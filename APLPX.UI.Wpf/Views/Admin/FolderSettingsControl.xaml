@@ -1,0 +1,144 @@
+﻿<UserControl x:Class="APLPX.UI.WPF.Views.FolderSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="1000" Unloaded="UserControl_Unloaded">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+           
+
+            <Style x:Key="ListBoxItemStyle3" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource ListBoxItemStyle1}">
+                <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=IsSelected}"/>
+            </Style>
+
+            <Style x:Key="ListBoxItemStyle2" TargetType="{x:Type ListBoxItem}">
+            <!--<Setter Property="FocusVisualStyle" Value="{x:Null}"/>-->
+            <!--<Setter Property="IsSelected" Value="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=IsSelected}"/>-->
+
+            <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+            <Setter Property="Background" Value="#FF3F3F46"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Grid Margin="4,0,4,4">
+                              
+
+                                <Border  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" 
+                                    Background="{TemplateBinding Background}" SnapsToDevicePixels="True"/>
+                                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" 
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="8,5"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Background" Value="#55555C"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Background" Value="#FF007ACC"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    
+                                    
+                                    <!--<Setter Property="Background" Value="#FF3F3F46"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>-->
+                                </Trigger>
+                               
+                            </ControlTemplate.Triggers>
+                        
+                        </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+            <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
+                <!--<Setter Property="FocusVisualStyle" Value="{x:Null}"/>-->
+                <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                <Setter Property="Background" Value="#FF3F3F46"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Grid Margin="4,0,4,4">
+                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}" SnapsToDevicePixels="True"/>
+                                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="8,5"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="0 10 0 0">
+
+
+        <StackPanel x:Name="FolderStackPanel" Orientation="Horizontal"  Margin="5">
+
+
+            <StackPanel>
+                <TextBlock Text="Module" FontSize="25" Margin="5 35 0 0" Foreground="White" ></TextBlock>
+                <Separator ></Separator>
+
+
+                <ListBox x:Name="SubModuleListBox" Margin="0 10 0 0" SelectionMode="Single" SelectionChanged="SubModuleListBox_SelectionChanged"
+                         SelectedIndex="{Binding SelectedModuleIndex}" Height="Auto" Width="Auto" FontSize="16" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+
+                            <StackPanel>    
+                                <TextBlock Foreground="{StaticResource Foreground}"><Run Text="{Binding Mode=OneWay}"/></TextBlock>
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    
+                    <ListBoxItem IsSelected="True" >Analytics</ListBoxItem>
+                    <ListBoxItem >Everyday</ListBoxItem>
+                    <ListBoxItem >Promos</ListBoxItem>
+                    <ListBoxItem >Kits</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Margin="20 0">
+                <TextBlock Text="{Binding Title}" FontSize="25" Margin="5 35 0 0" Foreground="White"></TextBlock>
+                <Separator ></Separator>
+
+
+                <ListBox x:Name="FolderListBox" Margin="0 10 0 0" ItemsSource="{Binding SelectedFolderList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         SelectionMode="Multiple" Height="Auto" Width="Auto"
+                         
+                         >
+                         <!--ItemContainerStyle="{StaticResource ListBoxItemStyle1}"-->
+                <ListBox.ItemContainerStyle>
+                        <!--<Style TargetType="{x:Type ListBoxItem}">-->
+
+                            <!--<Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">-->
+                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource ListBoxItemStyle2}">
+                            
+                            <!--<Setter Property="IsSelected" Value="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=IsSelected}"/>-->
+
+                        </Style>
+
+                </ListBox.ItemContainerStyle>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+
+                        <StackPanel>
+                            <TextBlock FontSize="16" Foreground="{StaticResource Foreground}"><Run Text="{Binding Path=Name, Mode=OneWay}"/></TextBlock>
+                        </StackPanel>
+
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                    
+                </ListBox>
+            </StackPanel>
+
+
+        </StackPanel>
+    </Grid>
+</UserControl>

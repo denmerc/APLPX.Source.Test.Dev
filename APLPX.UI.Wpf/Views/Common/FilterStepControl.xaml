@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="APLPX.UI.WPF.FilterStepControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- for design-time support, already in app.xml-->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid x:Name="LayoutRoot">
+        <StackPanel Orientation="Horizontal">
+
+            <ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto" ItemsSource="{Binding FilterTypes}" SelectionChanged="ListBoxItem_OnSelected">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="{Binding}"></Label>
+                        </StackPanel>
+                    </DataTemplate>
+                    
+                </ListBox.ItemTemplate>
+            <!--<ListBox.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>-->
+            <!--<ListBoxItem x:Name="VendorSelectedListBoxItem">
+                <StackPanel Orientation="Horizontal">
+                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Vendor Code</Label>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Is Kit</Label>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178">On Sale</Label>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Category</Label>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Discount Type</Label>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Status Type</Label>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Product Type</Label>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Stock Class</Label>
+                </StackPanel>
+            </ListBoxItem>-->
+        </ListBox>
+        <DataGrid x:Name="FilterGrid" ItemsSource="{Binding FilterItems}" Height="Auto" Margin="20 0 0 0" Visibility="Collapsed"
+                  AutoGenerateColumns="False">
+
+                <!--<DataGrid.ItemTemplate>
+                    <DataTemplate>
+                        <DataGrid ItemsSource="{Binding Items}">
+                            <DataGrid.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Code}" />
+                                </DataTemplate>
+                            </DataGrid.ItemTemplate>
+                        </DataGrid>
+                    </DataTemplate>
+                </DataGrid.ItemTemplate>-->
+                <DataGrid.Columns>
+                <DataGridCheckBoxColumn ElementStyle="{DynamicResource MetroDataGridCheckBox}"
+                                        EditingElementStyle="{DynamicResource MetroDataGridCheckBox}"
+                                        Header="Selected"
+                                        Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                        />
+                                        <!--Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected, Mode=OneWay}"-->
+                <DataGridTextColumn Header="Filter Value"
+                                    Binding="{Binding Description}" />
+                <DataGridTextColumn Header="Code"
+                                    Binding="{Binding Code}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        </StackPanel>
+    </Grid>
+</UserControl>

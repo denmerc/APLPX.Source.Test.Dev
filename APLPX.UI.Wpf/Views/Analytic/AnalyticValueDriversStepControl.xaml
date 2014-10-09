@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="APLPX.UI.WPF.AnalyticValueDriversStepControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- for design-time support, already in app.xml-->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid x:Name="LayoutRoot">
+        <StackPanel Orientation="Horizontal">
+            
+        <ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto" ItemsSource="{Binding DriverTypes}" SelectionChanged="StepContentListBox_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="{Binding}"></Label>
+                            <CheckBox></CheckBox>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            
+            <!--<ListBox.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>-->
+            <!--<ListBoxItem x:Name="VendorSelectedListBoxItem" >
+                <StackPanel Orientation="Horizontal">
+                        <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Movement</Label>
+                        <CheckBox></CheckBox>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Markup</Label>
+                        <CheckBox></CheckBox>
+                    </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Days On Hand</Label>
+                        <CheckBox></CheckBox>
+                    </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Days Lead Time</Label>
+                        <CheckBox></CheckBox>
+                    </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                        <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">In Stock Ratio</Label>
+                        <CheckBox></CheckBox>
+                    </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Sales Trend Ratio</Label>
+                        <CheckBox></CheckBox>
+                    </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Competition</Label>
+                        <CheckBox></CheckBox>
+                    </StackPanel>
+            </ListBoxItem>-->
+        </ListBox>
+                
+            <ListBox x:Name="ModeList" ItemsSource="{Binding ModeTypes}" Visibility="Hidden" SelectionChanged="ModeList_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="78" Content="{Binding}"></Label>
+                            <CheckBox></CheckBox>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <!--<ListBoxItem>
+                    <StackPanel Orientation="Horizontal">
+                        <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="78">Auto</Label>
+                        <CheckBox></CheckBox>
+                    </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <StackPanel Orientation="Horizontal">
+                        <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="78">Manual</Label>
+                        <CheckBox></CheckBox>
+                    </StackPanel>
+                </ListBoxItem>-->
+
+            </ListBox>
+            
+            <StackPanel x:Name="DetailStack" Visibility="Hidden">
+                <StackPanel Orientation="Horizontal">
+
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="Auto">No of Distribution Groups:</Label>
+                    <controls:NumericUpDown x:Name="RowNo" Minimum="0" Maximum="15" Margin="5" Foreground="{StaticResource Foreground}" IsReadOnly="True" IncrementValue="RowNo_IncrementValue" DecrementValue="RowNo_DecrementValue" Background="Transparent"></controls:NumericUpDown>
+                </StackPanel>
+                <DataGrid x:Name="FilterGrid" ItemsSource="{Binding Groups}" Height="500"
+                  AutoGenerateColumns="True" Width="500" IsReadOnly="True">
+                <!--<DataGrid.Columns>
+                    <DataGridTextColumn                                        
+                                        Width="200"
+                                        Header="Distribution Groups"
+                                        Binding="{Binding Group}"
+                                        />
+                    <DataGridTextColumn Header="SKU Count" Width="100"
+                                    />
+                    <DataGridTextColumn Header="Min"
+                                    Width="50"/>
+                    <DataGridTextColumn Header="Max"
+                                Width="50"/>
+
+
+                    <DataGridTextColumn Header="Sales Value"
+                                 Width="100"/>
+                </DataGrid.Columns>-->
+            </DataGrid>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

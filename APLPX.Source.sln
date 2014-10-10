@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf", "APLPX.UI.Wpf\APLPX.UI.Wpf.csproj", "{632A3DCA-FD92-4067-96B9-9A858C23E2D3}"
 EndProject
@@ -47,6 +47,51 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TEST", "TEST", "{77A1CB08-C3CC-4CAE-B331-28D23BA2A85E}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 11
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = APLPX.UI.Wpf\\APLPX.UI.Wpf.csproj
+		SccProjectTopLevelParentUniqueName1 = APLPX.Source.sln
+		SccProjectName1 = APLPX.UI.Wpf
+		SccLocalPath1 = APLPX.UI.Wpf
+		SccProjectUniqueName2 = APLPX.Client\\APLPX.Client.csproj
+		SccProjectTopLevelParentUniqueName2 = APLPX.Source.sln
+		SccProjectName2 = APLPX.Client
+		SccLocalPath2 = APLPX.Client
+		SccProjectUniqueName3 = APLPX.Client.Contracts\\APLPX.Client.Contracts.csproj
+		SccProjectTopLevelParentUniqueName3 = APLPX.Source.sln
+		SccProjectName3 = APLPX.Client.Contracts
+		SccLocalPath3 = APLPX.Client.Contracts
+		SccProjectUniqueName4 = APLPX.Client.Entity\\APLPX.Client.Entity.csproj
+		SccProjectTopLevelParentUniqueName4 = APLPX.Source.sln
+		SccProjectName4 = APLPX.Client.Entity
+		SccLocalPath4 = APLPX.Client.Entity
+		SccProjectUniqueName5 = APLPX.Core\\APLPX.Core.csproj
+		SccProjectName5 = APLPX.Core
+		SccLocalPath5 = APLPX.Core
+		SccProjectUniqueName6 = APLPX.Server.Data\\APLPX.Server.Data.csproj
+		SccProjectTopLevelParentUniqueName6 = APLPX.Source.sln
+		SccProjectName6 = APLPX.Server.Data
+		SccLocalPath6 = APLPX.Server.Data
+		SccProjectUniqueName7 = APLPX.Server.Entity\\APLPX.Server.Entity.csproj
+		SccProjectTopLevelParentUniqueName7 = APLPX.Source.sln
+		SccProjectName7 = APLPX.Server.Entity
+		SccLocalPath7 = APLPX.Server.Entity
+		SccProjectUniqueName8 = APLPX.Server.Services\\APLPX.Server.Services.csproj
+		SccProjectTopLevelParentUniqueName8 = APLPX.Source.sln
+		SccProjectName8 = APLPX.Server.Services
+		SccLocalPath8 = APLPX.Server.Services
+		SccProjectUniqueName9 = APLPX.Server.Services.Contracts\\APLPX.Server.Services.Contracts.csproj
+		SccProjectTopLevelParentUniqueName9 = APLPX.Source.sln
+		SccProjectName9 = APLPX.Server.Services.Contracts
+		SccLocalPath9 = APLPX.Server.Services.Contracts
+		SccProjectUniqueName10 = APLPX.Server.Services.Host.Web\\APLPX.Server.Services.Host.Web.csproj
+		SccProjectTopLevelParentUniqueName10 = APLPX.Source.sln
+		SccProjectName10 = APLPX.Server.Services.Host.Web
+		SccLocalPath10 = APLPX.Server.Services.Host.Web
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

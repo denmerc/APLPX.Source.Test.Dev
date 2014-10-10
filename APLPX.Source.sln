@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf", "APLPX.UI.Wpf\APLPX.UI.Wpf.csproj", "{632A3DCA-FD92-4067-96B9-9A858C23E2D3}"
 EndProject
@@ -48,56 +48,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TEST", "TEST", "{77A1CB08-C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf.Test", "APLPX.UI.Wpf.Test\APLPX.UI.Wpf.Test.csproj", "{184D6682-BAC7-47C8-8196-4EDB82A3538D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf.Tests", "APLPX.UI.Wpf.Tests\APLPX.UI.Wpf.Tests.csproj", "{CE218B52-9A53-4468-B929-686236DE5D0B}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = APLPX.UI.Wpf\\APLPX.UI.Wpf.csproj
-		SccProjectTopLevelParentUniqueName1 = APLPX.Source.sln
-		SccProjectName1 = APLPX.UI.Wpf
-		SccLocalPath1 = APLPX.UI.Wpf
-		SccProjectUniqueName2 = APLPX.Client\\APLPX.Client.csproj
-		SccProjectTopLevelParentUniqueName2 = APLPX.Source.sln
-		SccProjectName2 = APLPX.Client
-		SccLocalPath2 = APLPX.Client
-		SccProjectUniqueName3 = APLPX.Client.Contracts\\APLPX.Client.Contracts.csproj
-		SccProjectTopLevelParentUniqueName3 = APLPX.Source.sln
-		SccProjectName3 = APLPX.Client.Contracts
-		SccLocalPath3 = APLPX.Client.Contracts
-		SccProjectUniqueName4 = APLPX.Client.Entity\\APLPX.Client.Entity.csproj
-		SccProjectTopLevelParentUniqueName4 = APLPX.Source.sln
-		SccProjectName4 = APLPX.Client.Entity
-		SccLocalPath4 = APLPX.Client.Entity
-		SccProjectUniqueName5 = APLPX.Core\\APLPX.Core.csproj
-		SccProjectName5 = APLPX.Core
-		SccLocalPath5 = APLPX.Core
-		SccProjectUniqueName6 = APLPX.Server.Data\\APLPX.Server.Data.csproj
-		SccProjectTopLevelParentUniqueName6 = APLPX.Source.sln
-		SccProjectName6 = APLPX.Server.Data
-		SccLocalPath6 = APLPX.Server.Data
-		SccProjectUniqueName7 = APLPX.Server.Entity\\APLPX.Server.Entity.csproj
-		SccProjectTopLevelParentUniqueName7 = APLPX.Source.sln
-		SccProjectName7 = APLPX.Server.Entity
-		SccLocalPath7 = APLPX.Server.Entity
-		SccProjectUniqueName8 = APLPX.Server.Services\\APLPX.Server.Services.csproj
-		SccProjectTopLevelParentUniqueName8 = APLPX.Source.sln
-		SccProjectName8 = APLPX.Server.Services
-		SccLocalPath8 = APLPX.Server.Services
-		SccProjectUniqueName9 = APLPX.Server.Services.Contracts\\APLPX.Server.Services.Contracts.csproj
-		SccProjectTopLevelParentUniqueName9 = APLPX.Source.sln
-		SccProjectName9 = APLPX.Server.Services.Contracts
-		SccLocalPath9 = APLPX.Server.Services.Contracts
-		SccProjectUniqueName10 = APLPX.Server.Services.Host.Web\\APLPX.Server.Services.Host.Web.csproj
-		SccProjectTopLevelParentUniqueName10 = APLPX.Source.sln
-		SccProjectName10 = APLPX.Server.Services.Host.Web
-		SccLocalPath10 = APLPX.Server.Services.Host.Web
-		SccProjectUniqueName11 = APLPX.UI.Wpf.Test\\APLPX.UI.Wpf.Test.csproj
-		SccProjectTopLevelParentUniqueName11 = APLPX.Source.sln
-		SccProjectName11 = APLPX.UI.Wpf.Test
-		SccLocalPath11 = APLPX.UI.Wpf.Test
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -147,6 +100,10 @@ Global
 		{184D6682-BAC7-47C8-8196-4EDB82A3538D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{184D6682-BAC7-47C8-8196-4EDB82A3538D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{184D6682-BAC7-47C8-8196-4EDB82A3538D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE218B52-9A53-4468-B929-686236DE5D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE218B52-9A53-4468-B929-686236DE5D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE218B52-9A53-4468-B929-686236DE5D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE218B52-9A53-4468-B929-686236DE5D0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -162,5 +119,6 @@ Global
 		{6E5C5DB5-F3AB-4F68-9C16-6AF6E5E1E7BD} = {0FEE0BEF-AC98-49B2-BD62-6E0C8CB16BDF}
 		{5F70D122-D62F-43B3-994F-F313CC15717E} = {0FEE0BEF-AC98-49B2-BD62-6E0C8CB16BDF}
 		{184D6682-BAC7-47C8-8196-4EDB82A3538D} = {4D4B4CFB-0B02-40DD-826A-10C9F8250773}
+		{CE218B52-9A53-4468-B929-686236DE5D0B} = {77A1CB08-C3CC-4CAE-B331-28D23BA2A85E}
 	EndGlobalSection
 EndGlobal

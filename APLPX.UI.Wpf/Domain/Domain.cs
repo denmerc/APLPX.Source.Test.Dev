@@ -9,7 +9,7 @@ using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Linq;
 
-namespace APLPX.Client.Entity
+namespace APLPX.Client.Display
 {
 
 

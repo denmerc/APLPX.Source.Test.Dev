@@ -263,17 +263,17 @@ namespace APLPX.Client.Entity
         protected Boolean IsEditing { get; set; }
 
         [IgnoreDataMember]
-        public ReactiveCommand PreviousCommand { get; set; }
+        public ReactiveCommand<System.Reactive.Unit> PreviousCommand { get; set; }
         [IgnoreDataMember]
-        public ReactiveCommand SaveCommand { get; set; }
+        public ReactiveCommand<System.Reactive.Unit> SaveCommand { get; set; }
         [IgnoreDataMember]
-        public ReactiveCommand CancelCommand { get; set; }
+        public ReactiveCommand<System.Reactive.Unit> CancelCommand { get; set; }
         [IgnoreDataMember]
-        public ReactiveCommand ClearCommand { get; set; }
+        public ReactiveCommand<System.Reactive.Unit> ClearCommand { get; set; }
         [IgnoreDataMember]
-        public ReactiveCommand NextCommand { get; set; }
+        public ReactiveCommand<System.Reactive.Unit> NextCommand { get; set; }
         [IgnoreDataMember]
-        public ReactiveCommand ChangeStepCommand { get; set; }
+        public ReactiveCommand<System.Reactive.Unit> ChangeStepCommand { get; set; }
 
 
 

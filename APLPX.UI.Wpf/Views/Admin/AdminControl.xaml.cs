@@ -15,7 +15,7 @@ using System.Linq;
 using APLPX.UI.WPF.ViewModels.Events;
 using APLPX.UI.WPF.ViewModels;
 using APLPX.UI.WPF.ViewModels.Reactive;
-using Domain = APLPX.Client.Entity;
+using Domain = APLPX.Client.Display;
 
 namespace APLPX.UI.WPF
 {

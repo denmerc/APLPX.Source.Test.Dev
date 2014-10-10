@@ -6,7 +6,7 @@ using APLPX.Client.Entity;
 namespace APLPX.UI.Wpf.Tests
 {
     [TestClass]
-    public class MockRepos
+    public class TestMockRepos
     {
         [TestMethod]
         public void LoadList()
@@ -16,12 +16,13 @@ namespace APLPX.UI.Wpf.Tests
             Assert.IsNotNull(list);
         }
 
+        [TestMethod]
         public void LoadFilters()
         {
             var repo = new MockAnalyticRepository();
 
             var session = new Session<Analytic.Identity>();
-            var id = new Analytic.Identity();
+            var id = new Analytic.Identity {  Id = 83};
             session.Data = id;
             var list = repo.LoadFilters(session);
             Assert.IsNotNull(list);

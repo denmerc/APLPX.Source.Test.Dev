@@ -112,10 +112,13 @@ namespace APLX.UI.WPF.Data
 
         public Session<List<Filter>> LoadFilters(Session<Analytic.Identity> session)
         {
-            throw new NotImplementedException();
-            //var identity = session.Data as Analytic.Identity;
-            //var filters = Analytics.AsQueryable().Where(x => x.Id == identity.Id.ToString()).SingleOrDefault().Filters
-            //    .Select( f => new Filter{Name = f.Type, Values = f.Items.Select( x => new Filter.Value{ Id = x.Id.To} ;
+            var identity = session.Data as Analytic.Identity;
+            var filters = Analytics.AsQueryable().Where(x => x.AnalyticId == identity.Id).SingleOrDefault().Filters
+                .Select(f => new Filter { 
+                    Name = f.Type, 
+                    Values = f.Items.Select(x => new Filter.Value { Id = x._id , Code = x.Code, Name = x.Description}).ToList()
+                }).ToList(); ;
+            return new Session<List<Filter>> { Data = filters };
         }
 
         public Session<List<Filter>> SaveFilters(Session<Analytic> session)

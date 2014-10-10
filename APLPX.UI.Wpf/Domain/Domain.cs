@@ -236,7 +236,7 @@ namespace APLPX.Client.Display
         {
             [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
             public string Id { get; set; }
-            
+            public int AnalyticId { get; set; }
             public string Name { get; set; }
             
             public string Status { get; set; }
@@ -266,6 +266,7 @@ namespace APLPX.Client.Display
         {
             [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
             public string Id { get; set; }
+            public int PriceRoutineId { get; set; }
             public PriceRoutineType @Type { get; set; } //everyday, promo, kits
             public string Name { get; set; }
             public string Description { get; set; }
@@ -400,8 +401,12 @@ namespace APLPX.Client.Display
 
         public class Filter : ReactiveObject
         {
-            [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-            public string Id { get; set; }
+            //[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+
+            //[BsonElement("_id")]
+            public int _id { get; set; }
+
+
 
             private Boolean _isSelected;
             public Boolean IsSelected { get { return _isSelected; } set { this.RaiseAndSetIfChanged(ref _isSelected, value); } } //TODO: should be in viewmodel or in datastore?

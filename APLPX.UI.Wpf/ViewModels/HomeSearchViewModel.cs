@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using System.Reactive.Linq;
 using APLPX.UI.WPF.ViewModels.Events;
-using Domain = APLPX.Client.Entity;
+using Domain = APLPX.Client.Display;
 using System.Windows;
 using APLPX.Server.Data;
 

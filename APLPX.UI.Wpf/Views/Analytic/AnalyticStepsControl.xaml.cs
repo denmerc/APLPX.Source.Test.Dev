@@ -14,7 +14,7 @@ using MahApps.Metro.Controls;
 using System.Timers;
 using System.Threading;
 using APLPX.UI.WPF.ViewModels.Events;
-using Domain = APLPX.Client.Entity;
+using Domain = APLPX.Client.Display;
 
 namespace APLPX.UI.WPF
 {

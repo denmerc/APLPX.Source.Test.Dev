@@ -7,7 +7,7 @@ using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Linq;
 using APLPX.UI.WPF.ViewModels.Reactive;
-using Domain = APLPX.Client.Entity;
+using Domain = APLPX.Client.Display;
 
 namespace APLPX.UI.WPF.ViewModels.Pricing
 {

@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using APLPX.UI.WPF.ViewModels.Reactive;
-using Domain = APLPX.Client.Entity;
+using Domain = APLPX.Client.Display;
 
 namespace APLPX.UI.WPF
 {

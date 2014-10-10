@@ -73,9 +73,9 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public String Name { get; private set; }
+        public String Name { get; set; }
         [DataMember]
-        public List<Value> Values { get; private set; }
+        public List<Value> Values { get; set; }
 
         [DataContract]
         public class Value

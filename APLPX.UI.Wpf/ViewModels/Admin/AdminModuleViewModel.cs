@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ReactiveUI;
 using APLPX.UI.WPF.ViewModels.Events;
 using APLPX.Server.Data;
-using Domain = APLPX.Client.Entity;
+using Domain = APLPX.Client.Display;
 using System.Windows;
 
 

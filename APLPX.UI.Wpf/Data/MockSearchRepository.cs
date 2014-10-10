@@ -9,7 +9,7 @@ using MongoDB.Bson;
 using MongoDB.Driver.Linq;
 using System.Configuration;
 using MongoDB.Driver.Builders;
-using Domain = APLPX.Client.Entity;
+using Domain = APLPX.Client.Display;
 
 namespace APLPX.Server.Data
 {
@@ -287,90 +287,7 @@ namespace APLPX.Server.Data
 
     }
 
-    public class MockAnalyticRepository : IAnalyticRepository
-    {
 
-
-        public void Save<T>(T item) where T : class, new()
-        {
-            Analytics.Save(item);
-        }
-
-        public void Add<T>(T item) where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete<T>(T item) where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Single<T>() where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<T> All<T>() where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<T> All<T>(int page, int pageSize) where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-
-                public MockAnalyticRepository()
-        {
-            client = new MongoClient(connectionString);
-            server = client.GetServer();
-            database = server.GetDatabase(databaseName);
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        private readonly string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
-        private const string databaseName = "promo";
-        //private const string TagsCollectionName = "tags";
-        //public MongoDatabase Database;
-
-        private MongoClient client { get; set; }
-        protected MongoServer server { get; set; }
-        protected MongoDatabase database { get; set; }
-        public MongoCollection<Domain.Filter> Filters
-        {
-            get
-            {
-                return database.GetCollection<Domain.Filter>("filters");
-            }
-        }
-
-        public MongoCollection<Domain.Analytic> Analytics
-        {
-            get
-            {
-                return database.GetCollection<Domain.Analytic>("analytics");
-            }
-        }
-
-
-        //public List<Domain.Analytic> FindAnalyticsByTag(List<string> tags)
-        //{
-
-        //    //var list = Analytics.AsQueryable().Where(a => a.Tags.ContainsAny(tags)).Cast<T>().ToList(); //not supported
-
-        //    return Analytics.AsQueryable().Where(a => a.Tags.ContainsAll(tags)).ToList();
-
-
-        //}
-
-
-    }
 
     public class MockPricingRepository : IPricingRepository
     {
@@ -526,20 +443,6 @@ namespace APLPX.Server.Data
 
     }
 
-
-    public interface IAnalyticRepository : IDisposable
-    {
-        void Save<T>(T item) where T : class, new();
-        void Add<T>(T item) where T : class, new();
-        void Delete<T>(T item) where T : class, new();
-        T Single<T>() where T : class, new();
-        System.Linq.IQueryable<T> All<T>() where T : class, new();
-        System.Linq.IQueryable<T> All<T>(int page, int pageSize) where T : class, new();
-
-        //List<Domain.Analytic> FindAnalyticsByTag(List<string> tags);
-
-
-    }
 
     public interface IPricingRepository : IDisposable
     {

@@ -10,8 +10,9 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using APLPX.UI.WPF.ViewModels.Events;
 using APLPX.Server.Data;
-using Domain = APLPX.Client.Entity;
+using Domain = APLPX.Client.Display;
 using System.Windows;
+using APLX.UI.WPF.Data;
 
 
 namespace APLPX.UI.WPF.ViewModels

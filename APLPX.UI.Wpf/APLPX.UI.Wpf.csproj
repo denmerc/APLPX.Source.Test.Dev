@@ -137,6 +137,7 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Data\MockUserRepository.cs" />
     <Compile Include="Data\MockAnalyticRepository.cs" />
     <Compile Include="ViewModels\Admin\AdminModuleViewModel.cs" />
     <Compile Include="ViewModels\Admin\FolderSettingsViewModel.cs" />
@@ -305,6 +306,10 @@
     <ProjectReference Include="..\APLPX.Client.Entity\APLPX.Client.Entity.csproj">
       <Project>{b365c24a-4504-47dd-9305-48c2ae1657f3}</Project>
       <Name>APLPX.Client.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APLPX.Core\APLPX.Core.csproj">
+      <Project>{5216effb-bfe7-4f59-9c07-ae1b4a14139f}</Project>
+      <Name>APLPX.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

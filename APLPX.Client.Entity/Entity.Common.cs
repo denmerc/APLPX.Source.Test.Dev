@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using ReactiveUI;
 using APLPX.Core;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace APLPX.Client.Entity
 {
@@ -25,37 +26,37 @@ namespace APLPX.Client.Entity
         [DataMember]
         public List<Value> Values { get; private set; }
 
-        [DataContract]
-        public class Value
-        {
-            #region Initialize...
-            public Value() { }
-            public Value(
-                Int32 Id,
-                Int32 Key,
-                String Code,
-                String Name,
-                Boolean Included
-                ) {
-                this.Id = Id;
-                this.Key = Key;
-                this.Code = Code;
-                this.Name = Name;
-                this.Included = Included;
-            }
-            #endregion
+        //[DataContract]
+        //public class Value
+        //{
+        //    #region Initialize...
+        //    public Value() { }
+        //    public Value(
+        //        Int32 Id,
+        //        Int32 Key,
+        //        String Code,
+        //        String Name,
+        //        Boolean Included
+        //        ) {
+        //        this.Id = Id;
+        //        this.Key = Key;
+        //        this.Code = Code;
+        //        this.Name = Name;
+        //        this.Included = Included;
+        //    }
+        //    #endregion
 
-            [DataMember]
-            public Int32 Id { get; private set; }
-            [DataMember]
-            public Int32 Key { get; private set; }
-            [DataMember]
-            public String Code { get; private set; }
-            [DataMember]
-            public String Name { get; private set; }
-            [DataMember]
-            public Boolean Included { get; private set; }
-        }
+        //    [DataMember]
+        //    public Int32 Id { get; private set; }
+        //    [DataMember]
+        //    public Int32 Key { get; private set; }
+        //    [DataMember]
+        //    public String Code { get; private set; }
+        //    [DataMember]
+        //    public String Name { get; private set; }
+        //    [DataMember]
+        //    public Boolean Included { get; private set; }
+        //}
     }
 
     [DataContract]
@@ -77,37 +78,41 @@ namespace APLPX.Client.Entity
         [DataMember]
         public List<Value> Values { get; set; }
 
-        [DataContract]
-        public class Value
-        {
-            #region Initialize...
-            public Value() { }
-            public Value(
-                Int32 Id,
-                Int32 Key,
-                String Code,
-                String Name,
-                Boolean Included
-                ) {
-                this.Id = Id;
-                this.Key = Key;
-                this.Code = Code;
-                this.Name = Name;
-                this.Included = Included;
-            }
-            #endregion
 
-            [DataMember]
-            public Int32 Id { get;  set; }
-            [DataMember]
-            public Int32 Key { get;  set; }
-            [DataMember]
-            public String Code { get;  set; }
-            [DataMember]
-            public String Name { get;  set; }
-            [DataMember]
-            public Boolean Included { get;  set; }
+    }
+
+    [DataContract]
+    [BsonIgnoreExtraElements]
+    public class Value
+    {
+        #region Initialize...
+        public Value() { }
+        public Value(
+            Int32 Id,
+            Int32 Key,
+            String Code,
+            String Name,
+            Boolean Included
+            )
+        {
+            this.Id = Id;
+            this.Key = Key;
+            this.Code = Code;
+            this.Name = Name;
+            this.IsSelected = Included;
         }
+        #endregion
+
+        [DataMember]
+        public Int32 Id{ get; set; }
+        [DataMember]
+        public Int32 Key { get; set; }
+        [DataMember]
+        public String Code { get; set; }
+        [DataMember]
+        public String Name { get; set; }
+        [DataMember]
+        public Boolean IsSelected { get; set; }
     }
 
     [DataContract]

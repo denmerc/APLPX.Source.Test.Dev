@@ -77,7 +77,7 @@ namespace APLX.UI.WPF.Data
             }
         }
 
-        public MongoCollection<Domain.Analytic> Analytics
+        public MongoCollection<Domain.Analytic> Analytics2
         {
             get
             {
@@ -85,6 +85,14 @@ namespace APLX.UI.WPF.Data
             }
         }
 
+
+        public MongoCollection<Analytic> Analytics
+        {
+            get
+            {
+                return database.GetCollection<Analytic>("Analytics");
+            }
+        }
 
         //public List<Domain.Analytic> FindAnalyticsByTag(List<string> tags)
         //{
@@ -101,40 +109,148 @@ namespace APLX.UI.WPF.Data
 
         public Session<List<Analytic.Identity>> LoadList(Session<NullT> session)
         {
-            var identities = Analytics.AsQueryable().Select(x => new Analytic.Identity { Name = x.Name });
-            return new Session<List<Analytic.Identity>> { Data = identities.ToList() };
+
+            var analytics = Analytics.AsQueryable().Select( x => x.Self).ToList();
+            return new Session<List<Analytic.Identity>> { Data = analytics};
+
+
+            //var identities = Analytics.AsQueryable().Select(x => new Analytic.Identity { Name = x. });
+            //return new Session<List<Analytic.Identity>> { Data = identities.ToList() };
         }
 
         public Session<Analytic.Identity> SaveIdentity(Session<Analytic.Identity> session)
         {
+            //Analytics.Save(session.Data);
+            //return new Session<Analytic.Identity>();
             throw new NotImplementedException();
+
         }
 
         public Session<List<Filter>> LoadFilters(Session<Analytic.Identity> session)
         {
-            var identity = session.Data as Analytic.Identity;
-            var filters = Analytics.AsQueryable().Where(x => x.AnalyticId == identity.Id).SingleOrDefault().Filters
-                .Select(f => new Filter { 
-                    Name = f.Type, 
-                    Values = f.Items.Select(x => new Filter.Value { Id = x._id , Code = x.Code, Name = x.Description}).ToList()
-                }).ToList(); ;
-            return new Session<List<Filter>> { Data = filters };
-        }
+            //var identity = session.Data as Analytic.Identity;
+            //var filters = Analytics.AsQueryable().Where(x => x.AnalyticId == identity.Id).SingleOrDefault().Filters
+            //    .Select(f => new Filter
+            //    {
+            //        Name = f.Type,
+            //        Values = f.Items.Select(x => new Filter.Value { Id = x._id, Code = x.Code, Name = x.Description }).ToList()
+            //    }).ToList();
 
-        public Session<List<Filter>> SaveFilters(Session<Analytic> session)
-        {
-            throw new NotImplementedException();
+            var identity = session.Data as Analytic.Identity;
+            var filters = Analytics.AsQueryable()
+//.ToList();
+                .Where(x => x.Self.Id == identity.Id).SingleOrDefault().Filters;
+
+            return new Session<List<Filter>> { Data = filters };
+            //return null;
+            //throw new NotImplementedException();
         }
 
         public Session<List<Analytic.Driver>> LoadDrivers(Session<Analytic.Identity> session)
         {
+            var identity = session.Data as Analytic.Identity;
+            var drivers = Analytics.AsQueryable().Where(x => x.Self.Id == identity.Id).SingleOrDefault().Drivers.ToList();
+
+            //var drivers = analytic.Drivers
+            //    .Select((d,index)=>
+                    
+            //            new Analytic.Driver(index, index, Enum.GetName(typeof(Domain.ValueDriverType), d.Type), "Tooltip for Driver Type", false, 
+            //                new List<Analytic.Driver.Mode>(){
+
+            //                        new Analytic.Driver.Mode(1, Enum.GetName(typeof(Domain.Mode), Domain.Mode.Auto), "tooltip for auto group mode", false,
+            //                                new List<Analytic.Driver.Mode.Group>{
+            //                                    new Analytic.Driver.Mode.Group(
+            //                                        d.Groups[0].LineItemId, 
+            //                                        Convert.ToInt32(d.Groups[0].SalesValue),
+            //                                        Convert.ToDecimal(d.Groups[0].Min),
+            //                                        Convert.ToDecimal(d.Groups[0].Max)),   
+            //                                }
+            //                        ),
+            //                        new Analytic.Driver.Mode(2, Enum.GetName(typeof(Domain.Mode), Domain.Mode.Manual), "tooltip for manual group mode", false,
+            //                                new List<Analytic.Driver.Mode.Group>{
+            //                                    new Analytic.Driver.Mode.Group(
+            //                                        d.Groups[0].LineItemId, 
+            //                                        Convert.ToInt32(d.Groups[0].SalesValue),
+            //                                        Convert.ToDecimal(d.Groups[0].Min),
+            //                                        Convert.ToDecimal(d.Groups[0].Max))
+                                            
+                                            
+            //                                }
+            //                        )
+            //                }
+            //           )
+
+                    
+            ////.Select(d => 
+                    
+            ////            new Analytic.Driver{ Name = Enum.GetName(typeof(Domain.ValueDriverType), d.Type)}
+                    
+            //    ).ToList();
+
+            
+
+            return new Session<List<Analytic.Driver>>(){ Data = drivers};
+
+            //throw new NotImplementedException();
+
+
+        }
+
+        public Session<List<Filter>> SaveFilters(Session<Analytic> session)
+        {
+            //Analytics.Save(session.Data);
+            //return new Session<List<Filter>>();
+
             throw new NotImplementedException();
         }
 
-        public Session<List<Analytic.Driver>> SaveDrivers(Session<Analytic> session)
+
+        public Session<List<Analytic.Driver>> SaveValueDrivers(Session<Analytic> session)
         {
-            throw new NotImplementedException();
+           
+
+
+
+            //var query = Query.And(
+            //    Query.EQ("Analytic.Identity.Id", session.Data.Self.Id)
+            //);
+
+            //var sortBy = SortBy.Descending("Id");
+            //var update = Update
+            //    .Set("Drivers", session.Data.Drivers.ToBsonDocument<List<Analytic.Driver>>());
+
+            //var args = new FindAndModifyArgs
+            //{
+            //    Query = query,
+            //    SortBy = sortBy,
+            //    Update = update
+            //};
+
+
+            //var r = Analytics.FindOneAs<Analytic>(query);
+
+            var r = Analytics.AsQueryable().First(x =>);
+
+
+            r.Drivers = session.Data.Drivers;
+
+            Analytics.Save(r);
+
+            //var result = Analytics.FindAndModify(args);
+
+            //var chosenJob = result.ModifiedDocument;
+
+
+
+            //Analytics.Save(session.Data);
+            return new Session<List<Analytic.Driver>>();
+
         }
+
+        //public void SaveDrivers(Session<Analytic.Identity> session)
+        //{
+        //    Analytics.Save(session.Data);
+        //}
     }
 
 
@@ -153,7 +269,8 @@ namespace APLX.UI.WPF.Data
         Session<List<Filter>> LoadFilters(Session<Analytic.Identity> session);
         Session<List<Filter>> SaveFilters(Session<Analytic> session);
         Session<List<Analytic.Driver>> LoadDrivers(Session<Analytic.Identity> session);
-        Session<List<Analytic.Driver>> SaveDrivers(Session<Analytic> session);
+        //Session<List<Analytic.Driver>> SaveDrivers(Session<Analytic> session);        
+        Session<List<Analytic.Driver>> SaveValueDrivers(Session<Analytic> session);
 
 
         //List<Domain.Analytic> FindAnalyticsByTag(List<string> tags);

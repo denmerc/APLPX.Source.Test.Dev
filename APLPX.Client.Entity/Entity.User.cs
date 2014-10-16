@@ -10,13 +10,18 @@ namespace APLPX.Client.Entity
     [DataContract]
     public class User : ReactiveValidatedEntity
     {
+
+        public UserIdentity Identity { get;     set; }
+        public Role Role { get; set; }
+        public Password Password { get; set; }
+    }
         [DataContract]
-        public class Identity : ReactiveValidatedEntity
+        public class UserIdentity : ReactiveValidatedEntity
         {
 
             #region Initialize...
-            public Identity() { }
-            public Identity(
+            public UserIdentity() { }
+            public UserIdentity(
                 Int32 Id,
                 String sqlKey,
                 String Login,
@@ -62,8 +67,8 @@ namespace APLPX.Client.Entity
                 get{return _Id;}
                 set
                 {
-                 _Id = value;
-                 this.RaiseAndSetIfChanged(ref _Id, value);
+                    _Id = value;
+                    this.RaiseAndSetIfChanged(ref _Id, value);
                 }
             }
             
@@ -101,96 +106,97 @@ namespace APLPX.Client.Entity
             public String EditedText { get; set; }
             [DataMember]
             public String Editor { get; set; }
+            public UserIdentity Identity { get; set; }
+
         }
 
-        [DataContract]
-        public class Role
-        {
+    [DataContract]
+    public class Role
+    {
 
+        #region Initialize...
+        public Role() { }
+        public Role(
+            Int32 Id,
+            String Name,
+            String Description
+        )
+        {
+            this.Id = Id;
+            this.Name = Name;
+            this.Description = Description;
+        }
+        #endregion
+
+        [DataMember]
+        public Int32 Id { get; set; }
+        [DataMember]
+        public String Name { get; set; }
+        [DataMember]
+        public String Description { get; set; }
+        [DataMember]
+        public Entity.Role.Explorer Planning { get; set; }
+        [DataMember]
+        public Entity.Role.Explorer Tracking { get; private set; }
+        [DataMember]
+        public Entity.Role.Explorer Reporting { get; private set; }
+        [DataMember]
+        public List<Entity.SQLEnumeration> Enumerations { get; private set; }
+        [DataContract]
+        public class Explorer
+        {                
             #region Initialize...
-            public Role() { }
-            public Role(
-                Int32 Id,
+            public Explorer() { }
+            public Explorer(
                 String Name,
-                String Description
-            )
-            {
-                this.Id = Id;
+                String Title,
+                List<Navigator> Navigators,
+                List<Workflow> Workflows,
+                WorkflowGroupType WorkflowGroup
+            ) {
                 this.Name = Name;
-                this.Description = Description;
+                this.Title = Title;
+                this.Navigators = Navigators;
+                this.Workflows = Workflows;
+                this.WorkflowGroup = WorkflowGroup;
             }
             #endregion
 
             [DataMember]
-            public Int32 Id { get; set; }
+            public String Name{ get;  set; }
             [DataMember]
-            public String Name { get; set; }
+            public String Title{ get;  set; }
             [DataMember]
-            public String Description { get; set; }
+            public List<Entity.Navigator> Navigators{ get;  set; } 
             [DataMember]
-            public Entity.User.Role.Explorer Planning { get; set; }
+            public List<Entity.Workflow> Workflows{ get;  set; }
             [DataMember]
-            public Entity.User.Role.Explorer Tracking { get; private set; }
-            [DataMember]
-            public Entity.User.Role.Explorer Reporting { get; private set; }
-            [DataMember]
-            public List<Entity.SQLEnumeration> Enumerations { get; private set; }
-            [DataContract]
-            public class Explorer
-            {                
-                #region Initialize...
-                public Explorer() { }
-                public Explorer(
-                    String Name,
-                    String Title,
-                    List<Navigator> Navigators,
-                    List<Workflow> Workflows,
-                    WorkflowGroupType WorkflowGroup
-                ) {
-                    this.Name = Name;
-                    this.Title = Title;
-                    this.Navigators = Navigators;
-                    this.Workflows = Workflows;
-                    this.WorkflowGroup = WorkflowGroup;
-                }
-                #endregion
-
-                [DataMember]
-                public String Name{ get;  set; }
-                [DataMember]
-                public String Title{ get;  set; }
-                [DataMember]
-                public List<Entity.Navigator> Navigators{ get;  set; } 
-                [DataMember]
-                public List<Entity.Workflow> Workflows{ get;  set; }
-                [DataMember]
-                public WorkflowGroupType WorkflowGroup{ get; private set; }
-                [IgnoreDataMember]
-                public Boolean IsExpanded{ get;  set; }
-            }
+            public WorkflowGroupType WorkflowGroup{ get; private set; }
+            [IgnoreDataMember]
+            public Boolean IsExpanded{ get;  set; }
         }
-
-        [DataContract]
-        public class Password
-        {
-
-            #region Initialize...
-            public Password() { }
-            public Password(
-                String Old,
-                String New
-            )
-            {
-                this.Old = Old;
-                this.New = New;
-            }
-            #endregion
-
-            [DataMember]
-            public String Old { get; set; }
-            [DataMember]
-            public String New { get; set; }
-        }
-
     }
+
+    [DataContract]
+    public class Password
+    {
+
+        #region Initialize...
+        public Password() { }
+        public Password(
+            String Old,
+            String New
+        )
+        {
+            this.Old = Old;
+            this.New = New;
+        }
+        #endregion
+
+        [DataMember]
+        public String Old { get; set; }
+        [DataMember]
+        public String New { get; set; }
+    }
+
 }

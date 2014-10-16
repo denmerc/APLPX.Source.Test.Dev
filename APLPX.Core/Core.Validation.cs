@@ -10,164 +10,164 @@ using System.Runtime.Serialization;
 
 namespace APLPX.Core
 {
-    [DataContract]
-    public class ReactiveValidatedObject : ReactiveObject, IDataErrorInfo
-    {
-        /// <summary>
-        ///
-        /// </summary>
-        public ReactiveValidatedObject()
-        {
-            this.Changing.Subscribe(x =>
-            {
-                if (x.Sender != this)
-                {
-                    return;
-                }
+    //[DataContract]
+    //public class ReactiveValidatedObject : ReactiveObject, IDataErrorInfo
+    //{
+    //    /// <summary>
+    //    ///
+    //    /// </summary>
+    //    public ReactiveValidatedObject()
+    //    {
+    //        this.Changing.Subscribe(x =>
+    //        {
+    //            if (x.Sender != this)
+    //            {
+    //                return;
+    //            }
 
-                if (_validationCache.ContainsKey(x.PropertyName))
-                {
-                    _validationCache.Remove(x.PropertyName);
-                }
-            });
+    //            if (_validationCache.ContainsKey(x.PropertyName))
+    //            {
+    //                _validationCache.Remove(x.PropertyName);
+    //            }
+    //        });
 
-            _validatedPropertyCount = new Lazy<int>(() =>
-            {
-                lock (allValidatedProperties)
-                {
-                    return allValidatedProperties.Get(this.GetType()).Count;
-                }
-            });
-        }
+    //        _validatedPropertyCount = new Lazy<int>(() =>
+    //        {
+    //            lock (allValidatedProperties)
+    //            {
+    //                return allValidatedProperties.Get(this.GetType()).Count;
+    //            }
+    //        });
+    //    }
 
-        [IgnoreDataMember]
-        public string Error
-        {
-            get { return null; }
-        }
+    //    [IgnoreDataMember]
+    //    public string Error
+    //    {
+    //        get { return null; }
+    //    }
 
-        protected Boolean _IsDirty = false;
-        public Boolean IsDirty
-        {
-            get { return _IsDirty; }
-            set { this.RaiseAndSetIfChanged(ref _IsDirty, value); }
-        }
+    //    protected Boolean _IsDirty = false;
+    //    public Boolean IsDirty
+    //    {
+    //        get { return _IsDirty; }
+    //        set { this.RaiseAndSetIfChanged(ref _IsDirty, value); }
+    //    }
 
-        [IgnoreDataMember]
-        public string this[string columnName]
-        {
-            get
-            {
-                string ret;
-                if (_validationCache.TryGetValue(columnName, out ret))
-                {
-                    return ret;
-                }
+    //    [IgnoreDataMember]
+    //    public string this[string columnName]
+    //    {
+    //        get
+    //        {
+    //            string ret;
+    //            if (_validationCache.TryGetValue(columnName, out ret))
+    //            {
+    //                return ret;
+    //            }
 
-                this.Log().Debug("Checking {0:X}.{1}...", this.GetHashCode(), columnName);
-                ret = getPropertyValidationError(columnName);
-                this.Log().Debug("Validation result: {0}", ret);
+    //            this.Log().Debug("Checking {0:X}.{1}...", this.GetHashCode(), columnName);
+    //            ret = getPropertyValidationError(columnName);
+    //            this.Log().Debug("Validation result: {0}", ret);
 
-                _validationCache[columnName] = ret;
+    //            _validationCache[columnName] = ret;
 
-                _ValidationObservable.OnNext(new ObservedChange<object, bool>()
-                {
-                    Sender = this,
-                    PropertyName = columnName,
-                    Value = (ret != null)
-                });
-                return ret;
-            }
-        }
+    //            _ValidationObservable.OnNext(new ObservedChange<object, bool>()
+    //            {
+    //                Sender = this,
+    //                PropertyName = columnName,
+    //                Value = (ret != null)
+    //            });
+    //            return ret;
+    //        }
+    //    }
 
-        public bool IsObjectValid()
-        {
-            if (_validationCache.Count == _validatedPropertyCount.Value)
-            {
-                //return _validationCache.Values.All(x => x == null);
-                foreach (var v in _validationCache.Values)
-                {
-                    if (v != null)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
+    //    public bool IsObjectValid()
+    //    {
+    //        if (_validationCache.Count == _validatedPropertyCount.Value)
+    //        {
+    //            //return _validationCache.Values.All(x => x == null);
+    //            foreach (var v in _validationCache.Values)
+    //            {
+    //                if (v != null)
+    //                {
+    //                    return false;
+    //                }
+    //            }
+    //            return true;
+    //        }
 
-            IEnumerable<string> allProps;
-            lock (allValidatedProperties)
-            {
-                allProps = allValidatedProperties.Get(GetType()).Keys;
-            };
+    //        IEnumerable<string> allProps;
+    //        lock (allValidatedProperties)
+    //        {
+    //            allProps = allValidatedProperties.Get(GetType()).Keys;
+    //        };
 
-            //return allProps.All(x => this[x] == null);
-            foreach (var v in allProps)
-            {
-                if (this[v] != null)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+    //        //return allProps.All(x => this[x] == null);
+    //        foreach (var v in allProps)
+    //        {
+    //            if (this[v] != null)
+    //            {
+    //                return false;
+    //            }
+    //        }
+    //        return true;
+    //    }
 
-        protected void InvalidateValidationCache()
-        {
-            _validationCache.Clear();
-        }
+    //    protected void InvalidateValidationCache()
+    //    {
+    //        _validationCache.Clear();
+    //    }
 
-        [IgnoreDataMember]
-        readonly Subject<IObservedChange<object, bool>> _ValidationObservable = new Subject<IObservedChange<object, bool>>();
+    //    [IgnoreDataMember]
+    //    readonly Subject<IObservedChange<object, bool>> _ValidationObservable = new Subject<IObservedChange<object, bool>>();
 
-        [IgnoreDataMember]
-        public IObservable<IObservedChange<object, bool>> ValidationObservable
-        {
-            get { return _ValidationObservable; }
-        }
+    //    [IgnoreDataMember]
+    //    public IObservable<IObservedChange<object, bool>> ValidationObservable
+    //    {
+    //        get { return _ValidationObservable; }
+    //    }
 
-        [IgnoreDataMember]
-        readonly Lazy<int> _validatedPropertyCount;
+    //    [IgnoreDataMember]
+    //    readonly Lazy<int> _validatedPropertyCount;
 
-        [IgnoreDataMember]
-        readonly Dictionary<string, string> _validationCache = new Dictionary<string, string>();
+    //    [IgnoreDataMember]
+    //    readonly Dictionary<string, string> _validationCache = new Dictionary<string, string>();
 
-        static readonly MemoizingMRUCache<Type, Dictionary<string, PropertyExtraInfo>> allValidatedProperties =
-            new MemoizingMRUCache<Type, Dictionary<string, PropertyExtraInfo>>((x, _) =>
-                PropertyExtraInfo.CreateFromType(x).ToDictionary(k => k.PropertyName, v => v),
-                5);
+    //    static readonly MemoizingMRUCache<Type, Dictionary<string, PropertyExtraInfo>> allValidatedProperties =
+    //        new MemoizingMRUCache<Type, Dictionary<string, PropertyExtraInfo>>((x, _) =>
+    //            PropertyExtraInfo.CreateFromType(x).ToDictionary(k => k.PropertyName, v => v),
+    //            5);
 
-        string getPropertyValidationError(string propName)
-        {
-            PropertyExtraInfo pei;
+    //    string getPropertyValidationError(string propName)
+    //    {
+    //        PropertyExtraInfo pei;
 
-            lock (allValidatedProperties)
-            {
-                if (!allValidatedProperties.Get(this.GetType()).TryGetValue(propName, out pei))
-                {
-                    return null;
-                }
-            }
+    //        lock (allValidatedProperties)
+    //        {
+    //            if (!allValidatedProperties.Get(this.GetType()).TryGetValue(propName, out pei))
+    //            {
+    //                return null;
+    //            }
+    //        }
 
-            foreach (var v in pei.ValidationAttributes)
-            {
-                try
-                {
-                    var ctx = new ValidationContext(this, null, null) { MemberName = propName };
-                    var getter = Reflection.GetValueFetcherForProperty(pei.Type, propName);
-                    v.Validate(getter(this), ctx);
-                }
-                catch (Exception ex)
-                {
-                    this.Log().Info("{0:X}.{1} failed validation: {2}",
-                        this.GetHashCode(), propName, ex.Message);
-                    return ex.Message;
-                }
-            }
+    //        foreach (var v in pei.ValidationAttributes)
+    //        {
+    //            try
+    //            {
+    //                var ctx = new ValidationContext(this, null, null) { MemberName = propName };
+    //                var getter = Reflection.GetValueFetcherForProperty(pei.Type, propName);
+    //                v.Validate(getter(this), ctx);
+    //            }
+    //            catch (Exception ex)
+    //            {
+    //                this.Log().Info("{0:X}.{1} failed validation: {2}",
+    //                    this.GetHashCode(), propName, ex.Message);
+    //                return ex.Message;
+    //            }
+    //        }
 
-            return null;
-        }
-    }
+    //        return null;
+    //    }
+    //}
 
 
     

@@ -24,11 +24,11 @@ namespace APLPX.Client.Contracts
         [OperationContract]
         Session<Client.Entity.NullT> LoadExplorerReporting(Session<Client.Entity.NullT> session);
         [OperationContract]
-        Session<List<Client.Entity.User.Identity>> LoadList(Session<Client.Entity.NullT> session);
+        Session<List<Client.Entity.UserIdentity>> LoadList(Session<Client.Entity.NullT> session);
         [OperationContract]
-        Session<Client.Entity.User.Identity> LoadIdentity(Session<Client.Entity.User.Identity> session);
+        Session<Client.Entity.UserIdentity> LoadIdentity(Session<Client.Entity.UserIdentity> session);
         [OperationContract]
-        Session<Client.Entity.User.Identity> SaveIdentity(Session<Client.Entity.User.Identity> session);
+        Session<Client.Entity.UserIdentity> SaveIdentity(Session<Client.Entity.UserIdentity> session);
         [OperationContract]
         Session<Client.Entity.NullT> SavePassword(Session<Client.Entity.NullT> session);
     }

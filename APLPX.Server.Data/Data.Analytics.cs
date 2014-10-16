@@ -295,7 +295,7 @@ namespace APLPX.Server.Data {
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Analytic.Driver>> SaveDrivers(Session<Server.Entity.Analytic> sessionIn) {
+        public Session<List<Analytic.Driver>> SaveDrivers(Session<Server.Entity.Analytic> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;

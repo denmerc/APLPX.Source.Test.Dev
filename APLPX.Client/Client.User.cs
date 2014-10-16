@@ -44,17 +44,17 @@ namespace APLPX.Client
             return Channel.LoadExplorerReporting(session);
         }
 
-        public Session<List<User.Identity>> LoadList(Session<NullT> session)
+        public Session<List<UserIdentity>> LoadList(Session<NullT> session)
         {
             return Channel.LoadList(session);
         }
 
-        public Session<User.Identity> LoadIdentity(Session<User.Identity> session)
+        public Session<UserIdentity> LoadIdentity(Session<UserIdentity> session)
         {
             return Channel.LoadIdentity(session);
         }
 
-        public Session<User.Identity> SaveIdentity(Session<User.Identity> session)
+        public Session<UserIdentity> SaveIdentity(Session<UserIdentity> session)
         {
             return Channel.SaveIdentity(session);
         }

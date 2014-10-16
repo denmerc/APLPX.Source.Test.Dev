@@ -9,7 +9,7 @@ namespace APLPX.Client.Entity
     public class Session<T> where T : class
     {
         [DataMember]
-        public User.Identity UserIdentity { get; set; }
+        public UserIdentity Identity { get; set; }
         [DataMember]
         public T Data { get; set; }
         [DataMember]

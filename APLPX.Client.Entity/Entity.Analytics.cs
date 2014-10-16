@@ -1,24 +1,32 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace APLPX.Client.Entity
 {
     [DataContract]
+    [BsonIgnoreExtraElements]
     public class Analytic
     {
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        public string Id { get; set; }
         [DataMember]
         public List<Filter> Filters { get; private set; }
         [DataMember]
-        public List<Driver> Drivers { get; private set; }
+        public List<Driver> Drivers { get; set; }
         [DataMember]
         public List<PriceList> PriceLists { get; private set; }
         [DataMember]
         public List<Workflow> Workflow { get; private set; }
         [DataMember]
+        [BsonElement("Identity")]
         public Identity Self { get;  set; }
 
         [DataContract]
+        [BsonNoId]
+        [BsonIgnoreExtraElements]
         public class Identity
         {
 
@@ -55,21 +63,28 @@ namespace APLPX.Client.Entity
             }
             #endregion
 
+            //[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+            
+            //public String id2 { get; set; }
             [DataMember]
+            [BsonRepresentation(BsonType.String)]
             public Int32 Id { get;  set; }
             [DataMember]
             public String Name { get;  set; }
             [DataMember]
             public String Description { get; set; }
             [DataMember]
+            [BsonIgnore]
             public DateTime Refreshed;
             [DataMember]
             public String RefreshedText;
             [DataMember]
+            [BsonIgnore]
             public DateTime Created;
             [DataMember]
             public String CreatedText;
             [DataMember]
+            [BsonIgnore]
             public DateTime Edited;
             [DataMember]
             public String EditedText;
@@ -84,6 +99,7 @@ namespace APLPX.Client.Entity
         }
 
         [DataContract]
+        [BsonIgnoreExtraElements]
         public class Driver
         {
             #region Initialize...
@@ -110,15 +126,17 @@ namespace APLPX.Client.Entity
             [DataMember]
             public Int32 Key { get; private set; }
             [DataMember]
-            public String Name { get; private set; }
+            public String Name { get;  set; }
             [DataMember]
             public String Tooltip { get; private set; }
             [DataMember]
             public Boolean Selected { get; set; }
             [DataMember]
+            [BsonElement("Mode")]
             public List<Mode> Modes { get; private set; }
 
             [DataContract]
+            [BsonNoId]
             public class Mode {
 
                 #region Initialize...
@@ -128,12 +146,12 @@ namespace APLPX.Client.Entity
                     String Name,
                     String Tooltip,
                     Boolean Selected,
-                    List<Group> Groups
+                    Group Groups
                     ) {
                     this.Key = Key;
                     this.Name = Name;
                     this.Tooltip = Tooltip;
-                    this.Selected = Selected;
+                    this.IsSelected = Selected;
                     this.Groups = Groups;
                 }
                 #endregion
@@ -145,11 +163,15 @@ namespace APLPX.Client.Entity
                 [DataMember]
                 public String Tooltip { get; private set; }
                 [DataMember]
-                public Boolean Selected { get; private set; }
+                public Boolean IsSelected { get; private set; }
                 [DataMember]
-                public List<Group> Groups { get; private set; }
+                public Int32 Sort { get; private set; }
+                [DataMember]
+                [BsonElement("Group")]
+                public Group Groups { get; private set; }
 
                 [DataContract]
+                [BsonNoId]
                 public class Group {
 
                     #region Initialize...
@@ -168,6 +190,7 @@ namespace APLPX.Client.Entity
                     #endregion
 
                     [DataMember]
+                    //[BsonRepresentation(BsonType.String)]
                     public Int32 Id { get; private set; }
                     [DataMember]
                     public Int32 Value { get; private set; }

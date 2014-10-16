@@ -229,7 +229,7 @@ namespace APLX.UI.WPF.Data
 
             //var r = Analytics.FindOneAs<Analytic>(query);
 
-            var r = Analytics.AsQueryable().First(x =>);
+            var r = Analytics.AsQueryable().First(x => x.Self.Id == session.Data.Self.Id);
 
 
             r.Drivers = session.Data.Drivers;

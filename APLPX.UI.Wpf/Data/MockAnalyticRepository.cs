@@ -198,16 +198,17 @@ namespace APLX.UI.WPF.Data
 
         public Session<List<Filter>> SaveFilters(Session<Analytic> session)
         {
-            //Analytics.Save(session.Data);
-            //return new Session<List<Filter>>();
+            var r = Analytics.AsQueryable().First(x => x.Self.Id == session.Data.Self.Id);
+            r.Filters = session.Data.Filters;
 
-            throw new NotImplementedException();
+            Analytics.Save(r);
+            return new Session<List<Filter>>();
         }
 
 
         public Session<List<Analytic.Driver>> SaveValueDrivers(Session<Analytic> session)
         {
-           
+
 
 
 

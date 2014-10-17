@@ -10,10 +10,11 @@ namespace APLPX.Client.Entity
     [BsonIgnoreExtraElements]
     public class Analytic
     {
+        //TODO: ID custom mapper to remove this id
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
         [DataMember]
-        public List<Filter> Filters { get; private set; }
+        public List<Filter> Filters { get; set; }
         [DataMember]
         public List<Driver> Drivers { get; set; }
         [DataMember]

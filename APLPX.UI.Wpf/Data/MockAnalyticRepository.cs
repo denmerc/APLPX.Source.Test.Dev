@@ -94,56 +94,30 @@ namespace APLX.UI.WPF.Data
             }
         }
 
-        //public List<Domain.Analytic> FindAnalyticsByTag(List<string> tags)
-        //{
-
-        //    //var list = Analytics.AsQueryable().Where(a => a.Tags.ContainsAny(tags)).Cast<T>().ToList(); //not supported
-
-        //    return Analytics.AsQueryable().Where(a => a.Tags.ContainsAll(tags)).ToList();
-
-
-        //}
-
-
-
-
         public Session<List<Analytic.Identity>> LoadList(Session<NullT> session)
         {
-
             var analytics = Analytics.AsQueryable().Select( x => x.Self).ToList();
             return new Session<List<Analytic.Identity>> { Data = analytics};
-
-
-            //var identities = Analytics.AsQueryable().Select(x => new Analytic.Identity { Name = x. });
-            //return new Session<List<Analytic.Identity>> { Data = identities.ToList() };
         }
 
         public Session<Analytic.Identity> SaveIdentity(Session<Analytic.Identity> session)
         {
-            //Analytics.Save(session.Data);
-            //return new Session<Analytic.Identity>();
-            throw new NotImplementedException();
+            var r = Analytics.AsQueryable().First(x => x.Self.Id == session.Data.Id);
+            r.Self = session.Data;
 
+            Analytics.Save(r);
+            return new Session<Analytic.Identity>(); //TODO: return keys
         }
 
         public Session<List<Filter>> LoadFilters(Session<Analytic.Identity> session)
         {
-            //var identity = session.Data as Analytic.Identity;
-            //var filters = Analytics.AsQueryable().Where(x => x.AnalyticId == identity.Id).SingleOrDefault().Filters
-            //    .Select(f => new Filter
-            //    {
-            //        Name = f.Type,
-            //        Values = f.Items.Select(x => new Filter.Value { Id = x._id, Code = x.Code, Name = x.Description }).ToList()
-            //    }).ToList();
 
             var identity = session.Data as Analytic.Identity;
             var filters = Analytics.AsQueryable()
-//.ToList();
                 .Where(x => x.Self.Id == identity.Id).SingleOrDefault().Filters;
 
             return new Session<List<Filter>> { Data = filters };
-            //return null;
-            //throw new NotImplementedException();
+            
         }
 
         public Session<List<Analytic.Driver>> LoadDrivers(Session<Analytic.Identity> session)
@@ -209,49 +183,14 @@ namespace APLX.UI.WPF.Data
         public Session<List<Analytic.Driver>> SaveValueDrivers(Session<Analytic> session)
         {
 
-
-
-
-            //var query = Query.And(
-            //    Query.EQ("Analytic.Identity.Id", session.Data.Self.Id)
-            //);
-
-            //var sortBy = SortBy.Descending("Id");
-            //var update = Update
-            //    .Set("Drivers", session.Data.Drivers.ToBsonDocument<List<Analytic.Driver>>());
-
-            //var args = new FindAndModifyArgs
-            //{
-            //    Query = query,
-            //    SortBy = sortBy,
-            //    Update = update
-            //};
-
-
-            //var r = Analytics.FindOneAs<Analytic>(query);
-
             var r = Analytics.AsQueryable().First(x => x.Self.Id == session.Data.Self.Id);
-
-
             r.Drivers = session.Data.Drivers;
-
             Analytics.Save(r);
 
-            //var result = Analytics.FindAndModify(args);
-
-            //var chosenJob = result.ModifiedDocument;
-
-
-
-            //Analytics.Save(session.Data);
             return new Session<List<Analytic.Driver>>();
 
         }
 
-        //public void SaveDrivers(Session<Analytic.Identity> session)
-        //{
-        //    Analytics.Save(session.Data);
-        //}
     }
 
 

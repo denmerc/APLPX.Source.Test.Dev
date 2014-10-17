@@ -10,6 +10,12 @@ namespace APLPX.UI.Wpf.Tests
     [TestClass]
     public class TestMockRepos
     {
+        [TestInitialize]
+        public void Setup()
+        {
+
+        }
+
         [TestMethod]
         public void LoadList()
         {
@@ -116,10 +122,17 @@ namespace APLPX.UI.Wpf.Tests
 
             };
 
+            var init = userRepo.Initialize(new Session<NullT>());
+            var auth = userRepo.Authenticate(init);
 
-            //get from list
+            if (auth.SessionOk == false)
+            {
+                Assert.Fail("Login failed"); return;
+            }
+
+            //TODO: insert test analytic 
+            //arrange - get from list
             var list = repo.LoadList(new Client.Entity.Session<Client.Entity.NullT>());
-
 
             var i = list.Data.FirstOrDefault();
 
@@ -127,14 +140,6 @@ namespace APLPX.UI.Wpf.Tests
             if (i != null)
             {
                 a.Self = i;
-            }
-
-            var init = userRepo.Initialize(new Session<NullT>());
-            var auth = userRepo.Authenticate(init);
-
-            if (auth.SessionOk == false)
-            {
-                Assert.Fail("Login failed"); return;
             }
 
             var payload = new List<Filter>()
@@ -157,6 +162,43 @@ namespace APLPX.UI.Wpf.Tests
             var response = repo.SaveFilters(packageIn);
         }
 
+        [TestMethod]
+        public void SaveIdentity()
+        {
+            //Setup -Initialize and auth
+            var repo = new MockAnalyticRepository();
+            var userRepo = new MockUserRepository();
 
+            var user = new User
+            {
+
+                Identity = new UserIdentity() { Login = "dmercado" }
+                //, Role = Role.Administrator
+                //, Password = ""
+
+            };
+
+
+
+            var init = userRepo.Initialize(new Session<NullT>());
+            var auth = userRepo.Authenticate(init);
+
+            if (auth.SessionOk == false)
+            {
+                Assert.Fail("Login failed"); return;
+            }
+
+            //Arrange - get an analytic identity from list
+            var list = repo.LoadList(new Client.Entity.Session<Client.Entity.NullT>());
+            var ident = list.Data.FirstOrDefault();
+
+            //Act
+            ident.Name = "Sheet Metal & Body Panels Sale 2";
+            ident.Description = "Sheet Metal & Body Panels Sale description 2";
+
+            Session<Analytic.Identity> packageIn = auth.Clone<Analytic.Identity>(ident);
+            var response = repo.SaveIdentity(packageIn);
+        
+        }
     }
 }

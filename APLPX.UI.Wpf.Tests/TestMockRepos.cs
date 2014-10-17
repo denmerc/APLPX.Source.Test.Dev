@@ -10,23 +10,71 @@ namespace APLPX.UI.Wpf.Tests
     [TestClass]
     public class TestMockRepos
     {
-        [TestInitialize]
+        //[TestInitialize]
         public void Setup()
         {
+            //Setup -Initialize and auth
+            //TODO: insert test analytic 
+
+
+
+
+
+            var repo = new MockAnalyticRepository();
+            var userRepo = new MockUserRepository();
+
+            repo.InsertSampleAnalytic();
+
+
+            var user = new User
+            {
+
+                Identity = new UserIdentity() { Login = "dmercado" }
+                //, Role = Role.Administrator
+                //, Password = ""
+
+            };
+
+            var init = userRepo.Initialize(new Session<NullT>());
+            var auth = userRepo.Authenticate(init);
+
+            if (auth.SessionOk == false)
+            {
+                Assert.Fail("Login failed"); return;
+            }
+        }
+
+
+        [TestMethod]
+        public void InsertMockAnalytic()
+        {
+            var repo = new MockAnalyticRepository();
+            repo.InsertSampleAnalytic();
+
+        }
+
+        [TestMethod]
+        public void RemoveMockAnalytic()
+        {
+            var repo = new MockAnalyticRepository();
+            repo.RemoveSampleAnalytic();
 
         }
 
         [TestMethod]
         public void LoadList()
         {
+
             var repo = new MockAnalyticRepository();
             var list = repo.LoadList(new Client.Entity.Session<Client.Entity.NullT>());
             Assert.IsNotNull(list);
+
         }
 
         [TestMethod]
         public void LoadFilters()
         {
+
             var repo = new MockAnalyticRepository();
 
             var session = new Session<Analytic.Identity>();
@@ -34,11 +82,13 @@ namespace APLPX.UI.Wpf.Tests
             session.Data = id;
             var list = repo.LoadFilters(session);
             Assert.IsNotNull(list);
+
         }
 
         [TestMethod]
         public void LoadValueDrivers()
         {
+
             var repo = new MockAnalyticRepository();
             var session = new Session<Analytic.Identity>();
             var id = new Analytic.Identity { Id= 1 };
@@ -130,8 +180,7 @@ namespace APLPX.UI.Wpf.Tests
                 Assert.Fail("Login failed"); return;
             }
 
-            //TODO: insert test analytic 
-            //arrange - get from list
+            //Arrange - get from list
             var list = repo.LoadList(new Client.Entity.Session<Client.Entity.NullT>());
 
             var i = list.Data.FirstOrDefault();
@@ -160,6 +209,9 @@ namespace APLPX.UI.Wpf.Tests
 
             Session<Analytic> packageIn = auth.Clone<Analytic>(a);
             var response = repo.SaveFilters(packageIn);
+
+            //Assert
+            Assert.IsNotNull(response);
         }
 
         [TestMethod]
@@ -177,8 +229,6 @@ namespace APLPX.UI.Wpf.Tests
                 //, Password = ""
 
             };
-
-
 
             var init = userRepo.Initialize(new Session<NullT>());
             var auth = userRepo.Authenticate(init);
@@ -199,6 +249,8 @@ namespace APLPX.UI.Wpf.Tests
             Session<Analytic.Identity> packageIn = auth.Clone<Analytic.Identity>(ident);
             var response = repo.SaveIdentity(packageIn);
         
+            //Assert
+            Assert.IsNotNull(response);
         }
     }
 }

@@ -7,14 +7,14 @@ namespace APLPX.Server.Data {
 
     public interface IAnalyticData {
         void Dispose();
-        Session<List<Server.Entity.Analytic.Identity>> LoadList(Session<Server.Entity.NullT> session);
-        Session<Server.Entity.Analytic.Identity> SaveIdentity(Session<Server.Entity.Analytic.Identity> session);
-        Session<List<Server.Entity.Filter>> LoadFilters(Session<Server.Entity.Analytic.Identity> session);
-        Session<List<Server.Entity.Filter>> SaveFilters(Session<Server.Entity.Analytic> session);
-        Session<List<Server.Entity.Analytic.Driver>> LoadDrivers(Session<Server.Entity.Analytic.Identity> session);
-        Session<List<Server.Entity.Analytic.Driver>> SaveDrivers(Session<Server.Entity.Analytic> session);
-        Session<List<Server.Entity.PriceList>> LoadPriceLists(Session<Server.Entity.Analytic.Identity> session);
-        Session<List<Server.Entity.PriceList>> SavePriceLists(Session<Server.Entity.Analytic> session);
+        Session<List<Server.Entity.Analytic>> LoadList(Session<Server.Entity.NullT> session);
+        Session<Server.Entity.Analytic> SaveIdentity(Session<Server.Entity.Analytic> session);
+        Session<Server.Entity.Analytic> LoadFilters(Session<Server.Entity.Analytic> session);
+        Session<Server.Entity.Analytic> SaveFilters(Session<Server.Entity.Analytic> session);
+        Session<Server.Entity.Analytic> LoadDrivers(Session<Server.Entity.Analytic> session);
+        Session<Server.Entity.Analytic> SaveDrivers(Session<Server.Entity.Analytic> session);
+        Session<Server.Entity.Analytic> LoadPriceLists(Session<Server.Entity.Analytic> session);
+        Session<Server.Entity.Analytic> SavePriceLists(Session<Server.Entity.Analytic> session);
     }
 
     public class AnalyticData : IAnalyticData {
@@ -52,69 +52,22 @@ namespace APLPX.Server.Data {
         ~AnalyticData() {
             if (sqlService != null) sqlService.ExecuteCloseConnection();
         }
-
-        public Session<Server.Entity.NullT> LoadWorkflow(Session<Server.Entity.NullT> sessionIn)
-        {
-            String sqlRequest = String.Empty;
-            String sqlResponse = String.Empty;
-            //Initialize session...
-            Session<Server.Entity.NullT> sessionOut = sessionIn.Clone<NullT>(new NullT());
-
-            try
-            {
-                sqlMapper.LoadWorkflowMapParameters(sessionOut, ref sqlService);
-                System.Data.DataTable dataTable = sqlService.ExecuteReader();
-                if (sqlService.SqlStatusOk)
-                {
-                    sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
-                    sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
-                    if (sqlRequest == sqlResponse)
-                    {
-                        sessionOut.Workflow = sqlMapper.LoadWorkflowMapData(dataTable, sqlService);
-                        sessionOut.SessionOk = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", aplServiceEventLog, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
-                localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
-            }
-            finally
-            {
-                //SQL Service error...
-                if (!sqlService.SqlStatusOk)
-                {
-                    sessionOut.SessionOk = sqlService.SqlStatusOk;
-                    sessionOut.ClientMessage = sqlService.SqlStatusMessage;
-                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", aplServiceEventLog, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
-                }
-                //SQL Validation warning...
-                else if (sqlRequest != sqlResponse)
-                {
-                    sessionOut.ClientMessage = sqlResponse;
-                }
-            }
-
-            return sessionOut;
-
-        }
         
-        public Session<List<Server.Entity.Analytic.Identity>> LoadList(Session<Server.Entity.NullT> sessionIn) {
+        public Session<List<Server.Entity.Analytic>> LoadList(Session<Server.Entity.NullT> sessionIn) {
             
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Analytic.Identity>> sessionOut = Session<NullT>.Clone<List<Analytic.Identity>>(sessionIn);
+            Session<List<Server.Entity.Analytic>> sessionOut = Session<NullT>.Clone<List<Analytic>>(sessionIn);
 
             try {
-                sqlMapper.LoadListMapParameters(sessionOut, ref sqlService);
+                sqlMapper.LoadListMapParameters(sessionIn, ref sqlService);
                 System.Data.DataTable dataTable = sqlService.ExecuteReader();
                 if (sqlService.SqlStatusOk) {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data = sqlMapper.LoadListMapData(dataTable, sqlService);
+                        sessionOut.Data = sqlMapper.LoadListMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -139,12 +92,12 @@ namespace APLPX.Server.Data {
             return sessionOut;
         }
 
-        public Session<Server.Entity.Analytic.Identity> SaveIdentity(Session<Server.Entity.Analytic.Identity> sessionIn) {
+        public Session<Server.Entity.Analytic> SaveIdentity(Session<Server.Entity.Analytic> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.Analytic.Identity> sessionOut = sessionIn.Clone<Analytic.Identity>(new Analytic.Identity());
+            Session<Server.Entity.Analytic> sessionOut = Session<Analytic>.Clone<Analytic>(sessionIn);
 
             try {
                 sqlMapper.SaveIdentityMapParameters(sessionOut, ref sqlService);
@@ -153,7 +106,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data.Id = (sqlMapper.SaveIdentityMapData(dataTable, sqlService)).Id;
+                        sessionOut.Data.Id = (sqlMapper.SaveIdentityMapData(dataTable)).Id;
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -178,12 +131,12 @@ namespace APLPX.Server.Data {
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Filter>> LoadFilters(Session<Server.Entity.Analytic.Identity> sessionIn) {
+        public Session<Server.Entity.Analytic> LoadFilters(Session<Server.Entity.Analytic> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Filter>> sessionOut = Session<Analytic.Identity>.Clone<List<Filter>>(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = Session<Analytic>.Clone<Analytic>(sessionIn);
 
             try {
                 sqlMapper.LoadFiltersMapParameters(sessionIn, ref sqlService);
@@ -192,7 +145,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data = sqlMapper.LoadFiltersMapData(dataTable, sqlService);
+                        sessionOut.Data.FilterGroups = sqlMapper.LoadFiltersMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -217,12 +170,12 @@ namespace APLPX.Server.Data {
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Filter>> SaveFilters(Session<Server.Entity.Analytic> sessionIn) {
+        public Session<Server.Entity.Analytic> SaveFilters(Session<Server.Entity.Analytic> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Filter>> sessionOut = Session<Analytic>.Clone<List<Filter>>(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = Session<Analytic>.Clone<Analytic>(sessionIn);
 
             try {
                 sqlMapper.SaveFiltersMapParameters(sessionIn, ref sqlService);
@@ -231,7 +184,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data = sqlMapper.LoadFiltersMapData(dataTable, sqlService);
+                        sessionOut.Data.FilterGroups = sqlMapper.LoadFiltersMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -256,12 +209,12 @@ namespace APLPX.Server.Data {
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Analytic.Driver>> LoadDrivers(Session<Server.Entity.Analytic.Identity> sessionIn) {
+        public Session<Server.Entity.Analytic> LoadDrivers(Session<Server.Entity.Analytic> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Analytic.Driver>> sessionOut = Session<Analytic.Identity>.Clone<List<Analytic.Driver>>(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = Session<Analytic>.Clone<Analytic>(sessionIn);
 
             try {
                 sqlMapper.LoadDriversMapParameters(sessionIn, ref sqlService);
@@ -270,7 +223,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data = sqlMapper.LoadTypesMapData(dataTable, sqlService);
+                        sessionOut.Data.Drivers = sqlMapper.LoadDriversMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -295,12 +248,12 @@ namespace APLPX.Server.Data {
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Analytic.Driver>> SaveDrivers(Session<Server.Entity.Analytic> sessionIn) {
+        public Session<Server.Entity.Analytic> SaveDrivers(Session<Server.Entity.Analytic> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Analytic.Driver>> sessionOut = Session<Analytic>.Clone<List<Analytic.Driver>>(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = Session<Analytic>.Clone<Analytic>(sessionIn);
 
             try {
                 sqlMapper.SaveDriversMapParameters(sessionIn, ref sqlService);
@@ -309,7 +262,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data = sqlMapper.LoadTypesMapData(dataTable, sqlService);
+                        sessionOut.Data.Drivers = sqlMapper.LoadDriversMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -334,11 +287,11 @@ namespace APLPX.Server.Data {
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.PriceList>> LoadPriceLists(Session<Server.Entity.Analytic.Identity> sessionIn) {
+        public Session<Server.Entity.Analytic> LoadPriceLists(Session<Server.Entity.Analytic> sessionIn) {
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.PriceList>> sessionOut = Session<Analytic.Identity>.Clone<List<PriceList>>(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = Session<Analytic>.Clone<Analytic>(sessionIn);
 
             try {
                 sqlMapper.LoadPricelistsMapParameters(sessionIn, ref sqlService);
@@ -347,7 +300,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data = sqlMapper.LoadPricelistsMapData(dataTable, sqlService);
+                        sessionOut.Data.PriceListGroups = sqlMapper.LoadPricelistsMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -372,12 +325,12 @@ namespace APLPX.Server.Data {
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.PriceList>> SavePriceLists(Session<Server.Entity.Analytic> sessionIn) {
+        public Session<Server.Entity.Analytic> SavePriceLists(Session<Server.Entity.Analytic> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.PriceList>> sessionOut = Session<Analytic>.Clone<List<PriceList>>(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = Session<Analytic>.Clone<Analytic>(sessionIn);
 
             try {
                 sqlMapper.SavePricelistsMapParameters(sessionIn, ref sqlService);
@@ -386,7 +339,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data = sqlMapper.LoadPricelistsMapData(dataTable, sqlService);
+                        sessionOut.Data.PriceListGroups = sqlMapper.LoadPricelistsMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }

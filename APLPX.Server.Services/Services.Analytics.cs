@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.ServiceModel;
+using System.Collections.Generic;
 using APLPX.Server.Data;
 using APLPX.Server.Entity;
 using APLPX.Server.Services.Contracts;
 
 namespace APLPX.Server.Services
 {
+    [ServiceBehavior(UseSynchronizationContext = true, InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Single)]
+    [CallbackBehavior(UseSynchronizationContext = false)]
     public class AnalyticService : IAnalyticService
     {
         private IAnalyticData _analyticData;
@@ -15,69 +18,67 @@ namespace APLPX.Server.Services
             this._analyticData = analyticRepository;
         }
 
-        public Session<List<Server.Entity.Analytic.Identity>> LoadList(Session<Server.Entity.NullT> sessionIn) {
-            Session<List<Server.Entity.Analytic.Identity>> sessionOut = _analyticData.LoadList(sessionIn);
+        public Session<List<Server.Entity.Analytic>> LoadList(Session<Server.Entity.NullT> sessionIn) {
+            Session<List<Server.Entity.Analytic>> sessionOut = _analyticData.LoadList(sessionIn);
             _analyticData.Dispose();
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.Analytic.Identity> SaveIdentity(Session<Server.Entity.Analytic.Identity> sessionIn)
+        public Session<Server.Entity.Analytic> SaveIdentity(Session<Server.Entity.Analytic> sessionIn)
         {
-            Session<Server.Entity.Analytic.Identity> sessionOut = _analyticData.SaveIdentity(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.SaveIdentity(sessionIn);
             _analyticData.Dispose();
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Filter>> LoadFilters(Session<Server.Entity.Analytic.Identity> sessionIn)
+        public Session<Server.Entity.Analytic> LoadFilters(Session<Server.Entity.Analytic> sessionIn)
         {
-            Session<List<Server.Entity.Filter>> sessionOut = _analyticData.LoadFilters(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.LoadFilters(sessionIn);
             _analyticData.Dispose();
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Filter>> SaveFilters(Session<Server.Entity.Analytic> sessionIn)
+        public Session<Server.Entity.Analytic> SaveFilters(Session<Server.Entity.Analytic> sessionIn)
         {
-            Session<List<Server.Entity.Filter>> sessionOut = _analyticData.SaveFilters(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.SaveFilters(sessionIn);
             _analyticData.Dispose();
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Analytic.Driver>> SaveDrivers(Session<Server.Entity.Analytic> sessionIn)
+        public Session<Server.Entity.Analytic> LoadDrivers(Session<Server.Entity.Analytic> sessionIn) {
+
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.LoadDrivers(sessionIn);
+            _analyticData.Dispose();
+
+            return sessionOut;
+        }
+
+        public Session<Server.Entity.Analytic> SaveDrivers(Session<Server.Entity.Analytic> sessionIn)
         {
-            Session<List<Server.Entity.Analytic.Driver>> sessionOut = _analyticData.SaveDrivers(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.SaveDrivers(sessionIn);
             _analyticData.Dispose();
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Analytic.Driver>> LoadDrivers(Session<Server.Entity.Analytic.Identity> sessionIn)
+        public Session<Server.Entity.Analytic> LoadPriceLists(Session<Server.Entity.Analytic> sessionIn) 
         {
-            Session<List<Server.Entity.Analytic.Driver>> sessionOut = _analyticData.LoadDrivers(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.LoadPriceLists(sessionIn);
             _analyticData.Dispose();
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.PriceList>> LoadPriceLists(Session<Server.Entity.Analytic.Identity> sessionIn) 
+        public Session<Server.Entity.Analytic> SavePriceLists(Session<Server.Entity.Analytic> sessionIn) 
         {
-            Session<List<Server.Entity.PriceList>> sessionOut = _analyticData.LoadPriceLists(sessionIn);
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.SavePriceLists(sessionIn);
             _analyticData.Dispose();
 
             return sessionOut;
         }
-
-        public Session<List<Server.Entity.PriceList>> SavePriceLists(Session<Server.Entity.Analytic> sessionIn) 
-        {
-            Session<List<Server.Entity.PriceList>> sessionOut = _analyticData.SavePriceLists(sessionIn);
-            _analyticData.Dispose();
-
-            return sessionOut;
-        }
-
-
     }
 }

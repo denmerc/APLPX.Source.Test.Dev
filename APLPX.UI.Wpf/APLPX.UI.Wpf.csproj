@@ -7,7 +7,7 @@
     <ProjectGuid>{632A3DCA-FD92-4067-96B9-9A858C23E2D3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>APLX.UI.WPF</RootNamespace>
+    <RootNamespace>APLPX.UI.WPF</RootNamespace>
     <AssemblyName>APLPX.UI.WPF</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -63,10 +63,16 @@
     <ManifestCertificateThumbprint>6CB12849EDE2E98B21ECAD122532AC05FA46B73E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro, Version=0.14.0.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
@@ -121,14 +127,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Telerik.Windows.Controls, Version=2013.3.1316.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Telerik.Windows.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Controls.Input, Version=2013.3.1316.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Telerik.Windows.Controls.Input.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -137,7 +135,61 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Compile Include="Data\MockAnalyticRepository.cs" />
+    <Compile Include="Data\MockAnalyticRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DisplayEntities\Advisor.cs" />
+    <Compile Include="DisplayEntities\Analytic.cs" />
+    <Compile Include="DisplayEntities\ResultBase.cs" />
+    <Compile Include="DisplayEntities\PricingResult.cs" />
+    <Compile Include="DisplayEntities\PriceListGroup.cs" />
+    <Compile Include="DisplayEntities\IdentityBase.cs" />
+    <Compile Include="DisplayEntities\PricingDriver.cs" />
+    <Compile Include="DisplayEntities\Folder.cs" />
+    <Compile Include="DisplayEntities\ModuleFeatureStep.cs" />
+    <Compile Include="DisplayEntities\FilterGroup.cs" />
+    <Compile Include="DisplayEntities\FolderSet.cs" />
+    <Compile Include="DisplayEntities\ModuleFeature.cs" />
+    <Compile Include="DisplayEntities\Module.cs" />
+    <Compile Include="DisplayEntities\AnalyticResult.cs" />
+    <Compile Include="DisplayEntities\SQLEnumeration.cs" />
+    <Compile Include="DisplayEntities\PriceRoutine.cs" />
+    <Compile Include="DisplayEntities\PriceScheme.cs" />
+    <Compile Include="DisplayEntities\PricingIdentity.cs" />
+    <Compile Include="DisplayEntities\UserIdentity.cs" />
+    <Compile Include="DisplayEntities\DisplayEntityBase.cs" />
+    <Compile Include="DisplayEntities\AnalyticDriver.cs" />
+    <Compile Include="DisplayEntities\Error.cs" />
+    <Compile Include="DisplayEntities\Filter.cs" />
+    <Compile Include="DisplayEntities\DriverGroup.cs" />
+    <Compile Include="DisplayEntities\AnalyticIdentity.cs" />
+    <Compile Include="DisplayEntities\DriverMode.cs" />
+    <Compile Include="DisplayEntities\PriceList.cs" />
+    <Compile Include="DisplayEntities\Pricing.cs" />
+    <Compile Include="DisplayEntities\UserRole.cs" />
+    <Compile Include="DisplayEntities\Session.cs" />
+    <Compile Include="DisplayEntities\User.cs" />
+    <Compile Include="Interfaces\IAnalyticRepository.cs" />
+    <Compile Include="Mappers\AdvisorMapper.cs" />
+    <Compile Include="Mappers\AnalyticMapper.cs" />
+    <Compile Include="Mappers\DriverGroupMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mappers\DriverMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mappers\ModuleMapper.cs" />
+    <Compile Include="Mappers\ResultMapper.cs" />
+    <Compile Include="Mappers\FolderMapper.cs" />
+    <Compile Include="Mappers\SessionMapper.cs" />
+    <Compile Include="Mappers\PriceListMapper.cs" />
+    <Compile Include="Mappers\SQLEnumerationMapper.cs" />
+    <Compile Include="Mappers\UserMapper.cs" />
+    <Compile Include="Mappers\PricingMapper.cs" />
+    <Compile Include="Mappers\ModeMapper.cs" />
+    <Compile Include="Mappers\FilterMapper.cs" />
+    <Compile Include="Mappers\ErrorMapper.cs" />
+    <Compile Include="Mappers\IdentityMapper.cs" />
     <Compile Include="ViewModels\Admin\AdminModuleViewModel.cs" />
     <Compile Include="ViewModels\Admin\FolderSettingsViewModel.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticModuleViewModel.cs" />
@@ -263,6 +315,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -302,6 +355,10 @@
     <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\APLPX.Client.Contracts\APLPX.Client.Contracts.csproj">
+      <Project>{8888ebe0-7a11-4ad0-ab11-88dbfe009c57}</Project>
+      <Name>APLPX.Client.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\APLPX.Client.Entity\APLPX.Client.Entity.csproj">
       <Project>{b365c24a-4504-47dd-9305-48c2ae1657f3}</Project>
       <Name>APLPX.Client.Entity</Name>

@@ -5,7 +5,6 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
-	xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
     mc:Ignorable="d"
 	x:Class="APLPX.UI.WPF.HomeVerticalControl"
 	x:Name="UserControl"
@@ -247,8 +246,74 @@
                 </Trigger>
             </Style.Triggers>
         </Style>-->
-    </ResourceDictionary>
-</UserControl.Resources>
+
+        <!--TODO: apply these styles and data template when we databind the ModuleListBox. 
+            Also, refactor to ResourceDictionary for similar listboxes in Admin, other views. -->
+            <Style TargetType="Canvas" x:Key="graphicsCanvasStyle">
+                <Setter Property="Width" Value="75" />
+                <Setter Property="Height" Value="75" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Clip" Value="F1 M 0,0L 76,0L 76,76L 0,76L 0,0" />
+            </Style>
+        
+            <Style TargetType="Path" x:Key="graphicsPathStyle">
+                <Setter Property="Width" Value="75" />
+                <Setter Property="Height" Value="75" />
+                <Setter Property="Stretch" Value="Fill" />
+                <Setter Property="Fill" Value="White" />
+            </Style>
+
+            <Style TargetType="ListBoxItem" x:Key="listItemStyle">
+                <Setter Property="Height" Value="125"/>
+                <Setter Property="Width" Value="125"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+            </Style>
+        
+            <DataTemplate x:Key="listItemTemplate">
+                <StackPanel VerticalAlignment="Center">
+                    <Canvas x:Name="itemCanvas"
+				            Style="{StaticResource graphicsCanvasStyle}">
+                    <Path x:Name="itemPath"
+				          Style="{StaticResource graphicsPathStyle}"
+				          Data="F1 M 22,52L 22,35L 30,35L 30,52L 22,52 Z M 32,52L 32,22L 39,22L 39,52L 32,52 Z M 41,52L 41,41L 49,41L 49,52L 41,52 Z M 51,52L 51,29L 59,29L 59,52L 51,52 Z M 17,19L 20,19L 20,54L 59,54L 59,57L 17,57L 17,19 Z " 
+                          />
+                    </Canvas>
+                    <TextBlock FontSize="15"
+				               TextAlignment="Center"
+				               Foreground="{StaticResource Foreground}"
+				               Text="{Binding Path=SelectedSubModule}" 
+                               />
+                </StackPanel>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Path=SelectedSubModule}"
+					             Value="Analytics">
+                        <Setter TargetName="itemPath"
+					            Property="Data"
+					            Value="F1 M 22,52L 22,35L 30,35L 30,52L 22,52 Z M 32,52L 32,22L 39,22L 39,52L 32,52 Z M 41,52L 41,41L 49,41L 49,52L 41,52 Z M 51,52L 51,29L 59,29L 59,52L 51,52 Z M 17,19L 20,19L 20,54L 59,54L 59,57L 17,57L 17,19 Z " />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=SelectedSubModule}"
+					             Value="Everyday">
+                        <Setter TargetName="itemPath"
+					        Property="Data"
+					        Value="F1 M 19,19L 20.1875,19L 20.1875,57L 19,57L 19,19 Z M 22.1666,19L 23.75,19L 23.75,57L 22.1666,57L 22.1666,19 Z M 25.3333,19L 28.5,19L 28.5,57L 25.3333,57L 25.3333,19 Z M 30.0833,19L 31.6666,19L 31.6666,57L 30.0833,57L 30.0833,19 Z M 33.25,19L 34.0416,19L 34.0416,57L 33.25,57L 33.25,19 Z M 38,19L 42.75,19L 42.75,57L 38,57L 38,19 Z M 44.3333,19L 45.9166,19L 45.9166,57L 44.3333,57L 44.3333,19 Z M 50.6667,19L 53.8333,19L 53.8333,57L 50.6667,57L 50.6667,19 Z M 55.4167,19L 57,19L 57,57L 55.4167,57L 55.4167,19 Z M 47.5,19L 48.2917,19L 48.2917,57L 47.5,57L 47.5,19 Z " />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=SelectedSubModule}"
+					             Value="Promotions">
+                        <Setter TargetName="itemPath"
+					            Property="Data"
+					            Value="F1 M 24.5416,19L 33.25,19L 55.4167,41.1667C 56.6533,42.4033 56.6533,44.4083 55.4167,45.645L 45.645,55.4167C 44.4084,56.6533 42.4033,56.6533 41.1667,55.4167L 19,33.25L 19,24.5417C 19,22.6945 19,20.8472 19.9236,19.9236C 20.8472,19 22.6944,19 24.5416,19 Z M 26.9167,23.75C 25.1678,23.75 23.75,25.1678 23.75,26.9167C 23.75,28.6656 25.1678,30.0833 26.9167,30.0833C 28.6656,30.0833 30.0833,28.6656 30.0833,26.9167C 30.0833,25.1678 28.6656,23.75 26.9167,23.75 Z " />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=SelectedSubModule}"
+					 Value="Kits">
+                        <Setter TargetName="itemPath"
+					            Property="Data"
+					            Value="F1 M 18,40L 36,40L 36,58L 18,58L 18,40 Z M 40,58L 40,40L 58,40L 58,58L 40,58 Z M 40,36L 40,18L 58,18L 58,36L 40,36 Z M 29,36L 25,36L 25,29L 18,29L 18,25L 25,25L 25,18L 29,18L 29,25L 36,25L 36,29L 29,29L 29,36 Z " />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        
+        </ResourceDictionary>
+    </UserControl.Resources>
 <Grid x:Name="LayoutRoot">
 
     <DockPanel x:Name="DetailContentDockPanel">
@@ -374,17 +439,17 @@
                             </StackPanel>
                             <StackPanel x:Name="TagStack" Orientation="Vertical" Width="Auto" Height="Auto" 
                                         Visibility="{Binding IsTagsDisplayed}" Margin="15 10 10 0">
-                                <TextBlock Text="Folder Search" FontSize="23" FontWeight="Normal"></TextBlock>
-                                <Separator ></Separator>
+                           <!--     <TextBlock Text="Folder Search" FontSize="23" FontWeight="Normal"></TextBlock>  
+                                <Separator ></Separator>    BMB-Folder Search Removal -->
 
-                                    <telerik:RadAutoCompleteBox x:Name="TagSearchBox" ItemsSource="{Binding Tags}" SelectionChanged="TagSearchBox_SelectionChanged"
-                                                            WatermarkContent="--Enter Keyword Here--"
+                          <!--          <telerik:RadAutoCompleteBox x:Name="TagSearchBox" ItemsSource="{Binding Tags}" SelectionChanged="TagSearchBox_SelectionChanged"
+                                                            WatermarkContent="Enter Keyword Here"
                                                             AutoCompleteMode="Suggest"
                                                             Width="200" Margin="0 5"
                                                             Background="White" FontSize="16" Foreground="Black"
                                                                 
                                                                 TextSearchMode="Contains"
-                                                                />
+                                                                />  Removal w/ Telerek-->
 
                                     <!--<ListBox x:Name="TagListBox" Margin="0 10 0 0" ItemsSource="{Binding Tags, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                          Height="250" Width="200" SelectionChanged="TagListBox_SelectionChanged">

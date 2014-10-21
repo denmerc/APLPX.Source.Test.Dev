@@ -65,6 +65,7 @@ namespace APLPX.Server.Data
             public const String pricingId = "pricingId";
             public const String pricingName = "pricingName";
             public const String pricingDescription = "pricingDescription";
+            public const String pricingNotes = "pricingNotes";
             public const String refreshedText = "refreshedText";
             public const String createdText = "createdText";
             public const String editedText = "editedText";

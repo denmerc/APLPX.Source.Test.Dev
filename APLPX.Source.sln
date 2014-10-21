@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf", "APLPX.UI.Wpf\APLPX.UI.Wpf.csproj", "{632A3DCA-FD92-4067-96B9-9A858C23E2D3}"
 EndProject
@@ -32,10 +32,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{FFBEF6B5-B3F
 		lib\System.Reactive.Interfaces.dll = lib\System.Reactive.Interfaces.dll
 		lib\System.Reactive.Linq.dll = lib\System.Reactive.Linq.dll
 		lib\System.Reactive.PlatformServices.dll = lib\System.Reactive.PlatformServices.dll
-		lib\Telerik.Windows.Controls.dll = lib\Telerik.Windows.Controls.dll
-		lib\Telerik.Windows.Controls.Input.dll = lib\Telerik.Windows.Controls.Input.dll
-		lib\Telerik.Windows.Controls.Navigation.dll = lib\Telerik.Windows.Controls.Navigation.dll
-		lib\Telerik.Windows.Data.dll = lib\Telerik.Windows.Data.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CLIENT", "CLIENT", "{0171304D-A858-4B86-8300-8D8BDBB85698}"
@@ -46,11 +42,81 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{4D4B4CFB-0B02-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TEST", "TEST", "{77A1CB08-C3CC-4CAE-B331-28D23BA2A85E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf.Test", "APLPX.UI.Wpf.Test\APLPX.UI.Wpf.Test.csproj", "{184D6682-BAC7-47C8-8196-4EDB82A3538D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.Server.Test", "APLPX.Server.Test\APLPX.Server.Test.csproj", "{5BC76472-F6B0-4C13-9C15-541ED976A45E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf.Tests", "APLPX.UI.Wpf.Tests\APLPX.UI.Wpf.Tests.csproj", "{CE218B52-9A53-4468-B929-686236DE5D0B}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 11
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccProjectUniqueName0 = APLPX.Core\\APLPX.Core.csproj
+		SccProjectName0 = APLPX.Core
+		SccAuxPath0 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath0 = APLPX.Core
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName1 = APLPX.Client.Entity\\APLPX.Client.Entity.csproj
+		SccProjectTopLevelParentUniqueName1 = APLPX.Source.sln
+		SccProjectName1 = APLPX.Client.Entity
+		SccAuxPath1 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath1 = APLPX.Client.Entity
+		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName2 = APLPX.UI.Wpf\\APLPX.UI.Wpf.csproj
+		SccProjectTopLevelParentUniqueName2 = APLPX.Source.sln
+		SccProjectName2 = APLPX.UI.Wpf
+		SccAuxPath2 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath2 = APLPX.UI.Wpf
+		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName3 = APLPX.Client.Contracts\\APLPX.Client.Contracts.csproj
+		SccProjectTopLevelParentUniqueName3 = APLPX.Source.sln
+		SccProjectName3 = APLPX.Client.Contracts
+		SccAuxPath3 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath3 = APLPX.Client.Contracts
+		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName4 = APLPX.Server.Entity\\APLPX.Server.Entity.csproj
+		SccProjectTopLevelParentUniqueName4 = APLPX.Source.sln
+		SccProjectName4 = APLPX.Server.Entity
+		SccAuxPath4 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath4 = APLPX.Server.Entity
+		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName5 = APLPX.Server.Data\\APLPX.Server.Data.csproj
+		SccProjectTopLevelParentUniqueName5 = APLPX.Source.sln
+		SccProjectName5 = APLPX.Server.Data
+		SccAuxPath5 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath5 = APLPX.Server.Data
+		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName6 = APLPX.Server.Services.Contracts\\APLPX.Server.Services.Contracts.csproj
+		SccProjectTopLevelParentUniqueName6 = APLPX.Source.sln
+		SccProjectName6 = APLPX.Server.Services.Contracts
+		SccAuxPath6 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath6 = APLPX.Server.Services.Contracts
+		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName7 = APLPX.Server.Services\\APLPX.Server.Services.csproj
+		SccProjectTopLevelParentUniqueName7 = APLPX.Source.sln
+		SccProjectName7 = APLPX.Server.Services
+		SccAuxPath7 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath7 = APLPX.Server.Services
+		SccProvider7 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName8 = APLPX.Server.Services.Host.Web\\APLPX.Server.Services.Host.Web.csproj
+		SccProjectTopLevelParentUniqueName8 = APLPX.Source.sln
+		SccProjectName8 = APLPX.Server.Services.Host.Web
+		SccAuxPath8 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath8 = APLPX.Server.Services.Host.Web
+		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName9 = APLPX.Client\\APLPX.Client.csproj
+		SccProjectTopLevelParentUniqueName9 = APLPX.Source.sln
+		SccProjectName9 = APLPX.Client
+		SccAuxPath9 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath9 = APLPX.Client
+		SccProvider9 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName10 = APLPX.Server.Test\\APLPX.Server.Test.csproj
+		SccProjectTopLevelParentUniqueName10 = APLPX.Source.sln
+		SccProjectName10 = APLPX.Server.Test
+		SccAuxPath10 = http://apl03:8080/tfs/apl%20source%20-%20seal
+		SccLocalPath10 = APLPX.Server.Test
+		SccProvider10 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -96,10 +162,10 @@ Global
 		{5F70D122-D62F-43B3-994F-F313CC15717E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F70D122-D62F-43B3-994F-F313CC15717E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F70D122-D62F-43B3-994F-F313CC15717E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{184D6682-BAC7-47C8-8196-4EDB82A3538D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{184D6682-BAC7-47C8-8196-4EDB82A3538D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{184D6682-BAC7-47C8-8196-4EDB82A3538D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{184D6682-BAC7-47C8-8196-4EDB82A3538D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BC76472-F6B0-4C13-9C15-541ED976A45E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BC76472-F6B0-4C13-9C15-541ED976A45E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BC76472-F6B0-4C13-9C15-541ED976A45E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BC76472-F6B0-4C13-9C15-541ED976A45E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CE218B52-9A53-4468-B929-686236DE5D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CE218B52-9A53-4468-B929-686236DE5D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE218B52-9A53-4468-B929-686236DE5D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -118,7 +184,7 @@ Global
 		{1F370A03-4DC6-4F1B-946F-B8B2F3B32157} = {0FEE0BEF-AC98-49B2-BD62-6E0C8CB16BDF}
 		{6E5C5DB5-F3AB-4F68-9C16-6AF6E5E1E7BD} = {0FEE0BEF-AC98-49B2-BD62-6E0C8CB16BDF}
 		{5F70D122-D62F-43B3-994F-F313CC15717E} = {0FEE0BEF-AC98-49B2-BD62-6E0C8CB16BDF}
-		{184D6682-BAC7-47C8-8196-4EDB82A3538D} = {4D4B4CFB-0B02-40DD-826A-10C9F8250773}
+		{5BC76472-F6B0-4C13-9C15-541ED976A45E} = {0FEE0BEF-AC98-49B2-BD62-6E0C8CB16BDF}
 		{CE218B52-9A53-4468-B929-686236DE5D0B} = {77A1CB08-C3CC-4CAE-B331-28D23BA2A85E}
 	EndGlobalSection
 EndGlobal

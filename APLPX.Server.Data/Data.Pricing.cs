@@ -9,14 +9,14 @@ namespace APLPX.Server.Data
     public interface IPricingData
     {
         void Dispose();
-        Session<List<Server.Entity.Pricing.Identity>> LoadList(Session<Server.Entity.NullT> session);
-        Session<Server.Entity.Pricing.Identity> SaveIdentity(Session<Server.Entity.Pricing.Identity> session);
-        Session<List<Server.Entity.Filter>> LoadFilters(Session<Server.Entity.Pricing.Identity> session);
-        Session<List<Server.Entity.Filter>> SaveFilters(Session<Server.Entity.Pricing> session);
-        Session<List<Server.Entity.Pricing.Driver>> LoadDrivers(Session<Server.Entity.Pricing.Identity> session);
-        Session<List<Server.Entity.Pricing.Driver>> SaveDrivers(Session<Server.Entity.Pricing> session);
-        Session<List<Server.Entity.PriceList>> LoadPriceLists(Session<Server.Entity.Pricing.Identity> session);
-        Session<List<Server.Entity.PriceList>> SavePriceLists(Session<Server.Entity.Pricing> session);
+        Session<List<Server.Entity.Pricing>> LoadList(Session<Server.Entity.NullT> session);
+        Session<Server.Entity.Pricing> SaveIdentity(Session<Server.Entity.Pricing> session);
+        Session<Server.Entity.Pricing> LoadFilters(Session<Server.Entity.Pricing> session);
+        Session<Server.Entity.Pricing> SaveFilters(Session<Server.Entity.Pricing> session);
+        Session<Server.Entity.Pricing> LoadDrivers(Session<Server.Entity.Pricing> session);
+        Session<Server.Entity.Pricing> SaveDrivers(Session<Server.Entity.Pricing> session);
+        Session<Server.Entity.Pricing> LoadPriceLists(Session<Server.Entity.Pricing> session);
+        Session<Server.Entity.Pricing> SavePriceLists(Session<Server.Entity.Pricing> session);
     }
 
     public class PricingData : IPricingData
@@ -56,81 +56,81 @@ namespace APLPX.Server.Data
             if (sqlService != null) sqlService.ExecuteCloseConnection();
         }
 
-        public Session<List<Server.Entity.Pricing.Identity>> LoadList(Session<Server.Entity.NullT> sessionIn) {
+        public Session<List<Server.Entity.Pricing>> LoadList(Session<Server.Entity.NullT> sessionIn) {
             
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Pricing.Identity>> sessionOut = Session<NullT>.Clone<List<Pricing.Identity>>(sessionIn);
+            Session<List<Server.Entity.Pricing>> sessionOut = Session<NullT>.Clone<List<Pricing>>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.Pricing.Identity> SaveIdentity(Session<Server.Entity.Pricing.Identity> sessionIn) {
+        public Session<Server.Entity.Pricing> SaveIdentity(Session<Server.Entity.Pricing> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.Pricing.Identity> sessionOut = sessionIn.Clone<Pricing.Identity>(new Pricing.Identity());
+            Session<Server.Entity.Pricing> sessionOut = Session<Pricing>.Clone<Pricing>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Filter>> LoadFilters(Session<Server.Entity.Pricing.Identity> sessionIn) {
+        public Session<Server.Entity.Pricing> LoadFilters(Session<Server.Entity.Pricing> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Filter>> sessionOut = Session<Pricing.Identity>.Clone<List<Filter>>(sessionIn);
+            Session<Server.Entity.Pricing> sessionOut = Session<Pricing>.Clone<Pricing>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Filter>> SaveFilters(Session<Server.Entity.Pricing> sessionIn) {
+        public Session<Server.Entity.Pricing> SaveFilters(Session<Server.Entity.Pricing> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Filter>> sessionOut = Session<Pricing>.Clone<List<Filter>>(sessionIn);
+            Session<Server.Entity.Pricing> sessionOut = Session<Pricing>.Clone<Pricing>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Pricing.Driver>> LoadDrivers(Session<Server.Entity.Pricing.Identity> sessionIn) {
+        public Session<Server.Entity.Pricing> LoadDrivers(Session<Server.Entity.Pricing> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Pricing.Driver>> sessionOut = Session<Pricing.Identity>.Clone<List<Pricing.Driver>>(sessionIn);
+            Session<Server.Entity.Pricing> sessionOut = Session<Pricing>.Clone<Pricing>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.Pricing.Driver>> SaveDrivers(Session<Server.Entity.Pricing> sessionIn) {
+        public Session<Server.Entity.Pricing> SaveDrivers(Session<Server.Entity.Pricing> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.Pricing.Driver>> sessionOut = Session<Pricing>.Clone<List<Pricing.Driver>>(sessionIn);
+            Session<Server.Entity.Pricing> sessionOut = Session<Pricing>.Clone<Pricing>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.PriceList>> LoadPriceLists(Session<Server.Entity.Pricing.Identity> sessionIn) {
+        public Session<Server.Entity.Pricing> LoadPriceLists(Session<Server.Entity.Pricing> sessionIn) {
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.PriceList>> sessionOut = Session<Pricing.Identity>.Clone<List<PriceList>>(sessionIn);
+            Session<Server.Entity.Pricing> sessionOut = Session<Pricing>.Clone<Pricing>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<List<Server.Entity.PriceList>> SavePriceLists(Session<Server.Entity.Pricing> sessionIn) {
+        public Session<Server.Entity.Pricing> SavePriceLists(Session<Server.Entity.Pricing> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.PriceList>> sessionOut = Session<Pricing>.Clone<List<PriceList>>(sessionIn);
+            Session<Server.Entity.Pricing> sessionOut = Session<Pricing>.Clone<Pricing>(sessionIn);
 
             return sessionOut;
         }

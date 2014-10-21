@@ -186,7 +186,7 @@ namespace APLPX.UI.WPF
                         {
                             Console.WriteLine((x as ListBoxItem).Tag);
 
-                            TagSearchBox.SelectedItems = null;
+                           // TagSearchBox.SelectedItems = null;	//BMB - Removed w/ removal of Telerik
                             FavTagListBox.SelectedItem = null;
                             //switch ((x as ListBoxItem).Tag.ToString())
                             switch (ModuleListBox.SelectedIndex)
@@ -580,7 +580,7 @@ namespace APLPX.UI.WPF
             if (subModuleType != Domain.SubModuleType.MySettings || subModuleType != Domain.SubModuleType.Search)
             {
 
-                var items = TagSearchBox.SelectedItems;
+                var items = new List<object>(); //TagSearchBox.SelectedItems;	//BMB - Altered w/ removal of Telerik
                 var list = new List<string>();
                 foreach (var item in items)
                 {

@@ -9,7 +9,7 @@ namespace APLPX.Server.Entity
     public class Session<T> where T : class
     {
         [DataMember]
-        public User.Identity UserIdentity { get; set; }
+        public User User { get; set; }
         [DataMember]
         public T Data { get; set; }
         [DataMember]
@@ -29,7 +29,7 @@ namespace APLPX.Server.Entity
         [DataMember]
         public String SqlKey { get; set; }
         [DataMember]
-        public APLPX.Server.Entity.Workflow Workflow { get; set; }
+        public APLPX.Server.Entity.ModuleFeature Feature { get; set; }
 
         public Session<Tdata> Clone<Tdata>(Tdata Data) where Tdata : class {
 
@@ -49,9 +49,9 @@ namespace APLPX.Server.Entity
                 ClientMessage = String.Empty,
                 ServerMessage = String.Empty,
 
+                User = session.User,
                 SqlKey = session.SqlKey,
                 AppOnline = session.AppOnline,
-                UserIdentity = session.UserIdentity,
                 Authenticated = session.Authenticated,
                 SqlAuthorization = session.SqlAuthorization,
                 WinAuthorization = session.WinAuthorization,
@@ -59,5 +59,4 @@ namespace APLPX.Server.Entity
             };
         }
     }
-
 }

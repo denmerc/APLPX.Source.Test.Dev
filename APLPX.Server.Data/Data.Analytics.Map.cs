@@ -7,79 +7,8 @@ namespace APLPX.Server.Data {
 
     class AnalyticMap
     {
-
-        #region Load workflow...
-        public void LoadWorkflowMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
-
-            //Map the command...
-            service.SqlProcedure = AnalyticMap.Names.selectCommand;
-
-            //Map the parameters...
-            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadWorkflowMessage)
-            }; service.sqlParameters.List = parameters;
-
-        }
-
-        public Server.Entity.Workflow LoadWorkflowMapData(System.Data.DataTable data, Server.Data.SqlService service) {
-
-            //Map the entity data...
-            Boolean reading = true;
-            Boolean IsValid = true;
-            Boolean IsActive = false;
-            Int32 rows = data.Rows.Count;
-            String stepNow = String.Empty;
-            String stepLast = String.Empty;
-            APLPX.Server.Entity.Workflow workflow = null;
-            List<Server.Entity.Workflow.Step> listSteps = new List<Entity.Workflow.Step>();
-            List<Server.Entity.Workflow.Error> listErrors = new List<Entity.Workflow.Error>();
-            List<Server.Entity.Workflow.Advisor> listAdvisor = new List<Entity.Workflow.Advisor>();
-            System.Data.DataTableReader reader = data.CreateDataReader();
-
-            //From record set...
-            while (reading) {
-                reading = reader.Read();
-                workflow = new Workflow { Title = reader[AnalyticMap.Names.workflowTitle].ToString(), Steps = listSteps };
-                stepNow = (reading) ? reader[AnalyticMap.Names.workflowStepTitle].ToString() : String.Empty;
-                if (reading) {
-                    listAdvisor.Add(new Entity.Workflow.Advisor(
-                        Int32.Parse(reader[AnalyticMap.Names.workflowMessageSort].ToString()),
-                        reader[AnalyticMap.Names.workflowMessageTitle].ToString()
-                        ));
-                    if (stepLast != stepNow) {
-                        listSteps.Add(new Entity.Workflow.Step(
-                            Int16.Parse(reader[UserMap.Names.workflowStepSort].ToString()),
-                            reader[AnalyticMap.Names.workflowStepName].ToString(),
-                            reader[AnalyticMap.Names.workflowStepTitle].ToString(),
-                            IsValid,
-                            IsActive,
-                            Boolean.Parse(reader[AnalyticMap.Names.workflowStepEnablePrevious].ToString()),
-                            Boolean.Parse(reader[AnalyticMap.Names.workflowStepEnableNext].ToString()),
-                            listErrors,
-                            listAdvisor,
-                            (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.workflowStepKey].ToString())
-                            ));
-                    }
-                }
-                if (!(stepLast.Equals(String.Empty) || stepLast == stepNow)) {
-                    if (stepNow.Equals(String.Empty)) {
-                        listSteps[listSteps.Count - 1].Advisors = listAdvisor.GetRange(0, listAdvisor.Count);
-                    }
-                    else {
-                        listSteps[listSteps.Count - 2].Advisors = listAdvisor.GetRange(0, listAdvisor.Count - 1);
-                        listAdvisor.RemoveRange(0, listAdvisor.Count - 1);
-                    }
-                }
-                stepLast = stepNow;
-            }
-
-            return workflow;
-        }
-        #endregion
-
         #region Load Identities...
-        public void LoadListMapParameters(Session<List<Server.Entity.Analytic.Identity>> session, ref Server.Data.SqlService service) {
+        public void LoadListMapParameters(Session<NullT> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
@@ -92,28 +21,31 @@ namespace APLPX.Server.Data {
 
         }
 
-        public List<Server.Entity.Analytic.Identity> LoadListMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public List<Server.Entity.Analytic> LoadListMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            List<Server.Entity.Analytic.Identity> list = new List<Analytic.Identity>(data.Rows.Count);
+            List<Server.Entity.Analytic> list = new List<Analytic>(data.Rows.Count);
             //Record set...
             while (reader.Read()) {
-                list.Add(new Analytic.Identity (
-                    Int32.Parse(reader[AnalyticMap.Names.analyticsId].ToString()),
-                    reader[AnalyticMap.Names.analyticsName].ToString(),
-                    reader[AnalyticMap.Names.analyticsDescription].ToString(),
-                    reader[AnalyticMap.Names.refreshedText].ToString(),
-                    reader[AnalyticMap.Names.createdText].ToString(),
-                    reader[AnalyticMap.Names.editedText].ToString(),
-                    DateTime.Parse(reader[AnalyticMap.Names.refreshed].ToString()),
-                    DateTime.Parse(reader[AnalyticMap.Names.created].ToString()),
-                    DateTime.Parse(reader[AnalyticMap.Names.edited].ToString()),
-                    reader[AnalyticMap.Names.authorText].ToString(),
-                    reader[AnalyticMap.Names.editorText].ToString(),
-                    reader[AnalyticMap.Names.ownerText].ToString(),
-                    Boolean.Parse(reader[AnalyticMap.Names.active].ToString())
-                ));
+                list.Add(
+                    new Analytic (
+                        Int32.Parse(reader[AnalyticMap.Names.analyticsId].ToString()),
+                        new AnalyticIdentity(
+                            reader[AnalyticMap.Names.analyticsName].ToString(),
+                            reader[AnalyticMap.Names.analyticsDescription].ToString(),
+                            reader[AnalyticMap.Names.analyticsNotes].ToString(),
+                            reader[AnalyticMap.Names.refreshedText].ToString(),
+                            reader[AnalyticMap.Names.createdText].ToString(),
+                            reader[AnalyticMap.Names.editedText].ToString(),
+                            DateTime.Parse(reader[AnalyticMap.Names.refreshed].ToString()),
+                            DateTime.Parse(reader[AnalyticMap.Names.created].ToString()),
+                            DateTime.Parse(reader[AnalyticMap.Names.edited].ToString()),
+                            reader[AnalyticMap.Names.authorText].ToString(),
+                            reader[AnalyticMap.Names.editorText].ToString(),
+                            reader[AnalyticMap.Names.ownerText].ToString(),
+                            Boolean.Parse(reader[AnalyticMap.Names.active].ToString())
+                    )));
             }
 
             return list;
@@ -121,7 +53,7 @@ namespace APLPX.Server.Data {
         #endregion
 
         #region Save Identity...
-        public void SaveIdentityMapParameters(Session<Server.Entity.Analytic.Identity> session, ref Server.Data.SqlService service) {
+        public void SaveIdentityMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
@@ -129,29 +61,32 @@ namespace APLPX.Server.Data {
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
-                new SqlServiceParameter(AnalyticMap.Names.name, SqlDbType.VarChar, 105, ParameterDirection.Input, session.Data.Name),
-                new SqlServiceParameter(AnalyticMap.Names.description, SqlDbType.VarChar, 255, ParameterDirection.Input, session.Data.Description),
+                new SqlServiceParameter(AnalyticMap.Names.name, SqlDbType.VarChar, 105, ParameterDirection.Input, session.Data.Identity.Name),
+                new SqlServiceParameter(AnalyticMap.Names.description, SqlDbType.VarChar, 255, ParameterDirection.Input, session.Data.Identity.Description),
+                //TODO: Add notes to meta data
+                //TODO: Add folder to meta data
+                //TODO: Add shared to meta data
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.saveIdentityMessage)
             }; service.sqlParameters.List= parameters;
         }
 
-        public Server.Entity.Analytic.Identity SaveIdentityMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public Server.Entity.Analytic SaveIdentityMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.Analytic.Identity item = new Analytic.Identity();
+            Server.Entity.Analytic analytic = new Analytic();
             //Single record...
             if (reader.Read()) {
-                item.Id = Int32.Parse(reader[AnalyticMap.Names.id].ToString());
+                analytic.Id = Int32.Parse(reader[AnalyticMap.Names.id].ToString());
             }
 
-            return item;
+            return analytic;
         }
         #endregion
 
         #region Load Filters...
-        public void LoadFiltersMapParameters(Session<Server.Entity.Analytic.Identity> session, ref Server.Data.SqlService service) {
+        public void LoadFiltersMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
@@ -165,48 +100,51 @@ namespace APLPX.Server.Data {
 
         }
         
-        public List<Server.Entity.Filter> LoadFiltersMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public List<Entity.FilterGroup> LoadFiltersMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
             Int32 rows = data.Rows.Count;
-            String filterTypeNow = String.Empty;
-            String filterTypeLast = String.Empty;
+            String filterGroupNow = String.Empty;
+            String filterGroupLast = String.Empty;
             List<Server.Entity.Filter> listFilters = new List<Entity.Filter>();
-            List<Server.Entity.Filter.Value> listValues = new List<Entity.Filter.Value>();
+            List<Server.Entity.FilterGroup> listFilterGroups = new List<Entity.FilterGroup>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
             //From record set...
             while (reading) {
                 reading = reader.Read();
-                filterTypeNow = (reading) ? reader[AnalyticMap.Names.filterTypeName].ToString() : String.Empty;
+                filterGroupNow = (reading) ? reader[AnalyticMap.Names.filterTypeName].ToString() : String.Empty;
                 if (reading) {
-                    listValues.Add(new Entity.Filter.Value(
-                        Int32.Parse(reader[AnalyticMap.Names.filterId].ToString()),
-                        Int32.Parse(reader[AnalyticMap.Names.filterKey].ToString()),
-                        reader[AnalyticMap.Names.filterCode].ToString(),
-                        reader[AnalyticMap.Names.filterName].ToString(),
-                        Boolean.Parse(reader[AnalyticMap.Names.filterIncluded].ToString())
+                    listFilters.Add(
+                        new Entity.Filter(
+                            Int32.Parse(reader[AnalyticMap.Names.filterId].ToString()),
+                            Int32.Parse(reader[AnalyticMap.Names.filterKey].ToString()),
+                            reader[AnalyticMap.Names.filterCode].ToString(),
+                            reader[AnalyticMap.Names.filterName].ToString(),
+                            Boolean.Parse(reader[AnalyticMap.Names.filterIncluded].ToString())
                         ));
-                    if (filterTypeLast != filterTypeNow) {
-                        listFilters.Add(new Entity.Filter(
-                            reader[AnalyticMap.Names.filterTypeName].ToString(),
-                            new List<Filter.Value>()
+                    if (filterGroupLast != filterGroupNow) {
+                        listFilterGroups.Add(
+                            new Entity.FilterGroup(
+                                reader[AnalyticMap.Names.filterTypeName].ToString(),
+                                new List<Filter>()
                             ));
                     }
                 }
-                if (!(filterTypeLast.Equals(String.Empty) || filterTypeLast == filterTypeNow) ) {
-                    if (filterTypeNow.Equals(String.Empty)) {
-                        listFilters[listFilters.Count - 1].Values = listValues.GetRange(0, listValues.Count);
+                if (!(filterGroupLast.Equals(String.Empty) || filterGroupLast == filterGroupNow) ) {
+                    if (filterGroupNow.Equals(String.Empty)) {
+                        listFilterGroups[listFilterGroups.Count - 1].Filters = listFilters.GetRange(0, listFilters.Count);
                     }
                     else {
-                        listFilters[listFilters.Count - 2].Values = listValues.GetRange(0, listValues.Count - 1);
-                        listValues.RemoveRange(0, listValues.Count - 1);
+                        listFilterGroups[listFilterGroups.Count - 2].Filters = listFilters.GetRange(0, listFilters.Count - 1);
+                        listFilters.RemoveRange(0, listFilters.Count - 1);
                     }
                 }
-                filterTypeLast = filterTypeNow;
+                filterGroupLast = filterGroupNow;
             }
-            return listFilters;
+
+            return listFilterGroups;
         }
         #endregion
 
@@ -219,14 +157,14 @@ namespace APLPX.Server.Data {
             //Build comma delimited key list...
             const System.Char delimiter = ',';
             System.Text.StringBuilder filterKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.Filter filter in session.Data.Filters) { 
-                foreach (Server.Entity.Filter.Value value in filter.Values) {
-                    if (!value.Included) { filterKeys.Append(value.Key.ToString() + delimiter); }
+            foreach (Server.Entity.FilterGroup filterGroup in session.Data.FilterGroups) { 
+                foreach (Server.Entity.Filter filter in filterGroup.Filters) {
+                    if (!filter.IsSelected) { filterKeys.Append(filter.Key.ToString() + delimiter); }
                 }
             }
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Self.Id.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.filters, SqlDbType.VarChar, 4000, ParameterDirection.Input, filterKeys.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.saveFiltersMessage)
@@ -235,7 +173,7 @@ namespace APLPX.Server.Data {
         #endregion
 
         #region Load Drivers...
-        public void LoadDriversMapParameters(Session<Server.Entity.Analytic.Identity> session, ref Server.Data.SqlService service) {
+        public void LoadDriversMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
@@ -249,7 +187,7 @@ namespace APLPX.Server.Data {
 
         }
 
-        public List<Server.Entity.Analytic.Driver> LoadTypesMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public List<Server.Entity.AnalyticDriver> LoadDriversMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
@@ -259,9 +197,9 @@ namespace APLPX.Server.Data {
             String driverLast = String.Empty;
             String modeNow = String.Empty;
             String modeLast = String.Empty;
-            List<Server.Entity.Analytic.Driver> listDrivers = new List<Analytic.Driver>();
-            List<Server.Entity.Analytic.Driver.Mode> listModes = new List<Analytic.Driver.Mode>();
-            List<Server.Entity.Analytic.Driver.Mode.Group> listGroups = new List<Analytic.Driver.Mode.Group>();
+            List<Server.Entity.AnalyticDriver> listDrivers = new List<AnalyticDriver>();
+            List<Server.Entity.AnalyticDriverMode> listModes = new List<AnalyticDriverMode>();
+            List<Server.Entity.AnalyticDriverGroup> listGroups = new List<AnalyticDriverGroup>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
             //From record set...
@@ -271,29 +209,35 @@ namespace APLPX.Server.Data {
                 modeNow = (reading) ? reader[AnalyticMap.Names.driverModeName].ToString() : String.Empty;
 
                 if (reading) {
-                    listGroups.Add(new Analytic.Driver.Mode.Group(
-                        Int32.Parse(reader[AnalyticMap.Names.driverGroupId].ToString()),
-                        Int32.Parse(reader[AnalyticMap.Names.driverGroupValue].ToString()),
-                        Decimal.Parse(reader[AnalyticMap.Names.driverGroupMinOutlier].ToString()),
-                        Decimal.Parse(reader[AnalyticMap.Names.driverGroupMaxOutlier].ToString())
+                    listGroups.Add(
+                        new AnalyticDriverGroup(
+                            Int32.Parse(reader[AnalyticMap.Names.driverGroupId].ToString()),
+                            Int16.Parse(reader[AnalyticMap.Names.driverGroupValue].ToString()),
+                            Decimal.Parse(reader[AnalyticMap.Names.driverGroupMinOutlier].ToString()),
+                            Decimal.Parse(reader[AnalyticMap.Names.driverGroupMaxOutlier].ToString()),
+                            0 //TODO: Add sort order to meta data
                         ));
                     if (modeLast != modeNow) {
-                        listModes.Add(new Entity.Analytic.Driver.Mode(
-                           Int32.Parse(reader[AnalyticMap.Names.driverModeKey].ToString()),
-                           reader[AnalyticMap.Names.driverModeName].ToString(), //Name
-                           reader[AnalyticMap.Names.driverModeName].ToString(), //Tooltip
-                           Boolean.Parse(reader[AnalyticMap.Names.driverModeIncluded].ToString()),
-                           new List<Analytic.Driver.Mode.Group>()
+                        listModes.Add(
+                            new Entity.AnalyticDriverMode(
+                               Int32.Parse(reader[AnalyticMap.Names.driverModeKey].ToString()),
+                               reader[AnalyticMap.Names.driverModeName].ToString(), //Name
+                               reader[AnalyticMap.Names.driverModeName].ToString(), //Tooltip
+                               0, //TODO: add sort order to meta data
+                               Boolean.Parse(reader[AnalyticMap.Names.driverModeIncluded].ToString()),
+                               new List<AnalyticDriverGroup>()
                             ));
                     }
                     if (driverLast != driverNow) {
-                        listDrivers.Add(new Entity.Analytic.Driver(
-                            Int32.Parse(reader[AnalyticMap.Names.driverId].ToString()),
-                            Int32.Parse(reader[AnalyticMap.Names.driverKey].ToString()),
-                            reader[AnalyticMap.Names.driverName].ToString(), //Name
-                            reader[AnalyticMap.Names.driverName].ToString(), //Tooltip
-                            Boolean.Parse(reader[AnalyticMap.Names.driverIncluded].ToString()),
-                            new List<Analytic.Driver.Mode>()
+                        listDrivers.Add(
+                            new Entity.AnalyticDriver(
+                                Int32.Parse(reader[AnalyticMap.Names.driverId].ToString()),
+                                Int32.Parse(reader[AnalyticMap.Names.driverKey].ToString()),
+                                reader[AnalyticMap.Names.driverName].ToString(), //Name
+                                reader[AnalyticMap.Names.driverName].ToString(), //Title
+                                0, //TODO: Add sort order to meta data
+                                Boolean.Parse(reader[AnalyticMap.Names.driverIncluded].ToString()),
+                                new List<AnalyticDriverMode>()
                             ));
                     }
                 }
@@ -334,11 +278,11 @@ namespace APLPX.Server.Data {
             const System.Char splitter = ',';
             const System.Char delimiter = ';';
             System.Text.StringBuilder driverKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.Analytic.Driver driver in session.Data.Drivers) {
-                if (driver.Selected) {
-                    foreach (Server.Entity.Analytic.Driver.Mode mode in driver.Modes) {
-                        if (mode.Selected) { 
-                            foreach (Server.Entity.Analytic.Driver.Mode.Group group in mode.Groups) {
+            foreach (Server.Entity.AnalyticDriver driver in session.Data.Drivers) {
+                if (driver.IsSelected) {
+                    foreach (Server.Entity.AnalyticDriverMode mode in driver.Modes) {
+                        if (mode.IsSelected) { 
+                            foreach (Server.Entity.AnalyticDriverGroup group in mode.Groups) {
                                 driverKeys.Append(driver.Key.ToString() + delimiter);
                                 driverKeys.Append(mode.Key.ToString() + delimiter);
                                 driverKeys.Append(group.Value.ToString() + delimiter);
@@ -351,7 +295,7 @@ namespace APLPX.Server.Data {
             }
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Self.Id.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.drivers, SqlDbType.VarChar, 4000, ParameterDirection.Input, driverKeys.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.saveDriversMessage)
@@ -360,7 +304,7 @@ namespace APLPX.Server.Data {
         #endregion
 
         #region Load Price lists...
-        public void LoadPricelistsMapParameters(Session<Server.Entity.Analytic.Identity> session, ref Server.Data.SqlService service) {
+        public void LoadPricelistsMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
@@ -374,15 +318,15 @@ namespace APLPX.Server.Data {
 
         }
 
-        public List<Server.Entity.PriceList> LoadPricelistsMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public List<Server.Entity.PriceListGroup> LoadPricelistsMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
             Int32 rows = data.Rows.Count;
             String listTypeNow = String.Empty;
             String listTypeLast = String.Empty;
+            List<Server.Entity.PriceListGroup> priceListGroups = new List<Entity.PriceListGroup>();
             List<Server.Entity.PriceList> priceLists = new List<Entity.PriceList>();
-            List<Server.Entity.PriceList.Value> listValues = new List<Entity.PriceList.Value>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
             //From record set...
@@ -390,32 +334,34 @@ namespace APLPX.Server.Data {
                 reading = reader.Read();
                 listTypeNow = (reading) ? reader[AnalyticMap.Names.priceListTypeName].ToString() : String.Empty;
                 if (reading) {
-                    listValues.Add(new Entity.PriceList.Value(
-                        Int32.Parse(reader[AnalyticMap.Names.priceListId].ToString()),
-                        Int32.Parse(reader[AnalyticMap.Names.priceListKey].ToString()),
-                        reader[AnalyticMap.Names.priceListCode].ToString(),
-                        reader[AnalyticMap.Names.priceListName].ToString(),
-                        Boolean.Parse(reader[AnalyticMap.Names.priceListIncluded].ToString())
+                    priceLists.Add(
+                        new Entity.PriceList(
+                            Int32.Parse(reader[AnalyticMap.Names.priceListId].ToString()),
+                            Int32.Parse(reader[AnalyticMap.Names.priceListKey].ToString()),
+                            reader[AnalyticMap.Names.priceListCode].ToString(),
+                            reader[AnalyticMap.Names.priceListName].ToString(),
+                            Boolean.Parse(reader[AnalyticMap.Names.priceListIncluded].ToString())
                         ));
                     if (listTypeLast != listTypeNow) {
-                        priceLists.Add(new Entity.PriceList(
-                            reader[AnalyticMap.Names.priceListTypeName].ToString(),
-                            new List<PriceList.Value>()
+                        priceListGroups.Add(
+                            new Entity.PriceListGroup(
+                                reader[AnalyticMap.Names.priceListTypeName].ToString(),
+                                new List<PriceList>()
                             ));
                     }
                 }
                 if (!(listTypeLast.Equals(String.Empty) || listTypeLast == listTypeNow)) {
                     if (listTypeNow.Equals(String.Empty)) {
-                        priceLists[priceLists.Count - 1].Values = listValues.GetRange(0, listValues.Count);
+                        priceListGroups[priceListGroups.Count - 1].PriceLists = priceLists.GetRange(0, priceLists.Count);
                     }
                     else {
-                        priceLists[priceLists.Count - 2].Values = listValues.GetRange(0, listValues.Count - 1);
-                        listValues.RemoveRange(0, listValues.Count - 1);
+                        priceListGroups[priceListGroups.Count - 2].PriceLists = priceLists.GetRange(0, priceLists.Count - 1);
+                        priceLists.RemoveRange(0, priceLists.Count - 1);
                     }
                 }
                 listTypeLast = listTypeNow;
             }
-            return priceLists;
+            return priceListGroups;
         }
         #endregion
 
@@ -428,14 +374,14 @@ namespace APLPX.Server.Data {
             //Build comma delimited key list...
             const System.Char delimiter = ',';
             System.Text.StringBuilder priceKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.PriceList list in session.Data.PriceLists) {
-                foreach (Server.Entity.PriceList.Value value in list.Values) {
-                    if (!value.Included) { priceKeys.Append(value.Key.ToString() + delimiter); }
+            foreach (Server.Entity.PriceListGroup group in session.Data.PriceListGroups) {
+                foreach (Server.Entity.PriceList priceList in group.PriceLists) {
+                    if (!priceList.IsSelected) { priceKeys.Append(priceList.Key.ToString() + delimiter); }
                 }
             }
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Self.Id.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.pricelists, SqlDbType.VarChar, 4000, ParameterDirection.Input, priceKeys.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.savePriceListsMessage)
@@ -480,6 +426,7 @@ namespace APLPX.Server.Data {
             public const String analyticsId = "analyticsId";
             public const String analyticsName = "analyticsName";
             public const String analyticsDescription = "analyticsDescription";
+            public const String analyticsNotes = "analyticsNotes";
             public const String refreshedText = "refreshedText";
             public const String createdText = "createdText";
             public const String editedText = "editedText";
@@ -554,4 +501,76 @@ namespace APLPX.Server.Data {
 
         //TODO - Determine result view for validation; by workflow, validation messages, validation warnings, icons
     }
+
+    #region OBSOLETE
+    //#region Load workflow...
+    //public void LoadWorkflowMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
+
+    //    //Map the command...
+    //    service.SqlProcedure = AnalyticMap.Names.selectCommand;
+
+    //    //Map the parameters...
+    //    APLPX.Server.Data.SqlServiceParameter[] parameters = { 
+    //        new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
+    //        new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadWorkflowMessage)
+    //    }; service.sqlParameters.List = parameters;
+
+    //}
+
+    //public Server.Entity.Workflow LoadWorkflowMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+
+    //    //Map the entity data...
+    //    Boolean reading = true;
+    //    Boolean IsValid = true;
+    //    Boolean IsActive = false;
+    //    Int32 rows = data.Rows.Count;
+    //    String stepNow = String.Empty;
+    //    String stepLast = String.Empty;
+    //    APLPX.Server.Entity.Workflow workflow = null;
+    //    List<Server.Entity.Workflow.Step> listSteps = new List<Entity.Workflow.Step>();
+    //    List<Server.Entity.Workflow.Error> listErrors = new List<Entity.Workflow.Error>();
+    //    List<Server.Entity.Workflow.Advisor> listAdvisor = new List<Entity.Workflow.Advisor>();
+    //    System.Data.DataTableReader reader = data.CreateDataReader();
+
+    //    //From record set...
+    //    while (reading) {
+    //        reading = reader.Read();
+    //        workflow = new Workflow { Title = reader[AnalyticMap.Names.workflowTitle].ToString(), Steps = listSteps };
+    //        stepNow = (reading) ? reader[AnalyticMap.Names.workflowStepTitle].ToString() : String.Empty;
+    //        if (reading) {
+    //            listAdvisor.Add(new Entity.Workflow.Advisor(
+    //                Int32.Parse(reader[AnalyticMap.Names.workflowMessageSort].ToString()),
+    //                reader[AnalyticMap.Names.workflowMessageTitle].ToString()
+    //                ));
+    //            if (stepLast != stepNow) {
+    //                listSteps.Add(new Entity.Workflow.Step(
+    //                    Int16.Parse(reader[UserMap.Names.workflowStepSort].ToString()),
+    //                    reader[AnalyticMap.Names.workflowStepName].ToString(),
+    //                    reader[AnalyticMap.Names.workflowStepTitle].ToString(),
+    //                    IsValid,
+    //                    IsActive,
+    //                    Boolean.Parse(reader[AnalyticMap.Names.workflowStepEnablePrevious].ToString()),
+    //                    Boolean.Parse(reader[AnalyticMap.Names.workflowStepEnableNext].ToString()),
+    //                    listErrors,
+    //                    listAdvisor,
+    //                    (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.workflowStepKey].ToString())
+    //                    ));
+    //            }
+    //        }
+    //        if (!(stepLast.Equals(String.Empty) || stepLast == stepNow)) {
+    //            if (stepNow.Equals(String.Empty)) {
+    //                listSteps[listSteps.Count - 1].Advisors = listAdvisor.GetRange(0, listAdvisor.Count);
+    //            }
+    //            else {
+    //                listSteps[listSteps.Count - 2].Advisors = listAdvisor.GetRange(0, listAdvisor.Count - 1);
+    //                listAdvisor.RemoveRange(0, listAdvisor.Count - 1);
+    //            }
+    //        }
+    //        stepLast = stepNow;
+    //    }
+
+    //    return workflow;
+    //}
+    //#endregion
+    #endregion
 }

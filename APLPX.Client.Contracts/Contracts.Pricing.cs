@@ -12,8 +12,20 @@ namespace APLPX.Client.Contracts
     public interface IPricingService
     {
         [OperationContract]
-        Session<List<Client.Entity.Pricing.Identity>> LoadList(Session<Client.Entity.NullT> session);
+        Session<List<Client.Entity.Pricing>> LoadList(Session<Client.Entity.NullT> session);
         [OperationContract]
-        Session<Client.Entity.Pricing.Identity> SaveIdentity(Session<Client.Entity.Pricing.Identity> session);
+        Session<Client.Entity.Pricing> SaveIdentity(Session<Client.Entity.Pricing> session);
+        [OperationContract]
+        Session<Client.Entity.Pricing> LoadFilters(Session<Client.Entity.Pricing> session);
+        [OperationContract]
+        Session<Client.Entity.Pricing> SaveFilters(Session<Client.Entity.Pricing> session);
+        [OperationContract]
+        Session<Client.Entity.Pricing> LoadDrivers(Session<Client.Entity.Pricing> session);
+        [OperationContract]
+        Session<Client.Entity.Pricing> SaveDrivers(Session<Client.Entity.Pricing> session);
+        [OperationContract]
+        Session<Client.Entity.Pricing> LoadPriceLists(Session<Client.Entity.Pricing> session);
+        [OperationContract]
+        Session<Client.Entity.Pricing> SavePriceLists(Session<Client.Entity.Pricing> session);
     }
 }

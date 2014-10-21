@@ -5,55 +5,94 @@ using System.Runtime.Serialization;
 namespace APLPX.Server.Entity
 {
     [DataContract]
+    public class PriceListGroup
+    {
+        #region Initialize...
+        public PriceListGroup() { }
+        public PriceListGroup(
+            List<PriceList> PriceLists
+            ) {
+                this.PriceLists = PriceLists;
+        }
+        public PriceListGroup(
+            String TypeName,
+            List<PriceList> PriceLists
+            ) {
+            this.TypeName = TypeName;
+            this.PriceLists = PriceLists;
+        }
+        #endregion
+
+        [DataMember]
+        public String TypeName; //CLIENT { get; private set; }
+        [DataMember]
+        public List<PriceList> PriceLists; //CLIENT { get; private set; }
+    }
+
+    [DataContract]
     public class PriceList
     {
         #region Initialize...
         public PriceList() { }
         public PriceList(
-            String Name,
-            List<Value> Values
+            Int32 Id,
+            Int32 Key,
+            Boolean IsSelected
             ) {
+            this.Id = Id;
+            this.Key = Key;
+            this.IsSelected = IsSelected;
+        }
+        public PriceList(
+            Int32 Id,
+            Int32 Key,
+            String Code,
+            String Name,
+            Boolean IsSelected
+            ) {
+            this.Id = Id;
+            this.Key = Key;
+            this.Code = Code;
             this.Name = Name;
-            this.Values = Values;
+            this.IsSelected = IsSelected;
         }
         #endregion
 
         [DataMember]
+        public Int32 Id; //CLIENT { get; private set; }
+        [DataMember]
+        public Int32 Key; //CLIENT { get; private set; }
+        [DataMember]
+        public String Code; //CLIENT { get; private set; }
+        [DataMember]
         public String Name; //CLIENT { get; private set; }
         [DataMember]
-        public List<Value> Values; //CLIENT { get; private set; }
+        public Boolean IsSelected; //CLIENT { get; set; }
+    }
 
-        [DataContract]
-        public class Value
-        {
-            #region Initialize...
-            public Value() { }
-            public Value(
-                Int32 Id,
-                Int32 Key,
-                String Code,
-                String Name,
-                Boolean Included
-                ) {
-                this.Id = Id;
-                this.Key = Key;
-                this.Code = Code;
-                this.Name = Name;
-                this.Included = Included;
-            }
-            #endregion
-
-            [DataMember]
-            public Int32 Id; //CLIENT { get; private set; }
-            [DataMember]
-            public Int32 Key; //CLIENT { get; private set; }
-            [DataMember]
-            public String Code; //CLIENT { get; private set; }
-            [DataMember]
-            public String Name; //CLIENT { get; private set; }
-            [DataMember]
-            public Boolean Included; //CLIENT { get; set; }
+    [DataContract]
+    public class FilterGroup
+    {
+        #region Initialize...
+        public FilterGroup() { }
+        public FilterGroup(
+            List<Filter> Filters
+            ) {
+                this.Filters = Filters;
         }
+        public FilterGroup(
+            String TypeName,
+            List<Filter> Filters
+            ) {
+            this.TypeName = TypeName;
+            this.Filters = Filters;
+        }
+        #endregion
+
+        [DataMember]
+        public String TypeName; //CLIENT { get; private set; }
+        [DataMember]
+        public List<Filter> Filters; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -62,212 +101,228 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public Filter() { }
         public Filter(
-            String Name,
-            List<Value> Values
+            Int32 Id,
+            Int32 Key,
+            Boolean IsSelected
             ) {
+            this.Id = Id;
+            this.Key = Key;
+            this.IsSelected = IsSelected;
+        }
+        public Filter(
+            Int32 Id,
+            Int32 Key,
+            String Code,
+            String Name,
+            Boolean IsSelected
+            ) {
+            this.Id = Id;
+            this.Key = Key;
+            this.Code = Code;
             this.Name = Name;
-            this.Values = Values;
+            this.IsSelected = IsSelected;
         }
         #endregion
 
+        [DataMember]
+        public Int32 Id; //CLIENT { get; private set; }
+        [DataMember]
+        public Int32 Key; //CLIENT { get; private set; }
+        [DataMember]
+        public String Code; //CLIENT { get; private set; }
         [DataMember]
         public String Name; //CLIENT { get; private set; }
         [DataMember]
-        public List<Value> Values; //CLIENT { get; private set; }
-
-        [DataContract]
-        public class Value
-        {
-            #region Initialize...
-            public Value() { }
-            public Value(
-                Int32 Id,
-                Int32 Key,
-                String Code,
-                String Name,
-                Boolean Included
-                ) {
-                this.Id = Id;
-                this.Key = Key;
-                this.Code = Code;
-                this.Name = Name;
-                this.Included = Included;
-            }
-            #endregion
-
-            [DataMember]
-            public Int32 Id; //CLIENT { get; private set; }
-            [DataMember]
-            public Int32 Key; //CLIENT { get; private set; }
-            [DataMember]
-            public String Code; //CLIENT { get; private set; }
-            [DataMember]
-            public String Name; //CLIENT { get; private set; }
-            [DataMember]
-            public Boolean Included; //CLIENT { get; set; }
-        }
+        public Boolean IsSelected; //CLIENT { get; set; }
     }
 
     [DataContract]
-    public class Workflow
+    public class Module
     {
-
         #region Initialize...
-        public Workflow() { }
-        public Workflow(
+        public Module() { }
+        public Module(
+            String Name,
             String Title,
-            List<Step> Steps,
-            WorkflowType WorkflowType
-            ) {
+            Boolean IsVisible,
+            ModuleType Type,
+            List<ModuleFeature> Features
+        ) {
+            this.Name = Name;
             this.Title = Title;
-            this.Steps = Steps;
-            this.ThisWorkflowType = WorkflowType;
+            this.IsVisible = IsVisible;
+            this.Features = Features;
+            this.Type = Type;
         }
         #endregion
 
+        [DataMember]
+        public ModuleType Type; //CLIENT { get; private set; }
+        [DataMember]
+        public String Name; //CLIENT { get; private set; }
         [DataMember]
         public String Title; //CLIENT { get; private set; }
         [DataMember]
-        public List<Step> Steps; //CLIENT { get; private set; }
+        public Boolean IsVisible; //CLIENT { get; private set; }
         [DataMember]
-        public WorkflowType ThisWorkflowType;
-
-        [DataContract]
-        public class Step
-        {
-            #region Initialize...
-            public Step() { }
-            public Step(
-                Int16 Index,
-                String Name,
-                String Caption,
-                Boolean IsValid,
-                Boolean IsActive,
-                Boolean IsEnabledPrevious,
-                Boolean IsEnabledNext,
-                List<Error> Errors,
-                List<Advisor> Advisors,
-                WorkflowStepType ThisStepType
-                ) {
-                    this.Index = Index;
-                    this.Name = Name;
-                    this.Caption = Caption;
-                    this.IsValid = IsValid;
-                    this.IsActive = IsActive;
-                    this.IsEnabledPrevious = IsEnabledPrevious;
-                    this.IsEnabledNext = IsEnabledNext;
-                    this.Errors = Errors;
-                    this.Advisors = Advisors;
-                    this.ThisStepType = ThisStepType;
-            }
-            #endregion
-
-            [DataMember]
-            public Int16 Index; //CLIENT { get; private set; }
-            [DataMember]
-            public String Name; //CLIENT { get; private set; }
-            [DataMember]
-            public String Caption; //CLIENT { get; set; }
-            [DataMember]
-            public Boolean IsValid; //CLIENT { get; set; }
-            [DataMember]
-            public Boolean IsActive; //CLIENT { get; set; }
-            [DataMember]
-            public Boolean IsEnabledPrevious; //CLIENT { get; set; }
-            [DataMember]
-            public Boolean IsEnabledNext; //CLIENT { get; set; }
-            [DataMember]
-            public List<Advisor> Advisors; //CLIENT { get; private set; }
-            [DataMember]
-            public List<Error> Errors; //CLIENT { get; private set; }
-            [DataMember]
-            public WorkflowStepType ThisStepType;
-        }
-
-        [DataContract]
-        public class Advisor
-        {
-            #region Initialize...
-            public Advisor() { }
-            public Advisor(
-                Int32 SortId,
-                String Message
-                ) {
-                this.SortId = SortId;
-                this.Message = Message;
-            }
-            #endregion
-
-            [DataMember]
-            public Int32 SortId; //CLIENT { get; private set; }
-            [DataMember]
-            public String Message; //CLIENT { get; private set; }
-        }
-
-        [DataContract]
-        public class Error
-        {
-            #region Initialize...
-            public Error() { }
-            public Error(
-                String Message
-                ) {
-                    this.Message = Message;
-            }
-            #endregion
-
-            [DataMember]
-            public String Message; //CLIENT { get; set; }
-        }
+        public List<ModuleFeature> Features; //CLIENT { get; private set; }
     }
 
     [DataContract]
-    public class Navigator
+    public class ModuleFeature
     {
+
         #region Initialize...
-        public Navigator() { }
-        public Navigator(
-            Int32 EntityId,
-            String NodeHeader,
-            String NodeTitle,
-            String NodeCaption,
-            WorkflowType Workflow,
-            WorkflowStepType WorkflowStep,
-            WorkflowGroupType WorkflowGroup,
-            Boolean WorkflowReadonly,
-            List<Navigator> Nodes
+        public ModuleFeature() { }
+        public ModuleFeature(
+            String Name,
+            String Title,
+            Boolean IsVisible,
+            ModuleFeatureType Type,
+            List<Folder> Folders,
+            List<ModuleFeatureStep> Steps
             ) {
-            this.EntityId = EntityId;
-            this.NodeHeader = NodeHeader;
-            this.NodeTitle = NodeTitle;
-            this.NodeHeader = NodeHeader;
-            this.NodeCaption = NodeCaption;
-            this.Workflow = Workflow;
-            this.WorkflowStep = WorkflowStep;
-            this.WorkflowGroup = WorkflowGroup;
-            this.WorkflowReadonly = WorkflowReadonly;
-            this.Nodes = Nodes;
+            this.Name = Name;
+            this.Title = Title;
+            this.IsVisible = IsVisible;
+            this.Type = Type;
+            this.Folders = Folders;
+            this.Steps = Steps;
         }
         #endregion
 
         [DataMember]
-        public Int32 EntityId; // CLIENT { get; private set; }
+        public List<Folder> Folders; //CLIENT { get; private set; }
         [DataMember]
-        public String NodeHeader; // CLIENT { get; private set; }
+        public ModuleFeatureType Type; //CLIENT { get; private set; }
         [DataMember]
-        public String NodeTitle; // CLIENT { get; private set; }
+        public String Name; //CLIENT { get; private set; }
         [DataMember]
-        public String NodeCaption; // CLIENT { get; private set; }
+        public String Title; //CLIENT { get; private set; }
         [DataMember]
-        public WorkflowType Workflow; //CLIENT { get; private set; }
+        public Boolean IsVisible;  //CLIENT { get; private set; }
         [DataMember]
-        public WorkflowStepType WorkflowStep; //CLIENT { get; private set; }
+        public List<ModuleFeatureStep> Steps; //CLIENT { get; private set; }
+    }
+
+    [DataContract]
+    public class ModuleFeatureStep
+    {
+        #region Initialize...
+        public ModuleFeatureStep() { }
+        public ModuleFeatureStep(
+            Int16 Index,
+            String Name,
+            String Title,
+            Boolean IsVisible,
+            ModuleFeatureStepType Type,
+            List<ModuleFeatureStepError> Errors,
+            List<ModuleFeatureStepAdvisor> Advisors
+            ) {
+            this.Index = Index;
+            this.Name = Name;
+            this.Title = Title;
+            this.IsVisible = IsVisible;
+            this.Errors = Errors;
+            this.Advisors = Advisors;
+            this.Type = Type;
+        }
+        #endregion
+
         [DataMember]
-        public WorkflowGroupType WorkflowGroup; //CLIENT { get; private set; }
+        public ModuleFeatureStepType Type; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean WorkflowReadonly; // CLIENT { get; private set; }
+        public Int16 Index; //CLIENT { get; private set; }
         [DataMember]
-        public List<Server.Entity.Navigator> Nodes; //CLIENT { get; private set; }
+        public String Name; //CLIENT { get; private set; }
+        [DataMember]
+        public String Title; //CLIENT { get; set; }
+        [DataMember]
+        public Boolean IsVisible; //CLIENT { get; set; }
+        [DataMember]
+        public List<ModuleFeatureStepError> Errors; //CLIENT { get; private set; }
+        [DataMember]
+        public List<ModuleFeatureStepAdvisor> Advisors; //CLIENT { get; private set; }
+    }
+
+    [DataContract]
+    public class ModuleFeatureStepAdvisor
+    {
+        #region Initialize...
+        public ModuleFeatureStepAdvisor() { }
+        public ModuleFeatureStepAdvisor(
+            Int32 SortOrder,
+            String Message
+            ) {
+                this.SortOrder = SortOrder;
+            this.Message = Message;
+        }
+        #endregion
+
+        [DataMember]
+        public Int32 SortOrder; //CLIENT { get; private set; }
+        [DataMember]
+        public String Message; //CLIENT { get; private set; }
+    }
+
+    [DataContract]
+    public class ModuleFeatureStepError
+    {
+        #region Initialize...
+        public ModuleFeatureStepError() { }
+        public ModuleFeatureStepError(
+            String Message
+            ) {
+            this.Message = Message;
+        }
+        #endregion
+
+        [DataMember]
+        public String Message; //CLIENT { get; set; }
+    }
+
+    [DataContract]
+    public class Folder
+    {
+        #region Initialize...
+        public Folder() { }
+        public Folder(
+            Int32 Id,
+            Int32 Template,
+            Int16 ItemCount,
+            String Name,
+            String ParentName,
+            Boolean IsNameChanged,
+            Boolean CanNameChange,
+            Int16 Sort
+            ) {
+            this.Id = Id;
+            this.Template = Template;
+            this.ItemCount = ItemCount;
+            this.Name = Name;
+            this.ParentName = ParentName;
+            this.IsNameChanged = IsNameChanged;
+            this.CanNameChange = CanNameChange;
+            this.Sort = Sort;
+        }
+        #endregion
+
+        [DataMember]
+        public Int32 Id; //CLIENT { get; private set; }
+        [DataMember]
+        public Int32 Template; //CLIENT { get; private set; }
+        [DataMember]
+        public Int16 ItemCount; //CLIENT { get; set; }
+        [DataMember]
+        public String Name; //CLIENT { get; set; }
+        [DataMember]
+        public String ParentName; //CLIENT { get; private set; }
+        [DataMember]
+        public Boolean IsNameChanged; //CLIENT { get; set; }
+        [DataMember]
+        public Boolean CanNameChange; //CLIENT { get; private set; }
+        [DataMember]
+        public Int16 Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -289,12 +344,12 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public Int16 Value;
+        public Int16 Sort; //CLIENT { get; private set; }
         [DataMember]
-        public String Name;
+        public Int16 Value; //CLIENT { get; private set; }
         [DataMember]
-        public String Description;
+        public String Name; //CLIENT { get; private set; }
         [DataMember]
-        public Int16 Sort;
+        public String Description; //CLIENT { get; private set; }
     }
 }

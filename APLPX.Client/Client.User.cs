@@ -19,44 +19,30 @@ namespace APLPX.Client
             return Channel.Initialize(session);
         }
 
-        public Task<Session<NullT>> InitializeAsync(Session<Client.Entity.NullT> session)
-        {
-            return Channel.InitializeAsync(session);
-        }
+        //TODO: Future implementation
+        //public Task<Session<NullT>> InitializeAsync(Session<Client.Entity.NullT> session)
+        //{
+        //    return Channel.InitializeAsync(session);
+        //}
 
         public Session<NullT> Authenticate(Session<NullT> session)
         {
             return Channel.Authenticate(session);
         }
 
-        public Session<NullT> LoadExplorerPlanning(Session<NullT> session)
-        {
-            return Channel.LoadExplorerPlanning(session);
-        }
-
-        public Session<NullT> LoadExplorerTracking(Session<NullT> session)
-        {
-            return Channel.LoadExplorerTracking(session);
-        }
-
-        public Session<NullT> LoadExplorerReporting(Session<NullT> session)
-        {
-            return Channel.LoadExplorerReporting(session);
-        }
-
-        public Session<List<User.Identity>> LoadList(Session<NullT> session)
+        public Session<List<Client.Entity.User>> LoadList(Session<NullT> session)
         {
             return Channel.LoadList(session);
         }
 
-        public Session<User.Identity> LoadIdentity(Session<User.Identity> session)
+        public Session<Client.Entity.User> LoadUser(Session<User> session)
         {
-            return Channel.LoadIdentity(session);
+            return Channel.LoadUser(session);
         }
 
-        public Session<User.Identity> SaveIdentity(Session<User.Identity> session)
+        public Session<Client.Entity.User> SaveUser(Session<User> session)
         {
-            return Channel.SaveIdentity(session);
+            return Channel.SaveUser(session);
         }
 
         public Session<NullT> SavePassword(Session<NullT> session)

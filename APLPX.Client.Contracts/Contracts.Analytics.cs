@@ -12,16 +12,20 @@ namespace APLPX.Client.Contracts
     public interface IAnalyticService
     {
         [OperationContract]
-        Session<List<Client.Entity.Analytic.Identity>> LoadList(Session<Client.Entity.NullT> session);
+        Session<List<Client.Entity.Analytic>> LoadList(Session<Client.Entity.NullT> session);
         [OperationContract]
-        Session<Client.Entity.Analytic.Identity> SaveIdentity(Session<Client.Entity.Analytic.Identity> session);
+        Session<Client.Entity.Analytic> SaveIdentity(Session<Client.Entity.Analytic> session);
         [OperationContract]
-        Session<List<Client.Entity.Filter>> LoadFilters(Session<Client.Entity.Analytic.Identity> session);
+        Session<Client.Entity.Analytic> LoadFilters(Session<Client.Entity.Analytic> session);
         [OperationContract]
-        Session<List<Client.Entity.Filter>> SaveFilters(Session<Client.Entity.Analytic> session);
+        Session<Client.Entity.Analytic> SaveFilters(Session<Client.Entity.Analytic> session);
         [OperationContract]
-        Session<List<Client.Entity.Analytic.Driver>> LoadDrivers(Session<Client.Entity.Analytic.Identity> session);
+        Session<Client.Entity.Analytic> LoadDrivers(Session<Client.Entity.Analytic> session);
         [OperationContract]
-        Session<List<Client.Entity.Analytic.Driver>> SaveDrivers(Session<Client.Entity.Analytic> session);
+        Session<Client.Entity.Analytic> SaveDrivers(Session<Client.Entity.Analytic> session);
+        [OperationContract]
+        Session<Client.Entity.Analytic> LoadPriceLists(Session<Client.Entity.Analytic> session);
+        [OperationContract]
+        Session<Client.Entity.Analytic> SavePriceLists(Session<Client.Entity.Analytic> session);
     }
 }

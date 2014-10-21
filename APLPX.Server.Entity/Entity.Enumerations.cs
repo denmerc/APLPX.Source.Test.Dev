@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace APLPX.Server.Entity
 {
     [DataContract]
-    public enum WorkflowGroupType
+    public enum ModuleType
     {
         #region Common view types...
         [EnumMember]
@@ -22,7 +22,7 @@ namespace APLPX.Server.Entity
     }
 
     [DataContract]
-    public enum WorkflowType
+    public enum ModuleFeatureType
     {
         #region Common view types...
         [EnumMember]
@@ -48,7 +48,7 @@ namespace APLPX.Server.Entity
     }
 
     [DataContract]
-    public enum WorkflowStepType
+    public enum ModuleFeatureStepType
     {
         #region Common view types...
         [EnumMember]
@@ -64,12 +64,6 @@ namespace APLPX.Server.Entity
 
         [EnumMember]
         PlanningHomeMyHomePage = 111, // Step 1) My Home Page
-        [EnumMember]
-        PlanningHomeMyOptimization = 177, // Step 2) My Optimization
-        [EnumMember]
-        PlanningHomeMyMarkuprules = 178, // Step 3) My Markup rules
-        [EnumMember]
-        PlanningHomeMyRoundingrules = 179, // Step 4) My Rounding rules
 
         [EnumMember]
         PlanningAnalyticsMyAnalytics = 112, // Step 1) My Analytics

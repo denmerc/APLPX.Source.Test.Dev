@@ -9,7 +9,7 @@ namespace APLPX.Client.Entity
     public class Session<T> where T : class
     {
         [DataMember]
-        public User.Identity UserIdentity { get; set; }
+        public UserIdentity UserIdentity { get; set; }
         [DataMember]
         public T Data { get; set; }
         [DataMember]
@@ -29,9 +29,7 @@ namespace APLPX.Client.Entity
         [DataMember]
         public String SqlKey { get; set; }
         [DataMember]
-        public APLPX.Client.Entity.Workflow Workflow { get; set; }
-
-
+        public APLPX.Client.Entity.ModuleFeature Feature { get; set; }
 
         public static Session<Tdata> Clone<Tdata>(Session<T> session, Tdata data)
             where Tdata : class

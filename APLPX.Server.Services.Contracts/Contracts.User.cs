@@ -12,19 +12,21 @@ namespace APLPX.Server.Services.Contracts
         [OperationContract]
         Session<Server.Entity.NullT> Authenticate(Session<Server.Entity.NullT> session);
         [OperationContract]
-        Session<Server.Entity.NullT> LoadExplorerPlanning(Session<Server.Entity.NullT> session);
+        Session<List<Server.Entity.User>> LoadList(Session<Server.Entity.NullT> session);
         [OperationContract]
-        Session<Server.Entity.NullT> LoadExplorerTracking(Session<Server.Entity.NullT> session);
+        Session<Server.Entity.User> LoadUser(Session<Server.Entity.User> session);
         [OperationContract]
-        Session<Server.Entity.NullT> LoadExplorerReporting(Session<Server.Entity.NullT> session);
-        [OperationContract]
-        Session<List<Server.Entity.User.Identity>> LoadList(Session<Server.Entity.NullT> session);
-        [OperationContract]
-        Session<Server.Entity.User.Identity> LoadIdentity(Session<Server.Entity.User.Identity> session);
-        [OperationContract]
-        Session<Server.Entity.User.Identity> SaveIdentity(Session<Server.Entity.User.Identity> session);
+        Session<Server.Entity.User> SaveUser(Session<Server.Entity.User> session);
         [OperationContract]
         Session<Server.Entity.NullT> SavePassword(Session<Server.Entity.NullT> session);
-
     }
+
+    #region OBSOLETE...
+    //[OperationContract]
+    //Session<Server.Entity.NullT> LoadExplorerPlanning(Session<Server.Entity.NullT> session);
+    //[OperationContract]
+    //Session<Server.Entity.NullT> LoadExplorerTracking(Session<Server.Entity.NullT> session);
+    //[OperationContract]
+    //Session<Server.Entity.NullT> LoadExplorerReporting(Session<Server.Entity.NullT> session);
+    #endregion
 }

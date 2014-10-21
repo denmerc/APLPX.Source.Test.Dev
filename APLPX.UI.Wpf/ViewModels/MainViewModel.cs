@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using APLPX.UI.WPF;
-using APLPX.UI.WPF.ViewModels;
-using ReactiveUI;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using APLPX.UI.WPF.ViewModels.Events;
-using APLPX.Server.Data;
-using Domain = APLPX.Client.Display;
 using System.Windows;
-using APLX.UI.WPF.Data;
+
+using APLPX.Server.Data;
+using APLPX.UI.WPF.Data;
+using APLPX.UI.WPF.Interfaces;
+using APLPX.UI.WPF.ViewModels.Events;
+using ReactiveUI;
+using Domain = APLPX.Client.Display;
 
 
 namespace APLPX.UI.WPF.ViewModels

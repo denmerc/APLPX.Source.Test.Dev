@@ -36,49 +36,25 @@ namespace APLPX.Server.Services
             return sessionOut;
         }
 
-        public Session<NullT> LoadExplorerPlanning(Session<NullT> sessionIn)
+        public Session<List<User>> LoadList(Session<NullT> sessionIn)
         {
-            APLPX.Server.Entity.Session<NullT> sessionOut = _userData.LoadExplorerPlanning(sessionIn);
+            APLPX.Server.Entity.Session<List<User>> sessionOut = _userData.LoadList(sessionIn);
             _userData.Dispose();
 
             return sessionOut;
         }
 
-        public Session<NullT> LoadExplorerTracking(Session<NullT> sessionIn)
+        public Session<User> LoadUser(Session<User> sessionIn)
         {
-            APLPX.Server.Entity.Session<NullT> sessionOut = _userData.LoadExplorerTracking(sessionIn);
+            APLPX.Server.Entity.Session<User> sessionOut = _userData.LoadUser(sessionIn);
             _userData.Dispose();
 
             return sessionOut;
         }
 
-        public Session<NullT> LoadExplorerReporting(Session<NullT> sessionIn)
+        public Session<User> SaveUser(Session<User> sessionIn)
         {
-            APLPX.Server.Entity.Session<NullT> sessionOut = _userData.LoadExplorerReporting(sessionIn);
-            _userData.Dispose();
-
-            return sessionOut;
-        }
-
-        public Session<List<User.Identity>> LoadList(Session<NullT> sessionIn)
-        {
-            APLPX.Server.Entity.Session<List<User.Identity>> sessionOut = _userData.LoadList(sessionIn);
-            _userData.Dispose();
-
-            return sessionOut;
-        }
-
-        public Session<User.Identity> LoadIdentity(Session<User.Identity> sessionIn)
-        {
-            APLPX.Server.Entity.Session<User.Identity> sessionOut = _userData.LoadIdentity(sessionIn);
-            _userData.Dispose();
-
-            return sessionOut;
-        }
-
-        public Session<User.Identity> SaveIdentity(Session<User.Identity> sessionIn)
-        {
-            APLPX.Server.Entity.Session<User.Identity> sessionOut = _userData.SaveIdentity(sessionIn);
+            APLPX.Server.Entity.Session<User> sessionOut = _userData.SaveUser(sessionIn);
             _userData.Dispose();
 
             return sessionOut;
@@ -92,4 +68,29 @@ namespace APLPX.Server.Services
             return sessionOut;
         }
     }
+    #region OBSOLETE...
+        //public Session<NullT> LoadExplorerPlanning(Session<NullT> sessionIn)
+        //{
+        //    APLPX.Server.Entity.Session<NullT> sessionOut = _userData.LoadExplorerPlanning(sessionIn);
+        //    _userData.Dispose();
+
+        //    return sessionOut;
+        //}
+
+        //public Session<NullT> LoadExplorerTracking(Session<NullT> sessionIn)
+        //{
+        //    APLPX.Server.Entity.Session<NullT> sessionOut = _userData.LoadExplorerTracking(sessionIn);
+        //    _userData.Dispose();
+
+        //    return sessionOut;
+        //}
+
+        //public Session<NullT> LoadExplorerReporting(Session<NullT> sessionIn)
+        //{
+        //    APLPX.Server.Entity.Session<NullT> sessionOut = _userData.LoadExplorerReporting(sessionIn);
+        //    _userData.Dispose();
+
+        //    return sessionOut;
+        //}
+    #endregion
 }

@@ -21,7 +21,7 @@ namespace APLPX.Server.Data {
 
         }
 
-        public Server.Entity.Session<NullT> InitializeMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public Server.Entity.Session<NullT> InitializeMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
@@ -40,62 +40,6 @@ namespace APLPX.Server.Data {
             if (reader != null) reader.Dispose();
             return init;
         }
-
-        public Server.Entity.Workflow InitializeMapWorkflow(System.Data.DataTable data, Server.Data.SqlService service) {
-
-            //Map the entity data...
-            Boolean reading = true;
-            Boolean IsValid = true;
-            Boolean IsActive = false;
-            Int32 rows = data.Rows.Count;
-            String stepNow = String.Empty;
-            String stepLast = String.Empty;
-            APLPX.Server.Entity.Workflow workflow = null;
-            List<Server.Entity.Workflow.Step> listSteps = new List<Entity.Workflow.Step>();
-            List<Server.Entity.Workflow.Error> listErrors = new List<Entity.Workflow.Error>();
-            List<Server.Entity.Workflow.Advisor> listAdvisor = new List<Entity.Workflow.Advisor>();
-            System.Data.DataTableReader reader = data.CreateDataReader();
-
-            //From record set...
-            while (reading) {
-                reading = reader.Read();
-                workflow = new Workflow { Title = reader[UserMap.Names.workflowViewTitle].ToString(), Steps = listSteps };
-                stepNow = (reading) ? reader[UserMap.Names.workflowStepTitle].ToString() : String.Empty;
-                if (reading) {
-                    listAdvisor.Add(new Entity.Workflow.Advisor(
-                        Int32.Parse(reader[UserMap.Names.workflowMessageSort].ToString()),
-                        reader[UserMap.Names.workflowMessageTitle].ToString()
-                        ));
-                    if (stepLast != stepNow) {
-                        listSteps.Add(new Entity.Workflow.Step(
-                            Int16.Parse(reader[UserMap.Names.workflowStepSort].ToString()),
-                            reader[UserMap.Names.workflowStepName].ToString(),
-                            reader[UserMap.Names.workflowStepTitle].ToString(),
-                            IsValid,
-                            IsActive,
-                            Boolean.Parse(reader[UserMap.Names.workflowStepEnablePrevious].ToString()),
-                            Boolean.Parse(reader[UserMap.Names.workflowStepEnableNext].ToString()),
-                            listErrors,
-                            listAdvisor,
-                            (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.workflowStepKey].ToString())
-                            ));
-                    }
-                }
-                if (!(stepLast.Equals(String.Empty) || stepLast == stepNow)) {
-                    if (stepNow.Equals(String.Empty)) {
-                        listSteps[listSteps.Count - 1].Advisors = listAdvisor.GetRange(0, listAdvisor.Count);
-                    }
-                    else {
-                        listSteps[listSteps.Count - 2].Advisors = listAdvisor.GetRange(0, listAdvisor.Count - 1);
-                        listAdvisor.RemoveRange(0, listAdvisor.Count - 1);
-                    }
-                }
-                stepLast = stepNow;
-            }
-
-            if (reader != null) reader.Dispose();
-            return workflow;
-        }
         #endregion
 
         #region Authenticate...
@@ -107,279 +51,92 @@ namespace APLPX.Server.Data {
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.UserIdentity.Login),
-                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.UserIdentity.Password.Old),
+                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Identity.Login),
+                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Password.Old),
                 new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //Tenant private client key
                 new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, authenticateMessage)
             }; service.sqlParameters.List = parameters;
 
         }
 
-        public Server.Entity.User.Identity AuthenticateMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public Server.Entity.User AuthenticateMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.User.Identity user = null;
+            Server.Entity.User user = null;
             //Record set...
             if (reader.Read()) {
-                user = new User.Identity(
+                user = new User(
                     Int32.Parse(reader[UserMap.Names.id].ToString()),
                     reader[UserMap.Names.sqlSession].ToString(),
-                    Boolean.Parse(reader[UserMap.Names.active].ToString()),
-                    reader[UserMap.Names.login].ToString(),
-                    reader[UserMap.Names.email].ToString(),
-                    reader[UserMap.Names.userGreeting].ToString(),
-                    reader[UserMap.Names.userName].ToString(),
-                    reader[UserMap.Names.firstName].ToString(),
-                    reader[UserMap.Names.lastName].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
-                    reader[UserMap.Names.lastLoginText].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.created].ToString()),
-                    reader[UserMap.Names.createdText].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.edited].ToString()),
-                    reader[UserMap.Names.editedText].ToString(),
-                    reader[UserMap.Names.editor].ToString(),
-                    new User.Role(
+                    new UserRole(
                         Int32.Parse(reader[UserMap.Names.roleId].ToString()),
                         reader[UserMap.Names.roleName].ToString(),
                         reader[UserMap.Names.roleDescription].ToString()
-                    )
-                );
+                    ),
+                    new UserIdentity(
+                        reader[UserMap.Names.login].ToString(),
+                        reader[UserMap.Names.email].ToString(),
+                        reader[UserMap.Names.userGreeting].ToString(),
+                        reader[UserMap.Names.userName].ToString(),
+                        reader[UserMap.Names.firstName].ToString(),
+                        reader[UserMap.Names.lastName].ToString(),
+                        reader[UserMap.Names.lastLoginText].ToString(),
+                        reader[UserMap.Names.createdText].ToString(),
+                        reader[UserMap.Names.editedText].ToString(),
+                        DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
+                        DateTime.Parse(reader[UserMap.Names.created].ToString()),
+                        DateTime.Parse(reader[UserMap.Names.edited].ToString()),
+                        reader[UserMap.Names.editor].ToString(),
+                        Boolean.Parse(reader[UserMap.Names.active].ToString())
+                     ));
             }
-
             if (reader != null) reader.Dispose();
             return user;
         }
-        #endregion
 
-        #region Load Identity...
-        public void LoadIdentityMapParameters(Session<Server.Entity.User.Identity> session, ref Server.Data.SqlService service) {
-
-            //Map the command...
-            service.SqlProcedure = UserMap.Names.selectCommand;
-
-            //Map the parameters...
-            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
-                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadIdentityMessage)
-            }; service.sqlParameters.List = parameters;
-        }
-
-        public Server.Entity.User.Identity LoadIdentityMapData(System.Data.DataTable data, Server.Data.SqlService service) {
-
-            //Map the entity data...
-            System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.User.Identity identity = null;
-            //Single record...
-            if (reader.Read()) {
-                identity = new User.Identity(
-                    Int32.Parse(reader[UserMap.Names.id].ToString()),
-                    UserMap.Names.sharedKey.ToString(),
-                    Boolean.Parse(reader[UserMap.Names.active].ToString()),
-                    reader[UserMap.Names.login].ToString(),
-                    reader[UserMap.Names.email].ToString(),
-                    reader[UserMap.Names.userGreeting].ToString(),
-                    reader[UserMap.Names.userName].ToString(),
-                    reader[UserMap.Names.firstName].ToString(),
-                    reader[UserMap.Names.lastName].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
-                    reader[UserMap.Names.lastLoginText].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.created].ToString()),
-                    reader[UserMap.Names.createdText].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.edited].ToString()),
-                    reader[UserMap.Names.editedText].ToString(),
-                    reader[UserMap.Names.editor].ToString(),
-                    new User.Role(
-                        Int32.Parse(reader[UserMap.Names.roleId].ToString()),
-                        reader[UserMap.Names.roleName].ToString(),
-                        reader[UserMap.Names.roleDescription].ToString()
-                    )
-                );
-            }
-
-            if (reader != null) reader.Dispose();
-            return identity;
-        }
-        #endregion
-
-        #region Load List...
-        public void LoadListMapParameters(Session<List<Server.Entity.User.Identity>> session, ref Server.Data.SqlService service) {
-
-            //Map the command...
-            service.SqlProcedure = UserMap.Names.selectCommand;
-
-            //Map the parameters...
-            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadIdentitiesMessage)
-            }; service.sqlParameters.List = parameters;
-        }
-
-        public List<Server.Entity.User.Identity> LoadListMapData(System.Data.DataTable data, Server.Data.SqlService service) {
-
-            //Map the entity data...
-            System.Data.DataTableReader reader = data.CreateDataReader();
-            List<Server.Entity.User.Identity> list = new List<User.Identity>(data.Rows.Count);
-            //Record set...
-            while (reader.Read()) {
-                list.Add(new User.Identity(
-                    Int32.Parse(reader[UserMap.Names.id].ToString()),
-                    UserMap.Names.sharedKey.ToString(),
-                    Boolean.Parse(reader[UserMap.Names.active].ToString()),
-                    reader[UserMap.Names.login].ToString(),
-                    reader[UserMap.Names.email].ToString(),
-                    reader[UserMap.Names.userGreeting].ToString(),
-                    reader[UserMap.Names.userName].ToString(),
-                    reader[UserMap.Names.firstName].ToString(),
-                    reader[UserMap.Names.lastName].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
-                    reader[UserMap.Names.lastLoginText].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.created].ToString()),
-                    reader[UserMap.Names.createdText].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.edited].ToString()),
-                    reader[UserMap.Names.editedText].ToString(),
-                    reader[UserMap.Names.editor].ToString(),
-                    new User.Role(
-                        Int32.Parse(reader[UserMap.Names.roleId].ToString()),
-                        reader[UserMap.Names.roleName].ToString(),
-                        reader[UserMap.Names.roleDescription].ToString()
-                    )
-                ));
-            }
-
-            if (reader != null) reader.Dispose();
-            return list;
-        }
-       #endregion
-
-        #region Load Explorer Planning...
-        public void LoadExplorerPlanningMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
-
-            //Map the command...
-            service.SqlProcedure = UserMap.Names.selectCommand;
-
-            //Map the parameters...
-            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
-                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerPlanningMessage)
-            }; service.sqlParameters.List = parameters;
-        }
-
-        public Server.Entity.User.Identity LoadExplorerPlanningMapData(System.Data.DataTable data, Server.Data.SqlService service) {
-
-            //Map the entity data...
-            Boolean reading = true;
-            Int32 entityId = 0;
-            Int32 rows = data.Rows.Count;
-            String viewNow = String.Empty;
-            String viewLast = String.Empty;
-            List<Server.Entity.Navigator> listViews = new List<Entity.Navigator>();
-            List<Server.Entity.Navigator> listNodes = new List<Entity.Navigator>();
-            Server.Entity.User.Identity identity = new User.Identity { Role = new User.Role { Planning = new User.Role.Explorer() } };
-            System.Data.DataTableReader reader = data.CreateDataReader();
-
-            //From record set...
-            while (reading) {
-                reading = reader.Read();
-                viewNow = (reading) ? reader[UserMap.Names.viewName].ToString() : String.Empty;
-                entityId = (reading) ? Int32.Parse(reader[UserMap.Names.entityId].ToString()) : UserMap.Names.nodeEntityZero;
-                if (reading) {
-                    identity.Role.Planning.Title = reader[UserMap.Names.groupText].ToString();
-                    identity.Role.Planning.Name = reader[UserMap.Names.groupName].ToString();
-                    identity.Role.Planning.WorkflowGroup = (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString());
-
-                    if (entityId > UserMap.Names.nodeEntityZero)
-                        listNodes.Add(new Entity.Navigator(
-                            //EntityId, NodeHeader, NodeTitle, NodeCaption, WorkflowType, WorkflowStep, WorkflowGroup, WorkflowReadonly, Nodes
-                            Int32.Parse(reader[UserMap.Names.entityId].ToString()),
-                            reader[UserMap.Names.nodeHeader].ToString(),
-                            reader[UserMap.Names.nodeName].ToString(),
-                            reader[UserMap.Names.nodeText].ToString(),
-                            (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.viewId].ToString()),
-                            (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.nodeId].ToString()),
-                            (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString()),
-                            Boolean.Parse(reader[UserMap.Names.viewIsReadOnly].ToString()),
-                            new List<Navigator>()
-                            ));
-                    if (viewLast != viewNow) {
-                        listViews.Add(new Entity.Navigator(
-                            UserMap.Names.nodeEntityZero,
-                            reader[UserMap.Names.viewName].ToString(),
-                            reader[UserMap.Names.viewName].ToString(),
-                            reader[UserMap.Names.viewText].ToString(),
-                            (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.viewId].ToString()),
-                            (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.viewDefault].ToString()),
-                            (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString()),
-                            Boolean.Parse(reader[UserMap.Names.viewIsReadOnly].ToString()),
-                            new List<Navigator>()
-                            ));
-                    }
-                }
-                if (!(viewLast.Equals(String.Empty) || viewLast == viewNow || listNodes.Count == 0)) {
-                    if (viewNow.Equals(String.Empty)) {
-                        listViews[listViews.Count - 1].Nodes = listNodes.GetRange(0, listNodes.Count);
-                    }
-                    else {
-                        listViews[listViews.Count - 2].Nodes = listNodes.GetRange(0, (entityId > UserMap.Names.nodeEntityZero) ? listNodes.Count - 1 : listNodes.Count);
-                        listNodes.RemoveRange(0, (entityId > UserMap.Names.nodeEntityZero) ? listNodes.Count - 1 : listNodes.Count);
-                    }
-                }
-                viewLast = viewNow;
-            }
-
-            identity.Role.Planning.Navigators = listViews;
-
-            if (reader != null) reader.Dispose();
-            return identity;
-        }
-
-        public List<Server.Entity.Workflow> LoadExplorerPlanningMapWorkflow(System.Data.DataTable data, Server.Data.SqlService service) {
+        public List<Server.Entity.Module> AuthenticateMapWorkflowModules(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
             Boolean IsValid = true;
             Boolean IsActive = false;
-            String workflowNow = String.Empty;
-            String workflowLast = String.Empty;
+            Int32 rows = data.Rows.Count;
             String stepNow = String.Empty;
             String stepLast = String.Empty;
-            List<Server.Entity.Workflow> listWorkflows = new List<Entity.Workflow>();
-            List<Server.Entity.Workflow.Step> listSteps = new List<Entity.Workflow.Step>();
-            List<Server.Entity.Workflow.Error> listErrors = new List<Entity.Workflow.Error>();
-            List<Server.Entity.Workflow.Advisor> listAdvisor = new List<Entity.Workflow.Advisor>();
+
+            List<Module> modules = null;
+            List<ModuleFeature> features = null;
+            List<ModuleFeatureStep> listSteps = new List<Entity.ModuleFeatureStep>();
+            List<ModuleFeatureStepError> listErrors = new List<Entity.ModuleFeatureStepError>();
+            List<ModuleFeatureStepAdvisor> listAdvisor = new List<Entity.ModuleFeatureStepAdvisor>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
             //From record set...
             while (reading) {
                 reading = reader.Read();
-                workflowNow = (reading) ? reader[UserMap.Names.workflowViewName].ToString() : String.Empty;
-                stepNow = (reading) ? reader[UserMap.Names.workflowStepName].ToString() : String.Empty;
+
+                /*
+                workflow = new ModuleFeature { Title = reader[UserMap.Names.workflowViewTitle].ToString(), Steps = listSteps };
+                stepNow = (reading) ? reader[UserMap.Names.workflowStepTitle].ToString() : String.Empty;
                 if (reading) {
-                    listAdvisor.Add(new Entity.Workflow.Advisor(
+                    listAdvisor.Add(new Entity.ModuleFeatureStepAdvisor(
                         Int32.Parse(reader[UserMap.Names.workflowMessageSort].ToString()),
                         reader[UserMap.Names.workflowMessageTitle].ToString()
                         ));
                     if (stepLast != stepNow) {
-                        listSteps.Add(new Entity.Workflow.Step(
-                            Int16.Parse(reader[UserMap.Names.workflowStepSort].ToString()),
-                            reader[UserMap.Names.workflowStepName].ToString(),
-                            reader[UserMap.Names.workflowStepTitle].ToString(),
-                            IsValid,
-                            IsActive,
-                            Boolean.Parse(reader[UserMap.Names.workflowStepEnablePrevious].ToString()),
-                            Boolean.Parse(reader[UserMap.Names.workflowStepEnableNext].ToString()),
-                            listErrors,
-                            listAdvisor,
-                            (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.workflowStepKey].ToString())
-                            ));
-                    }
-                    if (workflowLast != workflowNow) {
-                        listWorkflows.Add(new Entity.Workflow(
-                            reader[UserMap.Names.workflowViewName].ToString(),
-                            listSteps,
-                            (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.workflowViewKey].ToString())
+                        listSteps.Add(
+                            new Entity.ModuleFeatureStep(
+                                Int16.Parse(reader[UserMap.Names.workflowStepSort].ToString()),
+                                reader[UserMap.Names.workflowStepName].ToString(),
+                                reader[UserMap.Names.workflowStepTitle].ToString(),
+                                IsValid,
+                                IsActive,
+                                Boolean.Parse(reader[UserMap.Names.workflowStepEnablePrevious].ToString()),
+                                Boolean.Parse(reader[UserMap.Names.workflowStepEnableNext].ToString()),
+                                listErrors,
+                                listAdvisor,
+                                (Server.Entity.ModuleFeatureStepType)Int32.Parse(reader[UserMap.Names.workflowStepKey].ToString())
                             ));
                     }
                 }
@@ -392,77 +149,177 @@ namespace APLPX.Server.Data {
                         listAdvisor.RemoveRange(0, listAdvisor.Count - 1);
                     }
                 }
-                if (!(workflowLast.Equals(String.Empty) || workflowLast == workflowNow)) {
-                    if (workflowNow.Equals(String.Empty)) {
-                        listWorkflows[listWorkflows.Count - 1].Steps = listSteps.GetRange(0, listSteps.Count);
-                    }
-                    else {
-                        listWorkflows[listWorkflows.Count - 2].Steps = listSteps.GetRange(0, listSteps.Count - 1);
-                        listSteps.RemoveRange(0, listSteps.Count - 1);
-                    }
-                }
                 stepLast = stepNow;
-                workflowLast = workflowNow;
+                 */
             }
 
             if (reader != null) reader.Dispose();
-            return listWorkflows;
+            return modules;
+             
         }
         #endregion
 
-        #region Load Explorer Tracking...
-        public void LoadExplorerTrackingMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
+        #region Load User...
+        public void LoadUserMapParameters(Session<Server.Entity.User> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = UserMap.Names.selectCommand;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
+                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.User.Id.ToString()),
                 new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerTrackingMessage)
+                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadIdentityMessage)
             }; service.sqlParameters.List = parameters;
         }
 
-        public Server.Entity.User.Identity LoadExplorerTrackingMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public Server.Entity.User LoadUserMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.User.Identity identity = new User.Identity();
+            Server.Entity.User user = null;
             //Single record...
-            //if (reader.Read()) {
-            //    identity.Role.Tracking = reader[UserMap.Names.xmlDataColumn].ToString();
-            //}
+            if (reader.Read()) {
+                user = new User(
+                    Int32.Parse(reader[UserMap.Names.id].ToString()),
+                    reader[UserMap.Names.sqlSession].ToString(),
+                    new UserRole(
+                        Int32.Parse(reader[UserMap.Names.roleId].ToString()),
+                        reader[UserMap.Names.roleName].ToString(),
+                        reader[UserMap.Names.roleDescription].ToString()
+                    ),
+                    new UserIdentity(
+                        reader[UserMap.Names.login].ToString(),
+                        reader[UserMap.Names.email].ToString(),
+                        reader[UserMap.Names.userGreeting].ToString(),
+                        reader[UserMap.Names.userName].ToString(),
+                        reader[UserMap.Names.firstName].ToString(),
+                        reader[UserMap.Names.lastName].ToString(),
+                        reader[UserMap.Names.lastLoginText].ToString(),
+                        reader[UserMap.Names.createdText].ToString(),
+                        reader[UserMap.Names.editedText].ToString(),
+                        DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
+                        DateTime.Parse(reader[UserMap.Names.created].ToString()),
+                        DateTime.Parse(reader[UserMap.Names.edited].ToString()),
+                        reader[UserMap.Names.editor].ToString(),
+                        Boolean.Parse(reader[UserMap.Names.active].ToString())
+                     ));
+            }
             if (reader != null) reader.Dispose();
-            return identity;
+            return user;
         }
         #endregion
 
-        #region Load Explorer Reporting...
-        public void LoadExplorerReportingMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
+        #region Load List...
+        public void LoadListMapParameters(Session<List<Server.Entity.User>> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = UserMap.Names.selectCommand;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
                 new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerReportingMessage)
+                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadIdentitiesMessage)
             }; service.sqlParameters.List = parameters;
         }
 
-        public Server.Entity.User.Identity LoadExplorerReportingMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+        public List<Server.Entity.User> LoadListMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.User.Identity identity = new User.Identity();
-            //Single record...
-            //if (reader.Read()) {
-            //    identity.Role.Reporting = reader[UserMap.Names.xmlDataColumn].ToString();
-            //}
+            List<Server.Entity.User> list = new List<User>(data.Rows.Count);
+            //Record set...
+            while (reader.Read()) {
+                list.Add(
+                    new User(
+                        Int32.Parse(reader[UserMap.Names.id].ToString()),
+                        reader[UserMap.Names.sqlSession].ToString(),
+                        new UserRole(
+                            Int32.Parse(reader[UserMap.Names.roleId].ToString()),
+                            reader[UserMap.Names.roleName].ToString(),
+                            reader[UserMap.Names.roleDescription].ToString()
+                        ),
+                        new UserIdentity(
+                            reader[UserMap.Names.login].ToString(),
+                            reader[UserMap.Names.email].ToString(),
+                            reader[UserMap.Names.userGreeting].ToString(),
+                            reader[UserMap.Names.userName].ToString(),
+                            reader[UserMap.Names.firstName].ToString(),
+                            reader[UserMap.Names.lastName].ToString(),
+                            reader[UserMap.Names.lastLoginText].ToString(),
+                            reader[UserMap.Names.createdText].ToString(),
+                            reader[UserMap.Names.editedText].ToString(),
+                            DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
+                            DateTime.Parse(reader[UserMap.Names.created].ToString()),
+                            DateTime.Parse(reader[UserMap.Names.edited].ToString()),
+                            reader[UserMap.Names.editor].ToString(),
+                            Boolean.Parse(reader[UserMap.Names.active].ToString())
+                    )));
+            }
+
             if (reader != null) reader.Dispose();
-            return identity;
+            return list;
+        }
+       #endregion
+
+        #region Save User...
+        public void SaveUserMapParameters(Session<Server.Entity.User> session, ref Server.Data.SqlService service) {
+
+            //Map the command...
+            Int16 insertId = 0;
+            service.SqlProcedure = UserMap.Names.updateCommand;
+            String updateCommandMessage = (session.Data.Id == insertId) ? UserMap.Names.saveIdentityInsertMessage : UserMap.Names.saveIdentityUpdateMessage;
+
+            //Map the parameters...
+            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
+                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
+                new SqlServiceParameter(UserMap.Names.roleId, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Role.Id.ToString()),
+                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Identity.Login),
+                new SqlServiceParameter(UserMap.Names.firstName, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Identity.FirstName),
+                new SqlServiceParameter(UserMap.Names.lastName, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Identity.LastName),
+                new SqlServiceParameter(UserMap.Names.email, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Identity.Email),
+                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Password.New),
+                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Password.Old),
+                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //logged on user session key
+                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, updateCommandMessage)
+            }; service.sqlParameters.List = parameters;
+        }
+        
+        public Server.Entity.User SaveUserMapData(System.Data.DataTable data) {
+
+            //Map the entity data...
+            System.Data.DataTableReader reader = data.CreateDataReader();
+            Server.Entity.User user = null;
+            //Single record...
+            if (reader.Read()) {
+                user = new User(
+                    Int32.Parse(reader[UserMap.Names.id].ToString()),
+                    reader[UserMap.Names.sqlSession].ToString(),
+                    new UserRole(
+                        Int32.Parse(reader[UserMap.Names.roleId].ToString()),
+                        reader[UserMap.Names.roleName].ToString(),
+                        reader[UserMap.Names.roleDescription].ToString()
+                    ),
+                    new UserIdentity(
+                        reader[UserMap.Names.login].ToString(),
+                        reader[UserMap.Names.email].ToString(),
+                        reader[UserMap.Names.userGreeting].ToString(),
+                        reader[UserMap.Names.userName].ToString(),
+                        reader[UserMap.Names.firstName].ToString(),
+                        reader[UserMap.Names.lastName].ToString(),
+                        reader[UserMap.Names.lastLoginText].ToString(),
+                        reader[UserMap.Names.createdText].ToString(),
+                        reader[UserMap.Names.editedText].ToString(),
+                        DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
+                        DateTime.Parse(reader[UserMap.Names.created].ToString()),
+                        DateTime.Parse(reader[UserMap.Names.edited].ToString()),
+                        reader[UserMap.Names.editor].ToString(),
+                        Boolean.Parse(reader[UserMap.Names.active].ToString())
+                     ));
+            }
+
+            if (reader != null) reader.Dispose();
+            return user;
         }
         #endregion
 
@@ -474,71 +331,12 @@ namespace APLPX.Server.Data {
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.UserIdentity.Login),
-                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.UserIdentity.Password.New),
-                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.UserIdentity.Password.Old),
-                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //user session key
+                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Identity.Login),
+                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Password.New),
+                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Password.Old),
+                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //logged in user session key
                 new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.savePasswordMessage)
             }; service.sqlParameters.List = parameters;
-        }
-        #endregion
-
-        #region Save Identity...
-        public void SaveIdentityMapParameters(Session<Server.Entity.User.Identity> session, ref Server.Data.SqlService service) {
-
-            //Map the command...
-            Int16 insertId = 0;
-            service.SqlProcedure = UserMap.Names.updateCommand;
-            String updateCommandMessage = (session.Data.Id == insertId) ? UserMap.Names.saveIdentityInsertMessage : UserMap.Names.saveIdentityUpdateMessage;
-
-            //Map the parameters...
-            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
-                new SqlServiceParameter(UserMap.Names.roleId, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Role.Id.ToString()),
-                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Login),
-                new SqlServiceParameter(UserMap.Names.firstName, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.FirstName),
-                new SqlServiceParameter(UserMap.Names.lastName, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.LastName),
-                new SqlServiceParameter(UserMap.Names.email, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Email),
-                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Password.New),
-                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Password.Old),
-                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //user session key
-                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, updateCommandMessage)
-            }; service.sqlParameters.List = parameters;
-        }
-        
-        public Server.Entity.User.Identity SaveIdentityMapData(System.Data.DataTable data, Server.Data.SqlService service) {
-
-            //Map the entity data...
-            System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.User.Identity identity = null;
-            //Single record...
-            if (reader.Read()) {
-                identity = new User.Identity(
-                    Int32.Parse(reader[UserMap.Names.id].ToString()),
-                    UserMap.Names.sharedKey.ToString(),
-                    Boolean.Parse(reader[UserMap.Names.active].ToString()),
-                    reader[UserMap.Names.login].ToString(),
-                    reader[UserMap.Names.email].ToString(),
-                    reader[UserMap.Names.userGreeting].ToString(),
-                    reader[UserMap.Names.userName].ToString(),
-                    reader[UserMap.Names.firstName].ToString(),
-                    reader[UserMap.Names.lastName].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
-                    reader[UserMap.Names.lastLoginText].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.created].ToString()),
-                    reader[UserMap.Names.createdText].ToString(),
-                    DateTime.Parse(reader[UserMap.Names.edited].ToString()),
-                    reader[UserMap.Names.editedText].ToString(),
-                    reader[UserMap.Names.editor].ToString(),
-                    new User.Role(
-                        Int32.Parse(reader[UserMap.Names.roleId].ToString()),
-                        reader[UserMap.Names.roleName].ToString(),
-                        reader[UserMap.Names.roleDescription].ToString()
-                    ));
-            }
-
-            if (reader != null) reader.Dispose();
-            return identity;
         }
         #endregion
 
@@ -639,7 +437,7 @@ namespace APLPX.Server.Data {
             public const String sharedKey = "72B9ED08-5D12-48FD-9CF7-56A3CA30E660";
             #endregion
 
-            #region Fields Workflow...
+            #region Fields ModuleFeature...
             public const String workflowGroupKey= "workflowGroupKey";
             public const String workflowGroupName = "workflowGroupName";
             public const String workflowGroupTitle = "workflowGroupTitle";
@@ -665,7 +463,7 @@ namespace APLPX.Server.Data {
 
         }
         //Database enumerations...
-        public enum DataSets { entitydata=0, workflow=1, enumeration=1 };
+        public enum DataSets { entitydata=0, workflowModules=1, enumeration=1 };
         #endregion
 
         #region Message map result sets...
@@ -686,4 +484,219 @@ namespace APLPX.Server.Data {
         #endregion
 
     }
+
+    #region OBSOLETE...
+    //    #region Load Explorer Planning...
+    //public void LoadExplorerPlanningMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
+
+    //    //Map the command...
+    //    service.SqlProcedure = UserMap.Names.selectCommand;
+
+    //    //Map the parameters...
+    //    APLPX.Server.Data.SqlServiceParameter[] parameters = { 
+    //        new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
+    //        new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
+    //        new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerPlanningMessage)
+    //    }; service.sqlParameters.List = parameters;
+    //}
+
+    //public Server.Entity.User.Identity LoadExplorerPlanningMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+
+    //    //Map the entity data...
+    //    Boolean reading = true;
+    //    Int32 entityId = 0;
+    //    Int32 rows = data.Rows.Count;
+    //    String viewNow = String.Empty;
+    //    String viewLast = String.Empty;
+    //    List<Server.Entity.Navigator> listViews = new List<Entity.Navigator>();
+    //    List<Server.Entity.Navigator> listNodes = new List<Entity.Navigator>();
+    //    Server.Entity.User.Identity identity = new User.Identity { Role = new User.Role { Planning = new User.Role.Explorer() } };
+    //    System.Data.DataTableReader reader = data.CreateDataReader();
+
+    //    //From record set...
+    //    while (reading) {
+    //        reading = reader.Read();
+    //        viewNow = (reading) ? reader[UserMap.Names.viewName].ToString() : String.Empty;
+    //        entityId = (reading) ? Int32.Parse(reader[UserMap.Names.entityId].ToString()) : UserMap.Names.nodeEntityZero;
+    //        if (reading) {
+    //            identity.Role.Planning.Title = reader[UserMap.Names.groupText].ToString();
+    //            identity.Role.Planning.Name = reader[UserMap.Names.groupName].ToString();
+    //            identity.Role.Planning.WorkflowGroup = (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString());
+
+    //            if (entityId > UserMap.Names.nodeEntityZero)
+    //                listNodes.Add(new Entity.Navigator(
+    //                    //EntityId, NodeHeader, NodeTitle, NodeCaption, WorkflowType, WorkflowStep, WorkflowGroup, WorkflowReadonly, Nodes
+    //                    Int32.Parse(reader[UserMap.Names.entityId].ToString()),
+    //                    reader[UserMap.Names.nodeHeader].ToString(),
+    //                    reader[UserMap.Names.nodeName].ToString(),
+    //                    reader[UserMap.Names.nodeText].ToString(),
+    //                    (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.viewId].ToString()),
+    //                    (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.nodeId].ToString()),
+    //                    (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString()),
+    //                    Boolean.Parse(reader[UserMap.Names.viewIsReadOnly].ToString()),
+    //                    new List<Navigator>()
+    //                    ));
+    //            if (viewLast != viewNow) {
+    //                listViews.Add(new Entity.Navigator(
+    //                    UserMap.Names.nodeEntityZero,
+    //                    reader[UserMap.Names.viewName].ToString(),
+    //                    reader[UserMap.Names.viewName].ToString(),
+    //                    reader[UserMap.Names.viewText].ToString(),
+    //                    (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.viewId].ToString()),
+    //                    (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.viewDefault].ToString()),
+    //                    (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString()),
+    //                    Boolean.Parse(reader[UserMap.Names.viewIsReadOnly].ToString()),
+    //                    new List<Navigator>()
+    //                    ));
+    //            }
+    //        }
+    //        if (!(viewLast.Equals(String.Empty) || viewLast == viewNow || listNodes.Count == 0)) {
+    //            if (viewNow.Equals(String.Empty)) {
+    //                listViews[listViews.Count - 1].Nodes = listNodes.GetRange(0, listNodes.Count);
+    //            }
+    //            else {
+    //                listViews[listViews.Count - 2].Nodes = listNodes.GetRange(0, (entityId > UserMap.Names.nodeEntityZero) ? listNodes.Count - 1 : listNodes.Count);
+    //                listNodes.RemoveRange(0, (entityId > UserMap.Names.nodeEntityZero) ? listNodes.Count - 1 : listNodes.Count);
+    //            }
+    //        }
+    //        viewLast = viewNow;
+    //    }
+
+    //    identity.Role.Planning.Navigators = listViews;
+
+    //    if (reader != null) reader.Dispose();
+    //    return identity;
+    //}
+
+    //public List<Server.Entity.ModuleFeature> LoadExplorerPlanningMapWorkflow(System.Data.DataTable data, Server.Data.SqlService service) {
+
+    //    //Map the entity data...
+    //    Boolean reading = true;
+    //    Boolean IsValid = true;
+    //    Boolean IsActive = false;
+    //    String workflowNow = String.Empty;
+    //    String workflowLast = String.Empty;
+    //    String stepNow = String.Empty;
+    //    String stepLast = String.Empty;
+    //    List<Server.Entity.ModuleFeature> listWorkflows = new List<Entity.ModuleFeature>();
+    //    List<Server.Entity.ModuleFeature.Step> listSteps = new List<Entity.ModuleFeature.Step>();
+    //    List<Server.Entity.ModuleFeature.Error> listErrors = new List<Entity.ModuleFeature.Error>();
+    //    List<Server.Entity.ModuleFeature.Advisor> listAdvisor = new List<Entity.ModuleFeature.Advisor>();
+    //    System.Data.DataTableReader reader = data.CreateDataReader();
+
+    //    //From record set...
+    //    while (reading) {
+    //        reading = reader.Read();
+    //        workflowNow = (reading) ? reader[UserMap.Names.workflowViewName].ToString() : String.Empty;
+    //        stepNow = (reading) ? reader[UserMap.Names.workflowStepName].ToString() : String.Empty;
+    //        if (reading) {
+    //            listAdvisor.Add(new Entity.ModuleFeature.Advisor(
+    //                Int32.Parse(reader[UserMap.Names.workflowMessageSort].ToString()),
+    //                reader[UserMap.Names.workflowMessageTitle].ToString()
+    //                ));
+    //            if (stepLast != stepNow) {
+    //                listSteps.Add(new Entity.ModuleFeature.Step(
+    //                    Int16.Parse(reader[UserMap.Names.workflowStepSort].ToString()),
+    //                    reader[UserMap.Names.workflowStepName].ToString(),
+    //                    reader[UserMap.Names.workflowStepTitle].ToString(),
+    //                    IsValid,
+    //                    IsActive,
+    //                    Boolean.Parse(reader[UserMap.Names.workflowStepEnablePrevious].ToString()),
+    //                    Boolean.Parse(reader[UserMap.Names.workflowStepEnableNext].ToString()),
+    //                    listErrors,
+    //                    listAdvisor,
+    //                    (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.workflowStepKey].ToString())
+    //                    ));
+    //            }
+    //            if (workflowLast != workflowNow) {
+    //                listWorkflows.Add(new Entity.ModuleFeature(
+    //                    reader[UserMap.Names.workflowViewName].ToString(),
+    //                    listSteps,
+    //                    (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.workflowViewKey].ToString())
+    //                    ));
+    //            }
+    //        }
+    //        if (!(stepLast.Equals(String.Empty) || stepLast == stepNow)) {
+    //            if (stepNow.Equals(String.Empty)) {
+    //                listSteps[listSteps.Count - 1].Advisors = listAdvisor.GetRange(0, listAdvisor.Count);
+    //            }
+    //            else {
+    //                listSteps[listSteps.Count - 2].Advisors = listAdvisor.GetRange(0, listAdvisor.Count - 1);
+    //                listAdvisor.RemoveRange(0, listAdvisor.Count - 1);
+    //            }
+    //        }
+    //        if (!(workflowLast.Equals(String.Empty) || workflowLast == workflowNow)) {
+    //            if (workflowNow.Equals(String.Empty)) {
+    //                listWorkflows[listWorkflows.Count - 1].Steps = listSteps.GetRange(0, listSteps.Count);
+    //            }
+    //            else {
+    //                listWorkflows[listWorkflows.Count - 2].Steps = listSteps.GetRange(0, listSteps.Count - 1);
+    //                listSteps.RemoveRange(0, listSteps.Count - 1);
+    //            }
+    //        }
+    //        stepLast = stepNow;
+    //        workflowLast = workflowNow;
+    //    }
+
+    //    if (reader != null) reader.Dispose();
+    //    return listWorkflows;
+    //}
+    //#endregion
+
+    //#region Load Explorer Tracking...
+    //public void LoadExplorerTrackingMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
+
+    //    //Map the command...
+    //    service.SqlProcedure = UserMap.Names.selectCommand;
+
+    //    //Map the parameters...
+    //    APLPX.Server.Data.SqlServiceParameter[] parameters = { 
+    //        new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
+    //        new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
+    //        new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerTrackingMessage)
+    //    }; service.sqlParameters.List = parameters;
+    //}
+
+    //public Server.Entity.User.Identity LoadExplorerTrackingMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+
+    //    //Map the entity data...
+    //    System.Data.DataTableReader reader = data.CreateDataReader();
+    //    Server.Entity.User.Identity identity = new User.Identity();
+    //    //Single record...
+    //    //if (reader.Read()) {
+    //    //    identity.Role.Tracking = reader[UserMap.Names.xmlDataColumn].ToString();
+    //    //}
+    //    if (reader != null) reader.Dispose();
+    //    return identity;
+    //}
+    //#endregion
+
+    //#region Load Explorer Reporting...
+    //public void LoadExplorerReportingMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
+
+    //    //Map the command...
+    //    service.SqlProcedure = UserMap.Names.selectCommand;
+
+    //    //Map the parameters...
+    //    APLPX.Server.Data.SqlServiceParameter[] parameters = { 
+    //        new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
+    //        new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
+    //        new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerReportingMessage)
+    //    }; service.sqlParameters.List = parameters;
+    //}
+
+    //public Server.Entity.User.Identity LoadExplorerReportingMapData(System.Data.DataTable data, Server.Data.SqlService service) {
+
+    //    //Map the entity data...
+    //    System.Data.DataTableReader reader = data.CreateDataReader();
+    //    Server.Entity.User.Identity identity = new User.Identity();
+    //    //Single record...
+    //    //if (reader.Read()) {
+    //    //    identity.Role.Reporting = reader[UserMap.Names.xmlDataColumn].ToString();
+    //    //}
+    //    if (reader != null) reader.Dispose();
+    //    return identity;
+    //}
+    //#endregion
+    #endregion
 }

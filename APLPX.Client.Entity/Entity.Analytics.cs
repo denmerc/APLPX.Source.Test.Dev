@@ -1,10 +1,14 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace APLPX.Client.Entity
 {
     [DataContract]
+    [BsonIgnoreExtraElements]
+    [BsonNoId]
     public class Analytic
     {
         #region Initialize...
@@ -82,14 +86,14 @@ namespace APLPX.Client.Entity
         public List<ModuleFeature> Features { get; private set; }
     }
 
-    [DataContract]
+        [DataContract]
     public class AnalyticIdentity
-    {
-        #region Initialize...
+        {
+            #region Initialize...
         public AnalyticIdentity() { }
         public AnalyticIdentity(
-            String Name,
-            String Description,
+                String Name,
+                String Description,
             String Notes,
             Boolean Active
             ) {
@@ -102,69 +106,73 @@ namespace APLPX.Client.Entity
             String Name,
             String Description,
             String Notes,
-            String RefreshedText,
-            String CreatedText,
-            String EditedText,
-            DateTime Refreshed,
-            DateTime Created,
-            DateTime Edited,
-            String Author,
-            String Editor,
-            String Owner,
-            Boolean Active
-            ) {
-            this.Name = Name;
-            this.Description = Description;
+                String RefreshedText,
+                String CreatedText,
+                String EditedText,
+                DateTime Refreshed,
+                DateTime Created,
+                DateTime Edited,
+                String Author,
+                String Editor,
+                String Owner,
+                Boolean Active
+                ) {
+                    this.Name = Name;
+                    this.Description = Description;
             this.Notes = Notes;
-            this.Refreshed = Refreshed;
-            this.RefreshedText = RefreshedText;
-            this.Created = Created;
-            this.CreatedText = CreatedText;
-            this.Edited = Edited;
-            this.EditedText = EditedText;
-            this.Author = Author;
-            this.Editor = Editor;
-            this.Owner = Owner;
-            this.Active = Active;
-        }
-        #endregion
+                    this.Refreshed = Refreshed;
+                    this.RefreshedText = RefreshedText;
+                    this.Created = Created;
+                    this.CreatedText = CreatedText;
+                    this.Edited = Edited;
+                    this.EditedText = EditedText;
+                    this.Author = Author;
+                    this.Editor = Editor;
+                    this.Owner = Owner;
+                    this.Active = Active;
+            }
+            #endregion
 
-        [DataMember]
+            [DataMember]
         public String Name { get; set; }
-        [DataMember]
-        public String Description { get; set; }
-        [DataMember]
+            [DataMember]
+            public String Description { get; set; }
+            [DataMember]
         public String Notes { get; set; }
-        [DataMember]
+            [DataMember]
+            [BsonIgnore]
         public DateTime Refreshed { get; private set; }
-        [DataMember]
+            [DataMember]
         public String RefreshedText { get; private set; }
-        [DataMember]
+            [DataMember]
+            [BsonIgnore]
         public DateTime Created { get; private set; }
-        [DataMember]
+            [DataMember]
         public String CreatedText { get; private set; }
-        [DataMember]
+            [DataMember]
+            [BsonIgnore]
         public DateTime Edited { get; private set; }
-        [DataMember]
+            [DataMember]
         public String EditedText { get; private set; }
-        [DataMember]
+            [DataMember]
         public String Author { get; private set; }
-        [DataMember]
+            [DataMember]
         public String Editor { get; private set; }
-        [DataMember]
+            [DataMember]
         public String Owner { get; private set; }
         [DataMember]
         public Boolean Active { get; set; }
-    }
+        }
 
     [DataContract]
+    [BsonIgnoreExtraElements]
     public class AnalyticDriver
-    {
-        #region Initialize...
+        {
+            #region Initialize...
         public AnalyticDriver() { }
         public AnalyticDriver(
-            Int32 Id,
-            Int32 Key,
+                Int32 Id,
+                Int32 Key,
             List<AnalyticDriverMode> Modes
             ) {
             this.Id = Id;
@@ -175,35 +183,35 @@ namespace APLPX.Client.Entity
         public AnalyticDriver(
             Int32 Id,
             Int32 Key,
-            String Name,
-            String Tooltip,
+                String Name,
+                String Tooltip,
             Int16 SortOrder,
             Boolean IsSelected,
             List<AnalyticDriverMode> Modes
-            ) {
+                ) {
             this.Id = Id;
-            this.Key = Key;
-            this.Name = Name;
+                    this.Key = Key;
+                    this.Name = Name;
             this.Title = Title;
             this.SortOrder = SortOrder;
             this.IsSelected = IsSelected;
-            this.Modes = Modes;
-        }
-        #endregion
+                    this.Modes = Modes;
+            }
+            #endregion
 
-        [DataMember]
-        public Int32 Id { get; private set; }
-        [DataMember]
-        public Int32 Key { get; private set; }
-        [DataMember]
-        public String Name { get; private set; }
-        [DataMember]
+            [DataMember]
+            public Int32 Id { get; private set; }
+            [DataMember]
+            public Int32 Key { get; private set; }
+            [DataMember]
+            public String Name { get; private set; }
+            [DataMember]
         public String Title { get; private set; }
         [DataMember]
         public Int16 SortOrder { get; private set; }
-        [DataMember]
+            [DataMember]
         public Boolean IsSelected { get; set; }
-        [DataMember]
+            [DataMember]
         public List<AnalyticDriverMode> Modes { get; private set; }
 
         #region Driver mode name indexer...
@@ -223,9 +231,10 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
+    [BsonNoId]
     public class AnalyticDriverMode
     {
-        #region Initialize...
+                #region Initialize...
         public AnalyticDriverMode() { }
         public AnalyticDriverMode(
             Int32 Key,
@@ -236,40 +245,41 @@ namespace APLPX.Client.Entity
             this.Groups = Groups;
         }
         public AnalyticDriverMode(
-            Int32 Key,
-            String Name,
+                    Int32 Key,
+                    String Name,
             String Title,
             Int16 SortOrder,
             Boolean IsSelected,
             List<AnalyticDriverGroup> Groups
-            ) {
-            this.Key = Key;
-            this.Name = Name;
+                    ) {
+                    this.Key = Key;
+                    this.Name = Name;
             this.Title = Title;
             this.SortOrder = SortOrder;
             this.IsSelected = IsSelected;
-            this.Groups = Groups;
-        }
-        #endregion
+                    this.Groups = Groups;
+                }
+                #endregion
 
-        [DataMember]
-        public Int32 Key { get; private set; }
-        [DataMember]
-        public String Name { get; private set; }
-        [DataMember]
+                [DataMember]
+                public Int32 Key { get; private set; }
+                [DataMember]
+                public String Name { get; private set; }
+                [DataMember]
         public String Title { get; private set; }
         [DataMember]
         public Int16 SortOrder { get; private set; }
-        [DataMember]
+                [DataMember]
         public Boolean IsSelected { get; set; }
-        [DataMember]
+                [DataMember]
         public List<AnalyticDriverGroup> Groups { get; private set; }
     }
 
-    [DataContract]
+    [DataContract]    
+    [BsonNoId]
     public class AnalyticDriverGroup
     {
-        #region Initialize...
+                    #region Initialize...
         public AnalyticDriverGroup() { }
         public AnalyticDriverGroup(
             Int32 Id
@@ -280,31 +290,31 @@ namespace APLPX.Client.Entity
             this.MaxOutlier = 0;
         }
         public AnalyticDriverGroup(
-            Int32 Id,
+                        Int32 Id,
             Int16 Value,
-            Decimal MinOutlier,
+                        Decimal MinOutlier,
             Decimal MaxOutlier,
             Int16 SortOrder
-            ) {
-            this.Id = Id;
-            this.Value = Value;
-            this.MinOutlier = MinOutlier;
-            this.MaxOutlier = MaxOutlier;
+                        ) {
+                        this.Id = Id;
+                        this.Value = Value;
+                        this.MinOutlier = MinOutlier;
+                        this.MaxOutlier = MaxOutlier;
             this.SortOrder = SortOrder;
-        }
-        #endregion
+                    }
+                    #endregion
 
-        [DataMember]
-        public Int32 Id { get; private set; }
-        [DataMember]
+                    [DataMember]
+                    public Int32 Id { get; private set; }
+                    [DataMember]
         public Int16 Value { get; set; }
         [DataMember]
         public Decimal MinOutlier { get; set; }
-        [DataMember]
+                    [DataMember]
         public Decimal MaxOutlier { get; set; }
-        [DataMember]
+                    [DataMember]
         public Int16 SortOrder { get; private set; }
-    }
+            }
 
     [DataContract]
     public class AnalyticResult

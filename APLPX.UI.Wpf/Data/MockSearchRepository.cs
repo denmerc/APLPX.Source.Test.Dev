@@ -304,7 +304,7 @@ namespace APLPX.Server.Data
 
         public void Save<T>(T item) where T : class, new()
         {
-            Analytics.Save(item);
+            PriceRoutines.Save(item);
         }
 
         public void Add<T>(T item) where T : class, new()

@@ -7,6 +7,8 @@ using Domain = APLPX.Client.Display;
 using System.Windows;
 using System.Linq;
 using APLPX.UI.WPF.ViewModels.Reactive;
+using APLPX.Client.Display;
+using APLPX.Client.Entity;
 
 
 namespace APLPX.UI.WPF.ViewModels
@@ -21,45 +23,45 @@ namespace APLPX.UI.WPF.ViewModels
          * */
         EventAggregator EventManager = ((EventAggregator)App.Current.Resources["EventManager"]);
         private Dictionary<Domain.SectionType, ViewModelBase> StepCache = new Dictionary<Domain.SectionType, ViewModelBase>();
-        public PricingModuleViewModel(IPricingRepository pricingRepo, Domain.Session session, string name)
+        public PricingModuleViewModel(IPricingRepository pricingRepo, Session<NullT> session, string name)
         {
             Name = name;
 
-            EventManager.GetEvent<SaveEvent>()
-                .Subscribe(evt =>
-                {
-                    Domain.PriceRoutine pricingToSave = null;
-                    //ViewModelBase vm = null;
-                    switch (evt.Section)
-                    {
-                        case Domain.SectionType.PlanningPricingIdentity:
-                            var vmi = (ViewModels.Pricing.IdentityViewModel)(SelectedStepViewModel);
-                            var tagsToSave = vmi.SelectedTags;
-                            pricingToSave = vmi.SelectedPriceRoutine;
-                            vmi.SelectedPriceRoutine.Tags = tagsToSave.Select(y => y.Value).ToList<string>();
-                            pricingRepo.Save<Domain.PriceRoutine>(pricingToSave);
-                            this.Navigate(new NavigateEvent
-                            {
-                                Module = Domain.ModuleType.Planning,
-                                SubModule = Domain.SubModuleType.Everyday,
-                                Section = Domain.SectionType.PlanningPricingFilters
-                            }); //TODO: switch by pricingtype evryday, promo, kits
-                            break;
-                        case Domain.SectionType.PlanningAnalyticsFilters:
-                            var vmf = (ViewModels.Pricing.FilterViewModel)(SelectedStepViewModel);
-                            pricingToSave = vmf.SelectedPriceRoutine;
-                            pricingRepo.Save<Domain.PriceRoutine>(pricingToSave);
-                            this.Navigate(new NavigateEvent
-                            {
-                                Module = Domain.ModuleType.Planning,
-                                SubModule = Domain.SubModuleType.Everyday,
-                                Section = Domain.SectionType.PlanningPricingPriceLists
-                            });
-                            break;
-                        default:
-                            break;
-                    }
-                });
+            //EventManager.GetEvent<SaveEvent>()
+            //    .Subscribe(evt =>
+            //    {
+            //        Domain.PriceRoutine pricingToSave = null;
+            //        //ViewModelBase vm = null;
+            //        switch (evt.Section)
+            //        {
+            //            case Domain.SectionType.PlanningPricingIdentity:
+            //                var vmi = (ViewModels.Pricing.IdentityViewModel)(SelectedStepViewModel);
+            //                var tagsToSave = vmi.SelectedTags;
+            //                pricingToSave = vmi.SelectedPriceRoutine;
+            //                vmi.SelectedPriceRoutine.Tags = tagsToSave.Select(y => y.Value).ToList<string>();
+            //                pricingRepo.Save<Domain.PriceRoutine>(pricingToSave);
+            //                this.Navigate(new NavigateEvent
+            //                {
+            //                    Module = Domain.ModuleType.Planning,
+            //                    SubModule = Domain.SubModuleType.Everyday,
+            //                    Section = Domain.SectionType.PlanningPricingFilters
+            //                }); //TODO: switch by pricingtype evryday, promo, kits
+            //                break;
+            //            case Domain.SectionType.PlanningAnalyticsFilters:
+            //                var vmf = (ViewModels.Pricing.FilterViewModel)(SelectedStepViewModel);
+            //                pricingToSave = vmf.SelectedPriceRoutine;
+            //                pricingRepo.Save<Domain.PriceRoutine>(pricingToSave);
+            //                this.Navigate(new NavigateEvent
+            //                {
+            //                    Module = Domain.ModuleType.Planning,
+            //                    SubModule = Domain.SubModuleType.Everyday,
+            //                    Section = Domain.SectionType.PlanningPricingPriceLists
+            //                });
+            //                break;
+            //            default:
+            //                break;
+            //        }
+            //    });
 
         }
 
@@ -78,67 +80,67 @@ namespace APLPX.UI.WPF.ViewModels
         public void Navigate(NavigateEvent navigator)
         {
 
-            if (navigator.Entity != null) SelectedPriceRoutine = (Domain.PriceRoutine)navigator.Entity;
-            Name = SelectedPriceRoutine.Name;
+            //if (navigator.Entity != null) SelectedPriceRoutine = (Domain.PriceRoutine)navigator.Entity;
+            //Name = SelectedPriceRoutine.Name;
 
-            if (!StepCache.ContainsKey(navigator.Section))
-            {
-                switch (navigator.Section)
-                {
-                    //case SectionType.PlanningPricingMyPricing:
-                    //    break;
-                    case Domain.SectionType.PlanningPricingIdentity:
-                        SelectedStepViewModel = new Pricing.IdentityViewModel(SelectedPriceRoutine);
-                        break;
-                    case Domain.SectionType.PlanningPricingFilters:
-                        SelectedStepViewModel = new Pricing.FilterViewModel(SelectedPriceRoutine);
-                        break;
-                    case Domain.SectionType.PlanningPricingPriceLists:
-                        break;
-                    case Domain.SectionType.PlanningPricingRounding:
-                        break;
-                    case Domain.SectionType.PlanningPricingStrategy:
-                        break;
-                    case Domain.SectionType.PlanningPricingResults:
-                        break;
-                    case Domain.SectionType.PlanningPricingForecast:
-                        break;
-                    case Domain.SectionType.PlanningPricingApproval:
-                        break;
-                    default:
-                        break;
-                }
-                StepCache.Add(navigator.Section, _SelectedStepViewModel);
-            }
-            else //in cache
-            {
-                switch (navigator.Section)
-                {
-                    //case SectionType.PlanningPricingMyPricing:
-                    //    break;
-                    case Domain.SectionType.PlanningPricingIdentity:
-                        SelectedStepViewModel = ((Pricing.IdentityViewModel)StepCache[navigator.Section]);
-                        break;
-                    case Domain.SectionType.PlanningPricingFilters:
-                        SelectedStepViewModel = ((Pricing.FilterViewModel)StepCache[navigator.Section]);
-                        break;
-                    case Domain.SectionType.PlanningPricingPriceLists:
-                        break;
-                    case Domain.SectionType.PlanningPricingRounding:
-                        break;
-                    case Domain.SectionType.PlanningPricingStrategy:
-                        break;
-                    case Domain.SectionType.PlanningPricingResults:
-                        break;
-                    case Domain.SectionType.PlanningPricingForecast:
-                        break;
-                    case Domain.SectionType.PlanningPricingApproval:
-                        break;
-                    default:
-                        break;
-                }
-                SelectedStepViewModel.LoadPriceRoutine(SelectedPriceRoutine);
-            }
+            //if (!StepCache.ContainsKey(navigator.Section))
+            //{
+            //    switch (navigator.Section)
+            //    {
+            //        //case SectionType.PlanningPricingMyPricing:
+            //        //    break;
+            //        case Domain.SectionType.PlanningPricingIdentity:
+            //            SelectedStepViewModel = new Pricing.IdentityViewModel(SelectedPriceRoutine);
+            //            break;
+            //        case Domain.SectionType.PlanningPricingFilters:
+            //            SelectedStepViewModel = new Pricing.FilterViewModel(SelectedPriceRoutine);
+            //            break;
+            //        case Domain.SectionType.PlanningPricingPriceLists:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingRounding:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingStrategy:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingResults:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingForecast:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingApproval:
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //    StepCache.Add(navigator.Section, _SelectedStepViewModel);
+            //}
+            //else //in cache
+            //{
+            //    switch (navigator.Section)
+            //    {
+            //        //case SectionType.PlanningPricingMyPricing:
+            //        //    break;
+            //        case Domain.SectionType.PlanningPricingIdentity:
+            //            SelectedStepViewModel = ((Pricing.IdentityViewModel)StepCache[navigator.Section]);
+            //            break;
+            //        case Domain.SectionType.PlanningPricingFilters:
+            //            SelectedStepViewModel = ((Pricing.FilterViewModel)StepCache[navigator.Section]);
+            //            break;
+            //        case Domain.SectionType.PlanningPricingPriceLists:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingRounding:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingStrategy:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingResults:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingForecast:
+            //            break;
+            //        case Domain.SectionType.PlanningPricingApproval:
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //    SelectedStepViewModel.LoadPriceRoutine(SelectedPriceRoutine);
+            //}
 
         }
     }   

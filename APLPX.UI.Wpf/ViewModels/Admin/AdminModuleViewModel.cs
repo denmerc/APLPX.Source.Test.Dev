@@ -57,21 +57,21 @@ namespace APLPX.UI.WPF.ViewModels
                     }
 
                     //if saved update in memory so search screen is updated
-                    var mainFolderSet = ((HomeSearchViewModel)MainViewModel.SubModuleCache[Domain.SubModuleType.Search]);
+                    //var mainFolderSet = ((HomeSearchViewModel)MainViewModel.SubModuleCache[Domain.SubModuleType.Search]);
 
-                    mainFolderSet.FolderSet.SelectedAnalyticFolders = vm.AnalyticFolderSet;
-                    mainFolderSet.FolderSet.SelectedEverydayFolders = vm.EverydayFolderSet;
-                    mainFolderSet.FolderSet.SelectedPromotionFolders = vm.PromoFolderSet;
-                    mainFolderSet.FolderSet.SelectedKitFolders = vm.KitFolderSet;
+                    //mainFolderSet.FolderSet.SelectedAnalyticFolders = vm.AnalyticFolderSet;
+                    //mainFolderSet.FolderSet.SelectedEverydayFolders = vm.EverydayFolderSet;
+                    //mainFolderSet.FolderSet.SelectedPromotionFolders = vm.PromoFolderSet;
+                    //mainFolderSet.FolderSet.SelectedKitFolders = vm.KitFolderSet;
 
-                    EventManager.Publish<NavigateEvent>(
-                        new NavigateEvent
-                        {
-                            Module = Domain.ModuleType.Planning,
-                            SubModule = Domain.SubModuleType.Search,
-                            Section = Domain.SectionType.PlanningHomeMyHomePage
+                    //EventManager.Publish<NavigateEvent>(
+                    //    new NavigateEvent
+                    //    {
+                    //        Module = Domain.ModuleType.Planning,
+                    //        SubModule = Domain.SubModuleType.Search,
+                    //        Section = Domain.SectionType.PlanningHomeMyHomePage
 
-                        });
+                    //    });
 
                 });
 

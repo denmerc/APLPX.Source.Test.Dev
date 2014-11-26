@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -7,218 +6,243 @@ using System.Runtime.Serialization;
 namespace APLPX.Client.Entity
 {
     [DataContract]
+    //[BsonNoId]
     [BsonIgnoreExtraElements]
-    [BsonNoId]
     public class Analytic
     {
+        [BsonId]
+        public MongoDB.Bson.ObjectId _id { get; set; }
         #region Initialize...
-        public Analytic() { }
+        public Analytic() {}
         public Analytic(
-            Int32 Id
+            int id
             ) {
-            this.Id = Id;
+            Id=id;
         }
         public Analytic(
-            Int32 Id,
-            AnalyticIdentity Identity
+            int id,
+            string searchGroupKey
             ) {
-            this.Id = Id;
-            this.Identity = Identity;
+            Id = id;
+            SearchGroupKey = searchGroupKey;
         }
         public Analytic(
-            Int32 Id,
-            List<AnalyticDriver> Drivers
+            int id,
+            string searchGroupKey,
+            AnalyticIdentity identity
             ) {
-            this.Id = Id;
-            this.Drivers = Drivers;
+            Id = id;
+            SearchGroupKey = searchGroupKey;
+            Identity = identity;
         }
         public Analytic(
-            Int32 Id,
-            List<PriceListGroup> PriceListGroups
+            int id,
+            List<AnalyticDriver> drivers
             ) {
-            this.Id = Id;
-            this.PriceListGroups = PriceListGroups;
+            Id = id;
+            Drivers = drivers;
         }
         public Analytic(
-            Int32 Id,
-            List<FilterGroup> FilterGroups
+            int id,
+            List<PriceListGroup> priceListGroups
             ) {
-            this.Id = Id;
-            this.FilterGroups = FilterGroups;
+            Id = id;
+            PriceListGroups = priceListGroups;
         }
         public Analytic(
-            Int32 Id,
-            List<AnalyticResult> Results
+            int id,
+            List<FilterGroup> filterGroups
             ) {
-            this.Id = Id;
-            this.Results = Results;
+            Id = id;
+            FilterGroups = filterGroups;
         }
         public Analytic(
-            Int32 Id,
-            AnalyticIdentity Identity,
-            List<AnalyticDriver> Drivers,
-            List<PriceListGroup> PriceListGroups,
-            List<FilterGroup> FilterGroups,
-            List<AnalyticResult> Results
+            int id,
+            string searchGroupKey,
+            AnalyticIdentity identity,
+            List<AnalyticDriver> drivers,
+            List<PriceListGroup> priceListGroups,
+            List<FilterGroup> filterGroups
             ) {
-            this.Id = Id;
-            this.Identity = Identity;
-            this.Drivers = Drivers;
-            this.PriceListGroups = PriceListGroups;
-            this.FilterGroups = FilterGroups;
-            this.Results = Results;
+            Id = id;
+            SearchGroupKey = searchGroupKey;
+            Identity = identity;
+            Drivers = drivers;
+            PriceListGroups = priceListGroups;
+            FilterGroups = filterGroups;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id { get; private set; }
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public int Id { get; private set; }
         [DataMember]
-        public AnalyticIdentity Identity { get; private set; }
+        public string SearchGroupKey { get; private set; }
         [DataMember]
-        public List<AnalyticDriver> Drivers { get; private set; }
+        public AnalyticIdentity Identity { get; set; }
         [DataMember]
-        public List<PriceListGroup> PriceListGroups { get; private set; }
+        public List<AnalyticDriver> Drivers { get; set; }
         [DataMember]
-        public List<FilterGroup> FilterGroups { get; private set; }
+        public List<PriceListGroup> PriceListGroups { get; set; }
         [DataMember]
-        public List<AnalyticResult> Results { get; private set; }
-        [DataMember]
-        public List<ModuleFeature> Features { get; private set; }
+        public List<FilterGroup> FilterGroups { get; set; }
     }
 
-        [DataContract]
+    [DataContract]
     public class AnalyticIdentity
-        {
-            #region Initialize...
+    {
+        #region Initialize...
         public AnalyticIdentity() { }
         public AnalyticIdentity(
-                String Name,
-                String Description,
-            String Notes,
-            Boolean Active
+            string name,
+            string description,
+            string notes,
+            bool shared,
+            bool active
             ) {
-            this.Name = Name;
-            this.Description = Description;
-            this.Notes = Notes;
-            this.Active = Active;
+            Name = name;
+            Description = description;
+            Notes = notes;
+            Shared = shared;
+            Active = active;
         }
         public AnalyticIdentity(
-            String Name,
-            String Description,
-            String Notes,
-                String RefreshedText,
-                String CreatedText,
-                String EditedText,
-                DateTime Refreshed,
-                DateTime Created,
-                DateTime Edited,
-                String Author,
-                String Editor,
-                String Owner,
-                Boolean Active
-                ) {
-                    this.Name = Name;
-                    this.Description = Description;
-            this.Notes = Notes;
-                    this.Refreshed = Refreshed;
-                    this.RefreshedText = RefreshedText;
-                    this.Created = Created;
-                    this.CreatedText = CreatedText;
-                    this.Edited = Edited;
-                    this.EditedText = EditedText;
-                    this.Author = Author;
-                    this.Editor = Editor;
-                    this.Owner = Owner;
-                    this.Active = Active;
-            }
-            #endregion
-
-            [DataMember]
-        public String Name { get; set; }
-            [DataMember]
-            public String Description { get; set; }
-            [DataMember]
-        public String Notes { get; set; }
-            [DataMember]
-            [BsonIgnore]
-        public DateTime Refreshed { get; private set; }
-            [DataMember]
-        public String RefreshedText { get; private set; }
-            [DataMember]
-            [BsonIgnore]
-        public DateTime Created { get; private set; }
-            [DataMember]
-        public String CreatedText { get; private set; }
-            [DataMember]
-            [BsonIgnore]
-        public DateTime Edited { get; private set; }
-            [DataMember]
-        public String EditedText { get; private set; }
-            [DataMember]
-        public String Author { get; private set; }
-            [DataMember]
-        public String Editor { get; private set; }
-            [DataMember]
-        public String Owner { get; private set; }
-        [DataMember]
-        public Boolean Active { get; set; }
+            string name,
+            string description,
+            string notes,
+            string refreshedText,
+            string createdText,
+            string editedText,
+            DateTime refreshed,
+            DateTime created,
+            DateTime edited,
+            string author,
+            string editor,
+            string owner,
+            bool shared,
+            bool active
+            ) {
+            Name = name;
+            Description = description;
+            Notes = notes;
+            Refreshed = refreshed;
+            RefreshedText = refreshedText;
+            Created = created;
+            CreatedText = createdText;
+            Edited = edited;
+            EditedText = editedText;
+            Author = author;
+            Editor = editor;
+            Owner = owner;
+            Shared = shared;
+            Active = active;
         }
+        #endregion
+
+        [DataMember]
+        public string Name { get; set; }
+        [DataMember]
+        public string Description { get; set; }
+        [DataMember]
+        public string Notes { get; set; }
+        [DataMember]
+        public DateTime Refreshed { get; private set; }
+        [DataMember]
+        public string RefreshedText { get; private set; }
+        [DataMember]
+        public DateTime Created { get; private set; }
+        [DataMember]
+        public string CreatedText { get; private set; }
+        [DataMember]
+        public DateTime Edited { get; private set; }
+        [DataMember]
+        public string EditedText { get; private set; }
+        [DataMember]
+        public string Author { get; private set; }
+        [DataMember]
+        public string Editor { get; private set; }
+        [DataMember]
+        public string Owner { get; private set; }
+        [DataMember]
+        public bool Shared { get; set; }
+        [DataMember]
+        public bool Active { get; set; }
+    }
 
     [DataContract]
+    [BsonNoId]
     [BsonIgnoreExtraElements]
     public class AnalyticDriver
-        {
-            #region Initialize...
+    {
+        #region Initialize...
         public AnalyticDriver() { }
         public AnalyticDriver(
-                Int32 Id,
-                Int32 Key,
-            List<AnalyticDriverMode> Modes
+            int id,
+            int key,
+            List<AnalyticDriverMode> modes
             ) {
-            this.Id = Id;
-            this.Key = Key;
-            this.IsSelected = true;
-            this.Modes = Modes;
+            Id = id;
+            Key = key;
+            IsSelected = true;
+            Modes = modes;
         }
         public AnalyticDriver(
-            Int32 Id,
-            Int32 Key,
-                String Name,
-                String Tooltip,
-            Int16 SortOrder,
-            Boolean IsSelected,
-            List<AnalyticDriverMode> Modes
-                ) {
-            this.Id = Id;
-                    this.Key = Key;
-                    this.Name = Name;
-            this.Title = Title;
-            this.SortOrder = SortOrder;
-            this.IsSelected = IsSelected;
-                    this.Modes = Modes;
-            }
-            #endregion
+            int id,
+            int key,
+            string name,
+            string title,
+            List<AnalyticResult> results
+            ) {
+            Id=id;
+            Key = key;
+            Name = name;
+            Title = title;
+            IsSelected = true;
+            Results = results;
+        }
+        public AnalyticDriver(
+            int id,
+            int key,
+            string name,
+            string title,
+            short sort,
+            bool isSelected,
+            List<AnalyticResult> results,
+            List<AnalyticDriverMode> modes
+            ) {
+            Id=id;
+            Key = key;
+            Name = name;
+            Title = title;
+            Sort = sort;
+            IsSelected = isSelected;
+            Results = results;
+            Modes = modes;
+        }
+        #endregion
 
-            [DataMember]
-            public Int32 Id { get; private set; }
-            [DataMember]
-            public Int32 Key { get; private set; }
-            [DataMember]
-            public String Name { get; private set; }
-            [DataMember]
-        public String Title { get; private set; }
         [DataMember]
-        public Int16 SortOrder { get; private set; }
-            [DataMember]
-        public Boolean IsSelected { get; set; }
-            [DataMember]
+        public int Id { get; private set; }
+        [DataMember]
+        public int Key { get; private set; }
+        [DataMember]
+        public string Name { get; private set; }
+        [DataMember]
+        public string Title { get; private set; }
+        [DataMember]
+        public short Sort { get; private set; }
+        [DataMember]
+        public bool IsSelected { get; set; }
+        [DataMember]
         public List<AnalyticDriverMode> Modes { get; private set; }
+        [DataMember]
+        public List<AnalyticResult> Results { get; private set; }
 
         #region Driver mode name indexer...
-        public AnalyticDriverMode this[String index] {
+        public AnalyticDriverMode this[string index] {
             get {
                 AnalyticDriverMode mode = new AnalyticDriverMode();
-                foreach (AnalyticDriverMode item in this.Modes) {
+                foreach (AnalyticDriverMode item in Modes) {
                     if (item.Name == index) {
                         mode = item;
                         break;
@@ -232,89 +256,91 @@ namespace APLPX.Client.Entity
 
     [DataContract]
     [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class AnalyticDriverMode
     {
-                #region Initialize...
+        #region Initialize...
         public AnalyticDriverMode() { }
         public AnalyticDriverMode(
-            Int32 Key,
-            List<AnalyticDriverGroup> Groups
+            int key,
+            List<AnalyticDriverGroup> groups
             ) {
-            this.Key = Key;
-            this.IsSelected = true;
-            this.Groups = Groups;
+            Key = key;
+            IsSelected = true;
+            Groups = groups;
         }
         public AnalyticDriverMode(
-                    Int32 Key,
-                    String Name,
-            String Title,
-            Int16 SortOrder,
-            Boolean IsSelected,
-            List<AnalyticDriverGroup> Groups
-                    ) {
-                    this.Key = Key;
-                    this.Name = Name;
-            this.Title = Title;
-            this.SortOrder = SortOrder;
-            this.IsSelected = IsSelected;
-                    this.Groups = Groups;
-                }
-                #endregion
+            int key,
+            string name,
+            string title,
+            short sort,
+            bool isSelected,
+            List<AnalyticDriverGroup> groups
+            ) {
+            Key = key;
+            Name = name;
+            Title = title;
+            Sort = sort;
+            IsSelected = isSelected;
+            Groups = groups;
+        }
+        #endregion
 
-                [DataMember]
-                public Int32 Key { get; private set; }
-                [DataMember]
-                public String Name { get; private set; }
-                [DataMember]
-        public String Title { get; private set; }
         [DataMember]
-        public Int16 SortOrder { get; private set; }
-                [DataMember]
-        public Boolean IsSelected { get; set; }
-                [DataMember]
+        public int Key { get; private set; }
+        [DataMember]
+        public string Name { get; private set; }
+        [DataMember]
+        public string Title { get; private set; }
+        [DataMember]
+        public short Sort { get; private set; }
+        [DataMember]
+        public bool IsSelected { get; set; }
+        [DataMember]
         public List<AnalyticDriverGroup> Groups { get; private set; }
     }
 
-    [DataContract]    
+    [DataContract]
     [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class AnalyticDriverGroup
     {
-                    #region Initialize...
+        #region Initialize...
         public AnalyticDriverGroup() { }
         public AnalyticDriverGroup(
-            Int32 Id
+            int id
             ) {
-            this.Id = Id;
-            this.Value = 0;
-            this.MinOutlier = 0;
-            this.MaxOutlier = 0;
+            Id = id;
+            Value = 0;
+            MinOutlier = 0;
+            MaxOutlier = 0;
         }
         public AnalyticDriverGroup(
-                        Int32 Id,
-            Int16 Value,
-                        Decimal MinOutlier,
-            Decimal MaxOutlier,
-            Int16 SortOrder
-                        ) {
-                        this.Id = Id;
-                        this.Value = Value;
-                        this.MinOutlier = MinOutlier;
-                        this.MaxOutlier = MaxOutlier;
-            this.SortOrder = SortOrder;
-                    }
-                    #endregion
+            int id,
+            short value,
+            decimal minOutlier,
+            decimal maxOutlier,
+            short sort
+            ) {
+            Id = id;
+            Value = value;
+            MinOutlier = minOutlier;
+            MaxOutlier = maxOutlier;
+            Sort = sort;
+        }
+        #endregion
 
-                    [DataMember]
-                    public Int32 Id { get; private set; }
-                    [DataMember]
-        public Int16 Value { get; set; }
         [DataMember]
-        public Decimal MinOutlier { get; set; }
-                    [DataMember]
-        public Decimal MaxOutlier { get; set; }
-                    [DataMember]
-        public Int16 SortOrder { get; private set; }
-            }
+        public int Id { get; private set; }
+        [DataMember]
+        public short Value { get; set; }
+        [DataMember]
+        public decimal MinOutlier { get; set; }
+        [DataMember]
+        public decimal MaxOutlier { get; set; }
+        [DataMember]
+        public short Sort { get; private set; }
+    }
 
     [DataContract]
     public class AnalyticResult
@@ -322,30 +348,31 @@ namespace APLPX.Client.Entity
         #region Initialize...
         public AnalyticResult() { }
         public AnalyticResult(
-            Int16 Group,
-            Decimal MinValue,
-            Decimal MaxValue,
-            Decimal SalesValue,
-            Int16 SortOrder
+            short group,
+            decimal minValue,
+            decimal maxValue,
+            string salesValue,
+            short sort
             ) {
-            this.Group = Group;
-            this.MinValue = MinValue;
-            this.MaxValue = MaxValue;
-            this.SalesValue = SalesValue;
-            this.SortOrder = SortOrder;
+            Group = group;
+            MinValue = minValue;
+            MaxValue = maxValue;
+            SalesValue = salesValue;
+            Sort = sort;
         }
         #endregion
 
         [DataMember]
-        public Int16 Group { get; private set; }
+        public short Group { get; private set; }
         [DataMember]
-        public Decimal MinValue { get; private set; }
+        public decimal MinValue { get; private set; }
         [DataMember]
-        public Decimal MaxValue { get; private set; }
+        public decimal MaxValue { get; private set; }
         [DataMember]
-        public Decimal SalesValue { get; private set; }
+        public string SalesValue { get; private set; }
         [DataMember]
-        public Int16 SortOrder { get; private set; }
+        public short Sort { get; private set; }
+
     }
 }
 

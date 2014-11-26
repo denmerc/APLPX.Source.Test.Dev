@@ -10,68 +10,59 @@ namespace APLPX.Client.Entity
         #region Initialize...
         public Pricing() { }
         public Pricing(
-            Int32 Id
+            Int32 id
             ) {
-            this.Id = Id;
+            Id = id;
         }
         public Pricing(
-            Int32 Id,
-            PricingIdentity Identity
+            Int32 id,
+            PricingIdentity identity
             ) {
-            this.Id = Id;
-            this.Identity = Identity;
+            Id = id;
+            Identity = identity;
         }
         public Pricing(
-            Int32 Id,
-            List<PricingDriver> Drivers
+            Int32 id,
+            List<PricingDriver> drivers
             ) {
-            this.Id = Id;
-            this.Drivers = Drivers;
+            Id = id;
+            Drivers = drivers;
         }
         public Pricing(
-            Int32 Id,
-            List<PriceListGroup> PriceListGroups
+            Int32 id,
+            List<PriceListGroup> priceListGroups
             ) {
-            this.Id = Id;
-            this.PriceListGroups = PriceListGroups;
+            Id = id;
+            PriceListGroups = priceListGroups;
         }
         public Pricing(
-            Int32 Id,
-            List<FilterGroup> FilterGroups
+            Int32 id,
+            List<FilterGroup> filterGroups
             ) {
-            this.Id = Id;
-            this.FilterGroups = FilterGroups;
+            Id = id;
+            FilterGroups = filterGroups;
         }
         public Pricing(
-            Int32 Id,
-            List<PricingResult> Results
+            Int32 id,
+            List<PricingResult> results
             ) {
-            this.Id = Id;
-            this.Results = Results;
+            Id = id;
+            Results = results;
         }
         public Pricing(
-            Int32 Id,
-            List<ModuleFeature> Features
+            Int32 id,
+            PricingIdentity identity,
+            List<PricingDriver> drivers,
+            List<PriceListGroup> priceListGroups,
+            List<FilterGroup> filterGroups,
+            List<PricingResult> results
             ) {
-            this.Id = Id;
-            this.Features = Features;
-        }
-        public Pricing(
-            Int32 Id,
-            PricingIdentity Identity,
-            List<PricingDriver> Drivers,
-            List<PriceListGroup> PriceListGroups,
-            List<FilterGroup> FilterGroups,
-            List<PricingResult> Results,
-            List<ModuleFeature> Features
-            ) {
-            this.Id = Id;
-            this.Identity = Identity;
-            this.Drivers = Drivers;
-            this.PriceListGroups = PriceListGroups;
-            this.FilterGroups = FilterGroups;
-            this.Results = Results;
-            this.Features = Features;
+            Id = id;
+            Identity = identity;
+            Drivers = drivers;
+            PriceListGroups = priceListGroups;
+            FilterGroups = filterGroups;
+            Results = results;
         }
         #endregion
 
@@ -87,8 +78,6 @@ namespace APLPX.Client.Entity
         public List<FilterGroup> FilterGroups { get; private set; }
         [DataMember]
         public List<PricingResult> Results { get; private set; }
-        [DataMember]
-        public List<ModuleFeature> Features { get; private set; }
     }
 
     [DataContract]
@@ -97,73 +86,79 @@ namespace APLPX.Client.Entity
         #region Initialize...
         public PricingIdentity() { }
         public PricingIdentity(
-            String Name,
-            String Description,
-            String Notes,
-            Boolean Active
+            string name,
+            string description,
+            string notes,
+            bool shared,
+            bool active
             ) {
-            this.Name = Name;
-            this.Description = Description;
-            this.Notes = Notes;
-            this.Active = Active;
+            Name = name;
+            Description = description;
+            Notes = notes;
+            Shared = shared;
+            Active = active;
         }
         public PricingIdentity(
-            String Name,
-            String Description,
-            String Notes,
-            String RefreshedText,
-            String CreatedText,
-            String EditedText,
-            DateTime Refreshed,
-            DateTime Created,
-            DateTime Edited,
-            String Author,
-            String Editor,
-            String Owner,
-            Boolean Active
+            string name,
+            string description,
+            string notes,
+            string refreshedText,
+            string createdText,
+            string editedText,
+            DateTime refreshed,
+            DateTime created,
+            DateTime edited,
+            string author,
+            string editor,
+            string owner,
+            bool shared,
+            bool active
             ) {
-            this.Name = Name;
-            this.Description = Description;
-            this.Notes = Notes;
-            this.Refreshed = Refreshed;
-            this.RefreshedText = RefreshedText;
-            this.Created = Created;
-            this.CreatedText = CreatedText;
-            this.Edited = Edited;
-            this.EditedText = EditedText;
-            this.Author = Author;
-            this.Editor = Editor;
-            this.Owner = Owner;
-            this.Active = Active;
+            Name = name;
+            Description = description;
+            Notes = notes;
+            Refreshed = refreshed;
+            RefreshedText = refreshedText;
+            Created = created;
+            CreatedText = createdText;
+            Edited = edited;
+            EditedText = editedText;
+            Author = author;
+            Editor = editor;
+            Owner = owner;
+            Shared = shared;
+            Active = active;
         }
         #endregion
 
         [DataMember]
-        public String Name { get; set; }
+        public string Name; //CLIENT { get; set; }
         [DataMember]
-        public String Description { get; set; }
+        public string Description; //CLIENT { get; set; }
         [DataMember]
-        public String Notes { get; set; }
+        public string Notes; //CLIENT { get; set; }
         [DataMember]
-        public DateTime Refreshed { get; private set; }
+        public DateTime Refreshed; //CLIENT { get; private set; }
         [DataMember]
-        public String RefreshedText { get; private set; }
+        public string RefreshedText; //CLIENT { get; private set; }
         [DataMember]
-        public DateTime Created { get; private set; }
+        public DateTime Created; //CLIENT { get; private set; }
         [DataMember]
-        public String CreatedText { get; private set; }
+        public string CreatedText; //CLIENT { get; private set; }
         [DataMember]
-        public DateTime Edited { get; private set; }
+        public DateTime Edited; //CLIENT { get; private set; }
         [DataMember]
-        public String EditedText { get; private set; }
+        public string EditedText; //CLIENT { get; private set; }
         [DataMember]
-        public String Author { get; private set; }
+        public string Author; //CLIENT { get; private set; }
         [DataMember]
-        public String Editor { get; private set; }
+        public string Editor; //CLIENT { get; private set; }
         [DataMember]
-        public String Owner { get; private set; }
+        public string Owner; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean Active { get; private set; }
+        public bool Shared; //CLIENT { get; set; }
+        [DataMember]
+        public bool Active; //CLIENT { get; private set; }
     }
 
     [DataContract]

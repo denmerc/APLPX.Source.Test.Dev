@@ -17,53 +17,76 @@ namespace APLPX.UI.WPF.Mappers
 
             displayEntity.Identity = dto.Identity.ToDisplayEntity();
 
-            foreach (var group in dto.FilterGroups)
+            if (dto.FilterGroups != null)
             {
-                displayEntity.FilterGroups.Add(group.ToDisplayEntity());
+                foreach (var filterGroup in dto.FilterGroups)
+                {
+                    displayEntity.FilterGroups.Add(filterGroup.ToDisplayEntity());
+                }
             }
 
-            foreach (var driver in dto.Drivers)
+            if (dto.Drivers != null)
             {
-                displayEntity.Drivers.Add(driver.ToDisplayEntity());
+                foreach (var driver in dto.Drivers)
+                {
+                    displayEntity.Drivers.Add(driver.ToDisplayEntity());
+                }
             }
 
-            foreach (var group in dto.PriceListGroups)
+            if (dto.PriceListGroups != null)
             {
-                displayEntity.PriceListGroups.Add(group.ToDisplayEntity());
+                foreach (var priceListGroup in dto.PriceListGroups)
+                {
+                    displayEntity.PriceListGroups.Add(priceListGroup.ToDisplayEntity());
+                }
             }
 
-            foreach (var feature in dto.Features)
+            if (dto.Results != null)
             {
-                displayEntity.Features.Add(feature.ToDisplayEntity());
+                foreach (var result in dto.Results)
+                {
+                    displayEntity.Results.Add(result.ToDisplayEntity());
+                }
             }
 
-            foreach (var result in dto.Results)
-            {
-                displayEntity.Results.Add(result.ToDisplayEntity());
-            }
-            
             return displayEntity;
         }
 
         public static DTO.Pricing ToDto(this Display.Pricing displayEntity)
         {
-            var dto = new DTO.Pricing(displayEntity.Id, displayEntity.Identity.ToDto());
-            
-            foreach (var group in displayEntity.FilterGroups)
+
+            var filterGroups = new List<DTO.FilterGroup>();
+            foreach (var filterGroup in displayEntity.FilterGroups)
             {
-                dto.FilterGroups.Add(group.ToDto());
+                filterGroups.Add(filterGroup.ToDto());
             }
 
+            var drivers = new List<DTO.PricingDriver>();
             foreach (var driver in displayEntity.Drivers)
             {
-                dto.Drivers.Add(driver.ToDto());
+                drivers.Add(driver.ToDto());
             }
 
-            foreach (var group in displayEntity.PriceListGroups)
+            var priceListGroups = new List<DTO.PriceListGroup>();
+            foreach (var priceListGroup in displayEntity.PriceListGroups)
             {
-                dto.PriceListGroups.Add(group.ToDto());
+                priceListGroups.Add(priceListGroup.ToDto());
             }
-                 
+
+            var results = new List<DTO.PricingResult>();
+            foreach (var result in displayEntity.Results)
+            {
+                results.Add(result.ToDto());
+            }
+
+            var dto = new DTO.Pricing(
+                                displayEntity.Id,
+                                displayEntity.Identity.ToDto(),
+                                drivers,
+                                priceListGroups,
+                                filterGroups,
+                                results);
+
             return dto;
         }
     }

@@ -12,8 +12,10 @@ namespace APLPX.UI.WPF.DisplayEntities
         private short _group;
         private decimal _minValue;
         private decimal _maxValue;
-        private decimal _salesVAlue;
-        private short _sortOrder;
+        private string _salesValue;
+        private short _sort;
+        private int _skuCount;
+        private string _driverName;
 
         #endregion
 
@@ -26,6 +28,13 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region Properties
+
+
+        public string DriverName
+        {
+            get { return _driverName; }
+            set { this.RaiseAndSetIfChanged(ref _driverName, value); }
+        }
 
         public short Group
         {
@@ -44,17 +53,23 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return _maxValue; }
             set { this.RaiseAndSetIfChanged(ref _maxValue, value); }
         }
-
-        public decimal SalesValue
+        
+        public string SalesValue
         {
-            get { return _salesVAlue; }
-            set { this.RaiseAndSetIfChanged(ref _salesVAlue, value); }
+            get { return _salesValue; }
+            set { this.RaiseAndSetIfChanged(ref _salesValue, value); }
         }
 
-        public short SortOrder
+        public short Sort
         {
-            get { return _sortOrder; }
-            set { this.RaiseAndSetIfChanged(ref _sortOrder, value); }
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
+        }
+
+        public int SkuCount
+        {
+            get { return _skuCount; }
+            set { this.RaiseAndSetIfChanged(ref _skuCount, value); }
         }
 
         #endregion

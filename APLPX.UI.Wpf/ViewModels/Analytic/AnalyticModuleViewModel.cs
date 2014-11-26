@@ -9,6 +9,8 @@ using APLPX.UI.WPF.Interfaces;
 
 using ReactiveUI;
 using Domain = APLPX.Client.Display;
+using APLPX.Client.Contracts;
+using APLPX.Client.Entity;
 
 
 namespace APLPX.UI.WPF.ViewModels
@@ -43,105 +45,109 @@ namespace APLPX.UI.WPF.ViewModels
 
         public void Navigate(NavigateEvent navigator)
         {
-            if (navigator.Entity != null) SelectedAnalytic = (Domain.Analytic)navigator.Entity;
-            Name = SelectedAnalytic.Name;
+            //if (navigator.Entity != null) SelectedAnalytic = (Domain.Analytic)navigator.Entity;
+            //Name = SelectedAnalytic.Name;
 
-            if (!StepCache.ContainsKey(navigator.Section))
-            {
-                switch (navigator.Section)// switch action bar for each step
-                {
-                    case Domain.SectionType.PlanningAnalyticsMyAnalytics:
-                        break;
-                    case Domain.SectionType.PlanningAnalyticsIdentity:
-                        SelectedStepViewModel = new ViewModels.Analytic.IdentityViewModel(SelectedAnalytic);
+            //if (!StepCache.ContainsKey(navigator.Section))
+            //{
+            //    switch (navigator.Section)// switch action bar for each step
+            //    {
+            //        case Domain.SectionType.PlanningAnalyticsMyAnalytics:
+            //            break;
+            //        case Domain.SectionType.PlanningAnalyticsIdentity:
+            //            SelectedStepViewModel = new ViewModels.Analytic.IdentityViewModel(SelectedAnalytic);
 
-                        break;
-                    case Domain.SectionType.PlanningAnalyticsFilters:
-                        SelectedStepViewModel = new ViewModels.Analytic.FilterViewModel(SelectedAnalytic);
-                        break;
-                    //case SectionType.PlanningAnalyticsPriceLists:
-                    //    break;
-                    case Domain.SectionType.PlanningAnalyticsValueDrivers:
-                        SelectedStepViewModel = new ViewModels.Analytic.DriverViewModel(SelectedAnalytic);
-                        break;
-                    case Domain.SectionType.PlanningAnalyticsResults:
-                        SelectedStepViewModel = new ViewModels.Analytic.ResultsViewModel(SelectedAnalytic);
-                        break;
-                    default:
-                        break;
-                }
-                StepCache.Add(navigator.Section, _SelectedStepViewModel);
-            }
-            else // in cache
-            {
-                switch (navigator.Section)
-                {
-                    case Domain.SectionType.PlanningAnalyticsIdentity:
-                        SelectedStepViewModel = ((Analytic.IdentityViewModel)StepCache[navigator.Section]);
-                        //SelectedStepViewModel.Load(navigator.Entity);
-                        break;
-                    case Domain.SectionType.PlanningAnalyticsFilters:
-                        SelectedStepViewModel = ((Analytic.FilterViewModel)StepCache[navigator.Section]);
-                        break;
-                    case Domain.SectionType.PlanningAnalyticsValueDrivers:
-                        SelectedStepViewModel = ((Analytic.DriverViewModel)StepCache[navigator.Section]);
-                        break;
-                    case Domain.SectionType.PlanningAnalyticsResults:
-                        SelectedStepViewModel = ((Analytic.ResultsViewModel)StepCache[navigator.Section]);
-                        break;
-                    default:
-                        break;
-                }
-                SelectedStepViewModel.LoadAnalytic(SelectedAnalytic);
+            //            break;
+            //        case Domain.SectionType.PlanningAnalyticsFilters:
+            //            SelectedStepViewModel = new ViewModels.Analytic.FilterViewModel(SelectedAnalytic);
+            //            break;
+            //        //case SectionType.PlanningAnalyticsPriceLists:
+            //        //    break;
+            //        case Domain.SectionType.PlanningAnalyticsValueDrivers:
+            //            SelectedStepViewModel = new ViewModels.Analytic.DriverViewModel(SelectedAnalytic);
+            //            break;
+            //        case Domain.SectionType.PlanningAnalyticsResults:
+            //            SelectedStepViewModel = new ViewModels.Analytic.ResultsViewModel(SelectedAnalytic);
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //    StepCache.Add(navigator.Section, _SelectedStepViewModel);
+            //}
+            //else // in cache
+            //{
+            //    switch (navigator.Section)
+            //    {
+            //        case Domain.SectionType.PlanningAnalyticsIdentity:
+            //            SelectedStepViewModel = ((Analytic.IdentityViewModel)StepCache[navigator.Section]);
+            //            //SelectedStepViewModel.Load(navigator.Entity);
+            //            break;
+            //        case Domain.SectionType.PlanningAnalyticsFilters:
+            //            SelectedStepViewModel = ((Analytic.FilterViewModel)StepCache[navigator.Section]);
+            //            break;
+            //        case Domain.SectionType.PlanningAnalyticsValueDrivers:
+            //            SelectedStepViewModel = ((Analytic.DriverViewModel)StepCache[navigator.Section]);
+            //            break;
+            //        case Domain.SectionType.PlanningAnalyticsResults:
+            //            SelectedStepViewModel = ((Analytic.ResultsViewModel)StepCache[navigator.Section]);
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //    SelectedStepViewModel.LoadAnalytic(SelectedAnalytic);
 
-            }
+            //}
         }
 
-        public AnalyticModuleViewModel(IAnalyticRepository repo, Domain.Session session, string name)
+        public AnalyticModuleViewModel(IAnalyticService repo, Session<NullT> session, string name)
         {
             Name = name;
 
-            EventManager.GetEvent<SaveEvent>()
-                .Subscribe(evt =>
-                {
-                    Domain.Analytic analyticToSave = null;
-                    //ViewModelBase vm = null;
-                    switch (evt.Section)
-                    {
-                        case Domain.SectionType.PlanningHomeMyMarkuprules:
-                            break;
-                        case Domain.SectionType.PlanningHomeMyRoundingrules:
-                            break;
-                        case Domain.SectionType.PlanningAnalyticsMyAnalytics:
-                            break;
-                        case Domain.SectionType.PlanningAnalyticsIdentity:
-                            var vmi = (ViewModels.Analytic.IdentityViewModel)(SelectedStepViewModel);
-                            var tagsToSave = vmi.SelectedTags;
-                            analyticToSave = vmi.SelectedAnalytic;
-                            vmi.SelectedAnalytic.Tags = tagsToSave.Select(y => y.Value).ToList<string>();
-                            repo.Save<Domain.Analytic>(analyticToSave);
-                            this.Navigate(new NavigateEvent { Module = Domain.ModuleType.Planning, SubModule = Domain.SubModuleType.Analytics, Section = Domain.SectionType.PlanningAnalyticsFilters });
-                            break;
-                        case Domain.SectionType.PlanningAnalyticsFilters:
-                            var vmf = (ViewModels.Analytic.FilterViewModel)(SelectedStepViewModel);
-                            analyticToSave = vmf.SelectedAnalytic;
+            //EventManager.GetEvent<SaveEvent>()
+            //    .Subscribe(evt =>
+            //    {
+            //        Domain.Analytic analyticToSave = null;
+            //        //ViewModelBase vm = null;
+            //        switch (evt.Section)
+            //        {
+            //            case Domain.SectionType.PlanningHomeMyMarkuprules:
+            //                break;
+            //            case Domain.SectionType.PlanningHomeMyRoundingrules:
+            //                break;
+            //            case Domain.SectionType.PlanningAnalyticsMyAnalytics:
+            //                break;
+            //            case Domain.SectionType.PlanningAnalyticsIdentity:
+            //                var vmi = (ViewModels.Analytic.IdentityViewModel)(SelectedStepViewModel);
+            //                var tagsToSave = vmi.SelectedTags;
+            //                analyticToSave = vmi.SelectedAnalytic;
+            //                vmi.SelectedAnalytic.Tags = tagsToSave.Select(y => y.Value).ToList<string>();
+
+
+            //                //repo.SaveIdentity(session.Clone<Client.Entity.Analytic>(analyticToSave));
+            //                this.Navigate(new NavigateEvent { Module = Domain.ModuleType.Planning, SubModule = Domain.SubModuleType.Analytics, Section = Domain.SectionType.PlanningAnalyticsFilters });
+            //                break;
+            //            case Domain.SectionType.PlanningAnalyticsFilters:
+            //                var vmf = (ViewModels.Analytic.FilterViewModel)(SelectedStepViewModel);
+            //                analyticToSave = vmf.SelectedAnalytic;
 
 
 
-                            repo.Save<Domain.Analytic>(analyticToSave);
-                            this.Navigate(new NavigateEvent { Module = Domain.ModuleType.Planning, SubModule = Domain.SubModuleType.Analytics, Section = Domain.SectionType.PlanningAnalyticsFilters });
-                            break;
-                        case Domain.SectionType.PlanningAnalyticsPriceLists:
-                            break;
-                        case Domain.SectionType.PlanningAnalyticsValueDrivers:
-                            break;
-                        case Domain.SectionType.PlanningAnalyticsResults:
-                            break;
-                        default:
-                            break;
-                    }
-                });
+            //                //repo.SaveFilters(analyticToSave);
+            //                this.Navigate(new NavigateEvent { Module = Domain.ModuleType.Planning, SubModule = Domain.SubModuleType.Analytics, Section = Domain.SectionType.PlanningAnalyticsFilters });
+            //                break;
+            //            case Domain.SectionType.PlanningAnalyticsPriceLists:
+            //                break;
+            //            case Domain.SectionType.PlanningAnalyticsValueDrivers:
+            //                break;
+            //            case Domain.SectionType.PlanningAnalyticsResults:
+            //                break;
+            //            default:
+            //                break;
+            //        }
+            //    });
         }
+
+        public AnalyticModuleViewModel(DisplayEntities.ModuleFeature feature) { }
 
         public string Name { get; set; }
         void Save() { }

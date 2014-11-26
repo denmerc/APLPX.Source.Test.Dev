@@ -11,7 +11,7 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
-        private UserIdentity _userIdentity;
+        private User _user;
         private object _data;
         private bool _appOnline;
         private bool _authenticated;
@@ -20,7 +20,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private bool _sessionOk;
         private string _clientMessage;
         private string _serverMessage;
-        private ModuleFeature _feature;
+        private List<Module> _modules;
 
         #endregion
 
@@ -28,18 +28,18 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public Session()
         {
-            UserIdentity = new UserIdentity();
-            Feature = new ModuleFeature();
+            User = new User();
+            Modules = new List<Module>();
         }
 
         #endregion
 
         #region Properties
 
-        public UserIdentity UserIdentity
+        public User User
         {
-            get { return _userIdentity; }
-            set { this.RaiseAndSetIfChanged(ref _userIdentity, value); }
+            get { return _user; }
+            set { this.RaiseAndSetIfChanged(ref _user, value); }
         }
 
         public object Data
@@ -90,10 +90,10 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _serverMessage, value); }
         }
 
-        public ModuleFeature Feature
+        public List<Module> Modules
         {
-            get { return _feature; }
-            set { this.RaiseAndSetIfChanged(ref _feature, value); }
+            get { return _modules; }
+            set { this.RaiseAndSetIfChanged(ref _modules, value); }
         }
 
         #endregion

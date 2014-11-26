@@ -1,22 +1,11 @@
-﻿using APLPX.UI.WPF.ViewModels.Events;
-using MahApps.Metro.Controls;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using APLPX.UI.WPF.ViewModels.Reactive;
-using Domain = APLPX.Client.Display;
+using System.Windows.Interop;
+using APLPX.UI.WPF.Events;
+using APLPX.UI.WPF.Views;
+using MahApps.Metro.Controls;
 
 namespace APLPX.UI.WPF
 {
@@ -25,23 +14,66 @@ namespace APLPX.UI.WPF
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        EventAggregator Publisher = ((EventAggregator)App.Current.Resources["EventManager"]);
-        ObservableCollection<UserControl> views;
+        #region Win32 declarations
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        // Make sure RECT is actually OUR defined struct, not the windows rect.
+        public static RECT GetWindowRectangle(Window window)
+        {
+            RECT rect;
+            GetWindowRect((new WindowInteropHelper(window)).Handle, out rect);
+
+            return rect;
+        }
+
+        #endregion
+
+        private EventAggregator _eventManager;
+
         public MainWindow()
         {
             InitializeComponent();
-            //views = new ObservableCollection<UserControl>();
-            //var h = new HomeVerticalControl();
             
-            //views.Add(new HomeVerticalControl());
-            //views.Add(new AnalyticStepsControl());
+            _eventManager = ((EventAggregator)App.Current.Resources["EventManager"]);
 
-            //DataContext = views;
+            _eventManager.GetEvent<OperationCompletedEvent>()
+               .Subscribe(action =>
+               {
+                   ShowMessageToaster(action);
+               });
+        }
 
+        private void ShowMessageToaster(OperationCompletedEvent action)
+        {
+            double thisWindowTop = this.Top;
+            double thisWindowLeft = this.Left;
 
+            if (WindowState == WindowState.Maximized)
+            {
+                //Ensure this window's coordinates are correct when it is maximized.
+                //Reference: https://social.msdn.microsoft.com/Forums/vstudio/en-US/078b8a70-7725-4986-8164-55efccbcfb46/window-top-and-left-values-are-not-updated-correctly-when-maximizing-a-window-in-net-4?forum=wpf
+                var rect = GetWindowRectangle(this);
+                thisWindowTop = rect.Top;
+                thisWindowLeft = rect.Left;
+            }
 
-           // ModuleControl.Content = views[0]; //selected module
-            
+            MessageToaster toaster = new MessageToaster();
+            toaster.Left = thisWindowLeft + this.ActualWidth - (ActionGrid.ActualWidth + CommandBar.ActualWidth);
+            toaster.Top = thisWindowTop + (this.ActualHeight - toaster.Height) / 2;
+            toaster.Message = action.Message;
+            toaster.Show();
         }
 
         private void MessageCenterButton_Click(object sender, RoutedEventArgs e)
@@ -54,7 +86,7 @@ namespace APLPX.UI.WPF
 
             flyout.IsOpen = !flyout.IsOpen;
 
-            DetailContentScrollViewer.HorizontalAlignment=HorizontalAlignment.Stretch;
+            DetailContentScrollViewer.HorizontalAlignment = HorizontalAlignment.Stretch;
             CommandBar.Width = 400;
         }
 
@@ -71,7 +103,7 @@ namespace APLPX.UI.WPF
         private void MessageCenter_IsOpenChanged(object sender, EventArgs e)
         {
             var f = sender as Flyout;
-            if(f != null && f.IsOpen==false)
+            if (f != null && f.IsOpen == false)
                 CommandBar.Width = 55;
         }
 
@@ -89,57 +121,9 @@ namespace APLPX.UI.WPF
             CommandBar.Width = 400;
         }
 
-        private void AddNewAnalyticButton_Click(object sender, RoutedEventArgs e)
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            ModuleControl.Content = views[1]; //go to analytic steps
+            base.OnClosing(e);
         }
-
-        private void PlanningModuleButton_Click(object sender, RoutedEventArgs e)
-        {
-            //HomeVerticalControl h = new HomeVerticalControl();
-            //h.ModuleListBox.SelectedItem = h.ModuleListBox.Items[0];
-            //h.FilterListBox.Visibility = Visibility.Visible;
-            //ModuleControl.Content = h;
-
-            //Publish SectionType & MVM changes selected sudmodule
-            Publisher.Publish<NavigateEvent>(
-                    new NavigateEvent
-                    {
-                        Module = Domain.ModuleType.Planning,
-                        SubModule = Domain.SubModuleType.Search,
-                        Section = Domain.SectionType.PlanningHomeMyHomePage
-                    }
-                
-                );
-            PlanningModuleTitle.Foreground = Brushes.White;
-            AdminModuleTitle.Foreground = Brushes.Black;
-
-        }
-
-        private void RelatedPriceRoutineButton_Click(object sender, RoutedEventArgs e)
-        {
-            PricingStepsControl view = new PricingStepsControl();
-            ModuleControl.Content = view;
-        }
-
-        private void AdministrationModuleButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            Publisher.Publish<NavigateEvent>(
-                new NavigateEvent
-                {
-                    Module = Domain.ModuleType.Administration,
-                    SubModule = Domain.SubModuleType.AdminDefault
-                }
-
-            );
-
-            AdminModuleTitle.Foreground = Brushes.White;
-            PlanningModuleTitle.Foreground = Brushes.Black;
-            //AdminControl c = new AdminControl(); //TODO: Disabled for demo
-            //ModuleControl.Content = c;
-        }
-
-
     }
 }

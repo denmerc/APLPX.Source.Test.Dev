@@ -10,8 +10,7 @@ namespace APLPX.UI.WPF.DisplayEntities
     public class UserIdentity : DisplayEntityBase
     {
         #region Private Fields
-      
-        private string _login; 
+             
         private bool _active;
         private string _email;
         private string _name;
@@ -37,12 +36,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region Properties 
-
-        public string Login
-        {
-            get { return _login; }
-            set { this.RaiseAndSetIfChanged(ref _login, value); }
-        }
 
         public bool Active
         {

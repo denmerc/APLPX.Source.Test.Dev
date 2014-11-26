@@ -18,7 +18,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Value = dto.Value;
             displayEntity.MinOutlier = dto.MinOutlier;
             displayEntity.MaxOutlier = dto.MaxOutlier;
-            displayEntity.SortOrder = dto.SortOrder;          
+            displayEntity.Sort = dto.Sort;
 
             return displayEntity;
         }
@@ -26,11 +26,11 @@ namespace APLPX.UI.WPF.Mappers
         public static Client.Entity.AnalyticDriverGroup ToDto(this Display.DriverGroup displayEntity)
         {
             var dto = new Client.Entity.AnalyticDriverGroup(
-                                            displayEntity.Id, 
-                                            displayEntity.Value, 
-                                            displayEntity.MinOutlier, 
-                                            displayEntity.MaxOutlier, 
-                                            displayEntity.SortOrder);
+                                            displayEntity.Id,
+                                            displayEntity.Value,
+                                            displayEntity.MinOutlier,
+                                            displayEntity.MaxOutlier,
+                                            displayEntity.Sort);
             return dto;
         }
     }

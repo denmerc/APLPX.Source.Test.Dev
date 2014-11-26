@@ -23,6 +23,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Code = dto.Code;
             displayEntity.Name = dto.Name;
             displayEntity.IsSelected = dto.IsSelected;
+            displayEntity.Sort = dto.Sort;
 
             return displayEntity;
         }
@@ -34,7 +35,8 @@ namespace APLPX.UI.WPF.Mappers
                                     displayEntity.Key,
                                     displayEntity.Code,
                                     displayEntity.Name,
-                                    displayEntity.IsSelected);
+                                    displayEntity.IsSelected,
+                                    displayEntity.Sort);
 
             return dto;
         }
@@ -48,7 +50,11 @@ namespace APLPX.UI.WPF.Mappers
             var displayEntity = new Display.PriceListGroup();
 
             displayEntity.TypeName = dto.TypeName;
-            dto.PriceLists.ForEach(item => displayEntity.PriceLists.Add(item.ToDisplayEntity()));
+
+            if (dto.PriceLists != null)
+            {
+                dto.PriceLists.ForEach(item => displayEntity.PriceLists.Add(item.ToDisplayEntity()));
+            }
 
             return displayEntity;
         }
@@ -56,9 +62,12 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.PriceListGroup ToDto(this Display.PriceListGroup displayEntity)
         {
             List<DTO.PriceList> priceLists = new List<DTO.PriceList>();
-            displayEntity.PriceLists.ForEach(item => priceLists.Add(item.ToDto()));
+            foreach (Display.PriceList priceList in displayEntity.PriceLists)
+            {
+                priceLists.Add(priceList.ToDto());
+            }
 
-            var dto = new DTO.PriceListGroup(displayEntity.TypeName, priceLists);
+            var dto = new DTO.PriceListGroup(displayEntity.Sort, displayEntity.TypeName, priceLists);
 
             return dto;
         }

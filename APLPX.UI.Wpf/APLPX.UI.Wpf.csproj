@@ -116,6 +116,7 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.0.14.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -135,7 +136,14 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Compile Include="Data\MockAnalyticRepository.cs">
+    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\ValueConverters.cs" />
+    <Compile Include="Data\MockUserService.cs" />
+    <Compile Include="DisplayEntities\Action.cs" />
+    <Compile Include="DisplayServices\AnalyticDisplayServices.cs" />
+    <Compile Include="DisplayServices\UserDisplayServices.cs" />
+    <Compile Include="Data\MockAnalyticService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DisplayEntities\Advisor.cs" />
@@ -143,18 +151,14 @@
     <Compile Include="DisplayEntities\ResultBase.cs" />
     <Compile Include="DisplayEntities\PricingResult.cs" />
     <Compile Include="DisplayEntities\PriceListGroup.cs" />
-    <Compile Include="DisplayEntities\IdentityBase.cs" />
     <Compile Include="DisplayEntities\PricingDriver.cs" />
-    <Compile Include="DisplayEntities\Folder.cs" />
+    <Compile Include="DisplayEntities\FeatureSearchGroup.cs" />
     <Compile Include="DisplayEntities\ModuleFeatureStep.cs" />
     <Compile Include="DisplayEntities\FilterGroup.cs" />
-    <Compile Include="DisplayEntities\FolderSet.cs" />
     <Compile Include="DisplayEntities\ModuleFeature.cs" />
     <Compile Include="DisplayEntities\Module.cs" />
     <Compile Include="DisplayEntities\AnalyticResult.cs" />
     <Compile Include="DisplayEntities\SQLEnumeration.cs" />
-    <Compile Include="DisplayEntities\PriceRoutine.cs" />
-    <Compile Include="DisplayEntities\PriceScheme.cs" />
     <Compile Include="DisplayEntities\PricingIdentity.cs" />
     <Compile Include="DisplayEntities\UserIdentity.cs" />
     <Compile Include="DisplayEntities\DisplayEntityBase.cs" />
@@ -167,9 +171,20 @@
     <Compile Include="DisplayEntities\PriceList.cs" />
     <Compile Include="DisplayEntities\Pricing.cs" />
     <Compile Include="DisplayEntities\UserRole.cs" />
-    <Compile Include="DisplayEntities\Session.cs" />
     <Compile Include="DisplayEntities\User.cs" />
+    <Compile Include="Events\OperationCompletedEvent.cs" />
+    <Compile Include="Helpers\AnalyticExtensions.cs" />
+    <Compile Include="Helpers\DisplayModuleGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\PricingExtensions.cs" />
+    <Compile Include="Helpers\PasswordExtension.cs" />
     <Compile Include="Interfaces\IAnalyticRepository.cs" />
+    <Compile Include="Interfaces\ISearchableEntity.cs" />
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Mappers\ActionMapper.cs" />
     <Compile Include="Mappers\AdvisorMapper.cs" />
     <Compile Include="Mappers\AnalyticMapper.cs" />
     <Compile Include="Mappers\DriverGroupMapper.cs">
@@ -180,8 +195,7 @@
     </Compile>
     <Compile Include="Mappers\ModuleMapper.cs" />
     <Compile Include="Mappers\ResultMapper.cs" />
-    <Compile Include="Mappers\FolderMapper.cs" />
-    <Compile Include="Mappers\SessionMapper.cs" />
+    <Compile Include="Mappers\SearchGroupMapper.cs" />
     <Compile Include="Mappers\PriceListMapper.cs" />
     <Compile Include="Mappers\SQLEnumerationMapper.cs" />
     <Compile Include="Mappers\UserMapper.cs" />
@@ -190,16 +204,40 @@
     <Compile Include="Mappers\FilterMapper.cs" />
     <Compile Include="Mappers\ErrorMapper.cs" />
     <Compile Include="Mappers\IdentityMapper.cs" />
-    <Compile Include="ViewModels\Admin\AdminModuleViewModel.cs" />
-    <Compile Include="ViewModels\Admin\FolderSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Analytic\AnalyticModuleViewModel.cs" />
-    <Compile Include="ViewModels\Events.cs" />
-    <Compile Include="ViewModels\HomeSearchViewModel.cs" />
-    <Compile Include="ViewModels\Pricing\PricingModuleViewModel.cs" />
-    <Compile Include="ViewModels\Pricing\StepViewModels.cs" />
+    <Compile Include="ViewModels\Admin\AdminUsersViewModel.cs" />
+    <Compile Include="ViewModels\Analytic\AnalyticDriverViewModel.cs" />
+    <Compile Include="ViewModels\Analytic\AnalyticIdentityViewModel.cs" />
+    <Compile Include="ViewModels\Analytic\AnalyticResultsViewModel.cs" />
+    <Compile Include="Events\EventAggregator.cs" />
+    <Compile Include="ViewModels\FilterViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\PriceListViewModel.cs" />
+    <Compile Include="ViewModels\Pricing\PricingIdentityViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\WaitViewModel.cs" />
     <Compile Include="Views\Admin\UserAdminControl.xaml.cs">
       <DependentUpon>UserAdminControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\PriceListControl.xaml.cs">
+      <DependentUpon>PriceListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MessageToaster.xaml.cs">
+      <DependentUpon>MessageToaster.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchGroupSelector.xaml.cs">
+      <DependentUpon>SearchGroupSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WaitView.xaml.cs">
+      <DependentUpon>WaitView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="LoginWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -212,9 +250,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Admin\FolderSettingsControl.xaml">
+    <Page Include="Views\Common\PriceListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MessageToaster.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Pricing\PricingIdentityStepControl.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -224,23 +270,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Admin\AdminControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Common\FilterStepControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Pricing\PricingStepsControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Analytic\AnalyticStepsControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Home.xaml">
+    <Page Include="Views\SearchControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -252,9 +286,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\MockSearchRepository.cs" />
-    <Compile Include="Domain\Domain.cs" />
-    <Compile Include="ViewModels\Analytic\StepViewModels.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Analytic\AnalyticResultsControl.xaml.cs">
@@ -263,35 +294,31 @@
     <Compile Include="Views\Analytic\AnalyticValueDriversStepControl.xaml.cs">
       <DependentUpon>AnalyticValueDriversStepControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Admin\FolderSettingsControl.xaml.cs">
-      <DependentUpon>FolderSettingsControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Pricing\PricingIdentityStepControl.xaml.cs">
       <DependentUpon>PricingIdentityStepControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Analytic\AnalyticIdentityStepControl.xaml.cs">
       <DependentUpon>AnalyticIdentityStepControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Admin\AdminControl.xaml.cs">
-      <DependentUpon>AdminControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Common\FilterStepControl.xaml.cs">
       <DependentUpon>FilterStepControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Pricing\PricingStepsControl.xaml.cs">
-      <DependentUpon>PricingStepsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Analytic\AnalyticStepsControl.xaml.cs">
-      <DependentUpon>AnalyticStepsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Home.xaml.cs">
-      <DependentUpon>Home.xaml</DependentUpon>
+    <Compile Include="Views\SearchControl.xaml.cs">
+      <DependentUpon>SearchControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\Admin\UserAdminControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchGroupSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WaitView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -363,6 +390,22 @@
       <Project>{b365c24a-4504-47dd-9305-48c2ae1657f3}</Project>
       <Name>APLPX.Client.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\APLPX.Client\APLPX.Client.csproj">
+      <Project>{ab16ff02-1b5b-4009-a989-0cb54c802efa}</Project>
+      <Name>APLPX.Client</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\bodyBackground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\APL Logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\APL_logo_new.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\APL_logo_new.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

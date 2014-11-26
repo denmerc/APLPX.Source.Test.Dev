@@ -17,14 +17,17 @@ namespace APLPX.UI.WPF.Mappers
         {
             var displayEntity = new Display.Module();
 
-            displayEntity.TypeId = dto.Type;
             displayEntity.Name = dto.Name;
             displayEntity.Title = dto.Title;
-            displayEntity.IsVisible = dto.IsVisible;
+            displayEntity.Sort = dto.Sort;
+            displayEntity.TypeId = dto.Type;
 
-            foreach (var feature in dto.Features)
+            if (dto.Features != null)
             {
-                displayEntity.Features.Add(feature.ToDisplayEntity());
+                foreach (DTO.ModuleFeature feature in dto.Features)
+                {
+                    displayEntity.Features.Add(feature.ToDisplayEntity());
+                }
             }
 
             return displayEntity;
@@ -33,14 +36,18 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.Module ToDto(this Display.Module displayEntity)
         {
             var featureDtos = new List<DTO.ModuleFeature>();
-            displayEntity.Features.ForEach(item => featureDtos.Add(item.ToDto()));
+
+            foreach (Display.ModuleFeature item in displayEntity.Features)
+            {
+                featureDtos.Add(item.ToDto());
+            }            
 
             var dto = new DTO.Module(
-                                    displayEntity.Name,
-                                    displayEntity.Title,
-                                    displayEntity.IsVisible,
-                                    displayEntity.TypeId,
-                                    featureDtos);
+                                displayEntity.Name,
+                                displayEntity.Title,
+                                displayEntity.Sort,
+                                displayEntity.TypeId,
+                                featureDtos);
 
             return dto;
         }
@@ -56,16 +63,24 @@ namespace APLPX.UI.WPF.Mappers
             result.TypeId = dto.Type;
             result.Name = dto.Name;
             result.Title = dto.Title;
-            result.IsVisible = dto.IsVisible;
+            result.Sort = dto.Sort;
+            result.LandingStepType = dto.LandingStepType;
+            result.ActionStepType = dto.ActionStepType;
 
-            foreach (var folder in dto.Folders)
+            if (dto.SearchGroups != null)
             {
-                result.Folders.Add(folder.ToDisplayEntity());
+                foreach (DTO.FeatureSearchGroup searchGroup in dto.SearchGroups)
+                {
+                    result.SearchGroups.Add(searchGroup.ToDisplayEntity());
+                }
             }
 
-            foreach (var step in dto.Steps)
+            if (dto.Steps != null)
             {
-                result.Steps.Add(step.ToDisplayEntity());
+                foreach (DTO.ModuleFeatureStep step in dto.Steps)
+                {
+                    result.Steps.Add(step.ToDisplayEntity());
+                }
             }
 
             return result;
@@ -73,19 +88,27 @@ namespace APLPX.UI.WPF.Mappers
 
         public static DTO.ModuleFeature ToDto(this Display.ModuleFeature displayEntity)
         {
-            var stepDtos = new List<DTO.ModuleFeatureStep>();
-            displayEntity.Steps.ForEach(step => stepDtos.Add(step.ToDto()));
+            var featureSteps = new List<DTO.ModuleFeatureStep>();
+            foreach (var step in displayEntity.Steps)
+            {
+                featureSteps.Add(step.ToDto());
+            }            
 
-            var folderDtos = new List<DTO.Folder>();
-            displayEntity.Folders.ForEach(folder => folderDtos.Add(folder.ToDto()));
+            var searchGroups = new List<DTO.FeatureSearchGroup>();
+            foreach (var searchGroup in displayEntity.SearchGroups)
+            {
+                searchGroups.Add(searchGroup.ToDto());
+            }            
 
             var result = new DTO.ModuleFeature(
                                         displayEntity.Name,
                                         displayEntity.Title,
-                                        displayEntity.IsVisible,
+                                        displayEntity.Sort,
                                         displayEntity.TypeId,
-                                        folderDtos,
-                                        stepDtos);
+                                        displayEntity.LandingStepType,
+                                        displayEntity.ActionStepType,
+                                        featureSteps,
+                                        searchGroups);
 
             return result;
         }
@@ -99,19 +122,32 @@ namespace APLPX.UI.WPF.Mappers
             var result = new Display.ModuleFeatureStep();
 
             result.TypeId = dto.Type;
-            result.Index = dto.Index;
+            result.Sort = dto.Sort;
             result.Name = dto.Name;
             result.Title = dto.Title;
-            result.IsVisible = dto.IsVisible;
-
-            foreach (var advisor in dto.Advisors)
+            
+            if (dto.Advisors != null)
             {
-                result.Advisors.Add(advisor.ToDisplayEntity());
+                foreach (var advisor in dto.Advisors)
+                {
+                    result.Advisors.Add(advisor.ToDisplayEntity());
+                }
             }
 
-            foreach (var error in dto.Errors)
+            if (dto.Errors != null)
             {
-                result.Errors.Add(error.ToDisplayEntity());
+                foreach (var error in dto.Errors)
+                {
+                    result.Errors.Add(error.ToDisplayEntity());
+                }
+            }
+
+            if (dto.Actions != null)
+            {
+                foreach (var action in dto.Actions)
+                {
+                    result.Actions.Add(action.ToDisplayEntity());
+                }
             }
 
             return result;
@@ -120,24 +156,41 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.ModuleFeatureStep ToDto(this Display.ModuleFeatureStep displayEntity)
         {
             var advisors = new List<DTO.ModuleFeatureStepAdvisor>();
-            foreach (var advisor in displayEntity.Advisors)
+
+            if (displayEntity.Advisors != null)
             {
-                advisors.Add(advisor.ToDto());
+                foreach (Display.Advisor advisor in displayEntity.Advisors)
+                {
+                    advisors.Add(advisor.ToDto());
+                }
             }
 
             var errors = new List<DTO.ModuleFeatureStepError>();
-            foreach (var error in displayEntity.Errors)
+            if (displayEntity.Errors != null)
             {
-                errors.Add(error.ToDto());
+                foreach (Display.Error error in displayEntity.Errors)
+                {
+                    errors.Add(error.ToDto());
+                }
+            }
+
+            var actions = new List<DTO.ModuleFeatureStepAction>();
+            if (displayEntity.Actions != null)
+            {
+                foreach (Display.Action item in displayEntity.Actions)
+                {
+                    actions.Add(item.ToDto());
+                }
             }
 
             var dto = new DTO.ModuleFeatureStep(
-                                            displayEntity.Index,
                                             displayEntity.Name,
                                             displayEntity.Title,
-                                            displayEntity.IsVisible,
+                                            displayEntity.Sort,
                                             displayEntity.TypeId,
-                                            errors, advisors);
+                                            errors,
+                                            advisors,
+                                            actions);
 
             return dto;
         }
@@ -154,6 +207,7 @@ namespace APLPX.UI.WPF.Mappers
             {
                 displayList.Add(moduleDTO.ToDisplayEntity());
             }
+
             return displayList;
         }
 
@@ -161,13 +215,14 @@ namespace APLPX.UI.WPF.Mappers
         {
             var dtoList = new List<DTO.Module>();
 
-            foreach (var displayModule in modules)
+            foreach (Display.Module displayModule in modules)
             {
                 dtoList.Add(displayModule.ToDto());
             }
 
             return dtoList;
         }
+
         #endregion
     }
 }

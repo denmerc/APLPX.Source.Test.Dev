@@ -11,7 +11,6 @@ namespace APLPX.UI.WPF.Mappers
     /// </summary>
     public static class FilterMapper
     {
-
         #region Filter
 
         public static Display.Filter ToDisplayEntity(this DTO.Filter dto)
@@ -23,6 +22,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Code = dto.Code;
             displayEntity.Name = dto.Name;
             displayEntity.IsSelected = dto.IsSelected;
+            displayEntity.Sort = dto.Sort;
 
             return displayEntity;
         }
@@ -34,7 +34,8 @@ namespace APLPX.UI.WPF.Mappers
                                     displayEntity.Key,
                                     displayEntity.Code,
                                     displayEntity.Name,
-                                    displayEntity.IsSelected);
+                                    displayEntity.IsSelected,
+                                    displayEntity.Sort);
 
             return dto;
         }
@@ -47,9 +48,17 @@ namespace APLPX.UI.WPF.Mappers
         public static Display.FilterGroup ToDisplayEntity(this DTO.FilterGroup dto)
         {
             var displayEntity = new Display.FilterGroup();
-
+            
+            displayEntity.Sort = dto.Sort;
             displayEntity.TypeName = dto.TypeName;
-            dto.Filters.ForEach(item => displayEntity.Filters.Add(item.ToDisplayEntity()));
+
+            if (dto.Filters != null)
+            {
+                foreach (DTO.Filter filterDto in dto.Filters)
+                {
+                    displayEntity.Filters.Add(filterDto.ToDisplayEntity());
+                }
+            }            
 
             return displayEntity;
         }
@@ -58,8 +67,13 @@ namespace APLPX.UI.WPF.Mappers
         {
             var filters = new List<DTO.Filter>();
 
-            displayEntity.Filters.ForEach(item => filters.Add(item.ToDto()));
+            foreach (Display.Filter displayFilter in displayEntity.Filters)
+            {
+                filters.Add(displayFilter.ToDto());
+            }
+            
             var result = new DTO.FilterGroup(
+                                        displayEntity.Sort,
                                         displayEntity.TypeName,
                                         filters);
             return result;

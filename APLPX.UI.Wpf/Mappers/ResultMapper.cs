@@ -21,7 +21,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.MinValue = dto.MinValue;
             displayEntity.MaxValue = dto.MaxValue;
             displayEntity.SalesValue = dto.SalesValue;
-            displayEntity.SortOrder = dto.SortOrder;
+            displayEntity.Sort = dto.Sort;
 
             return displayEntity;
         }
@@ -33,7 +33,7 @@ namespace APLPX.UI.WPF.Mappers
                                         displayEntity.MinValue,
                                         displayEntity.MaxValue,
                                         displayEntity.SalesValue,
-                                        displayEntity.SortOrder);
+                                        displayEntity.Sort);
 
             return dto;
         }
@@ -51,7 +51,7 @@ namespace APLPX.UI.WPF.Mappers
             //displayEntity.MinValue = dto.MinValue;
             //displayEntity.MaxValue = dto.MaxValue;
             //displayEntity.SalesValue = dto.SalesValue;
-            //displayEntity.SortOrder = dto.SortOrder;
+            //displayEntity.Sort = dto.Sort;
 
             return displayEntity;
         }

@@ -3,12 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
+        <CollectionViewSource x:Key="cvsResults" Source="{Binding Results}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Group"></PropertyGroupDescription>
+            </CollectionViewSource.GroupDescriptions>
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="Group"></scm:SortDescription>
+                    
+
+                </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+            
             <ResourceDictionary.MergedDictionaries>
                 <!-- for design-time support, already in app.xml-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
@@ -18,15 +30,89 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid x:Name="LayoutRoot">
-        <StackPanel Orientation="Horizontal">
+    <Grid x:Name="LayoutRoot" Background="Black">
+     <!--   <Grid.Background>
+            <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg"
+                        Stretch="UniformToFill"/>
+        </Grid.Background>  -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             
-        <ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto" SelectionChanged="StepContentListBox_SelectionChanged">
-            <!--<ListBox.ItemContainerStyle>
+        </Grid.RowDefinitions>
+        <DataGrid x:Name="FilterGrid" ItemsSource="{Binding Source={StaticResource cvsResults}}" Grid.Row="0"
+                  AutoGenerateColumns="False" Visibility="Visible">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Driver Name" Binding="{Binding DriverName}" />
+                <DataGridTextColumn Header="Group" Binding="{Binding Group}" />
+                <DataGridTextColumn Header="Sku Count" Binding="{Binding SkuCount}" />
+                <DataGridTextColumn Header="Min Value" Binding="{Binding MinValue}" />
+                <DataGridTextColumn Header="Max Value" Binding="{Binding MaxValue}" />
+                <DataGridTextColumn Header="Sales Value" Binding="{Binding SalesValue}" />
+                
+
+            </DataGrid.Columns>
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        
+                        
+                    <Style TargetType="{x:Type GroupItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GroupItem}">
+                                    <Expander x:Name="exp" IsExpanded="True"
+                              Background="Black"
+                              Foreground="White">
+                                        <Expander.Header>
+                                            <Grid>
+
+                                                <TextBlock Text="{Binding Name, StringFormat={}Group {0}}"/>
+                                            </Grid>
+                                        </Expander.Header>
+                                        <ItemsPresenter />
+                                    </Expander>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+                
+                
+            </DataGrid.GroupStyle>
+            <!--<GridView>
+                <GridViewColumn Header="Group" DisplayMemberBinding="{Binding Group}"/>
+                <GridViewColumn Header="Sales Value" DisplayMemberBinding="{Binding SalesValue}"/>
+            </GridView>-->
+
+        </DataGrid>
+        <!--<Style TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <Expander x:Name="exp" IsExpanded="True"
+                              Background="Black"
+                              Foreground="White">
+                            <Expander.Header>
+                                <Grid>
+
+                                    <TextBlock Text="{Binding Name}"/>
+                                </Grid>
+                            </Expander.Header>
+                            <ItemsPresenter />
+                        </Expander>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+        <!--<StackPanel Orientation="Horizontal">
+            
+        --><!--<ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto" >
+            --><!--<ListBox.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ListBoxItem}">
                                                     <Setter Property="Background" Value="Transparent" />
                                                 </Style>
-                                            </ListBox.ItemContainerStyle>-->
+                                            </ListBox.ItemContainerStyle>--><!--
             <ListBoxItem x:Name="VendorSelectedListBoxItem" >
                 <StackPanel Orientation="Horizontal">
                         <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="Movement"/>
@@ -62,8 +148,8 @@
                     <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Competition</Label>
                 </StackPanel>
             </ListBoxItem>
-        </ListBox>
-            <StackPanel Orientation="Vertical" Height="auto" Width="500">
+        </ListBox>-->
+            <!--<StackPanel Orientation="Vertical" Height="auto" Width="746">
                 
             <controls:MetroProgressBar IsIndeterminate="True"
                                        x:Name="ProgressBar"
@@ -72,8 +158,8 @@
                                        Width="500"
                                        Foreground="{StaticResource Foreground}"
                                        Margin="0, -5, 0, 0" />
-            <DataGrid x:Name="FilterGrid" ItemsSource="{Binding SelectedAnalytic.Filters}" Height="500"
-                  AutoGenerateColumns="True" Visibility="Hidden" Width="500"> //was 800
+            <DataGrid x:Name="FilterGrid" ItemsSource="{Binding Results}" Height="500"
+                  AutoGenerateColumns="True" Visibility="Visible" Width="746"> --><!--was 800-->
             <!--<DataGrid.Columns>
                 <DataGridTextColumn                                        
                                         Width="200"
@@ -89,9 +175,11 @@
 
                 <DataGridTextColumn Header="Sales Value"
                                  Width="100"/>
-                </DataGrid.Columns>-->
+                </DataGrid.Columns>--><!--
         </DataGrid>
-            </StackPanel>
-        </StackPanel>
+
+            </StackPanel>--><!--
+        </StackPanel>-->
     </Grid>
+
 </UserControl>

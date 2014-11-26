@@ -14,6 +14,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _code;
         private string _name;
         private bool _isSelected;
+        private short _sort;
 
         #endregion
 
@@ -55,6 +56,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _isSelected; }
             set { this.RaiseAndSetIfChanged(ref _isSelected, value); }
+        }
+
+        public short Sort
+        {
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         #endregion

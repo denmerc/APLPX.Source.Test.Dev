@@ -18,24 +18,26 @@ namespace APLPX.UI.WPF.Mappers
             var displayEntity = new Display.User();
 
             displayEntity.Id = dto.Id;
-            displayEntity.SqlKey = dto.SqlKey;
+            displayEntity.SqlKey = dto.Key;
             displayEntity.Identity = dto.Identity.ToDisplayEntity();
             displayEntity.Role = dto.Role.ToDisplayEntity();
-            displayEntity.Modules = dto.Modules.ToDisplayEntities();
-            displayEntity.OldPassword = dto.Password.Old;
-            displayEntity.NewPassword = dto.Password.New;
+            displayEntity.Login = dto.Credential.Login;
+            displayEntity.OldPassword = dto.Credential.OldPassword;
+            displayEntity.NewPassword = dto.Credential.NewPassword;
 
             return displayEntity;
         }
 
         public static DTO.User ToDto(this Display.User displayEntity)
         {
+            DTO.UserCredential credential = new DTO.UserCredential(displayEntity.Login, displayEntity.OldPassword, displayEntity.NewPassword);
+
             var dto = new DTO.User(
                                 displayEntity.Id,
                                 displayEntity.SqlKey,
                                 displayEntity.Role.ToDto(),
                                 displayEntity.Identity.ToDto(),
-                                displayEntity.Modules.ToDTOs(),
+                                credential,
                                 displayEntity.RoleTypes.ToDTOs());
 
             return dto;
@@ -67,5 +69,6 @@ namespace APLPX.UI.WPF.Mappers
         }
 
         #endregion
+ 
     }
 }

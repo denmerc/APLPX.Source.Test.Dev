@@ -21,10 +21,24 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Key = dto.Key;
             displayEntity.Name = dto.Name;
             displayEntity.Title = dto.Title;
-            displayEntity.SortOrder = dto.SortOrder;            
+            displayEntity.Sort = dto.Sort;
             displayEntity.IsSelected = dto.IsSelected;
 
-            dto.Modes.ForEach(mode => displayEntity.Modes.Add(mode.ToDisplayEntity()));
+            if (dto.Modes != null)
+            {
+                foreach (DTO.AnalyticDriverMode mode in dto.Modes)
+                {
+                    displayEntity.Modes.Add(mode.ToDisplayEntity()); 
+                }                
+            }
+
+            if (dto.Results != null)
+            {
+                foreach (DTO.AnalyticResult result in dto.Results)
+                {
+                    displayEntity.Results.Add(result.ToDisplayEntity());
+                }
+            }
 
             return displayEntity;
         }
@@ -33,16 +47,24 @@ namespace APLPX.UI.WPF.Mappers
         {
             var modes = new List<DTO.AnalyticDriverMode>();
             displayEntity.Modes.ForEach(mode => modes.Add(mode.ToDto()));
-            
-            var result = new DTO.AnalyticDriver(displayEntity.Id, 
-                                                   displayEntity.Key, 
-                                                   displayEntity.Name, 
-                                                   displayEntity.Title, //TODO: verify
-                                                   displayEntity.SortOrder, 
-                                                   displayEntity.IsSelected, 
-                                                   modes);
 
-            return result;
+            var results = new List<DTO.AnalyticResult>();
+            foreach (Display.AnalyticResult result in displayEntity.Results)
+            {
+                results.Add(result.ToDto());
+            }
+
+            var dto = new DTO.AnalyticDriver(
+                                        displayEntity.Id,
+                                        displayEntity.Key,
+                                        displayEntity.Name,
+                                        displayEntity.Title,
+                                        displayEntity.Sort,
+                                        displayEntity.IsSelected,
+                                        results,
+                                        modes);
+
+            return dto;
         }
 
         #endregion

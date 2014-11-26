@@ -11,6 +11,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private string _typeName;
+        private short _sort;
         private List<Filter> _filters;
 
         #endregion
@@ -32,13 +33,19 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _typeName, value); }
         }
 
+        public short Sort
+        {
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
+        }
+
         public List<Filter> Filters
         {
             get { return _filters; }
             set { this.RaiseAndSetIfChanged(ref _filters, value); }
         }
 
-
+        
         #endregion
     }
 }

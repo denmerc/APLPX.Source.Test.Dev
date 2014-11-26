@@ -30,6 +30,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Editor = dto.Editor;
             displayEntity.Owner = dto.Owner;
             displayEntity.Active = dto.Active;
+            displayEntity.Shared = dto.Shared;
 
             return displayEntity;
         }
@@ -49,6 +50,7 @@ namespace APLPX.UI.WPF.Mappers
                                         displayEntity.Author,
                                         displayEntity.Editor,
                                         displayEntity.Owner,
+                                        displayEntity.Shared,
                                         displayEntity.Active);
 
             return dto;
@@ -74,6 +76,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Editor = dto.Editor;
             displayEntity.Owner = dto.Owner;
             displayEntity.Active = dto.Active;
+            displayEntity.Shared = dto.Shared;
 
             return displayEntity;
         }
@@ -93,7 +96,9 @@ namespace APLPX.UI.WPF.Mappers
                                             displayEntity.Author,
                                             displayEntity.Editor,
                                             displayEntity.Owner,
-                                            displayEntity.Active);
+                                            displayEntity.Active,
+                                            displayEntity.Shared);
+
 
             return dto;
         }
@@ -106,7 +111,6 @@ namespace APLPX.UI.WPF.Mappers
         {
             var displayEntity = new Display.UserIdentity();
 
-            displayEntity.Login = dto.Login;
             displayEntity.Active = dto.Active;
             displayEntity.Email = dto.Email;
             displayEntity.Name = dto.Name;
@@ -126,10 +130,9 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.UserIdentity ToDto(this Display.UserIdentity displayEntity)
         {
             var dto = new DTO.UserIdentity(
-                                        displayEntity.Login, 
-                                        displayEntity.Email, 
-                                        displayEntity.FirstName, 
-                                        displayEntity.LastName, 
+                                        displayEntity.Email,
+                                        displayEntity.FirstName,
+                                        displayEntity.LastName,
                                         displayEntity.Active);
 
             return dto;

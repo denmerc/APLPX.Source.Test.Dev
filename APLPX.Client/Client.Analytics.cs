@@ -1,9 +1,5 @@
-﻿using System;
+﻿using System.ServiceModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ServiceModel;
 using System.ComponentModel.Composition;
 using APLPX.Client.Entity;
 using APLPX.Client.Contracts;
@@ -33,9 +29,17 @@ namespace APLPX.Client
             return Channel.SaveFilters(session);
         }
 
+        public Session<Client.Entity.Analytic> LoadDriver(Session<Client.Entity.Analytic> session) {
+            return Channel.LoadDriver(session);
+        }
+
         public Session<Client.Entity.Analytic> LoadDrivers(Session<Client.Entity.Analytic> session)
         {
             return Channel.LoadDrivers(session);
+        }
+
+        public Session<Client.Entity.Analytic> SaveDriver(Session<Client.Entity.Analytic> session) {
+            return Channel.SaveDriver(session);
         }
 
         public Session<Client.Entity.Analytic> SaveDrivers(Session<Client.Entity.Analytic> session)

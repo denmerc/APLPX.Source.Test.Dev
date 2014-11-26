@@ -9,7 +9,7 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
-        private int _sortOrder;
+        private short _sort;
         private string _message;
 
         #endregion
@@ -24,10 +24,10 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Properties
 
-        public int SortOrder
+        public short Sort
         {
-            get { return _sortOrder; }
-            set { this.RaiseAndSetIfChanged(ref _sortOrder, value); }
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         public string Message

@@ -1,0 +1,67 @@
+﻿################################################################################
+# This .tfignore file was automatically created by Microsoft(R) Visual Studio.
+#
+# Local items matching filespecs in this file will not be added to version
+# control. This file can be checked in to share exclusions with others.
+#
+# Wildcard characters are * and ?. Patterns are matched recursively unless the
+# pattern is prefixed by the \ character.
+#
+# You can prepend a path to a pattern to make it more specific. If you do,
+# wildcard characters are not permitted in the path portion.
+#
+# The # character at the beginning of a line indicates a comment.
+#
+# The ! prefix negates a pattern. This can be used to re-include an item after
+# it was excluded by a .tfignore file higher in the tree, or by the Team
+# Project Collection's global exclusions list.
+#
+# The / character is interpreted as a \ character on Windows platforms.
+#
+# Examples:
+#
+#  # Excludes all files ending in .txt in Alpha\Beta and all its subfolders.
+#  Alpha\Beta\*.txt
+#
+#  # Excludes all files ending in .cpp in this folder only.
+#  \*.cpp
+#
+#  # Excludes all files ending in .cpp in this folder and all subfolders.
+#  *.cpp
+#
+#  # If "Contoso" is a folder, then Contoso and all its children are excluded.
+#  # If it is a file, then only the "Contoso" in this folder is excluded.
+#  \Contoso
+#
+#  # If Help.exe is excluded by a higher .tfignore file or by the Team Project
+#  # Collection global exclusions list, then this pattern re-includes it in
+#  # this folder only.
+#  !\Help.exe    
+#
+################################################################################
+
+\.gitattributes
+\.gitignore
+\.git\ms-persist.xml
+\.git\objects\06\0e4083a46ddbcdec02b2fd81e33a03a9092588
+\.git\objects\0d\30f47be5ff01d50b6c389de96bf474ea539dff
+\.git\objects\1a\9f40c795d8988823f6b06d21ace8024ab4fc16
+\.git\objects\20\ae739c5bbf4d0d0d929fedf3508588dd8417b2
+\.git\objects\42\57c9a6cbf211ac627c8db2efd800615b227420
+\.git\objects\57\c0e8951967758df0592b06a455b86593cd7ef3
+\.git\objects\6c\2764fa80914ee44287a721d9212d9514be844c
+\.git\objects\6f\57c495217ba1b32607e20292ded47895c0b409
+\.git\objects\83\d4be62bb03c16a15efcd5a8b29a1a11223f106
+\.git\objects\ab\f67844b812134170ee301acbc7d3f9486c0119
+\.git\objects\ac\c36092ab60bb6365544ad21e5535333ee12c8a
+\APLPX.Server.Services.Mock\APLPX.Server.Services.Mock.csproj
+\APLPX.Server.Services.Mock\MockAnalyticService.cs
+\APLPX.Server.Services.Mock\MockUserService.cs
+\APLPX.Server.Services.Mock\packages.config
+\APLPX.Server.Services.Mock\Domain\Entity.Analytics.cs
+\APLPX.Server.Services.Mock\Domain\Entity.Common.cs
+\APLPX.Server.Services.Mock\Domain\Entity.Enumerations.cs
+\APLPX.Server.Services.Mock\Domain\Entity.Pricing.cs
+\APLPX.Server.Services.Mock\Domain\Entity.Session.cs
+\APLPX.Server.Services.Mock\Domain\Entity.User.cs
+\APLPX.Server.Services.Mock\Properties\AssemblyInfo.cs

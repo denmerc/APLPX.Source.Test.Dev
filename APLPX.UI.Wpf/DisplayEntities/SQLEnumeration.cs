@@ -12,7 +12,7 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
-        private short _sortOrder;
+        private short _sort;
         private short _value;
         private string _name;
         private string _description;
@@ -29,10 +29,10 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Properties
 
-        public short SortOrder
+        public short Sort
         {
-            get { return _sortOrder; }
-            set { this.RaiseAndSetIfChanged(ref _sortOrder, value); }
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         public short Value

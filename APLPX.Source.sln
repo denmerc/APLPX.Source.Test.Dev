@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf", "APLPX.UI.Wpf\APLPX.UI.Wpf.csproj", "{632A3DCA-FD92-4067-96B9-9A858C23E2D3}"
 EndProject
@@ -47,76 +47,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APLPX.UI.Wpf.Tests", "APLPX.UI.Wpf.Tests\APLPX.UI.Wpf.Tests.csproj", "{CE218B52-9A53-4468-B929-686236DE5D0B}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccProjectUniqueName0 = APLPX.Core\\APLPX.Core.csproj
-		SccProjectName0 = APLPX.Core
-		SccAuxPath0 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath0 = APLPX.Core
-		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName1 = APLPX.Client.Entity\\APLPX.Client.Entity.csproj
-		SccProjectTopLevelParentUniqueName1 = APLPX.Source.sln
-		SccProjectName1 = APLPX.Client.Entity
-		SccAuxPath1 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath1 = APLPX.Client.Entity
-		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName2 = APLPX.UI.Wpf\\APLPX.UI.Wpf.csproj
-		SccProjectTopLevelParentUniqueName2 = APLPX.Source.sln
-		SccProjectName2 = APLPX.UI.Wpf
-		SccAuxPath2 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath2 = APLPX.UI.Wpf
-		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName3 = APLPX.Client.Contracts\\APLPX.Client.Contracts.csproj
-		SccProjectTopLevelParentUniqueName3 = APLPX.Source.sln
-		SccProjectName3 = APLPX.Client.Contracts
-		SccAuxPath3 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath3 = APLPX.Client.Contracts
-		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName4 = APLPX.Server.Entity\\APLPX.Server.Entity.csproj
-		SccProjectTopLevelParentUniqueName4 = APLPX.Source.sln
-		SccProjectName4 = APLPX.Server.Entity
-		SccAuxPath4 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath4 = APLPX.Server.Entity
-		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName5 = APLPX.Server.Data\\APLPX.Server.Data.csproj
-		SccProjectTopLevelParentUniqueName5 = APLPX.Source.sln
-		SccProjectName5 = APLPX.Server.Data
-		SccAuxPath5 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath5 = APLPX.Server.Data
-		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName6 = APLPX.Server.Services.Contracts\\APLPX.Server.Services.Contracts.csproj
-		SccProjectTopLevelParentUniqueName6 = APLPX.Source.sln
-		SccProjectName6 = APLPX.Server.Services.Contracts
-		SccAuxPath6 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath6 = APLPX.Server.Services.Contracts
-		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName7 = APLPX.Server.Services\\APLPX.Server.Services.csproj
-		SccProjectTopLevelParentUniqueName7 = APLPX.Source.sln
-		SccProjectName7 = APLPX.Server.Services
-		SccAuxPath7 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath7 = APLPX.Server.Services
-		SccProvider7 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName8 = APLPX.Server.Services.Host.Web\\APLPX.Server.Services.Host.Web.csproj
-		SccProjectTopLevelParentUniqueName8 = APLPX.Source.sln
-		SccProjectName8 = APLPX.Server.Services.Host.Web
-		SccAuxPath8 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath8 = APLPX.Server.Services.Host.Web
-		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName9 = APLPX.Client\\APLPX.Client.csproj
-		SccProjectTopLevelParentUniqueName9 = APLPX.Source.sln
-		SccProjectName9 = APLPX.Client
-		SccAuxPath9 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath9 = APLPX.Client
-		SccProvider9 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName10 = APLPX.Server.Test\\APLPX.Server.Test.csproj
-		SccProjectTopLevelParentUniqueName10 = APLPX.Source.sln
-		SccProjectName10 = APLPX.Server.Test
-		SccAuxPath10 = http://apl03:8080/tfs/apl%20source%20-%20seal
-		SccLocalPath10 = APLPX.Server.Test
-		SccProvider10 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

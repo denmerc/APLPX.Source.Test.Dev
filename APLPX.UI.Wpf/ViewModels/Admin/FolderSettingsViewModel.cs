@@ -144,7 +144,7 @@ namespace APLPX.UI.WPF.ViewModels
             {
 
                 //save to in memory if folderList != null until flushed to db when user clicks save link
-                var master = ((HomeSearchViewModel)MainViewModel.SubModuleCache[Domain.SubModuleType.Search]);
+                var master = ((SearchViewModel)MainViewModel.SubModuleCache[Domain.SubModuleType.Search]);
 
                 //MasterFolderSet = ((HomeSearchViewModel)MainViewModel.SubModuleCache[Domain.SubModuleType.Search]).FolderSet;
                 AnalyticFolderSet = master.FolderSet.SelectedAnalyticFolders.ToList();

@@ -49,9 +49,24 @@ namespace APLPX.Server.Services
             return sessionOut;
         }
 
+        public Session<Server.Entity.Analytic> LoadDriver(Session<Server.Entity.Analytic> sessionIn) {
+
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.LoadDrivers(sessionIn);
+            _analyticData.Dispose();
+
+            return sessionOut;
+        }
+
         public Session<Server.Entity.Analytic> LoadDrivers(Session<Server.Entity.Analytic> sessionIn) {
 
             Session<Server.Entity.Analytic> sessionOut = _analyticData.LoadDrivers(sessionIn);
+            _analyticData.Dispose();
+
+            return sessionOut;
+        }
+
+        public Session<Server.Entity.Analytic> SaveDriver(Session<Server.Entity.Analytic> sessionIn) {
+            Session<Server.Entity.Analytic> sessionOut = _analyticData.SaveDrivers(sessionIn);
             _analyticData.Dispose();
 
             return sessionOut;

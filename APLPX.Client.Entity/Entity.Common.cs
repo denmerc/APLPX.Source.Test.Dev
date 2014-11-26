@@ -1,75 +1,85 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.ComponentModel;
-using APLPX.Core;
 
 namespace APLPX.Client.Entity
 {
     [DataContract]
+    [BsonNoId]
     public class PriceListGroup
     {
         #region Initialize...
         public PriceListGroup() { }
         public PriceListGroup(
-            List<PriceList> PriceLists
+            List<PriceList> priceLists
             ) {
-            this.PriceLists = PriceLists;
+            this.PriceLists = priceLists;
         }
         public PriceListGroup(
-            String TypeName,
-            List<PriceList> PriceLists
+            short sort,
+            string typeName,
+            List<PriceList> priceLists
             ) {
-            this.TypeName = TypeName;
-            this.PriceLists = PriceLists;
+            Sort = sort;
+            TypeName = typeName;
+            PriceLists = priceLists;
         }
         #endregion
 
         [DataMember]
-        public String TypeName { get; private set; }
+        [BsonElement("Name")]
+        public string TypeName; //CLIENT { get; private set; }
         [DataMember]
-        public List<PriceList> PriceLists { get; private set; }
+        public List<PriceList> PriceLists; //CLIENT { get; private set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]
+    [BsonNoId]
     public class PriceList
     {
         #region Initialize...
         public PriceList() { }
         public PriceList(
-            Int32 Id,
-            Int32 Key,
-            Boolean IsSelected
+            int id,
+            int key,
+            bool isSelected
             ) {
-            this.Id = Id;
-            this.Key = Key;
-            this.IsSelected = IsSelected;
+            Id = id;
+            Key = key;
+            IsSelected = isSelected;
         }
         public PriceList(
-            Int32 Id,
-            Int32 Key,
-            String Code,
-            String Name,
-            Boolean IsSelected
+            int id,
+            int key,
+            string code,
+            string name,
+            bool isSelected,
+            short sort
             ) {
-            this.Id = Id;
-            this.Key = Key;
-            this.Code = Code;
-            this.Name = Name;
-            this.IsSelected = IsSelected;
+            Id = id;
+            Key = key;
+            Code = code;
+            Name = name;
+            IsSelected = isSelected;
+            Sort = sort;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id { get; private set; }
+        public int Id; //CLIENT { get; private set; }
         [DataMember]
-        public Int32 Key { get; private set; }
+        public int Key; //CLIENT { get; private set; }
         [DataMember]
-        public String Code { get; private set; }
+        public string Code; //CLIENT { get; private set; }
         [DataMember]
-        public String Name { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean IsSelected { get; set; }
+        public bool IsSelected; //CLIENT { get; set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -78,172 +88,225 @@ namespace APLPX.Client.Entity
         #region Initialize...
         public FilterGroup() { }
         public FilterGroup(
-            List<Filter> Filters
+            List<Filter> filters
             ) {
-            this.Filters = Filters;
+            Filters = filters;
         }
         public FilterGroup(
-            String TypeName,
-            List<Filter> Filters
+            short sort,
+            string typeName,
+            List<Filter> filters
             ) {
-            this.TypeName = TypeName;
-            this.Filters = Filters;
+            Sort = sort;
+            TypeName = typeName;
+            Filters = filters;
         }
         #endregion
 
         [DataMember]
-        public String TypeName { get; private set; }
+        [BsonElement("Name")]
+        public string TypeName; //CLIENT { get; private set; }
         [DataMember]
-        public List<Filter> Filters { get; private set; }
+        public List<Filter> Filters; //CLIENT { get; private set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class Filter
     {
         #region Initialize...
         public Filter() { }
         public Filter(
-            Int32 Id,
-            Int32 Key,
-            Boolean IsSelected
+            int id,
+            int key,
+            bool isSelected
             ) {
-            this.Id = Id;
-            this.Key = Key;
-            this.IsSelected = IsSelected;
+            Id = id;
+            Key = key;
+            IsSelected = isSelected;
         }
         public Filter(
-            Int32 Id,
-            Int32 Key,
-            String Code,
-            String Name,
-            Boolean IsSelected
+            int id,
+            int key,
+            string code,
+            string name,
+            bool isSelected,
+            short sort
             ) {
-            this.Id = Id;
-            this.Key = Key;
-            this.Code = Code;
-            this.Name = Name;
-            this.IsSelected = IsSelected;
+            Id = id;
+            Key = key;
+            Code = code;
+            Name = name;
+            IsSelected = isSelected;
+            Sort = sort;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id { get; private set; }
+        public int Id; //CLIENT { get; private set; }
         [DataMember]
-        public Int32 Key { get; private set; }
+        public int Key; //CLIENT { get; private set; }
         [DataMember]
-        public String Code { get; private set; }
+        public string Code; //CLIENT { get; private set; }
         [DataMember]
-        public String Name { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean IsSelected { get; set; }
+        public bool IsSelected; //CLIENT { get; set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]
-    public class Module
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
+    public class Module //Workflow groups
     {
         #region Initialize...
         public Module() { }
         public Module(
-            String Name,
-            String Title,
-            Boolean IsVisible,
-            ModuleType Type,
-            List<ModuleFeature> Features
+            string name,
+            string title,
+            short sort,
+            ModuleType type,
+            List<ModuleFeature> features
         ) {
-            this.Name = Name;
-            this.Title = Title;
-            this.IsVisible = IsVisible;
-            this.Features = Features;
-            this.Type = Type;
+            Name = name;
+            Title = title;
+            Sort = sort;
+            Type = type;
+            Features = features;
         }
         #endregion
 
         [DataMember]
-        public ModuleType Type { get; private set; }
+        public ModuleType Type; //CLIENT { get; private set; }
         [DataMember]
-        public String Name { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public String Title { get; private set; }
+        public string Title; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean IsVisible { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
         [DataMember]
-        public List<ModuleFeature> Features { get; private set; }
+        public List<ModuleFeature> Features; //CLIENT { get; private set; }
     }
 
     [DataContract]
-    public class ModuleFeature
+    public class ModuleFeature  //Workflow Views
     {
         #region Initialize...
         public ModuleFeature() { }
         public ModuleFeature(
-            String Name,
-            String Title,
-            Boolean IsVisible,
-            ModuleFeatureType Type,
-            List<Folder> Folders,
-            List<ModuleFeatureStep> Steps
+            string name,
+            string title,
+            short sort,
+            ModuleFeatureType type,
+            ModuleFeatureStepType landingStepType,
+            ModuleFeatureStepType actionStepType,
+            List<ModuleFeatureStep> steps,
+            List<FeatureSearchGroup> searchGroups
             ) {
-            this.Name = Name;
-            this.Title = Title;
-            this.IsVisible = IsVisible;
-            this.Type = Type;
-            this.Folders = Folders;
-            this.Steps = Steps;
+            Name = name;
+            Title = title;
+            Sort = sort;
+            Type = type;
+            LandingStepType = landingStepType;
+            ActionStepType = actionStepType;
+            Steps = steps;
+            SearchGroups = searchGroups;
         }
         #endregion
-
+        
         [DataMember]
-        public List<Folder> Folders { get; private set; }
+        public ModuleFeatureType Type; //CLIENT { get; private set; }
         [DataMember]
-        public ModuleFeatureType Type { get; private set; }
+        public ModuleFeatureStepType LandingStepType; //CLIENT { get; private set; }
         [DataMember]
-        public String Name { get; private set; }
+        public ModuleFeatureStepType ActionStepType; //CLIENT { get; private set; }
         [DataMember]
-        public String Title { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean IsVisible { get; private set; }
+        public string Title; //CLIENT { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStep> Steps { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
+        [DataMember]
+        public List<ModuleFeatureStep> Steps; //CLIENT { get; private set; }
+        [DataMember]
+        public List<FeatureSearchGroup> SearchGroups; //CLIENT { get; private set; }
     }
 
     [DataContract]
-    public class ModuleFeatureStep
+    public class ModuleFeatureStep //Workflow View Steps
     {
         #region Initialize...
         public ModuleFeatureStep() { }
         public ModuleFeatureStep(
-            Int16 Index,
-            String Name,
-            String Title,
-            Boolean IsVisible,
-            ModuleFeatureStepType Type,
-            List<ModuleFeatureStepError> Errors,
-            List<ModuleFeatureStepAdvisor> Advisors
+            string name,
+            string title,
+            short sort,
+            ModuleFeatureStepType type,
+            List<ModuleFeatureStepError> errors,
+            List<ModuleFeatureStepAdvisor> advisors,
+            List<ModuleFeatureStepAction> actions
             ) {
-            this.Index = Index;
-            this.Name = Name;
-            this.Title = Title;
-            this.IsVisible = IsVisible;
-            this.Errors = Errors;
-            this.Advisors = Advisors;
-            this.Type = Type;
+            Name = name;
+            Title = title;
+            Sort = sort;
+            Type = type;
+            Errors = errors;
+            Advisors = advisors;
+            Actions = actions;
         }
         #endregion
 
         [DataMember]
-        public ModuleFeatureStepType Type { get; private set; }
+        public ModuleFeatureStepType Type; //CLIENT { get; private set; }
         [DataMember]
-        public Int16 Index { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public String Name { get; private set; }
+        public string Title; //CLIENT { get; private set; }
         [DataMember]
-        public String Title { get; set; }
+        public short Sort; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean IsVisible { get; set; }
+        public List<ModuleFeatureStepError> Errors; //CLIENT { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStepError> Errors { get; private set; }
+        public List<ModuleFeatureStepAdvisor> Advisors; //CLIENT { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStepAdvisor> Advisors { get; private set; }
+        public List<ModuleFeatureStepAction> Actions; //CLIENT { get; private set; }
+    }
+
+    [DataContract]
+    public class ModuleFeatureStepAction
+    {
+        #region Initialize...
+        public ModuleFeatureStepAction() { }
+        public ModuleFeatureStepAction(
+            string name,
+            string parentName,
+            string title,
+            short sort,
+            ModuleFeatureStepActionType type
+            ) {
+            Name = name;
+            ParentName = parentName;
+            Title = title;
+            Sort = sort;
+            Type = type;
+        }
+        #endregion
+
+        [DataMember]
+        public string Name; //CLIENT { get; private set; }
+        [DataMember]
+        public string ParentName; //CLIENT { get; private set; }
+        [DataMember]
+        public string Title; //CLIENT { get; private set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
+        [DataMember]
+        public ModuleFeatureStepActionType Type; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -252,18 +315,18 @@ namespace APLPX.Client.Entity
         #region Initialize...
         public ModuleFeatureStepAdvisor() { }
         public ModuleFeatureStepAdvisor(
-            Int32 SortOrder,
-            String Message
+            short sort,
+            string message
             ) {
-            this.SortOrder = SortOrder;
-            this.Message = Message;
+            Sort = sort;
+            Message = message;
         }
         #endregion
 
         [DataMember]
-        public Int32 SortOrder { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
         [DataMember]
-        public String Message { get; private set; }
+        public string Message; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -272,58 +335,58 @@ namespace APLPX.Client.Entity
         #region Initialize...
         public ModuleFeatureStepError() { }
         public ModuleFeatureStepError(
-            String Message
+            short sort,
+            string message
             ) {
-            this.Message = Message;
+            Sort = sort;
+            Message = message;
         }
         #endregion
 
         [DataMember]
-        public String Message { get; set; }
+        public short Sort; //CLIENT { get; private set; }
+        [DataMember]
+        public string Message; //CLIENT { get; set; }
     }
 
     [DataContract]
-    public class Folder
+    public class FeatureSearchGroup
     {
         #region Initialize...
-        public Folder() { }
-        public Folder(
-            Int32 Id,
-            Int32 Template,
-            Int16 ItemCount,
-            String Name,
-            String ParentName,
-            Boolean IsNameChanged,
-            Boolean CanNameChange,
-            Int16 Sort
+        public FeatureSearchGroup() { }
+        public FeatureSearchGroup(
+            string name,
+            short itemCount,
+            string searchKey,
+            string parentName,
+            bool isNameChanged,
+            bool canNameChange,
+            short sort
             ) {
-            this.Id = Id;
-            this.Template = Template;
-            this.ItemCount = ItemCount;
-            this.Name = Name;
-            this.ParentName = ParentName;
-            this.IsNameChanged = IsNameChanged;
-            this.CanNameChange = CanNameChange;
-            this.Sort = Sort;
+            Name = name;
+            ItemCount = itemCount;
+            SearchKey = searchKey;
+            ParentName = parentName;
+            IsNameChanged = isNameChanged;
+            CanNameChange = canNameChange;
+            Sort = sort;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id { get; private set; }
+        public string SearchKey; //CLIENT { get; private set; }
         [DataMember]
-        public Int32 Template { get; private set; }
+        public string Name; //CLIENT { get; set; }
         [DataMember]
-        public Int16 ItemCount { get; set; }
+        public short ItemCount; //CLIENT { get; set; }
         [DataMember]
-        public String Name { get; set; }
+        public string ParentName; //CLIENT { get; private set; }
         [DataMember]
-        public String ParentName { get; private set; }
+        public bool IsNameChanged; //CLIENT { get; set; }
         [DataMember]
-        public Boolean IsNameChanged { get; set; }
+        public bool CanNameChange; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean CanNameChange { get; private set; }
-        [DataMember]
-        public Int16 Sort { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -332,26 +395,26 @@ namespace APLPX.Client.Entity
         #region Initialize...
         public SQLEnumeration() { }
         public SQLEnumeration(
-            Int16 Sort,
-            Int16 Value,
-            String Name,
-            String Description
+            short sort,
+            short value,
+            string name,
+            string description
             ) {
-            this.Sort = Sort;
-            this.Value = Value;
-            this.Name = Name;
-            this.Description = Description;
+            Sort = sort;
+            Value = value;
+            Name = name;
+            Description = description;
         }
         #endregion
 
         [DataMember]
-        public Int16 Sort { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
         [DataMember]
-        public Int16 Value { get; private set; }
+        public short Value; //CLIENT { get; private set; }
         [DataMember]
-        public String Name { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public String Description { get; private set; }
+        public string Description; //CLIENT { get; private set; }
     }
 }
 

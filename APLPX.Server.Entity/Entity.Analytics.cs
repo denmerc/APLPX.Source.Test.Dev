@@ -10,64 +10,68 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public Analytic() {}
         public Analytic(
-            Int32 Id
+            int id
             ) {
-            this.Id=Id;
+            Id=id;
         }
         public Analytic(
-            Int32 Id,
-            AnalyticIdentity Identity
+            int id,
+            string searchGroupKey
             ) {
-            this.Id=Id;
-            this.Identity=Identity;
+            Id = id;
+            SearchGroupKey = searchGroupKey;
         }
         public Analytic(
-            Int32 Id,
-            List<AnalyticDriver> Drivers
+            int id,
+            string searchGroupKey,
+            AnalyticIdentity identity
             ) {
-            this.Id=Id;
-            this.Drivers=Drivers;
+            Id = id;
+            SearchGroupKey = searchGroupKey;
+            Identity = identity;
         }
         public Analytic(
-            Int32 Id,
-            List<PriceListGroup> PriceListGroups
+            int id,
+            List<AnalyticDriver> drivers
             ) {
-            this.Id=Id;
-            this.PriceListGroups=PriceListGroups;
+            Id = id;
+            Drivers = drivers;
         }
         public Analytic(
-            Int32 Id,
-            List<FilterGroup> FilterGroups
+            int id,
+            List<PriceListGroup> priceListGroups
             ) {
-            this.Id=Id;
-            this.FilterGroups=FilterGroups;
+            Id = id;
+            PriceListGroups = priceListGroups;
         }
         public Analytic(
-            Int32 Id,
-            List<AnalyticResult> Results
+            int id,
+            List<FilterGroup> filterGroups
             ) {
-            this.Id=Id;
-            this.Results=Results;
+            Id = id;
+            FilterGroups = filterGroups;
         }
         public Analytic(
-            Int32 Id,
-            AnalyticIdentity Identity,
-            List<AnalyticDriver> Drivers,
-            List<PriceListGroup> PriceListGroups,
-            List<FilterGroup> FilterGroups,
-            List<AnalyticResult> Results
+            int id,
+            string searchGroupKey,
+            AnalyticIdentity identity,
+            List<AnalyticDriver> drivers,
+            List<PriceListGroup> priceListGroups,
+            List<FilterGroup> filterGroups
             ) {
-            this.Id=Id;
-            this.Identity=Identity;
-            this.Drivers=Drivers;
-            this.PriceListGroups=PriceListGroups;
-            this.FilterGroups=FilterGroups;
-            this.Results=Results;
+            Id = id;
+            SearchGroupKey = searchGroupKey;
+            Identity = identity;
+            Drivers = drivers;
+            PriceListGroups = priceListGroups;
+            FilterGroups = filterGroups;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id; //CLIENT { get; private set; }
+        public int Id; //CLIENT { get; private set; }
+        [DataMember]
+        public string SearchGroupKey; //CLIENT { get; private set; }
         [DataMember]
         public AnalyticIdentity Identity; //CLIENT { get; private set; }
         [DataMember]
@@ -76,10 +80,6 @@ namespace APLPX.Server.Entity
         public List<PriceListGroup> PriceListGroups; //CLIENT { get; private set; }
         [DataMember]
         public List<FilterGroup> FilterGroups; //CLIENT { get; private set; }
-        [DataMember]
-        public List<AnalyticResult> Results; //CLIENT { get; private set; }
-        [DataMember]
-        public List<ModuleFeature> Features; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -88,73 +88,79 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public AnalyticIdentity() { }
         public AnalyticIdentity(
-            String Name,
-            String Description,
-            String Notes,
-            Boolean Active
+            string name,
+            string description,
+            string notes,
+            bool shared,
+            bool active
             ) {
-            this.Name = Name;
-            this.Description = Description;
-            this.Notes = Notes;
-            this.Active = Active;
+            Name = name;
+            Description = description;
+            Notes = notes;
+            Shared = shared;
+            Active = active;
         }
         public AnalyticIdentity(
-            String Name,
-            String Description,
-            String Notes,
-            String RefreshedText,
-            String CreatedText,
-            String EditedText,
-            DateTime Refreshed,
-            DateTime Created,
-            DateTime Edited,
-            String Author,
-            String Editor,
-            String Owner,
-            Boolean Active
+            string name,
+            string description,
+            string notes,
+            string refreshedText,
+            string createdText,
+            string editedText,
+            DateTime refreshed,
+            DateTime created,
+            DateTime edited,
+            string author,
+            string editor,
+            string owner,
+            bool shared,
+            bool active
             ) {
-            this.Name = Name;
-            this.Description = Description;
-            this.Notes = Notes;
-            this.Refreshed = Refreshed;
-            this.RefreshedText = RefreshedText;
-            this.Created = Created;
-            this.CreatedText = CreatedText;
-            this.Edited = Edited;
-            this.EditedText = EditedText;
-            this.Author = Author;
-            this.Editor = Editor;
-            this.Owner = Owner;
-            this.Active = Active;
+            Name = name;
+            Description = description;
+            Notes = notes;
+            Refreshed = refreshed;
+            RefreshedText = refreshedText;
+            Created = created;
+            CreatedText = createdText;
+            Edited = edited;
+            EditedText = editedText;
+            Author = author;
+            Editor = editor;
+            Owner = owner;
+            Shared = shared;
+            Active = active;
         }
         #endregion
 
         [DataMember]
-        public String Name; //CLIENT { get; set; }
+        public string Name; //CLIENT { get; set; }
         [DataMember]
-        public String Description; //CLIENT { get; set; }
+        public string Description; //CLIENT { get; set; }
         [DataMember]
-        public String Notes; //CLIENT { get; set; }
+        public string Notes; //CLIENT { get; set; }
         [DataMember]
         public DateTime Refreshed; //CLIENT { get; private set; }
         [DataMember]
-        public String RefreshedText; //CLIENT { get; private set; }
+        public string RefreshedText; //CLIENT { get; private set; }
         [DataMember]
         public DateTime Created; //CLIENT { get; private set; }
         [DataMember]
-        public String CreatedText; //CLIENT { get; private set; }
+        public string CreatedText; //CLIENT { get; private set; }
         [DataMember]
         public DateTime Edited; //CLIENT { get; private set; }
         [DataMember]
-        public String EditedText; //CLIENT { get; private set; }
+        public string EditedText; //CLIENT { get; private set; }
         [DataMember]
-        public String Author; //CLIENT { get; private set; }
+        public string Author; //CLIENT { get; private set; }
         [DataMember]
-        public String Editor; //CLIENT { get; private set; }
+        public string Editor; //CLIENT { get; private set; }
         [DataMember]
-        public String Owner; //CLIENT { get; private set; }
+        public string Owner; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean Active; //CLIENT { get; set; }
+        public bool Shared; //CLIENT { get; set; }
+        [DataMember]
+        public bool Active; //CLIENT { get; set; }
     }
 
     [DataContract]
@@ -163,54 +169,72 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public AnalyticDriver() { }
         public AnalyticDriver(
-            Int32 Id,
-            Int32 Key,
-            List<AnalyticDriverMode> Modes
+            int id,
+            int key,
+            List<AnalyticDriverMode> modes
             ) {
-            this.Id = Id;
-            this.Key = Key;
-            this.IsSelected = true;
-            this.Modes = Modes;
+            Id = id;
+            Key = key;
+            IsSelected = true;
+            Modes = modes;
         }
         public AnalyticDriver(
-            Int32 Id,
-            Int32 Key,
-            String Name,
-            String Tooltip,
-            Int16 SortOrder,
-            Boolean IsSelected,
-            List<AnalyticDriverMode> Modes
+            int id,
+            int key,
+            string name,
+            string title,
+            List<AnalyticResult> results
             ) {
-            this.Id=Id;
-            this.Key = Key;
-            this.Name = Name;
-            this.Title = Title;
-            this.SortOrder=SortOrder;
-            this.IsSelected = IsSelected;
-            this.Modes = Modes;
+            Id=id;
+            Key = key;
+            Name = name;
+            Title = title;
+            IsSelected = true;
+            Results = results;
+        }
+        public AnalyticDriver(
+            int id,
+            int key,
+            string name,
+            string title,
+            short sort,
+            bool isSelected,
+            List<AnalyticResult> results,
+            List<AnalyticDriverMode> modes
+            ) {
+            Id=id;
+            Key = key;
+            Name = name;
+            Title = title;
+            Sort = sort;
+            IsSelected = isSelected;
+            Results = results;
+            Modes = modes;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id; //CLIENT { get; private set; }
+        public int Id; //CLIENT { get; private set; }
         [DataMember]
-        public Int32 Key; //CLIENT { get; private set; }
+        public int Key; //CLIENT { get; private set; }
         [DataMember]
-        public String Name; //CLIENT { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public String Title; //CLIENT { get; private set; }
+        public string Title; //CLIENT { get; private set; }
         [DataMember]
-        public Int16 SortOrder; //CLIENT { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean IsSelected; //CLIENT { get; set; }
+        public bool IsSelected; //CLIENT { get; set; }
         [DataMember]
         public List<AnalyticDriverMode> Modes; //CLIENT { get; private set; }
+        [DataMember]
+        public List<AnalyticResult> Results; //CLIENT { get; private set; }
 
         #region Driver mode name indexer...
-        public AnalyticDriverMode this[String index] {
+        public AnalyticDriverMode this[string index] {
             get {
                 AnalyticDriverMode mode = new AnalyticDriverMode();
-                foreach (AnalyticDriverMode item in this.Modes) {
+                foreach (AnalyticDriverMode item in Modes) {
                     if (item.Name == index) {
                         mode = item;
                         break;
@@ -228,40 +252,40 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public AnalyticDriverMode() { }
         public AnalyticDriverMode(
-            Int32 Key,
-            List<AnalyticDriverGroup> Groups
+            int key,
+            List<AnalyticDriverGroup> groups
             ) {
-            this.Key = Key;
-            this.IsSelected = true;
-            this.Groups = Groups;
+            Key = key;
+            IsSelected = true;
+            Groups = groups;
         }
         public AnalyticDriverMode(
-            Int32 Key,
-            String Name,
-            String Title,
-            Int16 SortOrder,
-            Boolean IsSelected,
-            List<AnalyticDriverGroup> Groups
+            int key,
+            string name,
+            string title,
+            short sort,
+            bool isSelected,
+            List<AnalyticDriverGroup> groups
             ) {
-            this.Key = Key;
-            this.Name = Name;
-            this.Title = Title;
-            this.SortOrder=SortOrder;
-            this.IsSelected = IsSelected;
-            this.Groups = Groups;
+            Key = key;
+            Name = name;
+            Title = title;
+            Sort=sort;
+            IsSelected = isSelected;
+            Groups = groups;
         }
         #endregion
 
         [DataMember]
-        public Int32 Key; //CLIENT { get; private set; }
+        public int Key; //CLIENT { get; private set; }
         [DataMember]
-        public String Name; //CLIENT { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public String Title; //CLIENT { get; private set; }
+        public string Title; //CLIENT { get; private set; }
         [DataMember]
-        public Int16 SortOrder; //CLIENT { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean IsSelected; //CLIENT { get; set; }
+        public bool IsSelected; //CLIENT { get; set; }
         [DataMember]
         public List<AnalyticDriverGroup> Groups; //CLIENT { get; private set; }
     }
@@ -272,38 +296,38 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public AnalyticDriverGroup() { }
         public AnalyticDriverGroup(
-            Int32 Id
+            int id
             ) {
-            this.Id = Id;
-            this.Value = 0;
-            this.MinOutlier = 0;
-            this.MaxOutlier = 0;
+            Id = id;
+            Value = 0;
+            MinOutlier = 0;
+            MaxOutlier = 0;
         }
         public AnalyticDriverGroup(
-            Int32 Id,
-            Int16 Value,
-            Decimal MinOutlier,
-            Decimal MaxOutlier,
-            Int16 SortOrder
+            int id,
+            short value,
+            decimal minOutlier,
+            decimal maxOutlier,
+            short sort
             ) {
-            this.Id = Id;
-            this.Value = Value;
-            this.MinOutlier = MinOutlier;
-            this.MaxOutlier = MaxOutlier;
-            this.SortOrder=SortOrder;
+            Id = id;
+            Value = value;
+            MinOutlier = minOutlier;
+            MaxOutlier = maxOutlier;
+            Sort=sort;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id; //CLIENT { get; private set; }
+        public int Id; //CLIENT { get; private set; }
         [DataMember]
-        public Int16 Value; //CLIENT { get; set; }
+        public short Value; //CLIENT { get; set; }
         [DataMember]
-        public Decimal MinOutlier; //CLIENT { get; set; }
+        public decimal MinOutlier; //CLIENT { get; set; }
         [DataMember]
-        public Decimal MaxOutlier; //CLIENT { get; set; }
+        public decimal MaxOutlier; //CLIENT { get; set; }
         [DataMember]
-        public Int16 SortOrder; //CLIENT { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -312,30 +336,30 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public AnalyticResult() {}
         public AnalyticResult(
-            Int16 Group,
-            Decimal MinValue,
-            Decimal MaxValue,
-            Decimal SalesValue,
-            Int16 SortOrder
+            short group,
+            decimal minValue,
+            decimal maxValue,
+            string salesValue,
+            short sort
             ) {
-            this.Group=Group;
-            this.MinValue=MinValue;
-            this.MaxValue=MaxValue;
-            this.SalesValue=SalesValue;
-            this.SortOrder=SortOrder;
+            Group=group;
+            MinValue=minValue;
+            MaxValue=maxValue;
+            SalesValue=salesValue;
+            Sort=sort;
         }
         #endregion
 
         [DataMember]
-        public Int16 Group; //CLIENT { get; private set; }
+        public short Group; //CLIENT { get; private set; }
         [DataMember]
-        public Decimal MinValue; //CLIENT { get; private set; }
+        public decimal MinValue; //CLIENT { get; private set; }
         [DataMember]
-        public Decimal MaxValue; //CLIENT { get; private set; }
+        public decimal MaxValue; //CLIENT { get; private set; }
         [DataMember]
-        public Decimal SalesValue; //CLIENT { get; private set; }
+        public string SalesValue; //CLIENT { get; private set; }
         [DataMember]
-        public Int16 SortOrder; //CLIENT { get; private set; }
+        public short Sort; //CLIENT { get; private set; }
     }
 }
 

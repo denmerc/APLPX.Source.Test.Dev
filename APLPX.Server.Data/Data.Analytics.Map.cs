@@ -31,6 +31,7 @@ namespace APLPX.Server.Data {
                 list.Add(
                     new Analytic (
                         Int32.Parse(reader[AnalyticMap.Names.analyticsId].ToString()),
+                        String.Empty, //TODO: DaveJ - Add Search group key
                         new AnalyticIdentity(
                             reader[AnalyticMap.Names.analyticsName].ToString(),
                             reader[AnalyticMap.Names.analyticsDescription].ToString(),
@@ -44,6 +45,7 @@ namespace APLPX.Server.Data {
                             reader[AnalyticMap.Names.authorText].ToString(),
                             reader[AnalyticMap.Names.editorText].ToString(),
                             reader[AnalyticMap.Names.ownerText].ToString(),
+                            Boolean.Parse(reader[AnalyticMap.Names.shared].ToString()),
                             Boolean.Parse(reader[AnalyticMap.Names.active].ToString())
                     )));
             }
@@ -122,11 +124,13 @@ namespace APLPX.Server.Data {
                             Int32.Parse(reader[AnalyticMap.Names.filterKey].ToString()),
                             reader[AnalyticMap.Names.filterCode].ToString(),
                             reader[AnalyticMap.Names.filterName].ToString(),
-                            Boolean.Parse(reader[AnalyticMap.Names.filterIncluded].ToString())
+                            Boolean.Parse(reader[AnalyticMap.Names.filterIncluded].ToString()),
+                            0 //TODO: DaveJ - Add filter sort
                         ));
                     if (filterGroupLast != filterGroupNow) {
                         listFilterGroups.Add(
                             new Entity.FilterGroup(
+                                0, //TODO: DaveJ - Add filter group sort
                                 reader[AnalyticMap.Names.filterTypeName].ToString(),
                                 new List<Filter>()
                             ));
@@ -237,6 +241,7 @@ namespace APLPX.Server.Data {
                                 reader[AnalyticMap.Names.driverName].ToString(), //Title
                                 0, //TODO: Add sort order to meta data
                                 Boolean.Parse(reader[AnalyticMap.Names.driverIncluded].ToString()),
+                                new List<AnalyticResult>(),
                                 new List<AnalyticDriverMode>()
                             ));
                     }
@@ -340,11 +345,13 @@ namespace APLPX.Server.Data {
                             Int32.Parse(reader[AnalyticMap.Names.priceListKey].ToString()),
                             reader[AnalyticMap.Names.priceListCode].ToString(),
                             reader[AnalyticMap.Names.priceListName].ToString(),
-                            Boolean.Parse(reader[AnalyticMap.Names.priceListIncluded].ToString())
+                            Boolean.Parse(reader[AnalyticMap.Names.priceListIncluded].ToString()),
+                            0 //TODO: DaveJ - Add price list sort
                         ));
                     if (listTypeLast != listTypeNow) {
                         priceListGroups.Add(
                             new Entity.PriceListGroup(
+                                0, //TODO: DaveJ - Add price list group sort
                                 reader[AnalyticMap.Names.priceListTypeName].ToString(),
                                 new List<PriceList>()
                             ));
@@ -437,6 +444,7 @@ namespace APLPX.Server.Data {
             public const String editorText = "editorText";
             public const String ownerText = "ownerText";
             public const String active = "active";
+            public const String shared = "shared";
             #endregion
 
             #region Fields Filters...

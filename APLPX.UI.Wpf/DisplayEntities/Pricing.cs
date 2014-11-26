@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class Pricing : DisplayEntityBase
+    public class Pricing : DisplayEntityBase, ISearchableEntity
     {
         #region Private Fields
 
@@ -13,9 +13,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         private PricingIdentity _identity;
         private List<PricingDriver> _drivers;
         private List<PriceListGroup> _priceListGroups;
-        private List<FilterGroup> _filterGroups;
-        private List<ModuleFeature> _features;
+        private List<FilterGroup> _filterGroups;       
         private List<PricingResult> _results;
+        private string _searchKey;
 
         #endregion
 
@@ -26,8 +26,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             Identity = new PricingIdentity();
             Drivers = new List<PricingDriver>();
             PriceListGroups = new List<PriceListGroup>();
-            FilterGroups = new List<FilterGroup>();
-            Features = new List<ModuleFeature>();
+            FilterGroups = new List<FilterGroup>();            
             Results = new List<PricingResult>();
         }
 
@@ -62,13 +61,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _filterGroups; }
             set { this.RaiseAndSetIfChanged(ref _filterGroups, value); }
-        }
-
-        public List<ModuleFeature> Features
-        {
-            get { return _features; }
-            set { this.RaiseAndSetIfChanged(ref _features, value); }
-        }
+        } 
 
         public List<PricingResult> Results
         {
@@ -78,5 +71,19 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        #region ISearchableEntity
+
+        public string SearchKey
+        {
+            get { return _searchKey; }
+            set { _searchKey = value; }
+        }
+
+        public string EntityTypeName
+        {
+            get { return this.GetType().Name; }
+        }
+
+        #endregion
     }
 }

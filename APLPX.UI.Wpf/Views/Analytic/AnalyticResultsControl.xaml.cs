@@ -25,11 +25,12 @@ namespace APLPX.UI.WPF
         public AnalyticResultsControl()
         {
             InitializeComponent();
-            ProgressBar.Visibility = Visibility.Visible;
-            StepContentListBox.SelectedItem = StepContentListBox.Items[0];
+            //ProgressBar.Visibility = Visibility.Visible;
+            //StepContentListBox.SelectedItem = StepContentListBox.Items[0];
+            Display();
         }
 
-        private void StepContentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Display()
         {
             
             //FilterGrid.Visibility = Visibility.Collapsed;
@@ -46,16 +47,16 @@ namespace APLPX.UI.WPF
             Storyboard.SetTarget(a, FilterGrid);
             Storyboard.SetTargetProperty(a, new PropertyPath(OpacityProperty));
             storyboard.Begin();
-            
-            
+
+
 
             Task.Delay(4000)
-                
-                .ContinueWith(z=>
+
+                .ContinueWith(z =>
                 {
-                    
+
                     FilterGrid.Visibility = Visibility.Visible;
-                    ProgressBar.Visibility = Visibility.Collapsed;
+                    //ProgressBar.Visibility = Visibility.Visible;
 
                 }, TaskScheduler.FromCurrentSynchronizationContext());
             

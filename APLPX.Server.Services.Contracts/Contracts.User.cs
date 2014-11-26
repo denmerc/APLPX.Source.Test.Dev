@@ -20,13 +20,4 @@ namespace APLPX.Server.Services.Contracts
         [OperationContract]
         Session<Server.Entity.NullT> SavePassword(Session<Server.Entity.NullT> session);
     }
-
-    #region OBSOLETE...
-    //[OperationContract]
-    //Session<Server.Entity.NullT> LoadExplorerPlanning(Session<Server.Entity.NullT> session);
-    //[OperationContract]
-    //Session<Server.Entity.NullT> LoadExplorerTracking(Session<Server.Entity.NullT> session);
-    //[OperationContract]
-    //Session<Server.Entity.NullT> LoadExplorerReporting(Session<Server.Entity.NullT> session);
-    #endregion
 }

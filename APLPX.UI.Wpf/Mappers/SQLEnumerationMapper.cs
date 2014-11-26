@@ -17,7 +17,7 @@ namespace APLPX.UI.WPF.Mappers
         {
             var result = new Display.SQLEnumeration();
 
-            result.SortOrder = dto.Sort;
+            result.Sort = dto.Sort;
             result.Value = dto.Value;
             result.Name = dto.Name;
             result.Description = dto.Description;
@@ -28,7 +28,7 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.SQLEnumeration ToDto(this Display.SQLEnumeration displayEntity)
         {
             var dto = new DTO.SQLEnumeration(
-                                        displayEntity.SortOrder,
+                                        displayEntity.Sort,
                                         displayEntity.Value,
                                         displayEntity.Name,
                                         displayEntity.Description);

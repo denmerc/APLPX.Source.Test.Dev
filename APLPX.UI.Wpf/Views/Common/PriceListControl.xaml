@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="APLPX.UI.WPF.Views.Common.PriceListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  TODO: move this to common styles. Intended for use with titles of list boxes, data grids. etc.  -->
+        <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+
+        <CollectionViewSource x:Key="cvsPriceListGroups" Source="{Binding Path=PriceListGroups}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
+    <Grid x:Name="layoutRoot" Background="Black">
+     <!--   <Grid.Background>
+            <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg" Stretch="UniformToFill" />
+        </Grid.Background>  -->
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="Price List Groups" />
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="1"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="{Binding ElementName=lstPriceListGroups,
+                                  Path=Items.Count,
+                                  StringFormat={}Price Lists ({0})}" />
+
+        <ListBox x:Name="lstPriceListGroups"
+                 Grid.Row="1"
+                 Grid.Column="0"
+                 Margin="10,5"
+                 ItemsSource="{Binding Source={StaticResource cvsPriceListGroups}}"
+                 SelectedIndex="0">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=TypeName}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <DataGrid x:Name="dgPriceLists"
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  Margin="10,5"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  ItemsSource="{Binding ElementName=lstPriceListGroups,
+                                        Path=SelectedItem.PriceLists}">
+
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected}" Header="Selected" />
+                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
+                <DataGridTextColumn Binding="{Binding Path=Code}" Header="Code" />
+                <DataGridTextColumn Binding="{Binding Path=Key}"
+                                    Header="Key"
+                                    IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

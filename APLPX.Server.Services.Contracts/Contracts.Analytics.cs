@@ -16,7 +16,11 @@ namespace APLPX.Server.Services.Contracts
         [OperationContract]
         Session<Server.Entity.Analytic> SaveFilters(Session<Server.Entity.Analytic> session);
         [OperationContract]
+        Session<Server.Entity.Analytic> LoadDriver(Session<Server.Entity.Analytic> session);
+        [OperationContract]
         Session<Server.Entity.Analytic> LoadDrivers(Session<Server.Entity.Analytic> session);
+        [OperationContract]
+        Session<Server.Entity.Analytic> SaveDriver(Session<Server.Entity.Analytic> session);
         [OperationContract]
         Session<Server.Entity.Analytic> SaveDrivers(Session<Server.Entity.Analytic> session);
         [OperationContract]

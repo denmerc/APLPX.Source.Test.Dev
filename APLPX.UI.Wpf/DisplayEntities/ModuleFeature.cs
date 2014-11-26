@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using APLPX.Client.Entity;
+using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
+    /// <summary>
+    /// Display entity for a Module Feature .
+    /// </summary>
     public class ModuleFeature : DisplayEntityBase
     {
         #region Private Fields
@@ -13,9 +17,18 @@ namespace APLPX.UI.WPF.DisplayEntities
         private ModuleFeatureType _typeId;
         private string _name;
         private string _title;
-        private bool _isVisibile;
-        private List<Folder> _folders;
+        private short _sort;
+
+        private ModuleFeatureStepType _landingStepType;
+        private ModuleFeatureStepType _actionStepType;
+        private ModuleFeatureStep _selectedStep;
+
         private List<ModuleFeatureStep> _steps;
+        private List<FeatureSearchGroup> _searchGroups;
+        private List<ISearchableEntity> _searchableEntities;
+
+        private FeatureSearchGroup _selectedSearchGroup;
+        private ISearchableEntity _selectedEntity;
 
         #endregion
 
@@ -23,8 +36,9 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public ModuleFeature()
         {
-            Folders = new List<Folder>();
+            SearchGroups = new List<FeatureSearchGroup>();
             Steps = new List<ModuleFeatureStep>();
+            SearchableEntities = new List<ISearchableEntity>();
         }
 
         #endregion
@@ -49,16 +63,28 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
-        public bool IsVisible
+        public short Sort
         {
-            get { return _isVisibile; }
-            set { this.RaiseAndSetIfChanged(ref _isVisibile, value); }
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
-        public List<Folder> Folders
+        public ModuleFeatureStepType LandingStepType
         {
-            get { return _folders; }
-            set { this.RaiseAndSetIfChanged(ref _folders, value); }
+            get { return _landingStepType; }
+            set { this.RaiseAndSetIfChanged(ref _landingStepType, value); }
+        }
+
+        public ModuleFeatureStepType ActionStepType
+        {
+            get { return _actionStepType; }
+            set { this.RaiseAndSetIfChanged(ref _actionStepType, value); }
+        }
+
+        public List<FeatureSearchGroup> SearchGroups
+        {
+            get { return _searchGroups; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroups, value); }
         }
 
         public List<ModuleFeatureStep> Steps
@@ -67,7 +93,296 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _steps, value); }
         }
 
+        public ModuleFeatureStep SelectedStep
+        {
+            get { return _selectedStep; }
+            set { this.RaiseAndSetIfChanged(ref _selectedStep, value); }
+        }
+
+        /// <summary>
+        /// Gets the next step for this feature.
+        /// </summary>
+        public ModuleFeatureStep NextStep
+        {
+            get
+            {
+                ModuleFeatureStep result = null;
+
+                if (SelectedStep != null)
+                {
+                    result = Steps.Where(step => step.Sort == SelectedStep.Sort + 1).FirstOrDefault();
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets the previous step for this feature.
+        /// </summary>
+        public ModuleFeatureStep PreviousStep
+        {
+            get
+            {
+                ModuleFeatureStep result = null;
+
+                if (SelectedStep != null)
+                {
+                    result = Steps.Where(step => step.Sort == SelectedStep.Sort - 1).FirstOrDefault();
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ModuleFeatureStep"/> designated as the default landing step for this feature.
+        /// </summary>
+        public ModuleFeatureStep DefaultLandingStep
+        {
+            get
+            {
+                ModuleFeatureStep result = Steps.Where(step => step.TypeId == LandingStepType).FirstOrDefault();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ModuleFeatureStep"/> designated as the default action step for this feature.
+        /// </summary>
+        public ModuleFeatureStep DefaultActionStep
+        {
+            get
+            {
+                ModuleFeatureStep result = Steps.Where(step => step.TypeId == ActionStepType).FirstOrDefault();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets a representation of this feature's Search Groups suitable for display as a list.
+        /// </summary>
+        public List<FeatureSearchGroup> SearchGroupDisplayList
+        {
+            get
+            {
+                var list = new List<FeatureSearchGroup>(this.SearchGroups);
+
+                //Identify items representing sub-groups ("Folder 1", "Folder 2", etc.) 
+                var parentGroups = SearchGroups.GroupBy(sg => sg.ParentName)
+                      .Where(group => group.First().ParentName != group.First().Name);
+
+                //Mark each subgroup so the view can interpret accordingly.
+                foreach (var parent in parentGroups)
+                {
+                    foreach (FeatureSearchGroup searchGroup in parent)
+                    {
+                        searchGroup.IsSubGroup = true;
+                    }
+
+                    //Create a new search group  to represent the "parent" of this subgroup.
+                    //The view is responsible for displaying this item appropriately.
+                    short sort = Convert.ToInt16(parent.First().Sort - 1);
+                    short itemCount = Convert.ToInt16(parent.Sum(sub => sub.ItemCount));
+                    var parentGroup = new FeatureSearchGroup
+                    {
+                        Name = parent.Key,
+                        ParentName = parent.Key,
+                        HasSubGroups = true,
+                        Sort = sort,
+                        ItemCount = itemCount
+                    };
+
+                    list.Add(parentGroup);
+                }
+
+                return list;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the currently selected SearchGroup within this feature.
+        /// </summary>
+        public FeatureSearchGroup SelectedSearchGroup
+        {
+            get { return _selectedSearchGroup; }
+            set
+            {
+                if (_selectedSearchGroup != value)
+                {
+                    _selectedSearchGroup = value;
+                    this.RaisePropertyChanged("SelectedSearchGroup");
+                    if (_selectedSearchGroup != null)
+                    {
+                        //Trigger an update of related calculated property.
+                        this.RaisePropertyChanged("FilteredSearchableEntities");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the selected entity (e.g., Analytic, Price Routine, User, etc.) within this feature.
+        /// </summary>
+        public ISearchableEntity SelectedEntity
+        {
+            get { return _selectedEntity; }
+            set { this.RaiseAndSetIfChanged(ref _selectedEntity, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets the list of all searchable entities (e.g., Analytics, Price Routines, etc.) for this feature.
+        /// </summary>
+        public List<ISearchableEntity> SearchableEntities
+        {
+            get { return _searchableEntities; }
+            set { this.RaiseAndSetIfChanged(ref _searchableEntities, value); }
+        }
+
+        /// <summary>
+        /// Gets the list of searchable entites filtered by the currently selected SearchGroup, if any.
+        /// Returns an empty list if no SearchGroup is selected.
+        /// </summary>
+        public List<ISearchableEntity> FilteredSearchableEntities
+        {
+            get
+            {
+                var matchingEntities = Enumerable.Empty<ISearchableEntity>();
+
+                if (SelectedSearchGroup != null)
+                {
+                    matchingEntities = SearchableEntities.Where(item => item.SearchKey == SelectedSearchGroup.SearchKey);
+                }
+
+                return new List<ISearchableEntity>(matchingEntities);
+            }
+        }
+
+        /// <summary>
+        /// Gets a string describing this feature's classification.
+        /// </summary>
+        public string Classification
+        {
+            get
+            {
+                string result = String.Empty;
+
+                switch (TypeId)
+                {
+                    case ModuleFeatureType.PlanningAnalytics:
+                        result = "Analytic";
+                        break;
+                    case ModuleFeatureType.PlanningEverydayPricing:
+                    case ModuleFeatureType.PlanningPromotionPricing:
+                    case ModuleFeatureType.PlanningKitPricing:
+                        result = "Price Routine";
+                        break;
+                    default:
+                        result = TypeId.ToString();
+                        break;
+                }
+                return result;
+            }
+        }
+
         #endregion
 
+        #region Step Navigation Methods
+
+        /// <summary>
+        /// Moves to the specified step within this feature.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>true if the move was completed; otherwise, false.</returns>
+        public bool MoveToStep(ModuleFeatureStepType type)
+        {
+            bool completed = false;
+
+            var matchingStep = Steps.Where(item => item.TypeId == type).FirstOrDefault();
+
+            if (matchingStep != null)
+            {
+                SelectedStep = matchingStep;
+                completed = true;
+            }
+
+            return completed;
+        }
+
+        /// <summary>
+        /// Moves to the next step within this feature.
+        /// </summary>
+        /// <returns>true if the move was completed; otherwise, false.</returns>
+        public bool MoveToNextStep()
+        {
+            bool completed = false;
+            if (NextStep != null)
+            {
+                SelectedStep = NextStep;
+                completed = true;
+            }
+
+            return completed;
+        }
+
+        /// <summary>
+        /// Moves to the previous step within this feature.
+        /// </summary>
+        /// <returns>true if the move was completed; otherwise, false.</returns>
+        public bool MoveToPreviousStep()
+        {
+            bool completed = false;
+
+            if (PreviousStep != null)
+            {
+                SelectedStep = PreviousStep;
+                completed = true;
+            }
+
+            return completed;
+        }
+
+        public void DisableRemainingSteps()
+        {
+            SetRemainingStepsEnabled(false);
+        }
+
+        public void EnableRemainingSteps()
+        {
+            SetRemainingStepsEnabled(true);
+        }
+
+        public void SetAllStepsEnabled(bool isEnabled)
+        {
+            foreach (var step in Steps)
+            {
+                step.IsEnabled = isEnabled;
+            }
+        }
+
+        private void SetRemainingStepsEnabled(bool isEnabled)
+        {
+            if (SelectedStep != null)
+            {
+                var steps = Steps.Where(step => step.TypeId != SelectedStep.TypeId).OrderBy(step => step.Sort);
+                foreach (var step in steps)
+                {
+                    step.IsEnabled = isEnabled;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            string result = String.Format("{0}:Name={1};Type={2};LandingStepType={3};ActionStepType={4}",
+                                          GetType().Name, Name, TypeId, LandingStepType, ActionStepType);
+            return result;
+        }
+
+        #endregion
     }
 }

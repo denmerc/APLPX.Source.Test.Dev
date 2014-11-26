@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace APLPX.Client.Entity
@@ -9,7 +10,7 @@ namespace APLPX.Client.Entity
     public class Session<T> where T : class
     {
         [DataMember]
-        public UserIdentity UserIdentity { get; set; }
+        public User User { get; set; }
         [DataMember]
         public T Data { get; set; }
         [DataMember]
@@ -29,7 +30,7 @@ namespace APLPX.Client.Entity
         [DataMember]
         public String SqlKey { get; set; }
         [DataMember]
-        public APLPX.Client.Entity.ModuleFeature Feature { get; set; }
+        public List<Client.Entity.Module> Modules { get; set; }
 
         public static Session<Tdata> Clone<Tdata>(Session<T> session, Tdata data)
             where Tdata : class

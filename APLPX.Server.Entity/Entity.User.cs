@@ -10,219 +10,217 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public User() { }
         public User(
-            Int32 Id
-            ) {
-            this.Id=Id;
+            int id
+        ) {
+            Id = id;
         }
         public User(
-            Int32 Id,
-            UserRole Role
-            ) {
-            this.Id=Id;
-            this.Role = Role;
+            UserCredential credential
+        ) {
+            Credential = credential;
         }
         public User(
-            Int32 Id,
-            UserIdentity Identity
-            ) {
-            this.Id=Id;
-            this.Identity = Identity;
+            int id,
+            UserCredential credential 
+        ) {
+            Id = id;
+            Credential = credential;
         }
         public User(
-            Int32 Id,
-            UserIdentity Identity,
-            List<Module> Modules
-            ) {
-            this.Id=Id;
-            this.Identity = Identity;
-            this.Modules=Modules;
+            int id,
+            UserRole role
+        ) {
+            Id = id;
+            Role = role;
         }
         public User(
-            Int32 Id,
-            List<Entity.SQLEnumeration> RoleTypes
-            ) {
-            this.Id=Id;
-            this.RoleTypes=RoleTypes;
+            int id,
+            UserIdentity identity
+        ) {
+            Id = id;
+            Identity = identity;
         }
         public User(
-            Int32 Id,
-            String SqlKey,
-            UserRole Role,
-            UserIdentity Identity
-            ) {
-            this.Id=Id;
-            this.SqlKey=SqlKey;
-            this.Role = Role;
-            this.Identity = Identity;
+            int id,
+            List<Entity.SQLEnumeration> roleTypes
+        ) {
+            Id = id;
+            RoleTypes = roleTypes;
         }
         public User(
-            Int32 Id,
-            String SqlKey,
-            UserRole Role,
-            UserIdentity Identity,
-            List<Module> Modules,
-            List<Entity.SQLEnumeration> RoleTypes
-            ) {
-            this.Id=Id;
-            this.SqlKey=SqlKey;
-            this.Role = Role;
-            this.Identity = Identity;
-            this.Modules=Modules;
-            this.RoleTypes=RoleTypes;
+            int id,
+            string key,
+            UserRole role,
+            UserIdentity identity
+        ) {
+            Id = id;
+            Key = key;
+            Role = role;
+            Identity = identity;
+        }
+        public User(
+            int id,
+            string key,
+            UserRole role,
+            UserIdentity identity,
+            UserCredential credential,
+            List<Entity.SQLEnumeration> roleTypes
+        ) {
+            Id = id;
+            Key = key;
+            Role = role;
+            Identity = identity;
+            Credential = credential;
+            RoleTypes = roleTypes;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id; //CLIENT { get; private set; }
+        public int Id; //CLIENT { get; private set; }
         [DataMember]
-        public String SqlKey; //CLIENT { get; private set; }
+        public string Key; //CLIENT { get; private set; }
+        [DataMember]
+        public UserCredential Credential; //CLIENT { get; private set; }
         [DataMember]
         public UserIdentity Identity; //CLIENT { get; private set; }
         [DataMember]
         public UserRole Role;  //CLIENT { get; private set; }
         [DataMember]
-        public List<Module> Modules; //CLIENT { get; private set; } 
-        [DataMember]
-        public UserPassword Password; //CLIENT { get; set; }
-        [DataMember]
         public List<Entity.SQLEnumeration> RoleTypes; //CLIENT { get; private set; }
     }
 
     [DataContract]
-    public class UserIdentity {
-
+    public class UserIdentity 
+    {
         #region Initialize...
         public UserIdentity() { }
         public UserIdentity(
-            String Login,
-            String Email,
-            String FirstName,
-            String LastName,
-            Boolean Active
-            ) {
-            this.Login = Login;
-            this.Email = Email;
-            this.FirstName = FirstName;
-            this.LastName = LastName;
-            this.Active = Active;
+            string email,
+            string firstName,
+            string lastName,
+            bool active
+        ) {
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+            Active = active;
         }
         public UserIdentity(
-            String Login,
-            String Email,
-            String Greeting,
-            String Name,
-            String FirstName, 
-            String LastName,
-            String LastLoginText,
-            String CreatedText, 
-            String EditedText, 
-            DateTime LastLogin,
-            DateTime Created,
-            DateTime Edited,
-            String Editor,
-            Boolean Active
-            ) {
-            this.Login = Login;
-            this.Email = Email;
-            this.Greeting = Greeting;
-            this.Name = Name;
-            this.FirstName = FirstName;
-            this.LastName = LastName;
-            this.LastLoginText = LastLoginText;
-            this.CreatedText = CreatedText;
-            this.EditedText = EditedText;
-            this.LastLogin = LastLogin;
-            this.Created = Created;
-            this.Edited = Edited;
-            this.Editor = Editor;
-            this.Active = Active;
+            string email,
+            string greeting,
+            string name,
+            string firstName, 
+            string lastName,
+            string lastLoginText,
+            string createdText, 
+            string editedText, 
+            DateTime lastLogin,
+            DateTime created,
+            DateTime edited,
+            string editor,
+            bool active
+        ) {
+            Email = email;
+            Greeting = greeting;
+            Name = name;
+            FirstName = firstName;
+            LastName = lastName;
+            LastLoginText = lastLoginText;
+            CreatedText = createdText;
+            EditedText = editedText;
+            LastLogin = lastLogin;
+            Created = created;
+            Edited = edited;
+            Editor = editor;
+            Active = active;
         }
         #endregion
 
         [DataMember]
-        public String Login; //CLIENT { get; set; }
+        public string Email; //CLIENT { get; set; }
         [DataMember]
-        public String Email; //CLIENT { get; set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public String Name; //CLIENT { get; private set; }
+        public string FirstName; //CLIENT { get; set; }
         [DataMember]
-        public String FirstName; //CLIENT { get; set; }
+        public string LastName; //CLIENT { get; set; }
         [DataMember]
-        public String LastName; //CLIENT { get; set; }
-        [DataMember]
-        public String Greeting; //CLIENT { get; private set; }
+        public string Greeting; //CLIENT { get; private set; }
         [DataMember]
         public DateTime LastLogin; //CLIENT { get; private set; }
         [DataMember]
-        public String LastLoginText; //CLIENT { get; private set; }
+        public string LastLoginText; //CLIENT { get; private set; }
         [DataMember]
         public DateTime Created; //CLIENT { get; private set; }
         [DataMember]
-        public String CreatedText; //CLIENT { get; private set; }
+        public string CreatedText; //CLIENT { get; private set; }
         [DataMember]
         public DateTime Edited; //CLIENT { get; private set; }
         [DataMember]
-        public String EditedText; //CLIENT { get; private set; }
+        public string EditedText; //CLIENT { get; private set; }
         [DataMember]
-        public String Editor; //CLIENT { get; private set; }
+        public string Editor; //CLIENT { get; private set; }
         [DataMember]
-        public Boolean Active; //CLIENT { get; set; }
+        public bool Active; //CLIENT { get; set; }
     }
 
     [DataContract]
     public class UserRole
     {
-
         #region Initialize...
         public UserRole() { }
         public UserRole(
-            Int32 Id
+            int id
         ) {
-            this.Id = Id;
+            Id = id;
         }
         public UserRole(
-            Int32 Id,
-            String Name,
-            String Description
+            int id,
+            string name,
+            string description
         ) {
-            this.Id = Id;
-            this.Name = Name;
-            this.Description = Description;
+            Id = id;
+            Name = name;
+            Description = description;
         }
         #endregion
 
         [DataMember]
-        public Int32 Id; //CLIENT { get; private set; }
+        public int Id; //CLIENT { get; private set; }
         [DataMember]
-        public String Name; //CLIENT { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
-        public String Description; //CLIENT { get; private set; }
+        public string Description; //CLIENT { get; private set; }
     }
 
     [DataContract]
-    public class UserPassword
+    public class UserCredential
     {
-
         #region Initialize...
-        public UserPassword() { }
-        public UserPassword(
-            String Old
+        public UserCredential() { }
+        public UserCredential(
+            string login,
+            string oldPassword
         ) {
-            this.Old = Old;
-            this.New = String.Empty;
+            Login = login;
+            OldPassword = oldPassword;
+            NewPassword = string.Empty;
         }
-        public UserPassword(
-            String Old,
-            String New
+        public UserCredential(
+            string login,
+            string oldPassword,
+            string newPassword
         ) {
-            this.Old = Old;
-            this.New = New;
+            OldPassword = oldPassword;
+            NewPassword = newPassword;
         }
         #endregion
 
         [DataMember]
-        public String Old; //CLIENT { get; set; }
+        public string Login; //CLIENT { get; set; }
         [DataMember]
-        public String New; //CLIENT { get; set; }
+        public string OldPassword; //CLIENT { get; set; }
+        [DataMember]
+        public string NewPassword; //CLIENT { get; set; }
     }
 }

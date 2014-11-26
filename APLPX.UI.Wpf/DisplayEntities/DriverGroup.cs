@@ -13,7 +13,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private short _value;
         private decimal _minOutlier;
         private decimal _maxOutlier;
-        private short _sortOrder;
+        private short _sort;
 
         #endregion
 
@@ -51,10 +51,10 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _maxOutlier, value); }
         }
 
-        public short SortOrder
+        public short Sort
         {
-            get { return _sortOrder; }
-            set { this.RaiseAndSetIfChanged(ref _sortOrder, value); }
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         #endregion

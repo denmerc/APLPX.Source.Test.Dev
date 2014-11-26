@@ -14,10 +14,11 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _key;
         private string _name;
         private string _title;
-        private short _sortOrder;        
+        private short _sort;        
         private bool _isSelected;
         private List<DriverMode> _modes;
         private DriverMode _mode;
+        private List<AnalyticResult> _results;
 
         #endregion
 
@@ -25,7 +26,9 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public AnalyticDriver()
         {
+            Mode = new DriverMode();
             Modes = new List<DriverMode>();
+            Results = new List<AnalyticResult>();
         }
 
         #endregion
@@ -56,10 +59,10 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
-        public short SortOrder
+        public short Sort
         {
-            get { return _sortOrder; }
-            set { this.RaiseAndSetIfChanged(ref _sortOrder, value); }
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         public bool IsSelected
@@ -80,7 +83,23 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _mode, value); }
         }
 
+        public List<AnalyticResult> Results
+        {
+            get { return _results; }
+            set { this.RaiseAndSetIfChanged(ref _results, value); }
+        }
+
         #endregion
 
+        #region Overrides
+
+        public override string ToString()
+        {
+            string result = String.Format("{0}:Id={1};Name={2};Key={3};IsSelected={4}", GetType().Name, Id, Name, Key, IsSelected);
+
+            return result;
+        }
+
+        #endregion
     }
 }

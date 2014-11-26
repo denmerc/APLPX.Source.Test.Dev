@@ -12,8 +12,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         private ModuleType _typeId;
         private string _name;
         private string _title;
-        private bool _isVisibile;
+        private short _sort;
         private List<ModuleFeature> _features;
+        private ModuleFeature _selectedFeature;
 
         #endregion
 
@@ -46,10 +47,10 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
-        public bool IsVisible
+        public short Sort
         {
-            get { return _isVisibile; }
-            set { this.RaiseAndSetIfChanged(ref _isVisibile, value); }
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         public List<ModuleFeature> Features
@@ -58,7 +59,23 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _features, value); }
         }
 
+        public ModuleFeature SelectedFeature
+        {
+            get { return _selectedFeature; }
+            set { this.RaiseAndSetIfChanged(ref _selectedFeature, value); }
+        }
+
         #endregion
 
+        #region Overrides
+
+        public override string ToString()
+        {
+            string result = String.Format("{0}:Name={1};Type={2}",
+                                          GetType().Name, Name, TypeId);
+            return result;
+        }
+
+        #endregion
     }
 }

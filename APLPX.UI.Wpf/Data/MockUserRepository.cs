@@ -11,10 +11,11 @@ using System.Configuration;
 using MongoDB.Driver.Builders;
 using Domain = APLPX.Client.Display;
 using APLPX.Client.Entity;
+using APLPX.Client.Contracts;
 
-namespace APLX.UI.WPF.Data
+namespace APLPX.UI.WPF.Data
 {
-    public class MockUserRepository : IUserRepository
+    public class MockUserRepository : IUserService
     {
 
         public MockUserRepository()
@@ -55,6 +56,14 @@ namespace APLX.UI.WPF.Data
         }
 
 
+        public MongoCollection<Module> Modules
+        {
+            get
+            {
+                return database.GetCollection<Module>("Modules");
+            }
+        }
+
 
         public Session<NullT> Initialize(Session<NullT> session)
         {
@@ -63,40 +72,12 @@ namespace APLX.UI.WPF.Data
 
         public Session<NullT> Authenticate(Session<NullT> session)
         {
-            //TODO: need key here to fake requests
+            var modules = Modules.AsQueryable().ToList();
             return new Session<NullT>()
-            {
-                SqlKey = "Bletch",
-                SessionOk = true,
-                Workflow = new Workflow(),
-                Identity = new UserIdentity()
-                {
-                    Login = "dmercado",
-                    FirstName = "Dennis",
-                    LastName = "Mercado",
-                    Password = new Password { New = "", Old = "password" }
-                }
-            };
-        }
-
-        public Session<NullT> LoadExplorerPlanning(Session<NullT> session)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Session<NullT> LoadExplorerTracking(Session<NullT> session)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Session<NullT> LoadExplorerReporting(Session<NullT> session)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Session<UserIdentity> LoadList(Session<NullT> session)
-        {
-            throw new NotImplementedException();
+                { 
+                    User = session.User,            
+                    Modules = modules
+                };
         }
 
         public Session<UserIdentity> LoadIdentity(Session<UserIdentity> session)
@@ -110,6 +91,22 @@ namespace APLX.UI.WPF.Data
         }
 
         public Session<NullT> SavePassword(Session<NullT> session)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Session<List<User>> LoadList(Session<NullT> session)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Session<User> LoadUser(Session<User> session)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Session<User> SaveUser(Session<User> session)
         {
             throw new NotImplementedException();
         }

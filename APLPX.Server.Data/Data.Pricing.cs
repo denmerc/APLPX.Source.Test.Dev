@@ -23,9 +23,9 @@ namespace APLPX.Server.Data
     {
 
         #region Constants...
-        const String invalid = "Invalid:";
-        const String connectionName = "defaultConnectionString";
-        const String aplServiceEventLog = "APLServiceEventLog";
+        const String INVALID = "Invalid:";
+        const String CONNECTIONNAME = "defaultConnectionString";
+        const String APLSERVICEEVENTLOG = "APLServiceEventLog";
         #endregion
 
         #region Variables...
@@ -36,7 +36,7 @@ namespace APLPX.Server.Data
 
         private String sqlConnection {
             get {
-                return System.Configuration.ConfigurationManager.AppSettings[connectionName];
+                return System.Configuration.ConfigurationManager.AppSettings[CONNECTIONNAME];
             }
         }
 
@@ -48,7 +48,7 @@ namespace APLPX.Server.Data
             //if (!System.Diagnostics.EventLog.SourceExists(APLServiceEventLog)) EventLog.CreateEventSource(APLServiceEventLog, "Application");
             //Setup <APLServiceEventLog> event source manually through registry key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Application
             //To resolve message IDs create a RG_EXPAND_SZ attribute, named "EventMessageFile" to: "C:\WINDOWS\Microsoft.NET\Framework\<current version>\EventLogMessages.dll"
-            localServiceLog.Source = aplServiceEventLog;
+            localServiceLog.Source = APLSERVICEEVENTLOG;
 
         }
 

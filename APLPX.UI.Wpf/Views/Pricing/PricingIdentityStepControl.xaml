@@ -19,6 +19,10 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="LayoutRoot">
+      <!--  <Grid.Background>
+            <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg"
+                        Stretch="UniformToFill"/>
+        </Grid.Background>  -->
         <ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto">
             <!--<ListBox.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ListBoxItem}">

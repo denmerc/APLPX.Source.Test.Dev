@@ -51,8 +51,8 @@ namespace APLPX.Server.Data {
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Identity.Login),
-                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Password.Old),
+                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.Login),
+                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.OldPassword),
                 new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //Tenant private client key
                 new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, authenticateMessage)
             }; service.sqlParameters.List = parameters;
@@ -75,7 +75,6 @@ namespace APLPX.Server.Data {
                         reader[UserMap.Names.roleDescription].ToString()
                     ),
                     new UserIdentity(
-                        reader[UserMap.Names.login].ToString(),
                         reader[UserMap.Names.email].ToString(),
                         reader[UserMap.Names.userGreeting].ToString(),
                         reader[UserMap.Names.userName].ToString(),
@@ -189,7 +188,6 @@ namespace APLPX.Server.Data {
                         reader[UserMap.Names.roleDescription].ToString()
                     ),
                     new UserIdentity(
-                        reader[UserMap.Names.login].ToString(),
                         reader[UserMap.Names.email].ToString(),
                         reader[UserMap.Names.userGreeting].ToString(),
                         reader[UserMap.Names.userName].ToString(),
@@ -240,7 +238,6 @@ namespace APLPX.Server.Data {
                             reader[UserMap.Names.roleDescription].ToString()
                         ),
                         new UserIdentity(
-                            reader[UserMap.Names.login].ToString(),
                             reader[UserMap.Names.email].ToString(),
                             reader[UserMap.Names.userGreeting].ToString(),
                             reader[UserMap.Names.userName].ToString(),
@@ -274,12 +271,12 @@ namespace APLPX.Server.Data {
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(UserMap.Names.roleId, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Role.Id.ToString()),
-                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Identity.Login),
+                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Credential.Login),
                 new SqlServiceParameter(UserMap.Names.firstName, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Identity.FirstName),
                 new SqlServiceParameter(UserMap.Names.lastName, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Identity.LastName),
                 new SqlServiceParameter(UserMap.Names.email, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Identity.Email),
-                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Password.New),
-                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Password.Old),
+                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Credential.NewPassword),
+                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.Data.Credential.OldPassword),
                 new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //logged on user session key
                 new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, updateCommandMessage)
             }; service.sqlParameters.List = parameters;
@@ -301,7 +298,6 @@ namespace APLPX.Server.Data {
                         reader[UserMap.Names.roleDescription].ToString()
                     ),
                     new UserIdentity(
-                        reader[UserMap.Names.login].ToString(),
                         reader[UserMap.Names.email].ToString(),
                         reader[UserMap.Names.userGreeting].ToString(),
                         reader[UserMap.Names.userName].ToString(),
@@ -331,9 +327,9 @@ namespace APLPX.Server.Data {
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Identity.Login),
-                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Password.New),
-                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Password.Old),
+                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.Login),
+                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.NewPassword),
+                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.OldPassword),
                 new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //logged in user session key
                 new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.savePasswordMessage)
             }; service.sqlParameters.List = parameters;

@@ -15,29 +15,36 @@ namespace APLPX.UI.WPF.Mappers
         public static Display.Analytic ToDisplayEntity(this DTO.Analytic dto)
         {
             var displayEntity = new Display.Analytic();
+            displayEntity.SearchKey = dto.SearchGroupKey;
+            displayEntity.Id = dto.Id;
 
             displayEntity.Identity = dto.Identity.ToDisplayEntity();
 
-            foreach (DTO.FilterGroup filterGroup in dto.FilterGroups)
+            if (dto.FilterGroups != null)
             {
-                displayEntity.FilterGroups.Add(filterGroup.ToDisplayEntity());
+                foreach (DTO.FilterGroup filterGroup in dto.FilterGroups)
+                {
+                    displayEntity.FilterGroups.Add(filterGroup.ToDisplayEntity());
+                }
             }
 
-            foreach (DTO.AnalyticDriver driver in dto.Drivers)
+            if (dto.Drivers != null)
             {
-                displayEntity.Drivers.Add(driver.ToDisplayEntity());
+                foreach (DTO.AnalyticDriver driver in dto.Drivers)
+                {
+                    displayEntity.Drivers.Add(driver.ToDisplayEntity());
+                }
             }
 
-            foreach (DTO.PriceListGroup priceListGroup in dto.PriceListGroups)
+            if (dto.PriceListGroups != null)
             {
-                displayEntity.PriceListGroups.Add(priceListGroup.ToDisplayEntity());
+                foreach (DTO.PriceListGroup priceListGroup in dto.PriceListGroups)
+                {
+                    displayEntity.PriceListGroups.Add(priceListGroup.ToDisplayEntity());
+                }
             }
 
-            foreach (DTO.AnalyticResult result in dto.Results)
-            {
-                displayEntity.Results.Add(result.ToDisplayEntity());
-            }
-
+       
             return displayEntity;
         }
 
@@ -45,28 +52,58 @@ namespace APLPX.UI.WPF.Mappers
         {
             DTO.AnalyticIdentity identity = displayEntity.Identity.ToDto();
 
-            var filterGroups = new List<DTO.FilterGroup>();            
-            displayEntity.FilterGroups.ForEach(item => filterGroups.Add(item.ToDto()));
+            var filterGroups = new List<DTO.FilterGroup>();
+
+            foreach (Display.FilterGroup filterGroup in displayEntity.FilterGroups)
+            {
+                filterGroups.Add(filterGroup.ToDto());
+            }            
 
             var drivers = new List<DTO.AnalyticDriver>();
-            displayEntity.Drivers.ForEach(item => drivers.Add(item.ToDto()));
+            foreach (Display.AnalyticDriver driver in displayEntity.Drivers)
+            {
+                drivers.Add(driver.ToDto());
+            }           
 
             var priceListGroups = new List<DTO.PriceListGroup>();
-            displayEntity.PriceListGroups.ForEach(item => priceListGroups.Add(item.ToDto()));
-
-            var results = new List<DTO.AnalyticResult>();
-            displayEntity.Results.ForEach(item => results.Add(item.ToDto()));
+            foreach (var priceListGroup in displayEntity.PriceListGroups)
+            {
+                priceListGroups.Add(priceListGroup.ToDto());
+            }                      
 
             var dto = new DTO.Analytic(
                                     displayEntity.Id, 
+                                    displayEntity.SearchKey,
                                     identity, 
                                     drivers, 
                                     priceListGroups, 
-                                    filterGroups, 
-                                    results);
+                                    filterGroups);
 
             return dto;
         }
 
+        public static List<Display.Analytic> ToDisplayEntities(this List<DTO.Analytic> dtoList)
+        {
+            var displayList = new List<Display.Analytic>();
+
+            foreach (DTO.Analytic dto in dtoList)
+            {
+                displayList.Add(dto.ToDisplayEntity());
+            }
+
+            return displayList;
+        }
+
+        public static List<DTO.Analytic> ToDtos(this List<Display.Analytic> displayList)
+        {
+            var dtoList = new List<DTO.Analytic>();
+
+            foreach (Display.Analytic dto in displayList)
+            {
+                dtoList.Add(dto.ToDto());
+            }
+
+            return dtoList;
+        }
     }
 }

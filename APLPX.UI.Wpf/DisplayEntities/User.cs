@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 
 using APLPX.Client.Entity;
+using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class User : DisplayEntityBase
+    public class User : DisplayEntityBase, ISearchableEntity
     {
         #region Private Fields
 
         private int _id;
+        private string _searchKey;
         private string _sqlKey;
         private UserIdentity _identity;
         private UserRole _role;
         private List<Module> _modules;
-        //private UserPassword _password;
+        private string _login;
         private string _oldPassword;
         private string _newPassword;
         private List<SQLEnumeration> _roleTypes;
@@ -26,9 +28,10 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public User()
         {
-            Identity = new UserIdentity();
-            Role = new UserRole();
+            Identity = new UserIdentity();           
             Modules = new List<Module>();
+            Role = new UserRole();
+            RoleTypes = new List<SQLEnumeration>();
         }
 
         #endregion
@@ -77,11 +80,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _newPassword, value); }
         }
 
-        //public UserPassword Password
-        //{
-        //    get { return _password; }
-        //    set { this.RaiseAndSetIfChanged(ref _password, value); }
-        //}
+        public string Login
+        {
+            get { return _login; }
+            set { this.RaiseAndSetIfChanged(ref _login, value); }
+        }
 
         public List<SQLEnumeration> RoleTypes
         {
@@ -91,5 +94,19 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        #region ISearchableEntity
+
+        public string SearchKey
+        {
+            get { return _searchKey; }
+            set { _searchKey = value; }
+        }
+
+        public string EntityTypeName
+        {
+            get { return this.GetType().Name; }
+        }
+
+        #endregion
     }
 }

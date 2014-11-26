@@ -15,7 +15,7 @@ namespace APLPX.UI.WPF.Mappers
         {
             var displayEntity = new Display.Advisor();
 
-            displayEntity.SortOrder = dto.SortOrder;
+            displayEntity.Sort = dto.Sort;
             displayEntity.Message = dto.Message;
 
             return displayEntity;
@@ -24,7 +24,7 @@ namespace APLPX.UI.WPF.Mappers
         public static Client.Entity.ModuleFeatureStepAdvisor ToDto(this Display.Advisor displayEntity)
         {
             var dto = new DTO.ModuleFeatureStepAdvisor(
-                                            displayEntity.SortOrder, 
+                                            displayEntity.Sort,
                                             displayEntity.Message);
 
             return dto;

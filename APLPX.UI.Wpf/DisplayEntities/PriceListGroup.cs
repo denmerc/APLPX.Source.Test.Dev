@@ -11,6 +11,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private string _typeName;
+        private short _sort;
         private List<PriceList> _priceLists;
 
         #endregion
@@ -30,6 +31,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _typeName; }
             set { this.RaiseAndSetIfChanged(ref _typeName, value); }
+        }
+        
+        public short Sort
+        {
+            get { return _sort; }
+            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         public List<PriceList> PriceLists

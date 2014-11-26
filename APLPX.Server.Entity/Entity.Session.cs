@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace APLPX.Server.Entity
@@ -13,41 +14,41 @@ namespace APLPX.Server.Entity
         [DataMember]
         public T Data { get; set; }
         [DataMember]
-        public Boolean AppOnline { get; set; }
+        public bool AppOnline { get; set; }
         [DataMember]
-        public Boolean Authenticated { get; set; }
+        public bool Authenticated { get; set; }
         [DataMember]
-        public Boolean SqlAuthorization { get; set; }
+        public bool SqlAuthorization { get; set; }
         [DataMember]
-        public Boolean WinAuthorization { get; set; }
+        public bool WinAuthorization { get; set; }
         [DataMember]
-        public Boolean SessionOk { get; set; }
+        public bool SessionOk { get; set; }
         [DataMember]
-        public String ClientMessage { get; set; }
+        public string ClientMessage { get; set; }
         [DataMember]
-        public String ServerMessage { get; set; }
+        public string ServerMessage { get; set; }
         [DataMember]
-        public String SqlKey { get; set; }
+        public string SqlKey { get; set; }
         [DataMember]
-        public APLPX.Server.Entity.ModuleFeature Feature { get; set; }
+        List<Server.Entity.Module> Modules { get; set; }
 
-        public Session<Tdata> Clone<Tdata>(Tdata Data) where Tdata : class {
+        public Session<Tdata> Clone<Tdata>(Tdata data) where Tdata : class {
 
-            return InitCommon<Tdata>(this, Data);
+            return InitCommon<Tdata>(this, data);
         }
 
-        public static Session<Tdata> Clone<Tdata>(Session<T> session, Tdata Data = null) where Tdata : class {
+        public static Session<Tdata> Clone<Tdata>(Session<T> session, Tdata data = null) where Tdata : class {
 
-            return session.InitCommon<Tdata>(session, Data);
+            return session.InitCommon<Tdata>(session, data);
         }
 
-        private Session<Tdata> InitCommon<Tdata>(Session<T> session, Tdata Data) where Tdata : class {
+        private Session<Tdata> InitCommon<Tdata>(Session<T> session, Tdata data) where Tdata : class {
 
             return new Session<Tdata> 
             {
                 SessionOk = false,
-                ClientMessage = String.Empty,
-                ServerMessage = String.Empty,
+                ClientMessage = string.Empty,
+                ServerMessage = string.Empty,
 
                 User = session.User,
                 SqlKey = session.SqlKey,
@@ -55,7 +56,7 @@ namespace APLPX.Server.Entity
                 Authenticated = session.Authenticated,
                 SqlAuthorization = session.SqlAuthorization,
                 WinAuthorization = session.WinAuthorization,
-                Data = Data
+                Data = data
             };
         }
     }

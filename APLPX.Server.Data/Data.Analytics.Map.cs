@@ -191,7 +191,7 @@ namespace APLPX.Server.Data {
 
         }
 
-        public List<Server.Entity.AnalyticDriver> LoadDriversMapData(System.Data.DataTable data) {
+        public List<Server.Entity.AnalyticValueDriver> LoadDriversMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
@@ -201,9 +201,9 @@ namespace APLPX.Server.Data {
             String driverLast = String.Empty;
             String modeNow = String.Empty;
             String modeLast = String.Empty;
-            List<Server.Entity.AnalyticDriver> listDrivers = new List<AnalyticDriver>();
-            List<Server.Entity.AnalyticDriverMode> listModes = new List<AnalyticDriverMode>();
-            List<Server.Entity.AnalyticDriverGroup> listGroups = new List<AnalyticDriverGroup>();
+            List<Server.Entity.AnalyticValueDriver> listDrivers = new List<AnalyticValueDriver>();
+            List<Server.Entity.AnalyticValueDriverMode> listModes = new List<AnalyticValueDriverMode>();
+            List<Server.Entity.ValueDriverGroup> listGroups = new List<ValueDriverGroup>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
             //From record set...
@@ -214,35 +214,35 @@ namespace APLPX.Server.Data {
 
                 if (reading) {
                     listGroups.Add(
-                        new AnalyticDriverGroup(
+                        new ValueDriverGroup(
                             Int32.Parse(reader[AnalyticMap.Names.driverGroupId].ToString()),
                             Int16.Parse(reader[AnalyticMap.Names.driverGroupValue].ToString()),
-                            Decimal.Parse(reader[AnalyticMap.Names.driverGroupMinOutlier].ToString()),
-                            Decimal.Parse(reader[AnalyticMap.Names.driverGroupMaxOutlier].ToString()),
+                            Int32.Parse(reader[AnalyticMap.Names.driverGroupMinOutlier].ToString()),
+                            Int32.Parse(reader[AnalyticMap.Names.driverGroupMaxOutlier].ToString()),
                             0 //TODO: Add sort order to meta data
                         ));
                     if (modeLast != modeNow) {
                         listModes.Add(
-                            new Entity.AnalyticDriverMode(
+                            new Entity.AnalyticValueDriverMode(
                                Int32.Parse(reader[AnalyticMap.Names.driverModeKey].ToString()),
+                               Boolean.Parse(reader[AnalyticMap.Names.driverModeIncluded].ToString()),
                                reader[AnalyticMap.Names.driverModeName].ToString(), //Name
                                reader[AnalyticMap.Names.driverModeName].ToString(), //Tooltip
                                0, //TODO: add sort order to meta data
-                               Boolean.Parse(reader[AnalyticMap.Names.driverModeIncluded].ToString()),
-                               new List<AnalyticDriverGroup>()
+                               new List<ValueDriverGroup>()
                             ));
                     }
                     if (driverLast != driverNow) {
                         listDrivers.Add(
-                            new Entity.AnalyticDriver(
+                            new Entity.AnalyticValueDriver(
                                 Int32.Parse(reader[AnalyticMap.Names.driverId].ToString()),
                                 Int32.Parse(reader[AnalyticMap.Names.driverKey].ToString()),
+                                Boolean.Parse(reader[AnalyticMap.Names.driverIncluded].ToString()),
                                 reader[AnalyticMap.Names.driverName].ToString(), //Name
                                 reader[AnalyticMap.Names.driverName].ToString(), //Title
                                 0, //TODO: Add sort order to meta data
-                                Boolean.Parse(reader[AnalyticMap.Names.driverIncluded].ToString()),
-                                new List<AnalyticResult>(),
-                                new List<AnalyticDriverMode>()
+                                new List<AnalyticResultValueDriverGroup>(),
+                                new List<AnalyticValueDriverMode>()
                             ));
                     }
                 }
@@ -283,11 +283,11 @@ namespace APLPX.Server.Data {
             const System.Char splitter = ',';
             const System.Char delimiter = ';';
             System.Text.StringBuilder driverKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.AnalyticDriver driver in session.Data.Drivers) {
+            foreach (Server.Entity.AnalyticValueDriver driver in session.Data.ValueDrivers) {
                 if (driver.IsSelected) {
-                    foreach (Server.Entity.AnalyticDriverMode mode in driver.Modes) {
-                        if (mode.IsSelected) { 
-                            foreach (Server.Entity.AnalyticDriverGroup group in mode.Groups) {
+                    foreach (Server.Entity.AnalyticValueDriverMode mode in driver.Modes) {
+                        if (mode.IsSelected) {
+                            foreach (Server.Entity.ValueDriverGroup group in mode.Groups) {
                                 driverKeys.Append(driver.Key.ToString() + delimiter);
                                 driverKeys.Append(mode.Key.ToString() + delimiter);
                                 driverKeys.Append(group.Value.ToString() + delimiter);
@@ -323,14 +323,14 @@ namespace APLPX.Server.Data {
 
         }
 
-        public List<Server.Entity.PriceListGroup> LoadPricelistsMapData(System.Data.DataTable data) {
+        public List<Server.Entity.AnalyitcPriceListGroup> LoadPricelistsMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
             Int32 rows = data.Rows.Count;
             String listTypeNow = String.Empty;
             String listTypeLast = String.Empty;
-            List<Server.Entity.PriceListGroup> priceListGroups = new List<Entity.PriceListGroup>();
+            List<Server.Entity.AnalyitcPriceListGroup> priceListGroups = new List<Entity.AnalyitcPriceListGroup>();
             List<Server.Entity.PriceList> priceLists = new List<Entity.PriceList>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
@@ -345,14 +345,16 @@ namespace APLPX.Server.Data {
                             Int32.Parse(reader[AnalyticMap.Names.priceListKey].ToString()),
                             reader[AnalyticMap.Names.priceListCode].ToString(),
                             reader[AnalyticMap.Names.priceListName].ToString(),
-                            Boolean.Parse(reader[AnalyticMap.Names.priceListIncluded].ToString()),
-                            0 //TODO: DaveJ - Add price list sort
+                            0, //TODO: DaveJ - Add price list sort
+                            Boolean.Parse(reader[AnalyticMap.Names.priceListIncluded].ToString())
                         ));
                     if (listTypeLast != listTypeNow) {
                         priceListGroups.Add(
-                            new Entity.PriceListGroup(
-                                0, //TODO: DaveJ - Add price list group sort
+                            new Entity.AnalyitcPriceListGroup(
+                                0, //TODO: DaveJ - Add price list group key
                                 reader[AnalyticMap.Names.priceListTypeName].ToString(),
+                                String.Empty, //TODO: DaveJ - Add price list group title
+                                0, //TODO: DaveJ - Add price list group sort
                                 new List<PriceList>()
                             ));
                     }
@@ -381,7 +383,7 @@ namespace APLPX.Server.Data {
             //Build comma delimited key list...
             const System.Char delimiter = ',';
             System.Text.StringBuilder priceKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.PriceListGroup group in session.Data.PriceListGroups) {
+            foreach (Server.Entity.AnalyitcPriceListGroup group in session.Data.PriceListGroups) {
                 foreach (Server.Entity.PriceList priceList in group.PriceLists) {
                     if (!priceList.IsSelected) { priceKeys.Append(priceList.Key.ToString() + delimiter); }
                 }

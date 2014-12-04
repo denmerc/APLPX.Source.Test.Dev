@@ -60,14 +60,14 @@ namespace APLPX.UI.WPF.DisplayServices
             return displayList;
         }
 
-        public List<AnalyticDriver> LoadDrivers(Analytic displayAnalytic)
+        public List<AnalyticValueDriver> LoadDrivers(Analytic displayAnalytic)
         {
             DTO.Analytic payload = displayAnalytic.ToDto();
             var sessionDto = new DTO.Session<DTO.Analytic> { Data = payload };
 
             DTO.Session<DTO.Analytic> response = _analyticService.LoadDrivers(sessionDto);
 
-            var displayList = new List<AnalyticDriver>();
+            var displayList = new List<AnalyticValueDriver>();
             foreach (DTO.AnalyticDriver driver in response.Data.Drivers)
             {
                 displayList.Add(driver.ToDisplayEntity());
@@ -76,14 +76,14 @@ namespace APLPX.UI.WPF.DisplayServices
             return displayList;
         }
 
-        public List<PriceListGroup> LoadPriceListGroupss(Analytic displayAnalytic)
+        public List<AnalyticPriceListGroup> LoadPriceListGroupss(Analytic displayAnalytic)
         {
             DTO.Analytic payload = displayAnalytic.ToDto();
             var sessionDto = new DTO.Session<DTO.Analytic> { Data = payload };
 
             DTO.Session<DTO.Analytic> returnedSession = _analyticService.LoadDrivers(sessionDto);
 
-            var displayList = new List<PriceListGroup>();
+            var displayList = new List<AnalyticPriceListGroup>();
             foreach (DTO.PriceListGroup group in returnedSession.Data.PriceListGroups)
             {
                 displayList.Add(group.ToDisplayEntity());

@@ -2,7 +2,7 @@
 
 namespace APLPX.Server.Data
 {
-    class PricingMap
+    class PricingEverydayMap
     {
 
         #region Load workflow...

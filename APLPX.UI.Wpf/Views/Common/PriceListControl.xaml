@@ -60,7 +60,7 @@
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=TypeName}" />
+                    <TextBlock Text="{Binding Path=Name}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

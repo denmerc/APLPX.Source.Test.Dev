@@ -90,6 +90,7 @@ namespace APLPX.UI.WPF.ViewModels
         private void InitializeEventHandlers()
         {
             _eventManager = ((EventAggregator)App.Current.Resources["EventManager"]);
+            _eventManager.GetEvent<SearchGroupsUpdatedEvent>().Subscribe(data => OnSearchGroupReassigned(data));
 
             var selectedModuleChanged = this.WhenAnyValue(vm => vm.SelectedModule);
             selectedModuleChanged.Subscribe(module => OnSelectedModuleChanged(module));
@@ -161,7 +162,7 @@ namespace APLPX.UI.WPF.ViewModels
                 await Task.Run(() =>
                 {
                     var payload = SelectedAnalytic.ToPayload();
-                    payload.Drivers = SelectedAnalytic.Drivers;
+                    payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
                     var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto() };
                     var status = _analyticService.SaveDrivers(session);
 
@@ -646,7 +647,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Value Drivers
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsValueDrivers:
-                    result = new AnalyticDriverViewModel(SelectedAnalytic.Drivers);
+                    result = new AnalyticDriverViewModel(SelectedAnalytic);
                     break;
 
                 //Results
@@ -738,7 +739,7 @@ namespace APLPX.UI.WPF.ViewModels
             {
                 if (!String.IsNullOrEmpty(completedMessge))
                 {
-                    _eventManager.Publish(new OperationCompletedEvent { Message = completedMessge });
+                    _eventManager.Publish(new OperationCompletedEvent(completedMessge));
                 }
             }
             finally
@@ -755,10 +756,14 @@ namespace APLPX.UI.WPF.ViewModels
         }
 
         private void HandleException(Exception error)
-        {
-            //TODO: display error in a standardized way. This is for testing only.
-            MessageBox.Show(error.Message, "Price Advisor", MessageBoxButton.OK, MessageBoxImage.Error);
+        {            
+            ShowMessageBox(error.Message, MessageBoxImage.Error);
             ReenableUserInterface();
+        }
+
+        private void ShowMessageBox(string message, MessageBoxImage image)
+        {
+            MessageBox.Show(message, "PRICEXPERT", MessageBoxButton.OK, image);
         }
 
         /// <summary>
@@ -805,6 +810,19 @@ namespace APLPX.UI.WPF.ViewModels
 
             this.RaisePropertyChanged("IsEntitySelected");
             this.RaisePropertyChanged("SelectedEntity");
+        }
+
+        private void OnSearchGroupReassigned(SearchGroupsUpdatedEvent data)
+        {
+            if (data.SourceEntity.SearchKey!= data.DestinationSearchGroup.SearchKey)
+            {
+                data.SourceEntity.SearchKey = data.DestinationSearchGroup.SearchKey;
+                SelectedFeature.RecalculateSearchItemCounts();
+
+                //Re-select the reassigned entity within its new search group.
+                SelectedFeature.SelectedSearchGroup = data.DestinationSearchGroup;                
+                SelectedFeature.SelectedEntity = data.SourceEntity;        
+            }          
         }
 
         #endregion

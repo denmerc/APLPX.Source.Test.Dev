@@ -14,5 +14,19 @@ namespace APLPX.UI.WPF
             InitializeComponent();
         }
 
+        private void DriverGroupsDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            var group = e.Row.Item as APLPX.UI.WPF.DisplayEntities.ValueDriverGroup;
+            
+            if (e.Column == colLower)
+            {
+                e.Cancel = !group.IsMinValueEditable;
+            }
+            else if (e.Column == colUpper)
+            {
+                e.Cancel = !group.IsMaxValueEditable;
+            }
+        }
+
     }
 }

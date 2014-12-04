@@ -8,11 +8,15 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
                       xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
-                      Title="Promoter"
+                      Title="PRICEXPERT"
+                      WindowTitleBrush="{DynamicResource ApplicationTitleBarColor}"
+                      NonActiveWindowTitleBrush="{DynamicResource ApplicationTitleBarColorInactive}"
                       Height="900"
                       MinWidth="1080"
                       MinHeight="530"
-                      BorderBrush="Black"
+                      GlowBrush="{DynamicResource ApplicationGlowBrushBorderColor}"
+                      ShowIconOnTitleBar="True"
+                      WindowStartupLocation="CenterScreen"
                       BorderThickness="1"
                       WindowState="Maximized"
                       d:DesignHeight="1354"
@@ -121,15 +125,38 @@
         </ResourceDictionary>
     </controls:MetroWindow.Resources>
 
+    <controls:MetroWindow.IconTemplate>
+        <DataTemplate>
+            <Grid Width="{TemplateBinding Width}"
+                 Height="{TemplateBinding Height}"
+                 Margin="4"
+                 Background="Transparent"
+                 RenderOptions.EdgeMode="Aliased"
+                 RenderOptions.BitmapScalingMode="HighQuality">
+                <Image Source="/APLPX.UI.WPF;component/Resources/APL_logo_new.png"></Image>
+            </Grid>
+        </DataTemplate>
+    </controls:MetroWindow.IconTemplate>
+
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-
-            <Button Content="Promoter.com" ToolTip="Promoter.com web site" />
-            <Button Content="About" ToolTip="About Promoter" />
+            <ComboBox x:Name="themePicker"
+                      Grid.Column="3"
+                      Width="100"
+                      Height="1"
+                      Margin="1"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Center"
+                      SelectionChanged="themePicker_SelectionChanged" 
+                      Foreground="Black"
+                      HorizontalContentAlignment="Center"
+                      VerticalContentAlignment="Center"/>
+            <Button Content="Pricexpert.com" ToolTip="PRICEXPERT.com web site" />
+            <Button Content="About" ToolTip="About PRICEXPERT" />
             <!--  <Button Click="LaunchRibbonDemo" Content="Ribbon Demo (.NET 4.5)" />  -->
-            <Button Content="Help" ToolTip="Help documentation for Promoter" />
+            <Button Content="Help" ToolTip="Help documentation for PRICEXPERT" />
 
-            <Button Command="{Binding LogoutCommand}" ToolTip="Logout of Promoter">
+            <Button Command="{Binding LogoutCommand}" ToolTip="Logout of PRICEXPERT">
                 <Button.Content>
                     <TextBlock>
                         <Run Text="Logout - " />
@@ -467,7 +494,7 @@
     <Grid x:Name="layoutRoot"
           MinWidth="1080"
           MinHeight="530"
-          Background="LightGray"
+          Background="DimGray"
           IsEnabled="{Binding Path=IsActionInProgress,
                               Converter={StaticResource InverseBooleanConverter}}">
 
@@ -534,7 +561,7 @@
                                              Converter={StaticResource BooleanToVisibilityConverter}}">
 
                 <TextBlock x:Name="txtSelectedModule"
-                           Style="{StaticResource HeaderTextStyle}"
+                           Style="{StaticResource MainWindowHeaderTextStyle}"
                            Text="{Binding Path=SelectedModule.Name,
                                           StringFormat={}Module: {0}}" />
 
@@ -543,7 +570,7 @@
                            Text="{Binding Path=SelectedFeature.Name,
                                           StringFormat={}Feature: {0}}">
                     <TextBlock.Style>
-                        <Style BasedOn="{StaticResource HeaderTextStyle}" TargetType="TextBlock">
+                        <Style BasedOn="{StaticResource MainWindowHeaderTextStyle}" TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=SelectedFeature}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -558,7 +585,7 @@
                            Text="{Binding Path=SelectedEntity.Identity.Name,
                                           StringFormat={}Selected: {0}}">
                     <TextBlock.Style>
-                        <Style BasedOn="{StaticResource HeaderTextStyle}" TargetType="TextBlock">
+                        <Style BasedOn="{StaticResource MainWindowHeaderTextStyle}" TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=SelectedEntity}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -672,7 +699,7 @@
                             <StackPanel Orientation="Horizontal" Style="{x:Null}">
                                 <TextBlock x:Name="txtValue"
                                            Margin="2"
-                                           Style="{StaticResource filteredTextStyle}"
+                                           Style="{StaticResource AnalyticStepTextStyle}"
                                            Text="{Binding Path=Name}"
                                            ToolTip="{Binding Path=Title}" />
                             </StackPanel>

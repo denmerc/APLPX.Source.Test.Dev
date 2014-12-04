@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts.Analytics.cs" />
-    <Compile Include="Contracts.Pricing.cs" />
+    <Compile Include="Contracts.Pricing.Everyday.cs" />
     <Compile Include="Contracts.User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

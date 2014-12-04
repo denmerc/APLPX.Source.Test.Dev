@@ -50,7 +50,7 @@ namespace APLPX.UI.WPF.Helpers
                 copy.Drivers.Add(driverCopy);
             }
 
-            foreach (PriceListGroup priceListGroup in source.PriceListGroups)
+            foreach (AnalyticPriceListGroup priceListGroup in source.PriceListGroups)
             {
                 var priceListGroupCopy = priceListGroup.Copy();
                 copy.PriceListGroups.Add(priceListGroupCopy);
@@ -62,7 +62,7 @@ namespace APLPX.UI.WPF.Helpers
         }
 
         /// <summary>
-        /// Creates a copy of an <see cref="AnalyticDriver"/>.
+        /// Creates a copy of an <see cref="AnalyticValueDriver"/>.
         /// </summary>
         public static PricingDriver Copy(this PricingDriver source)
         {

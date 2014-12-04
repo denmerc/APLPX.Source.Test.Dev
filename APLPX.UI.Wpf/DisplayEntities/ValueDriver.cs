@@ -5,7 +5,10 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class AnalyticDriver : DisplayEntityBase
+    /// <summary>
+    /// Base class for ValueDriver display entities.
+    /// </summary>
+    public abstract class ValueDriver : DisplayEntityBase
     {
 
         #region Private Fields
@@ -15,20 +18,14 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _name;
         private string _title;
         private short _sort;        
-        private bool _isSelected;
-        private List<DriverMode> _modes;
-        private DriverMode _mode;
-        private List<AnalyticResult> _results;
+        private bool _isSelected;  
 
         #endregion
 
         #region Constructors
 
-        public AnalyticDriver()
+        public ValueDriver()
         {
-            Mode = new DriverMode();
-            Modes = new List<DriverMode>();
-            Results = new List<AnalyticResult>();
         }
 
         #endregion
@@ -69,24 +66,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _isSelected; }
             set { this.RaiseAndSetIfChanged(ref _isSelected, value); }
-        }
-
-        public List<DriverMode> Modes
-        {
-            get { return _modes; }
-            set { this.RaiseAndSetIfChanged(ref _modes, value); }
-        }
-
-        public DriverMode Mode
-        {
-            get { return _mode; }
-            set { this.RaiseAndSetIfChanged(ref _mode, value); }
-        }
-
-        public List<AnalyticResult> Results
-        {
-            get { return _results; }
-            set { this.RaiseAndSetIfChanged(ref _results, value); }
         }
 
         #endregion

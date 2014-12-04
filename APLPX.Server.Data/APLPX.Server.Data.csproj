@@ -46,8 +46,8 @@
   <ItemGroup>
     <Compile Include="Data.Analytics.cs" />
     <Compile Include="Data.Analytics.Map.cs" />
-    <Compile Include="Data.Pricing.cs" />
-    <Compile Include="Data.Pricing.Map.cs" />
+    <Compile Include="Data.Pricing.Everyday.cs" />
+    <Compile Include="Data.Pricing.Everyday.Map.cs" />
     <Compile Include="Data.SqlService.cs" />
     <Compile Include="Data.User.cs" />
     <Compile Include="Data.User.Map.cs" />

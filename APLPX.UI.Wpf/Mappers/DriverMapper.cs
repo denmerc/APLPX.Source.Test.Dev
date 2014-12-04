@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using DTO = APLPX.Client.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
@@ -13,9 +14,9 @@ namespace APLPX.UI.WPF.Mappers
     {
         #region Analytic Driver
 
-        public static Display.AnalyticDriver ToDisplayEntity(this DTO.AnalyticDriver dto)
+        public static Display.AnalyticValueDriver ToDisplayEntity(this DTO.AnalyticDriver dto)
         {
-            var displayEntity = new Display.AnalyticDriver();
+            var displayEntity = new Display.AnalyticValueDriver();
 
             displayEntity.Id = dto.Id;
             displayEntity.Key = dto.Key;
@@ -26,9 +27,14 @@ namespace APLPX.UI.WPF.Mappers
 
             if (dto.Modes != null)
             {
+                //TODO: Initial development; new model with a single "Mode":
+                var driverMode = dto.Modes.Where(m => m.Name.StartsWith("User")).FirstOrDefault();
+                displayEntity.Mode = driverMode.ToDisplayEntity();
+                //END TODO
+
                 foreach (DTO.AnalyticDriverMode mode in dto.Modes)
                 {
-                    displayEntity.Modes.Add(mode.ToDisplayEntity()); 
+                    displayEntity.Modes.Add(mode.ToDisplayEntity());
                 }                
             }
 
@@ -43,7 +49,7 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
-        public static DTO.AnalyticDriver ToDto(this Display.AnalyticDriver displayEntity)
+        public static DTO.AnalyticDriver ToDto(this Display.AnalyticValueDriver displayEntity)
         {
             var modes = new List<DTO.AnalyticDriverMode>();
             displayEntity.Modes.ForEach(mode => modes.Add(mode.ToDto()));

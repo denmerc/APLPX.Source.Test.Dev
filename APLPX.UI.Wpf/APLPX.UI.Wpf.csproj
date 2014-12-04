@@ -16,7 +16,11 @@
     <ExpressionBlendVersion>12.0.50429.0</ExpressionBlendVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>C:\Users\dmac\SkyDrive\Public\promo\</PublishUrl>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <PublishUrl>C:\Users\dennism\OneDrive\Public\promo\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -26,15 +30,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>1.0.0.3</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -63,7 +63,7 @@
     <ManifestCertificateThumbprint>6CB12849EDE2E98B21ECAD122532AC05FA46B73E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
@@ -141,6 +141,35 @@
     <Compile Include="Converters\ValueConverters.cs" />
     <Compile Include="Data\MockUserService.cs" />
     <Compile Include="DisplayEntities\Action.cs" />
+    <Compile Include="DisplayEntities\PriceListGroup.cs" />
+    <Compile Include="DisplayEntities\PricingEveryday.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayKeyValueDriver.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayKeyValueDriverGroup.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayLinkedValueDriver.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayLinkedValueDriverGroup.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayPriceList.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayPriceListGroup.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayResult.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayResultPriceList.cs" />
+    <Compile Include="DisplayEntities\PricingEverydayValueDriver.cs" />
+    <Compile Include="DisplayEntities\PricingKeyPriceListRule.cs" />
+    <Compile Include="DisplayEntities\PricingKits.cs" />
+    <Compile Include="DisplayEntities\PricingLinkedPriceListRule.cs" />
+    <Compile Include="DisplayEntities\PricingMarkupTemplate.cs" />
+    <Compile Include="DisplayEntities\PricingMode.cs" />
+    <Compile Include="DisplayEntities\PricingOptimizationTemplate.cs" />
+    <Compile Include="DisplayEntities\PricingPromotion.cs" />
+    <Compile Include="DisplayEntities\PricingResultDriverGroup.cs" />
+    <Compile Include="DisplayEntities\PricingResultEdit.cs" />
+    <Compile Include="DisplayEntities\PricingResultFilter.cs" />
+    <Compile Include="DisplayEntities\PricingResultWarning.cs" />
+    <Compile Include="DisplayEntities\PricingRoundingTemplate.cs" />
+    <Compile Include="DisplayEntities\PricingValueDriverGroup.cs" />
+    <Compile Include="DisplayEntities\ValueDriverMode.cs" />
+    <Compile Include="DisplayEntities\PriceRoundingRule.cs" />
+    <Compile Include="DisplayEntities\PriceMarkupRule.cs" />
+    <Compile Include="DisplayEntities\PriceOptimizationRule.cs" />
+    <Compile Include="DisplayEntities\ValueDriver.cs" />
     <Compile Include="DisplayServices\AnalyticDisplayServices.cs" />
     <Compile Include="DisplayServices\UserDisplayServices.cs" />
     <Compile Include="Data\MockAnalyticService.cs">
@@ -148,9 +177,8 @@
     </Compile>
     <Compile Include="DisplayEntities\Advisor.cs" />
     <Compile Include="DisplayEntities\Analytic.cs" />
-    <Compile Include="DisplayEntities\ResultBase.cs" />
     <Compile Include="DisplayEntities\PricingResult.cs" />
-    <Compile Include="DisplayEntities\PriceListGroup.cs" />
+    <Compile Include="DisplayEntities\AnalyticPriceListGroup.cs" />
     <Compile Include="DisplayEntities\PricingDriver.cs" />
     <Compile Include="DisplayEntities\FeatureSearchGroup.cs" />
     <Compile Include="DisplayEntities\ModuleFeatureStep.cs" />
@@ -162,24 +190,35 @@
     <Compile Include="DisplayEntities\PricingIdentity.cs" />
     <Compile Include="DisplayEntities\UserIdentity.cs" />
     <Compile Include="DisplayEntities\DisplayEntityBase.cs" />
-    <Compile Include="DisplayEntities\AnalyticDriver.cs" />
+    <Compile Include="DisplayEntities\AnalyticValueDriver.cs" />
     <Compile Include="DisplayEntities\Error.cs" />
     <Compile Include="DisplayEntities\Filter.cs" />
-    <Compile Include="DisplayEntities\DriverGroup.cs" />
+    <Compile Include="DisplayEntities\ValueDriverGroup.cs" />
     <Compile Include="DisplayEntities\AnalyticIdentity.cs" />
-    <Compile Include="DisplayEntities\DriverMode.cs" />
+    <Compile Include="DisplayEntities\AnalyticValueDriverMode.cs" />
     <Compile Include="DisplayEntities\PriceList.cs" />
     <Compile Include="DisplayEntities\Pricing.cs" />
     <Compile Include="DisplayEntities\UserRole.cs" />
     <Compile Include="DisplayEntities\User.cs" />
+    <Compile Include="DragDropProviders\SearchableEntityDragSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DragDropProviders\SearchItemDropTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\DragDropHelper.cs" />
     <Compile Include="Events\OperationCompletedEvent.cs" />
+    <Compile Include="Events\SearchGroupsUpdatedEvent.cs" />
     <Compile Include="Helpers\AnalyticExtensions.cs" />
     <Compile Include="Helpers\DisplayModuleGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\PricingExtensions.cs" />
     <Compile Include="Helpers\PasswordExtension.cs" />
+    <Compile Include="Helpers\TextBoxHelper.cs" />
     <Compile Include="Interfaces\IAnalyticRepository.cs" />
+    <Compile Include="Interfaces\IDragSource.cs" />
+    <Compile Include="Interfaces\IDropTarget.cs" />
     <Compile Include="Interfaces\ISearchableEntity.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -204,6 +243,7 @@
     <Compile Include="Mappers\FilterMapper.cs" />
     <Compile Include="Mappers\ErrorMapper.cs" />
     <Compile Include="Mappers\IdentityMapper.cs" />
+    <Compile Include="Themes\ThemeManager.cs" />
     <Compile Include="ViewModels\Admin\AdminUsersViewModel.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticDriverViewModel.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticIdentityViewModel.cs" />
@@ -239,6 +279,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Light.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Dark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -407,6 +455,7 @@
   <ItemGroup>
     <Resource Include="Resources\APL_logo_new.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,38 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-
 using APLPX.UI.WPF.DisplayEntities;
-using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 
-
 namespace APLPX.UI.WPF.ViewModels
 {
-    //Default SubModule for plannning
+    /// <summary>
+    /// View model for searching and filtering entitiels.
+    /// </summary>
     public class SearchViewModel : ViewModelBase
     {
+        #region Constructor and Initialization
+
         public SearchViewModel(ModuleFeature feature)
         {
             SelectedFeature = feature;
-            if (feature.SelectedStep == null)
-            {
-                feature.SelectedStep = feature.DefaultLandingStep;
-            }
-
             InitializeEventHandlers();
         }
 
         private void InitializeEventHandlers()
         {
             var selectedSearchGroupChanged = this.WhenAnyValue(vm => vm.SelectedFeature.SelectedSearchGroup);
-            selectedSearchGroupChanged.Subscribe(m => this.RaisePropertyChanged("IsSearchFilterSelected"));
-            
+            selectedSearchGroupChanged.Subscribe(m => OnSelectedSearchGroupChanged(m));
+
             var selectedEntityChanged = this.WhenAnyValue(vm => vm.SelectedFeature.SelectedEntity);
-            selectedEntityChanged.Subscribe(m => this.RaisePropertyChanged("IsDetailDisplayed"));
+            selectedEntityChanged.Subscribe(m => OnSelectedEntityChanged(m));
         }
+
+        #endregion
 
         #region Properties
 
@@ -61,7 +56,7 @@ namespace APLPX.UI.WPF.ViewModels
                 bool result = false;
 
                 if (SelectedFeature != null)
-                {                    
+                {
                     result = (SelectedFeature.SelectedEntity != null);
                 }
 
@@ -71,16 +66,20 @@ namespace APLPX.UI.WPF.ViewModels
 
         #endregion
 
+        #region Event Handlers
+
+        private void OnSelectedEntityChanged(ISearchableEntity entity)
+        {
+            this.RaisePropertyChanged("IsDetailDisplayed");
+        }
+
+        private void OnSelectedSearchGroupChanged(FeatureSearchGroup searchGroup)
+        {
+            this.RaisePropertyChanged("IsSearchFilterSelected");
+        }
+
+        #endregion
     }
-
-
-
-
-
-
-
-
-
 
 }
 

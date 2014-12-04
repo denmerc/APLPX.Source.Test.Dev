@@ -5,7 +5,10 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class DriverGroup : DisplayEntityBase
+    /// <summary>
+    /// Base class ofr Value Driver Group display entities.
+    /// </summary>
+    public class ValueDriverGroup : DisplayEntityBase
     {
         #region Private Fields
 
@@ -15,11 +18,14 @@ namespace APLPX.UI.WPF.DisplayEntities
         private decimal _maxOutlier;
         private short _sort;
 
+        private bool _isMinValueEditable;
+        private bool _isMaxValueEditable;
+
         #endregion
 
         #region Constructors
 
-        public DriverGroup()
+        public ValueDriverGroup()
         {
         }
 
@@ -55,6 +61,18 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _sort; }
             set { this.RaiseAndSetIfChanged(ref _sort, value); }
+        }
+
+        public bool IsMinValueEditable
+        {
+            get { return _isMinValueEditable; }
+            set { this.RaiseAndSetIfChanged(ref _isMinValueEditable, value); }
+        }
+
+        public bool IsMaxValueEditable
+        {
+            get { return _isMaxValueEditable; }
+            set { this.RaiseAndSetIfChanged(ref _isMaxValueEditable, value); }
         }
 
         #endregion

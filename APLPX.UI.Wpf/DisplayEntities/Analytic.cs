@@ -12,11 +12,14 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private int _id;
         private AnalyticIdentity _identity;
-        private List<AnalyticDriver> _drivers;
+        private List<AnalyticValueDriver> _valueDrivers;
         private List<FilterGroup> _filterGroups;
-        private List<PriceListGroup> _priceListGroups;
+        private List<AnalyticPriceListGroup> _priceListGroups;
         private FilterGroup _selectedFilterGroup;
+        private AnalyticValueDriver _selectedValueDriver;
         private string _searchKey;
+        private string _parentKey;
+        private bool _canNameChange;
 
         #endregion
 
@@ -25,9 +28,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         public Analytic()
         {
             Identity = new AnalyticIdentity();
-            Drivers = new List<AnalyticDriver>();
+            ValueDrivers = new List<AnalyticValueDriver>();
             FilterGroups = new List<FilterGroup>();           
-            PriceListGroups = new List<PriceListGroup>();            
+            PriceListGroups = new List<AnalyticPriceListGroup>();            
         }
 
         #endregion
@@ -46,13 +49,13 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _filterGroups, value); }
         }
 
-        public List<AnalyticDriver> Drivers
+        public List<AnalyticValueDriver> ValueDrivers
         {
-            get { return _drivers; }
-            set { this.RaiseAndSetIfChanged(ref _drivers, value); }
+            get { return _valueDrivers; }
+            set { this.RaiseAndSetIfChanged(ref _valueDrivers, value); }
         }
 
-        public List<PriceListGroup> PriceListGroups
+        public List<AnalyticPriceListGroup> PriceListGroups
         {
             get { return _priceListGroups; }
             set { this.RaiseAndSetIfChanged(ref _priceListGroups, value); }
@@ -70,14 +73,26 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _selectedFilterGroup, value); }
         }
 
+        public AnalyticValueDriver SelectedValueDriver
+        {
+            get { return _selectedValueDriver; }
+            set { this.RaiseAndSetIfChanged(ref _selectedValueDriver, value); }
+        }
+
         #endregion
 
         #region ISearchableEntity
 
+        public string ParentKey
+        {
+            get { return _parentKey; }
+            set { _parentKey = value; }
+        }
+
         public string SearchKey
         {
             get { return _searchKey; }
-            set { _searchKey = value; }
+            set { this.RaiseAndSetIfChanged(ref _searchKey, value); }
         }
 
         public string EntityTypeName
@@ -85,6 +100,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return this.GetType().Name; }
         }
 
+        public bool CanNameChange
+        {
+            get { return _canNameChange; }
+            set { _canNameChange = value; }
+        }
         #endregion
 
         #region Overrides

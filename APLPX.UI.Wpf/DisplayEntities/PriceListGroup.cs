@@ -5,46 +5,54 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class PriceListGroup : DisplayEntityBase
+    /// <summary>
+    /// Base class for Price List Group display entities.
+    /// </summary>
+    public abstract class PriceListGroup : DisplayEntityBase
     {
 
         #region Private Fields
 
-        private string _typeName;
+        private int _key;
+        private string _name;
+        private string _title;       
         private short _sort;
-        private List<PriceList> _priceLists;
-
+     
         #endregion
 
         #region Constructors
 
         public PriceListGroup()
-        {
-            PriceLists = new List<PriceList>();
+        {           
         }
 
         #endregion
 
         #region Properties
 
-        public string TypeName
+        public int Key
         {
-            get { return _typeName; }
-            set { this.RaiseAndSetIfChanged(ref _typeName, value); }
+            get { return _key; }
+            set { this.RaiseAndSetIfChanged(ref _key, value); }
         }
-        
+
+        public string Name
+        {
+            get { return _name; }
+            set { this.RaiseAndSetIfChanged(ref _name, value); }
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set { this.RaiseAndSetIfChanged(ref _title, value); }
+        }
+
         public short Sort
         {
             get { return _sort; }
             set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
-
-        public List<PriceList> PriceLists
-        {
-            get { return _priceLists; }
-            set { this.RaiseAndSetIfChanged(ref _priceLists, value); }
-        }
-
 
         #endregion
     }

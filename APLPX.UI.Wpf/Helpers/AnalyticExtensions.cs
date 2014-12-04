@@ -54,10 +54,10 @@ namespace APLPX.UI.WPF.Helpers
                 copy.FilterGroups.Add(filterGroupCopy);
             }
 
-            foreach (AnalyticDriver driver in source.Drivers)
+            foreach (AnalyticValueDriver driver in source.ValueDrivers)
             {
                 var driverCopy = driver.Copy();
-                copy.Drivers.Add(driverCopy);
+                copy.ValueDrivers.Add(driverCopy);
             }
 
             foreach (var item in source.PriceListGroups)
@@ -73,25 +73,25 @@ namespace APLPX.UI.WPF.Helpers
 
  
         /// <summary>
-        /// Creates a copy of an <see cref="AnalyticDriver"/>.
+        /// Creates a copy of an <see cref="AnalyticValueDriver"/>.
         /// </summary>
-        public static AnalyticDriver Copy(this AnalyticDriver source)
+        public static AnalyticValueDriver Copy(this AnalyticValueDriver source)
         {
-            var copy = new AnalyticDriver();
+            var copy = new AnalyticValueDriver();
 
             copy.Id = source.Id;
             copy.IsSelected = source.IsSelected;
             copy.Key = source.Key;
-            copy.Mode = source.Mode.Copy();
+            copy.SelectedMode = source.SelectedMode.Copy();
             copy.Name = source.Name;
             copy.Sort = source.Sort;
 
             return copy;
         }
 
-        public static DriverMode Copy(this DriverMode source)
+        public static AnalyticValueDriverMode Copy(this AnalyticValueDriverMode source)
         {
-            var copy = new DriverMode();
+            var copy = new AnalyticValueDriverMode();
 
             copy.Key = source.Key;
             copy.Name = source.Name;
@@ -99,7 +99,7 @@ namespace APLPX.UI.WPF.Helpers
             copy.Sort = source.Sort;
             copy.IsSelected = source.IsSelected;
 
-            foreach (DriverGroup driverGroup in source.Groups)
+            foreach (ValueDriverGroup driverGroup in source.Groups)
             {
                 var driverGroupCopy = driverGroup.Copy();
                 source.Groups.Add(driverGroupCopy);
@@ -108,9 +108,9 @@ namespace APLPX.UI.WPF.Helpers
             return copy;
         }
 
-        public static DriverGroup Copy(this DriverGroup source)
+        public static ValueDriverGroup Copy(this ValueDriverGroup source)
         {
-            var copy = new DriverGroup();
+            var copy = new ValueDriverGroup();
 
             copy.Id = source.Id;
             copy.Value = source.Value;
@@ -160,14 +160,16 @@ namespace APLPX.UI.WPF.Helpers
         }
 
         /// <summary>
-        /// Creates a copy of a <see cref="PriceListGroup"/>.
+        /// Creates a copy of a <see cref="AnalyticPriceListGroup"/>.
         /// </summary>
-        public static PriceListGroup Copy(this PriceListGroup source)
+        public static AnalyticPriceListGroup Copy(this AnalyticPriceListGroup source)
         {
-            var copy = new PriceListGroup();
-
+            var copy = new AnalyticPriceListGroup();
+            
+            copy.Key = source.Key;
+            copy.Name = source.Name;
+            copy.Title = source.Title;
             copy.Sort = source.Sort;
-            copy.TypeName = source.TypeName;
 
             foreach (PriceList priceList in source.PriceLists)
             {

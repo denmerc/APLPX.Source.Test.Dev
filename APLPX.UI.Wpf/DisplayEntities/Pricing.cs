@@ -12,10 +12,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _id;
         private PricingIdentity _identity;
         private List<PricingDriver> _drivers;
-        private List<PriceListGroup> _priceListGroups;
+        private List<AnalyticPriceListGroup> _priceListGroups;
         private List<FilterGroup> _filterGroups;       
         private List<PricingResult> _results;
         private string _searchKey;
+        private string _parentKey;
+        private bool _canNameChange;
 
         #endregion
 
@@ -25,7 +27,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             Identity = new PricingIdentity();
             Drivers = new List<PricingDriver>();
-            PriceListGroups = new List<PriceListGroup>();
+            PriceListGroups = new List<AnalyticPriceListGroup>();
             FilterGroups = new List<FilterGroup>();            
             Results = new List<PricingResult>();
         }
@@ -51,7 +53,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _drivers, value); }
         }
 
-        public List<PriceListGroup> PriceListGroups
+        public List<AnalyticPriceListGroup> PriceListGroups
         {
             get { return _priceListGroups; }
             set { this.RaiseAndSetIfChanged(ref _priceListGroups, value); }
@@ -73,15 +75,27 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region ISearchableEntity
 
+        public string ParentKey
+        {
+            get { return _parentKey; }
+            set { _parentKey = value; }
+        }
+
         public string SearchKey
         {
             get { return _searchKey; }
-            set { _searchKey = value; }
+            set { this.RaiseAndSetIfChanged(ref _searchKey, value); }
         }
 
         public string EntityTypeName
         {
             get { return this.GetType().Name; }
+        }
+
+        public bool CanNameChange
+        {
+            get { return _canNameChange; }
+            set { _canNameChange = value; }
         }
 
         #endregion

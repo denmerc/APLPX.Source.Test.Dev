@@ -10,9 +10,9 @@ namespace APLPX.UI.WPF.Mappers
     /// </summary>
     public static class DriverGroupMapper
     {
-        public static Display.DriverGroup ToDisplayEntity(this DTO.AnalyticDriverGroup dto)
+        public static Display.ValueDriverGroup ToDisplayEntity(this DTO.AnalyticDriverGroup dto)
         {
-            var displayEntity = new Display.DriverGroup();
+            var displayEntity = new Display.ValueDriverGroup();
 
             displayEntity.Id = dto.Id;
             displayEntity.Value = dto.Value;
@@ -23,7 +23,7 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
-        public static Client.Entity.AnalyticDriverGroup ToDto(this Display.DriverGroup displayEntity)
+        public static Client.Entity.AnalyticDriverGroup ToDto(this Display.ValueDriverGroup displayEntity)
         {
             var dto = new Client.Entity.AnalyticDriverGroup(
                                             displayEntity.Id,

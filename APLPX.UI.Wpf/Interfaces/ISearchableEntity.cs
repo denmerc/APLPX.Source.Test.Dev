@@ -14,6 +14,11 @@ namespace APLPX.UI.WPF.Interfaces
         int Id { get; set; }
 
         /// <summary>
+        /// Gets/sets the parent key of this item.
+        /// </summary>
+        string ParentKey { get; set; }
+
+        /// <summary>
         /// Gets/sets the search key of this item.
         /// </summary>
         string SearchKey { get; set; }
@@ -22,5 +27,10 @@ namespace APLPX.UI.WPF.Interfaces
         /// Gets the type name of the concrete entity.
         /// </summary>
         string EntityTypeName { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the entity can be changed by the user.
+        /// </summary>
+        bool CanNameChange { get; set; }
     }
 }

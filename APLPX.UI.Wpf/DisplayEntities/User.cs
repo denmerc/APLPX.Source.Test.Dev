@@ -12,7 +12,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private int _id;
-        private string _searchKey;
         private string _sqlKey;
         private UserIdentity _identity;
         private UserRole _role;
@@ -21,6 +20,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _oldPassword;
         private string _newPassword;
         private List<SQLEnumeration> _roleTypes;
+        private string _searchKey;
+        private string _parentKey;
+        private bool _canNameChange;
 
         #endregion
 
@@ -28,7 +30,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public User()
         {
-            Identity = new UserIdentity();           
+            Identity = new UserIdentity();
             Modules = new List<Module>();
             Role = new UserRole();
             RoleTypes = new List<SQLEnumeration>();
@@ -96,10 +98,16 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region ISearchableEntity
 
+        public string ParentKey
+        {
+            get { return _parentKey; }
+            set { _parentKey = value; }
+        }
+
         public string SearchKey
         {
             get { return _searchKey; }
-            set { _searchKey = value; }
+            set { this.RaiseAndSetIfChanged(ref _searchKey, value); }
         }
 
         public string EntityTypeName
@@ -107,6 +115,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return this.GetType().Name; }
         }
 
+        public bool CanNameChange
+        {
+            get { return _canNameChange; }
+            set { _canNameChange = value; }
+        }
         #endregion
     }
 }

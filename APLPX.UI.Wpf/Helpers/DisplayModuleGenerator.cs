@@ -273,13 +273,13 @@ namespace APLPX.UI.WPF.Helpers
             return result;
         }
 
-        private List<PriceListGroup> GetSamplePriceListGroups()
+        private List<AnalyticPriceListGroup> GetSamplePriceListGroups()
         {
-            var result = new List<PriceListGroup>();
+            var result = new List<AnalyticPriceListGroup>();
 
             for (int groupIndex = 1; groupIndex <= 3; groupIndex++)
             {
-                PriceListGroup group = new PriceListGroup { TypeName = "Price List Group " + groupIndex, Sort = (short)groupIndex };
+                AnalyticPriceListGroup group = new AnalyticPriceListGroup { Name = "Price List Group " + groupIndex, Sort = (short)groupIndex };
 
                 for (int priceListIndex = 1; priceListIndex <= 5; priceListIndex++)
                 {
@@ -300,23 +300,23 @@ namespace APLPX.UI.WPF.Helpers
             return result;
         }
 
-        private List<AnalyticDriver> GetSampleAnalyticDrivers()
+        private List<AnalyticValueDriver> GetSampleAnalyticDrivers()
         {
-            var result = new List<AnalyticDriver>();
+            var result = new List<AnalyticValueDriver>();
             string[] driverNames = { "Markup", "Movement", "Days On Hand" };
             for (int driverIndex = 0; driverIndex < driverNames.Length; driverIndex++)
             {
-                var driver = new AnalyticDriver { Id = driverIndex + 21, Name = driverNames[driverIndex], Sort = (short)driverIndex };
-                var mode = new DriverMode
+                var driver = new AnalyticValueDriver { Id = driverIndex + 21, Name = driverNames[driverIndex], Sort = (short)driverIndex };
+                var mode = new AnalyticValueDriverMode
                 {
                     Name = "Auto Generated groups",
                     Key = 29,
                     Sort = 0,
                     IsSelected = true
                 };
-                DriverGroup group = new DriverGroup { Id = 68, Value = 3, MinOutlier = 0.0M, MaxOutlier = 5.0M, Sort = 3 };
+                ValueDriverGroup group = new ValueDriverGroup { Id = 68, Value = 3, MinOutlier = 0.0M, MaxOutlier = 5.0M, Sort = 3 };
 
-                mode = new DriverMode
+                mode = new AnalyticValueDriverMode
                 {
                     Name = "User defined groups",
                     Key = 30,
@@ -327,7 +327,7 @@ namespace APLPX.UI.WPF.Helpers
                 for (int groupIndex = 1; groupIndex <= 5; groupIndex++)
                 {
                     minOutlier += 1.0M;
-                    group = new DriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1.0M, Sort = (short)groupIndex };
+                    group = new ValueDriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1.0M, Sort = (short)groupIndex };
                     mode.Groups.Add(group);
                 }
                 driver.Modes.Add(mode);

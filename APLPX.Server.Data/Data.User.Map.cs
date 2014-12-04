@@ -343,10 +343,10 @@ namespace APLPX.Server.Data {
 
             while (reader.Read()) {
                 list.Add(new SQLEnumeration(
-                    Int16.Parse(reader[UserMap.Names.enumSort].ToString()),
                     Int16.Parse(reader[UserMap.Names.enumValue].ToString()),
                     reader[UserMap.Names.enumName].ToString(),
-                    reader[UserMap.Names.enumDescription].ToString()
+                    reader[UserMap.Names.enumDescription].ToString(),
+                    Int16.Parse(reader[UserMap.Names.enumSort].ToString())
                 ));
             }
 

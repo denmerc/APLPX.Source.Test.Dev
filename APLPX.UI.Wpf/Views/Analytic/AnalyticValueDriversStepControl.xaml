@@ -4,20 +4,25 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:converters="clr-namespace:APLPX.UI.WPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:APLPX.UI.WPF.Helpers"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d">
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <CollectionViewSource x:Key="cvsDrivers" Source="{Binding Path=Drivers}">
+            <CollectionViewSource x:Key="cvsDrivers" Source="{Binding Path=Entity.ValueDrivers}">
                 <CollectionViewSource.SortDescriptions>
                     <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
 
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
 
+            <SolidColorBrush x:Key="editableTextBackground" Color="LightBlue"/>
+            <SolidColorBrush x:Key="editableTextForeground" Color="Black"/>
+            
             <!--  TODO: move this to common styles. Intended for use with titles of list boxes, data grids. etc.  -->
             <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
                 <Setter Property="TextAlignment" Value="Center" />
@@ -26,10 +31,13 @@
                 <Setter Property="Margin" Value="5" />
             </Style>
 
-            <Style x:Key="EditTextBoxStyle" TargetType="TextBox">
+            <Style x:Key="EditTextBoxStyle"
+                   BasedOn="{StaticResource TextBoxStyle1}"
+                   TargetType="TextBox">
                 <Setter Property="Width" Value="55" />
                 <Setter Property="Height" Value="23" />
                 <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="helpers:TextBoxHelper.SelectAllTextOnFocus" Value="True" />
             </Style>
 
             <ResourceDictionary.MergedDictionaries>
@@ -37,7 +45,6 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
-                <!--  <ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />  -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -46,24 +53,18 @@
         <EventTrigger RoutedEvent="UserControl.Loaded">
             <BeginStoryboard>
                 <Storyboard>
-                    <DoubleAnimation Duration="0:2:0"
-                                     FillBehavior="Stop"
+                    <DoubleAnimation x:Name="fadeIn"
+                                     Duration="0:0:1"
                                      From="0"
-                                     Storyboard.TargetName="DriverGroupsDataGrid"
-                                     Storyboard.TargetProperty="Opacity"
-                                     To="100" />
+                                     Storyboard.TargetProperty="(UIElement.Opacity)"
+                                     To="1" />
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="Black">
-        <!--
-            <Grid.Background>
-            <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg" Stretch="UniformToFill" />
-            </Grid.Background>
-        -->
 
+    <Grid x:Name="LayoutRoot" Background="Black">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -72,6 +73,7 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -85,19 +87,23 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
                    Style="{StaticResource ListTitleTextStyle}"
-                   Text="Modes" />
+                   Text="Modes"
+                   Visibility="Collapsed" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="2"
                    Style="{StaticResource ListTitleTextStyle}"
-                   Text="Driver Groups" />
+                   Text="Driver Groups"
+                   Visibility="{Binding ElementName=DriveGroupConfigurationGrid,
+                                        Path=Visibility}" />
 
         <ListBox x:Name="DriversListBox"
                  Grid.Row="1"
                  Grid.RowSpan="2"
                  Grid.Column="0"
-                 ItemsSource="{Binding Source={StaticResource cvsDrivers}}"
-                 SelectedIndex="0">
+                 Margin="20, 0"
+                 ItemsSource="{Binding Path=Entity.ValueDrivers}"
+                 SelectedItem="{Binding Path=Entity.SelectedValueDriver}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -116,7 +122,8 @@
                  Grid.Column="1"
                  ItemsSource="{Binding ElementName=DriversListBox,
                                        Path=SelectedItem.Modes}"
-                 SelectedIndex="0">
+                 SelectedItem="{Binding Path=Entity.SelectedValueDriver.SelectedMode}"
+                 Visibility="Collapsed">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -134,10 +141,14 @@
         <Grid x:Name="DriveGroupConfigurationGrid"
               Grid.Row="1"
               Grid.Column="2"
-              Margin="10,0"
-              DataContext="{Binding ElementName=DriverModesListBox,
-                                    Path=SelectedItem}">
+              Margin="20,0"
+              DataContext="{Binding Path=Entity.SelectedValueDriver.Mode}"
+              Visibility="{Binding ElementName=LayoutRoot,
+                                   Path=DataContext.IsValueDriverSelected,
+                                   Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -165,48 +176,145 @@
                                     Minimum="1"
                                     Value="{Binding Path=GroupCount}" />
 
+            <StackPanel x:Name="ModeSelectionPanel"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Orientation="Horizontal">
+                <RadioButton x:Name="rdoIsAuto"
+                             Margin="5"
+                             VerticalAlignment="Center"
+                             Content="Auto Generated"
+                             IsChecked="{Binding Path=IsAutoGenerated}" />
+
+                <RadioButton x:Name="rdoIsManual"
+                             Margin="10,5"
+                             VerticalAlignment="Center"
+                             Content="User Defined"
+                             IsChecked="{Binding ElementName=rdoIsAuto,
+                                                 Path=IsChecked,
+                                                 Converter={StaticResource InverseBooleanConverter}}" />
+            </StackPanel>
+
             <Grid x:Name="DriverGroupRangeGrid"
                   Grid.Row="1"
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
-                  Visibility="{Binding ElementName=DriverModesListBox,
-                                       Path=SelectedItem.IsAutoGenerated,
-                                       Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                  Visibility="Collapsed">
+                <!--
+                    Visibility="{Binding ElementName=DriverModesListBox,
+                    Path=SelectedItem.IsAutoGenerated,
+                    Converter={StaticResource BooleanToVisibilityConverter}}"
+                -->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />                   
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0"
                        Content="_Lower:"
                        FontSize="16"
                        Foreground="{StaticResource Foreground}"
-                       Target="{Binding ElementName=txtRangeMin}"/>
+                       Target="{Binding ElementName=txtRangeMin}" />
                 <TextBox x:Name="txtRangeMin"
                          Grid.Column="1"
+                         Grid.ColumnSpan="2"
                          Margin="5,4"
-                         Text="{Binding Path=LowerLimit}"
-                         Style="{StaticResource EditTextBoxStyle}" />
+                         Style="{StaticResource EditTextBoxStyle}"
+                         Text="{Binding Path=LowerLimit}" />
 
-                <Label Grid.Column="2"
+                <Label Grid.Column="3"
                        Content="_Upper:"
                        FontSize="16"
                        Foreground="{StaticResource Foreground}"
                        Target="{Binding ElementName=txtRangeMax}" />
 
                 <TextBox x:Name="txtRangeMax"
-                         Grid.Column="3"
+                         Grid.Column="4"
                          Margin="5,4"
-                         Text="{Binding Path=UpperLimit}"
-                         Style="{StaticResource EditTextBoxStyle}" />
+                         Style="{StaticResource EditTextBoxStyle}"
+                         Text="{Binding Path=UpperLimit}" />
             </Grid>
 
         </Grid>
 
+        <MenuItem Grid.Row="1"
+                  Grid.Column="3"
+                  VerticalAlignment="Top"
+                  Margin="15,5,0,0"
+                  Background="DarkGray"
+                  Command="{Binding ElementName=LayoutRoot,
+                                    Path=DataContext.AutoCalculateCommand}"
+                  FontSize="16"
+                  Foreground="Blue"
+                  Header="Run"
+                  Style="{x:Null}"
+                  ToolTip="Automatically calculate the groups for this value driver."
+                  Visibility="{Binding ElementName=DriveGroupConfigurationGrid,
+                                       Path=Visibility}" />
+
         <DataGrid x:Name="DriverGroupsDataGrid"
+                  Grid.Row="2"
+                  Grid.Column="2"
+                  VerticalAlignment="Top"
+                  AutoGenerateColumns="False"
+                  BeginningEdit="DriverGroupsDataGrid_BeginningEdit"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  ItemsSource="{Binding Path=Entity.SelectedValueDriver.Mode.Groups}"
+                  Visibility="{Binding Path=IsValueDriverSelected,
+                                       Converter={StaticResource BooleanToVisibilityConverter}}">
+            <DataGrid.Resources>
+                <Style x:Key="GroupMinElementStyle" TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsMinValueEditable}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource editableTextBackground}" />
+                            <Setter Property="Foreground" Value="{StaticResource editableTextForeground}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="GroupMaxElementStyle" TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsMaxValueEditable}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource editableTextBackground}" />
+                            <Setter Property="Foreground" Value="{StaticResource editableTextForeground}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="GroupMinEditingElementStyle"
+                       BasedOn="{StaticResource EditTextBoxStyle}"
+                       TargetType="TextBox">
+                    <Setter Property="IsEnabled" Value="{Binding Path=IsMinValueEditable}" />
+                </Style>
+                <Style x:Key="GroupMaxEditingElementStyle"
+                       BasedOn="{StaticResource EditTextBoxStyle}"
+                       TargetType="TextBox">
+                    <Setter Property="IsEnabled" Value="{Binding Path=IsMaxValueEditable}" />
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="colGroup"
+                                    Binding="{Binding Path=Value}"
+                                    Header="Group" />
+
+                <DataGridTextColumn x:Name="colLower"
+                                    Binding="{Binding Path=MinOutlier}"
+                                    EditingElementStyle="{StaticResource GroupMinEditingElementStyle}"
+                                    ElementStyle="{StaticResource GroupMinElementStyle}"
+                                    Header="Lower Limit" />
+
+                <DataGridTextColumn x:Name="colUpper"
+                                    Binding="{Binding Path=MaxOutlier}"
+                                    EditingElementStyle="{StaticResource GroupMaxEditingElementStyle}"
+                                    ElementStyle="{StaticResource GroupMaxElementStyle}"
+                                    Header="Upper Limit" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid x:Name="DriverGroupsDataGrid0"
                   Grid.Row="2"
                   Grid.Column="2"
                   Height="500"
@@ -216,17 +324,19 @@
                   CanUserDeleteRows="False"
                   ItemsSource="{Binding ElementName=DriverModesListBox,
                                         Path=SelectedItem.Groups}"
-                  Visibility="{Binding ElementName=DriverModesListBox,
-                                       Path=SelectedItem.IsAutoGenerated,
-                                       Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-
+                  Visibility="Collapsed">
+            <!--
+                Visibility="{Binding ElementName=DriverModesListBox,
+                Path=SelectedItem.IsAutoGenerated,
+                Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+            -->
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Value}" Header="Group" />
                 <DataGridTextColumn Binding="{Binding Path=MinOutlier}" Header="Lower Limit" />
                 <DataGridTextColumn Binding="{Binding Path=MaxOutlier}" Header="Upper Limit" />
             </DataGrid.Columns>
-
         </DataGrid>
+
 
     </Grid>
 </UserControl>

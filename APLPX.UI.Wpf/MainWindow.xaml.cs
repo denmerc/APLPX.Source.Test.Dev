@@ -6,6 +6,7 @@ using System.Windows.Interop;
 using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.Views;
 using MahApps.Metro.Controls;
+using APLPX.UI.WPF.Themes;
 
 namespace APLPX.UI.WPF
 {
@@ -42,6 +43,8 @@ namespace APLPX.UI.WPF
 
         private EventAggregator _eventManager;
 
+        ThemeManager manager = new ThemeManager();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -53,6 +56,14 @@ namespace APLPX.UI.WPF
                {
                    ShowMessageToaster(action);
                });
+
+            // Set the itemsource to the list of theme names.
+            themePicker.ItemsSource = manager.ThemeNameList;
+            // Set the start item to the default theme.
+            themePicker.SelectedItem = "dark";
+
+            
+            
         }
 
         private void ShowMessageToaster(OperationCompletedEvent action)
@@ -124,6 +135,12 @@ namespace APLPX.UI.WPF
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
+        }
+
+        private void themePicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // When they change the selection, just set the theme to the selected value.
+            manager.SetTheme(themePicker.SelectedValue.ToString());
         }
     }
 }

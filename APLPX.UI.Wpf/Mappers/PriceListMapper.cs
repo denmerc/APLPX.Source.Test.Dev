@@ -45,11 +45,14 @@ namespace APLPX.UI.WPF.Mappers
 
         #region PriceListGroup
 
-        public static Display.PriceListGroup ToDisplayEntity(this DTO.PriceListGroup dto)
+        public static Display.AnalyticPriceListGroup ToDisplayEntity(this DTO.PriceListGroup dto)
         {
-            var displayEntity = new Display.PriceListGroup();
+            var displayEntity = new Display.AnalyticPriceListGroup();
 
-            displayEntity.TypeName = dto.TypeName;
+            //TODO: UNCOMMENT
+            //displayEntity.Key = dto.Key;
+            //displayEntity.Name = dto.Name;
+            //displayEntity.Title = dto.Title;
 
             if (dto.PriceLists != null)
             {
@@ -59,7 +62,7 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
-        public static DTO.PriceListGroup ToDto(this Display.PriceListGroup displayEntity)
+        public static DTO.PriceListGroup ToDto(this Display.AnalyticPriceListGroup displayEntity)
         {
             List<DTO.PriceList> priceLists = new List<DTO.PriceList>();
             foreach (Display.PriceList priceList in displayEntity.PriceLists)
@@ -67,7 +70,8 @@ namespace APLPX.UI.WPF.Mappers
                 priceLists.Add(priceList.ToDto());
             }
 
-            var dto = new DTO.PriceListGroup(displayEntity.Sort, displayEntity.TypeName, priceLists);
+            //TODO: update w/new fields
+            var dto = new DTO.PriceListGroup(displayEntity.Sort, displayEntity.Name, priceLists);
 
             return dto;
         }

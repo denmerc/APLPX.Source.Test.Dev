@@ -13,7 +13,7 @@
              mc:Ignorable="d">
 
 
-    <Grid x:Name="LayoutRoot" Background="{StaticResource ContentBack}">
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <!--
             <Grid.Background>
             <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg"
@@ -34,8 +34,8 @@
                     Visibility="{Binding IsDetailDisplayed,
                                          Converter={StaticResource BooleanToVisibilityConverter}}">
             <Label Width="500"
-                   Margin="5,10,0,15"
-                   Style="{StaticResource LabelStyle3}">
+                   Margin="5,30,0,15"
+                   Style="{StaticResource SearchControlTitleLabelStyle}">
                 <Label.Content>
                     <AccessText Text="{Binding Path=SelectedFeature.SelectedEntity.Identity.Name, StringFormat='Details: {0}'}" TextTrimming="CharacterEllipsis" />
                 </Label.Content>
@@ -45,13 +45,14 @@
                     Margin="0,5,0,0"
                     BorderBrush="#828790"
                     BorderThickness="1"
-                    CornerRadius="5">
+                    CornerRadius="5"            
+                    Background="{DynamicResource SearchControlSelectedItemDetailBackgroundColor}" >
 
                 <Grid x:Name="SelectedItemDetailGrid"
                       Margin="10,5"
                       DataContext="{Binding Path=SelectedFeature.SelectedEntity}">
                     <Grid.Resources>
-                        <Style BasedOn="{StaticResource searchControlSelectedItemDetailGridStyle}" TargetType="{x:Type TextBlock}" />
+                        <Style BasedOn="{StaticResource SearchControlSelectedItemDetailStyle}" TargetType="{x:Type TextBlock}" />
                     </Grid.Resources>
 
 

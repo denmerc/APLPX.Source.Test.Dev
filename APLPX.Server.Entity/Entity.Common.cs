@@ -4,79 +4,6 @@ using System.Runtime.Serialization;
 
 namespace APLPX.Server.Entity
 {
-    [DataContract]
-    public class PriceListGroup
-    {
-        #region Initialize...
-        public PriceListGroup() { }
-        public PriceListGroup(
-            List<PriceList> priceLists
-            ) {
-                this.PriceLists = priceLists;
-        }
-        public PriceListGroup(
-            short sort,
-            string typeName,
-            List<PriceList> priceLists
-            ) {
-            Sort = sort;
-            TypeName = typeName;
-            PriceLists = priceLists;
-        }
-        #endregion
-
-        [DataMember]
-        public string TypeName; //CLIENT { get; private set; }
-        [DataMember]
-        public List<PriceList> PriceLists; //CLIENT { get; private set; }
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-    }
-
-    [DataContract]
-    public class PriceList
-    {
-        #region Initialize...
-        public PriceList() { }
-        public PriceList(
-            int id,
-            int key,
-            bool isSelected
-            ) {
-            Id = id;
-            Key = key;
-            IsSelected = isSelected;
-        }
-        public PriceList(
-            int id,
-            int key,
-            string code,
-            string name,
-            bool isSelected,
-            short sort
-            ) {
-            Id = id;
-            Key = key;
-            Code = code;
-            Name = name;
-            IsSelected = isSelected;
-            Sort = sort;
-        }
-        #endregion
-
-        [DataMember]
-        public int Id; //CLIENT { get; private set; }
-        [DataMember]
-        public int Key; //CLIENT { get; private set; }
-        [DataMember]
-        public string Code; //CLIENT { get; private set; }
-        [DataMember]
-        public string Name; //CLIENT { get; private set; }
-        [DataMember]
-        public bool IsSelected; //CLIENT { get; set; }
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-    }
 
     [DataContract]
     public class FilterGroup
@@ -147,237 +74,400 @@ namespace APLPX.Server.Entity
         [DataMember]
         public string Name; //CLIENT { get; private set; }
         [DataMember]
+        public short Sort; //CLIENT { get; private set; }
+        [DataMember]
         public bool IsSelected; //CLIENT { get; set; }
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]
-    public class Module //Workflow groups
+    public class ValueDriver
     {
         #region Initialize...
-        public Module() { }
-        public Module(
+        public ValueDriver() { }
+        public ValueDriver(
+            int id,
+            int key,
+            bool isSelected
+            ) {
+            Id = id;
+            Key = key;
+            IsSelected = isSelected;
+        }
+        public ValueDriver(
+            int id,
+            int key,
+            bool isSelected,
             string name,
             string title,
-            short sort,
-            ModuleType type,
-            List<ModuleFeature> features
-        ) {
-            Name = name;
-            Title = title;
-            Sort = sort;
-            Type = type;
-            Features = features;
-        }
-        #endregion
-
-        [DataMember]
-        public ModuleType Type; //CLIENT { get; private set; }
-        [DataMember]
-        public string Name; //CLIENT { get; private set; }
-        [DataMember]
-        public string Title; //CLIENT { get; private set; }
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-        [DataMember]
-        public List<ModuleFeature> Features; //CLIENT { get; private set; }
-    }
-
-    [DataContract]
-    public class ModuleFeature  //Workflow Views
-    {
-        #region Initialize...
-        public ModuleFeature() { }
-        public ModuleFeature(
-            string name,
-            string title,
-            short sort,
-            ModuleFeatureType type,
-            ModuleFeatureStepType landingStepType,
-            ModuleFeatureStepType actionStepType,
-            List<ModuleFeatureStep> steps,
-            List<FeatureSearchGroup> searchGroups
-            ) {
-            Name = name;
-            Title = title;
-            Sort = sort;
-            Type = type;
-            LandingStepType = landingStepType;
-            ActionStepType = actionStepType;
-            Steps = steps;
-            SearchGroups = searchGroups;
-        }
-        #endregion
-
-        [DataMember]
-        public ModuleFeatureType Type; //CLIENT { get; private set; }
-        [DataMember]
-        public ModuleFeatureStepType LandingStepType; //CLIENT { get; private set; }
-        [DataMember]
-        public ModuleFeatureStepType ActionStepType; //CLIENT { get; private set; }
-        [DataMember]
-        public string Name; //CLIENT { get; private set; }
-        [DataMember]
-        public string Title; //CLIENT { get; private set; }
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-        [DataMember]
-        public List<ModuleFeatureStep> Steps; //CLIENT { get; private set; }
-        [DataMember]
-        public List<FeatureSearchGroup> SearchGroups; //CLIENT { get; private set; }
-    }
-
-    [DataContract]
-    public class ModuleFeatureStep //Workflow View Steps
-    {
-        #region Initialize...
-        public ModuleFeatureStep() { }
-        public ModuleFeatureStep(
-            string name,
-            string title,
-            short sort,
-            ModuleFeatureStepType type,
-            List<ModuleFeatureStepError> errors,
-            List<ModuleFeatureStepAdvisor> advisors,
-            List<ModuleFeatureStepAction> actions
-            ) {
-            Name = name;
-            Title = title;
-            Sort = sort;
-            Type = type;
-            Errors = errors;
-            Advisors = advisors;
-            Actions = actions;
-        }
-        #endregion
-
-        [DataMember]
-        public ModuleFeatureStepType Type; //CLIENT { get; private set; }
-        [DataMember]
-        public string Name; //CLIENT { get; private set; }
-        [DataMember]
-        public string Title; //CLIENT { get; private set; }
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-        [DataMember]
-        public List<ModuleFeatureStepError> Errors; //CLIENT { get; private set; }
-        [DataMember]
-        public List<ModuleFeatureStepAdvisor> Advisors; //CLIENT { get; private set; }
-        [DataMember]
-        public List<ModuleFeatureStepAction> Actions; //CLIENT { get; private set; }
-    }
-
-    [DataContract]
-    public class ModuleFeatureStepAction
-    {
-        #region Initialize...
-        public ModuleFeatureStepAction() { }
-        public ModuleFeatureStepAction(
-            string name,
-            string parentName,
-            string title,
-            short sort,
-            ModuleFeatureStepActionType type
-            ) {
-            Name = name;
-            ParentName = parentName;
-            Title = title;
-            Sort = sort;
-            Type = type;
-        }
-        #endregion
-
-        [DataMember]
-        public string Name; //CLIENT { get; private set; }
-        [DataMember]
-        public string ParentName; //CLIENT { get; private set; }
-        [DataMember]
-        public string Title; //CLIENT { get; private set; }
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-        [DataMember]
-        public ModuleFeatureStepActionType Type; //CLIENT { get; private set; }
-    }
-
-    [DataContract]
-    public class ModuleFeatureStepAdvisor
-    {
-        #region Initialize...
-        public ModuleFeatureStepAdvisor() { }
-        public ModuleFeatureStepAdvisor(
-            short sort,
-            string message
-            ) {
-            Sort = sort;
-            Message = message;
-        }
-        #endregion
-
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-        [DataMember]
-        public string Message; //CLIENT { get; private set; }
-    }
-
-    [DataContract]
-    public class ModuleFeatureStepError
-    {
-        #region Initialize...
-        public ModuleFeatureStepError() { }
-        public ModuleFeatureStepError(
-            short sort,
-            string message
-            ) {
-            Sort = sort;
-            Message = message;
-        }
-        #endregion
-
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-        [DataMember]
-        public string Message; //CLIENT { get; set; }
-    }
-
-    [DataContract]
-    public class FeatureSearchGroup
-    {
-        #region Initialize...
-        public FeatureSearchGroup() { }
-        public FeatureSearchGroup(
-            string name,
-            short itemCount,
-            string searchKey,
-            string parentName,
-            bool isNameChanged,
-            bool canNameChange,
             short sort
             ) {
+            Id = id;
+            Key = key;
             Name = name;
-            ItemCount = itemCount;
-            SearchKey = searchKey;
-            ParentName = parentName;
-            IsNameChanged = isNameChanged;
-            CanNameChange = canNameChange;
+            Title = title;
+            Sort = sort;
+            IsSelected = isSelected;
+        }
+        #endregion
+
+        [DataMember]
+        public int Id; //CLIENT { get; private set; }
+        [DataMember]
+        public int Key; //CLIENT { get; private set; }
+        [DataMember]
+        public string Name; //CLIENT { get; private set; }
+        [DataMember]
+        public string Title; //CLIENT { get; private set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
+        [DataMember]
+        public bool IsSelected; //CLIENT { get; set; }
+    }
+
+    [DataContract]
+    public class ValueDriverMode
+    {
+        #region Initialize...
+        public ValueDriverMode() { }
+        public ValueDriverMode(
+            int key,
+            bool isSelected
+            ) {
+            Key = key;
+            IsSelected = isSelected;
+        }
+        public ValueDriverMode(
+            int key,
+            bool isSelected,
+            string name,
+            string title,
+            short sort
+            ) {
+            Key = key;
+            Name = name;
+            Title = title;
+            Sort = sort;
+            IsSelected = isSelected;
+        }
+        #endregion
+
+        [DataMember]
+        public int Key; //CLIENT { get; private set; }
+        [DataMember]
+        public string Name; //CLIENT { get; private set; }
+        [DataMember]
+        public string Title; //CLIENT { get; private set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
+        [DataMember]
+        public bool IsSelected; //CLIENT { get; set; }
+    }
+
+    [DataContract]
+    public class ValueDriverGroup
+    {
+        #region Initialize...
+        public ValueDriverGroup() { }
+        public ValueDriverGroup(
+            short value,
+            int minOutlier,
+            int maxOutlier
+            ) {
+            Id = 0;
+            Value = value;
+            MinOutlier = minOutlier;
+            MaxOutlier = maxOutlier;
+        }
+        public ValueDriverGroup(
+            int id,
+            short value,
+            int minOutlier,
+            int maxOutlier
+            ) {
+            Id = id;
+            Value = value;
+            MinOutlier = minOutlier;
+            MaxOutlier = maxOutlier;
+        }
+        public ValueDriverGroup(
+            int id,
+            short value,
+            int minOutlier,
+            int maxOutlier,
+            short sort
+            ) {
+            Id = id;
+            Value = value;
+            MinOutlier = minOutlier;
+            MaxOutlier = maxOutlier;
             Sort = sort;
         }
         #endregion
 
         [DataMember]
-        public string SearchKey; //CLIENT { get; private set; }
+        public int Id; //CLIENT { get; private set; }
         [DataMember]
-        public string Name; //CLIENT { get; set; }
+        public short Value; //CLIENT { get; set; }
         [DataMember]
-        public short ItemCount; //CLIENT { get; set; }
+        public int MinOutlier; //CLIENT { get; set; }
         [DataMember]
-        public string ParentName; //CLIENT { get; private set; }
+        public int MaxOutlier; //CLIENT { get; set; }
         [DataMember]
-        public bool IsNameChanged; //CLIENT { get; set; }
+        public short Sort; //CLIENT { get; set; }
+    }
+
+    [DataContract]
+    public class PriceListGroup
+    {
+        #region Initialize...
+        public PriceListGroup() { }
+        public PriceListGroup(
+            int key,
+            string name,
+            string title,
+            short sort
+            ) {
+            Key = key;
+            Name = name;
+            Title = title;
+            Sort = sort;
+        }
+        #endregion
+
         [DataMember]
-        public bool CanNameChange; //CLIENT { get; private set; }
+        public int Key; //CLIENT { get; private set; }
+        [DataMember]
+        public string Name; //CLIENT { get; private set; }
+        [DataMember]
+        public string Title; //CLIENT { get; private set; }
         [DataMember]
         public short Sort; //CLIENT { get; private set; }
+    }
+
+    [DataContract]
+    public class PriceList
+    {
+        #region Initialize...
+        public PriceList() { }
+        public PriceList(
+            int id,
+            int key,
+            bool isSelected
+            ) {
+            Id = id;
+            Key = key;
+            IsSelected = isSelected;
+        }
+        public PriceList(
+            int id,
+            int key,
+            string code,
+            string name,
+            short sort,
+            bool isSelected
+            ) {
+            Id = id;
+            Key = key;
+            Code = code;
+            Name = name;
+            Sort = sort;
+            IsSelected = isSelected;
+        }
+        #endregion
+
+        [DataMember]
+        public int Id; //CLIENT { get; private set; }
+        [DataMember]
+        public int Key; //CLIENT { get; private set; }
+        [DataMember]
+        public string Code; //CLIENT { get; private set; }
+        [DataMember]
+        public string Name; //CLIENT { get; private set; }
+        [DataMember]
+        public string Title; //CLIENT { get; private set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
+        [DataMember]
+        public bool IsSelected; //CLIENT { get; set; }
+    }
+
+    [DataContract]
+    public class PriceMarkupRule
+    {
+        #region initialize...
+        public PriceMarkupRule() { }
+        public PriceMarkupRule(
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            int percentLimitLower,
+            int percentLimitUpper
+            ) {
+            Id = 0;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            PercentLimitLower = percentLimitLower;
+            PercentLimitUpper = percentLimitUpper;
+        }
+        public PriceMarkupRule(
+            int id,
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            int percentLimitLower,
+            int percentLimitUpper
+            ) {
+            Id = id;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            PercentLimitLower = percentLimitLower;
+            PercentLimitUpper = percentLimitUpper;
+        }
+        public PriceMarkupRule(
+            int id,
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            int percentLimitLower,
+            int percentLimitUpper,
+            short sort
+            ) {
+            Id = id;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            PercentLimitLower = percentLimitLower;
+            PercentLimitUpper = percentLimitUpper;
+            Sort = sort;
+        }
+        #endregion
+
+        [DataMember]
+        public int Id; //CLIENT { get; private set; }
+        [DataMember]
+        public decimal DollarRangeLower; //CLIENT { get; set; }
+        [DataMember]
+        public decimal DollarRangeUpper; //CLIENT { get; set; }
+        [DataMember]
+        public int PercentLimitLower; //CLIENT { get; set; }
+        [DataMember]
+        public int PercentLimitUpper; //CLIENT { get; set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; set; }
+    }
+
+    [DataContract]
+    public class PriceOptimizationRule
+    {
+        #region initialize...
+        public PriceOptimizationRule() { }
+        public PriceOptimizationRule(
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            int percentChange
+            ) {
+            Id = 0;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            PercentChange = percentChange;
+        }
+        public PriceOptimizationRule(
+            int id,
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            int percentChange
+            ) {
+            Id = id;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            PercentChange = percentChange;
+        }
+        public PriceOptimizationRule(
+            int id,
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            int percentChange,
+            short sort
+            ) {
+            Id = id;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            PercentChange = percentChange;
+            Sort = sort;
+        }
+        #endregion
+
+        [DataMember]
+        public int Id; //CLIENT { get; private set; }
+        [DataMember]
+        public decimal DollarRangeLower; //CLIENT { get; set; }
+        [DataMember]
+        public decimal DollarRangeUpper; //CLIENT { get; set; }
+        [DataMember]
+        public decimal PercentChange; //CLIENT { get; set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; set; }
+    }
+
+    [DataContract]
+    public class PriceRoundingRule
+    {
+        #region initialize...
+        public PriceRoundingRule() { }
+        public PriceRoundingRule(
+            int type,
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            decimal valueChange
+            ) {
+            Id = 0;
+            Type = type;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            ValueChange = valueChange;
+        }
+        public PriceRoundingRule(
+            int id,
+            int type,
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            decimal valueChange
+            ) {
+            Id = id;
+            Type = type;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            ValueChange = valueChange;
+        }
+        public PriceRoundingRule(
+            int id,
+            int type,
+            decimal dollarRangeLower,
+            decimal dollarRangeUpper,
+            decimal valueChange,
+            short sort,
+            List<SQLEnumeration> roundingTypes
+            ) {
+            Id = id;
+            Type = type;
+            DollarRangeLower = dollarRangeLower;
+            DollarRangeUpper = dollarRangeUpper;
+            ValueChange = valueChange;
+            Sort = sort;
+            RoundingTypes = roundingTypes;
+        }
+        #endregion
+
+        [DataMember]
+        public int Id; //CLIENT { get; private set; }
+        [DataMember]
+        public int Type; //CLIENT { get; set; }
+        [DataMember]
+        public decimal DollarRangeLower; //CLIENT { get; set; }
+        [DataMember]
+        public decimal DollarRangeUpper; //CLIENT { get; set; }
+        [DataMember]
+        public decimal ValueChange; //CLIENT { get; set; }        
+        [DataMember]
+        public short Sort; //CLIENT { get; set; }
+        [DataMember]
+        public List<SQLEnumeration> RoundingTypes; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -386,25 +476,25 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public SQLEnumeration() { }
         public SQLEnumeration(
-            short sort,
-            short value,
+            int value,
             string name,
-            string description
+            string description,
+            short sort
             ) {
-            Sort = sort;
             Value = value;
             Name = name;
             Description = description;
+            Sort = sort;
         }
         #endregion
 
         [DataMember]
-        public short Sort; //CLIENT { get; private set; }
-        [DataMember]
-        public short Value; //CLIENT { get; private set; }
+        public int Value; //CLIENT { get; private set; }
         [DataMember]
         public string Name; //CLIENT { get; private set; }
         [DataMember]
         public string Description; //CLIENT { get; private set; }
+        [DataMember]
+        public short Sort; //CLIENT { get; private set; }
     }
 }

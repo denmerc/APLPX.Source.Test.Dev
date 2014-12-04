@@ -29,6 +29,8 @@
 
             <!--  Application Styles  -->
 
+            
+            
             <LinearGradientBrush x:Key="ContentBack">
                 <LinearGradientBrush.GradientStops>
                     <GradientStop Offset="0" Color="#121212" />
@@ -44,8 +46,8 @@
 
             <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
                 <Setter Property="Background" Value="#FF333337" />
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="CaretBrush" Value="White" />
+                <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
+                <Setter Property="CaretBrush" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TextBox}">
@@ -60,22 +62,22 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="HeaderTextStyle" TargetType="{x:Type TextBlock}">
+            <Style x:Key="MainWindowHeaderTextStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="14" />
-                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="Foreground" Value="{DynamicResource MainWindowHeaderStyleTextColor}" />
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="Margin" Value="5" />
             </Style>
 
-            <Style x:Key="filteredTextStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="White" />
+            <Style x:Key="AnalyticStepTextStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{DynamicResource AnalyticStepTextColor}" />
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
-            <Style x:Key="searchControlSelectedItemDetailGridStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="White" />
+            <Style x:Key="SearchControlSelectedItemDetailStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{DynamicResource SearchControlSelectedItemDetailTextColor}" />
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="Margin" Value="2,2,5,2" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
@@ -84,7 +86,9 @@
                 <Setter Property="MaxWidth" Value="300" />
             </Style>
 
-            <Style x:Key="mainWindowTextBlockStyle" BasedOn="{StaticResource HeaderTextStyle}" TargetType="{x:Type TextBlock}">
+            <Style x:Key="mainWindowTextBlockStyle"
+                   BasedOn="{StaticResource MainWindowHeaderTextStyle}"
+                   TargetType="{x:Type TextBlock}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=SelectedModule.SelectedFeature}" Value="{x:Null}">
                         <Setter Property="Visibility" Value="Collapsed" />
@@ -93,15 +97,15 @@
             </Style>
 
             <Style x:Key="SearchLblStyle" TargetType="{x:Type Label}">
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="FontSize" Value="25" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
-            <Style x:Key="LabelStyle3" TargetType="{x:Type Label}">
+            <Style x:Key="SearchControlTitleLabelStyle" TargetType="{x:Type Label}">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="AliceBlue" />
+                <Setter Property="Foreground" Value="{DynamicResource SearchControlTitleLabelTextColor}" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
                 <Setter Property="Height" Value="55" />
                 <Setter Property="FontSize" Value="30" />
@@ -152,6 +156,7 @@
                 <Setter Property="Clip" Value="F1 M 0,0L 76,0L 76,76L 0,76L 0,0" />
             </Style>
 
+            <!--  DO NOT CHANGE COLORS RIGHT NOW (THESE ARE THE FEATURE & MODULE ICON COLORS  -->
             <Style x:Key="featureGraphicsPathStyle" TargetType="{x:Type Path}">
                 <Setter Property="Width" Value="75" />
                 <Setter Property="Height" Value="75" />
@@ -166,8 +171,8 @@
                 <Setter Property="Stroke" Value="White" />
                 <Setter Property="Fill" Value="White" />
             </Style>
+            <!--  *************************************************************************  -->
 
-            
             <Style x:Key="commandPathStyle" TargetType="{x:Type Path}">
                 <Setter Property="Height" Value="32" />
                 <Setter Property="Width" Value="32" />
@@ -180,8 +185,8 @@
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5" />
                     </Style>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DodgerBlue" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DodgerBlue" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
                 </Style.Resources>
                 <Setter Property="Margin" Value="0,15,0,0" />
                 <Style.Triggers>
@@ -189,17 +194,20 @@
                         <Setter Property="Margin" Value="15,0,0,0" />
                         <Setter Property="Background" Value="#FF333337" />
                         <Setter Property="Margin" Value="0,2" />
-                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="FontFamily" Value="SegoeUI" />
                         <Setter Property="MaxWidth" Value="300" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ItemCount}" Value="0">
+                    <!--
+                        <DataTrigger Binding="{Binding Path=ItemCount}" Value="0">
                         <Setter Property="IsEnabled" Value="False" />
-                    </DataTrigger>
+                        </DataTrigger>
+                    -->
                     <DataTrigger Binding="{Binding Path=HasSubGroups}" Value="True">
                         <Setter Property="IsEnabled" Value="False" />
                         <Setter Property="FontStyle" Value="Italic" />
+                        <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxTitleTextColor}" /> 
                     </DataTrigger>
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
@@ -220,12 +228,12 @@
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5" />
                     </Style>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DodgerBlue" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DodgerBlue" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
                 </Style.Resources>
                 <Setter Property="Background" Value="#FF333337" />
                 <Setter Property="Margin" Value="0,2" />
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="Width" Value="300" />
@@ -236,7 +244,9 @@
                 </Style.Triggers>
             </Style>
 
-            <Style x:Key="mainWindowItemContainerStyle" BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
+            <Style x:Key="mainWindowItemContainerStyle"
+                   BasedOn="{StaticResource {x:Type ListBoxItem}}"
+                   TargetType="{x:Type ListBoxItem}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=IsEnabled}" Value="False">
                         <Setter Property="IsEnabled" Value="False" />
@@ -274,7 +284,7 @@
 
             <Style x:Key="ListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
                 <Setter Property="Background" Value="{DynamicResource Buttongradient}" />
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
                 <Setter Property="Height" Value="30" />
@@ -296,12 +306,12 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="CornflowerBlue" />
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                                 </Trigger>
 
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Background" Value="CornflowerBlue" />
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

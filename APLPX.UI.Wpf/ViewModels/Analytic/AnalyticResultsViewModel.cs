@@ -15,7 +15,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         public AnalyticResultsViewModel(Display.Analytic entity)
         {
             //SelectedAnalytic = (Domain.Analytic)entity;
-            var results = from d in entity.Drivers
+            var results = from d in entity.ValueDrivers
                           from r in d.Results
                           select new Display.AnalyticResult
                           {

@@ -32,7 +32,7 @@ namespace APLPX.UI.WPF.Mappers
             {
                 foreach (DTO.AnalyticDriver driver in dto.Drivers)
                 {
-                    displayEntity.Drivers.Add(driver.ToDisplayEntity());
+                    displayEntity.ValueDrivers.Add(driver.ToDisplayEntity());
                 }
             }
 
@@ -60,7 +60,7 @@ namespace APLPX.UI.WPF.Mappers
             }            
 
             var drivers = new List<DTO.AnalyticDriver>();
-            foreach (Display.AnalyticDriver driver in displayEntity.Drivers)
+            foreach (Display.AnalyticValueDriver driver in displayEntity.ValueDrivers)
             {
                 drivers.Add(driver.ToDto());
             }           

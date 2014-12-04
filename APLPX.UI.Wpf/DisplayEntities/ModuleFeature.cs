@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using APLPX.Client.Entity;
 using APLPX.UI.WPF.Interfaces;
@@ -162,11 +163,13 @@ namespace APLPX.UI.WPF.DisplayEntities
         /// <summary>
         /// Gets a representation of this feature's Search Groups suitable for display as a list.
         /// </summary>
-        public List<FeatureSearchGroup> SearchGroupDisplayList
+        public ObservableCollection<FeatureSearchGroup> SearchGroupDisplayList
         {
             get
             {
                 var list = new List<FeatureSearchGroup>(this.SearchGroups);
+
+                AssignSearchProperties();
 
                 //Identify items representing sub-groups ("Folder 1", "Folder 2", etc.) 
                 var parentGroups = SearchGroups.GroupBy(sg => sg.ParentName)
@@ -196,7 +199,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                     list.Add(parentGroup);
                 }
 
-                return list;
+                return new ObservableCollection<FeatureSearchGroup>(list);
             }
         }
 
@@ -373,6 +376,29 @@ namespace APLPX.UI.WPF.DisplayEntities
         }
 
         #endregion
+
+        private void AssignSearchProperties()
+        {
+            foreach (FeatureSearchGroup searchGroup in SearchGroups)
+            {
+                var matchingEntities = SearchableEntities.Where(item => item.SearchKey == searchGroup.SearchKey);
+                foreach (ISearchableEntity entity in matchingEntities)
+                {
+                    entity.ParentKey = searchGroup.ParentName;
+                    entity.CanNameChange = searchGroup.CanNameChange;
+                }
+            }
+        }
+
+        public void RecalculateSearchItemCounts()
+        {
+            foreach (FeatureSearchGroup searchGroup in SearchGroups)
+            {
+                var matchingEntities = SearchableEntities.Where(item => item.SearchKey == searchGroup.SearchKey);
+                searchGroup.ItemCount = Convert.ToInt16(matchingEntities.Count());
+            }
+            this.RaisePropertyChanged("SearchGroupDisplayList");
+        }
 
         #region Overrides
 

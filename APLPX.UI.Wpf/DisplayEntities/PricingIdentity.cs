@@ -10,6 +10,7 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
+        private int _analyticsId;
         private string _name;
         private string _description;
         private string _notes;
@@ -36,6 +37,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region Properties
+
+        public int AnalyticsId
+        {
+            get { return _analyticsId; }
+            set { this.RaiseAndSetIfChanged(ref _analyticsId, value); }
+        }
 
         public string Name
         {

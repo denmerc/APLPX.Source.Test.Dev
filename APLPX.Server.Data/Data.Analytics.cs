@@ -225,7 +225,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data.Drivers = sqlMapper.LoadDriversMapData(dataTable);
+                        sessionOut.Data.ValueDrivers = sqlMapper.LoadDriversMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -264,7 +264,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data.Drivers = sqlMapper.LoadDriversMapData(dataTable);
+                        sessionOut.Data.ValueDrivers = sqlMapper.LoadDriversMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -303,7 +303,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data.Drivers = sqlMapper.LoadDriversMapData(dataTable);
+                        sessionOut.Data.ValueDrivers = sqlMapper.LoadDriversMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }
@@ -342,7 +342,7 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.Data.Drivers = sqlMapper.LoadDriversMapData(dataTable);
+                        sessionOut.Data.ValueDrivers = sqlMapper.LoadDriversMapData(dataTable);
                         sessionOut.SessionOk = true;
                     }
                 }

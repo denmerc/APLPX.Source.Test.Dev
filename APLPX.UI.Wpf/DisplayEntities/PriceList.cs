@@ -13,6 +13,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _key;
         private string _code;
         private string _name;
+        private string _title;
         private bool _isSelected;
         private short _sort;
 
@@ -50,6 +51,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _name; }
             set { this.RaiseAndSetIfChanged(ref _name, value); }
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
         public bool IsSelected

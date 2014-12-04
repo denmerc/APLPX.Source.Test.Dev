@@ -46,12 +46,19 @@ namespace APLPX.UI.WPF
                 };
 
                 var userService = new MockUserSevice();
-                session.Modules = userService.Authenticate(session).Modules;
-
-                var mvm = new MainViewModel(session, new MockAnalyticService(), new MockUserSevice());
-                var mainWindow = new MainWindow();
-                mainWindow.DataContext = mvm;
-                mainWindow.Show();
+                DTO.Session<DTO.NullT> response = userService.Authenticate(session);
+                if (response.SessionOk)
+                {
+                    session.Modules = response.Modules;
+                    var mvm = new MainViewModel(session, new MockAnalyticService(), new MockUserSevice());
+                    var mainWindow = new MainWindow();
+                    mainWindow.DataContext = mvm;
+                    mainWindow.Show();
+                }
+                else
+                {
+                    MessageBox.Show(response.ClientMessage);
+                }
             }
             
 

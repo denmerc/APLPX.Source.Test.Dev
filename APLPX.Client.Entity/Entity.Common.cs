@@ -191,6 +191,8 @@ namespace APLPX.Client.Entity
         public short Sort; //CLIENT { get; private set; }
         [DataMember]
         public List<ModuleFeature> Features; //CLIENT { get; private set; }
+        [DataMember]
+        public List<UserRole> Roles;
     }
 
     [DataContract]
@@ -235,6 +237,9 @@ namespace APLPX.Client.Entity
         public List<ModuleFeatureStep> Steps; //CLIENT { get; private set; }
         [DataMember]
         public List<FeatureSearchGroup> SearchGroups; //CLIENT { get; private set; }
+        [DataMember]
+        public List<UserRole> Roles;
+
     }
 
     [DataContract]

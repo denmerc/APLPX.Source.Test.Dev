@@ -52,7 +52,7 @@ namespace APLPX.UI.WPF.Data
         {
             get
             {
-                return database.GetCollection<Module>("Modules");
+                return database.GetCollection<Module>("Modules_Role");
             }
         }
 
@@ -64,25 +64,63 @@ namespace APLPX.UI.WPF.Data
 
         public Session<NullT> Authenticate(Session<NullT> session)
         {
-            var modules = Modules.AsQueryable().ToList();
-
-            var user = Users.AsQueryable().Where(x => x.Credential.Login == session.User.Credential.Login && x.Credential.OldPassword == session.User.Credential.OldPassword).ToList();
-            if (user.Count > 0)
+            
+            try
             {
+                
+                var user = Users.AsQueryable()
+                    .Where(x => x.Credential.Login == session.User.Credential.Login 
+                                && x.Credential.OldPassword == session.User.Credential.OldPassword)
+                                .FirstOrDefault();
+                if (user == null)
+                {
+                    return new Session<NullT>()
+                    {
+                        SessionOk = false
+                    };
+                }
+
+                //var qLicMods = Query.ElemMatch("Roles", Query.EQ("Id", 3));
+                //var qLicFeatures = Query.ElemMatch("Features.Roles" , Query.EQ( "Id" , 3));
+                //var q = Query.And(new IMongoQuery[] {qLicFeatures, qLicMods });
+                //var lModsandFeats = Modules.Find(qLicFeatures);
+
+
+                var modules = Modules.AsQueryable().ToList();
+              
+                var licensedMods = from m in modules
+                                   where m.Roles.Any(r => r.Id == user.Role.Id)
+                                         select new Module
+                                         {
+                                            Type = m.Type,
+                                            Name =  m.Name,
+                                            Title = m.Title,
+                                            Sort = m.Sort,
+                                            Roles = m.Roles,
+                                            Features = m.Features.Where( fe => fe.Roles.Any( r => r.Id == user.Role.Id)).ToList()
+                                         };
+
                 return new Session<NullT>()
                     { 
-                        User = session.User,            
-                        Modules = modules,
+                        User = session.User,
+                        Modules = licensedMods.ToList(),
+                        //Modules = lModsandFeats.ToList(), 
                         SessionOk = true
                     };
+
+
             }
-            else
+            catch (Exception)
             {
+
                 return new Session<NullT>()
                 {
-                    SessionOk = false
+                    SessionOk = false,
+                    ClientMessage = "Failed to connect."
                 };
             }
+            
+            //var mods = Modules.AsQueryable().SelectMany( m=> m.Features).SelectMany( f => f.Roles).Where( r => r.Id == user.Role.Id);
         }
 
         public Session<UserIdentity> LoadIdentity(Session<UserIdentity> session)

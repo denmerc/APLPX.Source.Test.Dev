@@ -48,7 +48,7 @@ namespace APLPX.UI.WPF.DragDropProviders
         public bool IsDraggable(FrameworkElement draggedElement)
         {
             var entity = draggedElement.DataContext as ISearchableEntity;
-            bool result = (entity != null && entity.CanNameChange);
+            bool result = (entity != null && entity.CanSearchKeyChange);
 
             return result;
         }

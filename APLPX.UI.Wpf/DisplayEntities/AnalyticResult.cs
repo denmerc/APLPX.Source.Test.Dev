@@ -5,17 +5,15 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class AnalyticResult : DisplayEntityBase
+    public class AnalyticResult : ValueDriverGroup
     {
         #region Private Fields
-
-        private short _group;
-        private decimal _minValue;
-        private decimal _maxValue;
-        private string _salesValue;
-        private short _sort;
+ 
+        private string _salesValue;      
         private int _skuCount;
         private string _driverName;
+        private string _minValue;
+        private string _maxValue;
 
         #endregion
 
@@ -30,40 +28,27 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Properties
 
 
+        public string MinValue
+        {
+            get { return _minValue; }
+            set { this.RaiseAndSetIfChanged(ref _minValue, value); }
+        }
+        public string MaxValue
+        {
+            get { return _maxValue; }
+            set { this.RaiseAndSetIfChanged(ref _maxValue, value); }
+        }
+        //TODO: review where/how this property is used. Not in client entity model.
         public string DriverName
         {
             get { return _driverName; }
             set { this.RaiseAndSetIfChanged(ref _driverName, value); }
         }
-
-        public short Group
-        {
-            get { return _group; }
-            set { this.RaiseAndSetIfChanged(ref _group, value); }
-        }
-
-        public decimal MinValue
-        {
-            get { return _minValue; }
-            set { this.RaiseAndSetIfChanged(ref _minValue, value); }
-        }
-
-        public decimal MaxValue
-        {
-            get { return _maxValue; }
-            set { this.RaiseAndSetIfChanged(ref _maxValue, value); }
-        }
-        
+   
         public string SalesValue
         {
             get { return _salesValue; }
             set { this.RaiseAndSetIfChanged(ref _salesValue, value); }
-        }
-
-        public short Sort
-        {
-            get { return _sort; }
-            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         public int SkuCount

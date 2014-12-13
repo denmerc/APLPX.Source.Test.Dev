@@ -14,8 +14,10 @@ namespace APLPX.UI.WPF.DisplayEntities
         private short _itemCount;
         private string _name;
         private string _parentName;
-        private bool _isNameChanged;
         private bool _canNameChange;
+        private bool _isNameChanged;
+        private bool _canSearchKeyChange;
+        private bool _isSearchKeyChanged;
         private short _sort;
         private bool _isSubGroup;
         private bool _hasSubGroups;
@@ -62,10 +64,22 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _isNameChanged, value); }
         }
 
+        public bool IsSearchKeyChanged
+        {
+            get { return _isSearchKeyChanged; }
+            set { this.RaiseAndSetIfChanged(ref _isSearchKeyChanged, value); }
+        }
+
         public bool CanNameChange
         {
             get { return _canNameChange; }
             set { this.RaiseAndSetIfChanged(ref _canNameChange, value); }
+        }
+
+        public bool CanSearchKeyChange
+        {
+            get { return _canSearchKeyChange; }
+            set { this.RaiseAndSetIfChanged(ref _canSearchKeyChange, value); }
         }
 
         public short Sort
@@ -95,7 +109,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _hasSubGroups, value); }
         }
 
-        #endregion  
+        #endregion
 
         #region Overrides
 

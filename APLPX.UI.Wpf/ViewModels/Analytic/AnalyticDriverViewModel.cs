@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DisplayEntities = APLPX.UI.WPF.DisplayEntities;
-using ReactiveUI;
 using APLPX.UI.WPF.DisplayEntities;
+using ReactiveUI;
 
 namespace APLPX.UI.WPF.ViewModels.Analytic
 {
@@ -13,33 +10,32 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     public class AnalyticDriverViewModel : ViewModelBase
     {
         private DisplayEntities.Analytic _entity;
-        private bool _isValueDriverSelected;
- 
+        private bool _areResultsAvailable;
+
         #region Constructor and Initialization
 
         public AnalyticDriverViewModel(DisplayEntities.Analytic entity)
         {
             Entity = entity;
             InitializeCommands();
-
-            var selectedValueDriverChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver);
-            selectedValueDriverChanged.Subscribe(driver => OnSelectedValueDriverChanged(driver));
+            InitializeEventHandlers();
         }
 
         private void InitializeCommands()
-        {            
-            AutoCalculateCommand = ReactiveCommand.Create();
+        {
+            //testing canExecute:
+            var canExecute = this.WhenAnyValue(vm => vm.IsValueDriverModeSelected);
+            AutoCalculateCommand = ReactiveCommand.Create(canExecute);
             AutoCalculateCommand.Subscribe(_ => AutoCalculateCommandExecuted(_));
         }
 
-        private object OnSelectedValueDriverChanged(AnalyticValueDriver driver)
+        private void InitializeEventHandlers()
         {
-            IsValueDriverSelected = (driver != null);
-            if (driver != null)
-            {
-                driver.Mode.RecalculateEditableGroups();
-            }
-            return null;
+            var selectedValueDriverChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver);
+            selectedValueDriverChanged.Subscribe(driver => OnSelectedValueDriverChanged(driver));
+
+            var selectedValueDriverModeChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver.SelectedMode);
+            selectedValueDriverModeChanged.Subscribe(mode => OnSelectedValueDriverModeChanged(mode));
         }
 
         #endregion
@@ -52,14 +48,38 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             private set { this.RaiseAndSetIfChanged(ref _entity, value); }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether calculated results are available for the selected value driver.
+        /// The bound view can use this property to show/hide results, etc.
+        /// </summary>
+        public bool AreResultsAvailable
+        {
+            get { return _areResultsAvailable; }
+            private set { this.RaiseAndSetIfChanged(ref _areResultsAvailable, value); }
+        }
+
         public bool IsValueDriverSelected
         {
-            get { return _isValueDriverSelected; }
-            private set { this.RaiseAndSetIfChanged(ref _isValueDriverSelected, value); }
+            get { return (Entity != null && Entity.SelectedValueDriver != null); }
+        }
+
+        public bool IsValueDriverModeSelected
+        {
+            get
+            {
+                bool result = false;
+
+                if (Entity != null && Entity.SelectedValueDriver != null)
+                {
+                    result = (Entity.SelectedValueDriver.SelectedMode != null);
+                }
+
+                return result;
+            }
         }
 
         #endregion
- 
+
         #region Commands
 
         /// <summary>
@@ -71,10 +91,12 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         {
             if (Entity != null && Entity.SelectedValueDriver != null)
             {
-                AnalyticValueDriverMode mode = Entity.SelectedValueDriver.Mode;                
+                AnalyticValueDriverMode mode = Entity.SelectedValueDriver.SelectedMode;
                 if (mode != null && mode.Groups.Count > 0)
                 {
+                    //TODO: for testing only. In production, will call server method.
                     mode.MockAutoCalculateDriverGroups();
+                    AreResultsAvailable = true;
                 }
             }
             return parameter;
@@ -82,5 +104,25 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #endregion
 
+        #region Event Handlers
+
+        private object OnSelectedValueDriverChanged(AnalyticValueDriver driver)
+        {
+            this.RaisePropertyChanged("IsValueDriverSelected");
+
+            if (driver != null && driver.SelectedMode != null)
+            {
+                driver.SelectedMode.RecalculateEditableGroups();
+            }
+            return null;
+        }
+
+        private object OnSelectedValueDriverModeChanged(AnalyticValueDriverMode mode)
+        {
+            this.RaisePropertyChanged("IsValueDriverModeSelected");
+            return null;
+        }
+
+        #endregion
     }
 }

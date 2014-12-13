@@ -13,11 +13,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         private PricingIdentity _identity;
         private List<PricingDriver> _drivers;
         private List<AnalyticPriceListGroup> _priceListGroups;
-        private List<FilterGroup> _filterGroups;       
+        private List<FilterGroup> _filterGroups;
         private List<PricingResult> _results;
         private string _searchKey;
         private string _parentKey;
         private bool _canNameChange;
+        private bool _canSearchKeyChange;
 
         #endregion
 
@@ -28,7 +29,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             Identity = new PricingIdentity();
             Drivers = new List<PricingDriver>();
             PriceListGroups = new List<AnalyticPriceListGroup>();
-            FilterGroups = new List<FilterGroup>();            
+            FilterGroups = new List<FilterGroup>();
             Results = new List<PricingResult>();
         }
 
@@ -63,7 +64,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _filterGroups; }
             set { this.RaiseAndSetIfChanged(ref _filterGroups, value); }
-        } 
+        }
 
         public List<PricingResult> Results
         {
@@ -89,13 +90,19 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public string EntityTypeName
         {
-            get { return this.GetType().Name; }
+            get { return GetType().Name; }
         }
 
         public bool CanNameChange
         {
             get { return _canNameChange; }
             set { _canNameChange = value; }
+        }
+
+        public bool CanSearchKeyChange
+        {
+            get { return _canSearchKeyChange; }
+            set { _canSearchKeyChange = value; }
         }
 
         #endregion

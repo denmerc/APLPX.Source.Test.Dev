@@ -29,8 +29,13 @@ namespace APLPX.UI.WPF.Interfaces
         string EntityTypeName { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the entity can be changed by the user.
+        /// Gets a value indicating whether the entity name can be changed by the user.
         /// </summary>
         bool CanNameChange { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the entity search key can be changed by the user.
+        /// </summary>
+        bool CanSearchKeyChange { get; set; }
     }
 }

@@ -21,6 +21,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.ParentName = dto.ParentName;
             displayEntity.IsNameChanged = dto.IsNameChanged;
             displayEntity.CanNameChange = dto.CanNameChange;
+            displayEntity.CanSearchKeyChange = dto.CanSearchKeyChange;
+            displayEntity.IsSearchKeyChanged = dto.IsSearchKeyChanged;
             displayEntity.Sort = dto.Sort;
 
             return displayEntity;
@@ -29,11 +31,14 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.FeatureSearchGroup ToDto(this Display.FeatureSearchGroup displayEntity)
         {
             var dto = new DTO.FeatureSearchGroup(
-                                    displayEntity.Name, displayEntity.ItemCount,
+                                    displayEntity.Name, 
+                                    displayEntity.ItemCount,
                                     displayEntity.SearchKey,
                                     displayEntity.ParentName,
                                     displayEntity.IsNameChanged,
+                                    displayEntity.IsSearchKeyChanged,
                                     displayEntity.CanNameChange,
+                                    displayEntity.CanSearchKeyChange,
                                     displayEntity.Sort);
 
             return dto;

@@ -64,8 +64,10 @@ namespace APLPX.UI.WPF.Mappers
         {
             var displayEntity = new Display.PricingIdentity();
 
+            displayEntity.AnalyticsId = dto.AnalyticsId;
             displayEntity.Name = dto.Name;
             displayEntity.Description = dto.Description;
+            displayEntity.Notes = dto.Notes;
             displayEntity.RefreshedText = dto.RefreshedText;
             displayEntity.CreatedText = dto.CreatedText;
             displayEntity.EditedText = dto.EditedText;
@@ -75,8 +77,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Author = dto.Author;
             displayEntity.Editor = dto.Editor;
             displayEntity.Owner = dto.Owner;
-            displayEntity.Active = dto.Active;
             displayEntity.Shared = dto.Shared;
+            displayEntity.Active = dto.Active;
 
             return displayEntity;
         }
@@ -84,6 +86,7 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.PricingIdentity ToDto(this Display.PricingIdentity displayEntity)
         {
             var dto = new DTO.PricingIdentity(
+                                            displayEntity.AnalyticsId,
                                             displayEntity.Name,
                                             displayEntity.Description,
                                             displayEntity.Notes,
@@ -96,9 +99,8 @@ namespace APLPX.UI.WPF.Mappers
                                             displayEntity.Author,
                                             displayEntity.Editor,
                                             displayEntity.Owner,
-                                            displayEntity.Active,
-                                            displayEntity.Shared);
-
+                                            displayEntity.Shared,
+                                            displayEntity.Active);
 
             return dto;
         }
@@ -116,6 +118,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Name = dto.Name;
             displayEntity.FirstName = dto.FirstName;
             displayEntity.LastName = dto.LastName;
+            displayEntity.Greeting = dto.Greeting;
             displayEntity.LastLogin = dto.LastLogin;
             displayEntity.LastLoginText = dto.LastLoginText;
             displayEntity.Created = dto.Created;

@@ -9,33 +9,24 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
 
         #region Private Fields
-      
+
         private List<AnalyticValueDriverMode> _modes;
         private AnalyticValueDriverMode _selectedMode;
         private List<AnalyticResult> _results;
 
-        //IN DEVEL: NEW LOGIC
-        private AnalyticValueDriverMode _mode;
         #endregion
 
         #region Constructors
 
         public AnalyticValueDriver()
         {
-            Mode = new AnalyticValueDriverMode();
             Modes = new List<AnalyticValueDriverMode>();
             Results = new List<AnalyticResult>();
         }
 
         #endregion
 
-        #region Properties
-
-        public AnalyticValueDriverMode Mode
-        {
-            get { return _mode; }
-            set { this.RaiseAndSetIfChanged(ref _mode, value); }
-        }
+        #region Properties    
 
         public List<AnalyticValueDriverMode> Modes
         {
@@ -46,7 +37,20 @@ namespace APLPX.UI.WPF.DisplayEntities
         public AnalyticValueDriverMode SelectedMode
         {
             get { return _selectedMode; }
-            set { this.RaiseAndSetIfChanged(ref _selectedMode, value); }
+            set
+            {
+                if (_selectedMode != value)
+                {
+                    _selectedMode = value;
+                    this.RaisePropertyChanged("SelectedMode");
+
+                    if (_selectedMode != null)
+                    {
+                        _selectedMode.RecalculateEditableGroups();
+                        UpdateModeSelectionStatus();
+                    }
+                }
+            }
         }
 
         public List<AnalyticResult> Results
@@ -56,6 +60,14 @@ namespace APLPX.UI.WPF.DisplayEntities
         }
 
         #endregion
+
+        private void UpdateModeSelectionStatus()
+        {
+            foreach (AnalyticValueDriverMode mode in Modes)
+            {
+                mode.IsSelected = (mode == SelectedMode);
+            }
+        }
 
         #region Overrides
 

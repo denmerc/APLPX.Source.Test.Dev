@@ -6,7 +6,7 @@ namespace APLPX.UI.WPF.DisplayEntities
     public class PricingEverydayLinkedValueDriverGroup : DisplayEntityBase
     {
         private int _valueDriverGroupId;
-        private int _percentChange;
+        private decimal _percentChange;
 
         public int ValueDriverGroupId
         {
@@ -14,7 +14,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _valueDriverGroupId, value); }
         }
 
-        public int PercentChange
+        public decimal PercentChange
         {
             get { return _percentChange; }
             set { this.RaiseAndSetIfChanged(ref _percentChange, value); }

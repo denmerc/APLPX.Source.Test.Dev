@@ -18,14 +18,14 @@ namespace APLPX.UI.WPF.ViewModels
         private Module _selectedModule;
         private ModuleFeature _selectedFeature;
         private User _currentUser;
-        private Display.Analytic _selectedAnalytic;
-        private Display.Pricing _selectedPriceRoutine;
+        private Display.Analytic _selectedAnalytic; 
+        private Display.PricingEveryday _selectedPricingEveryday;
 
         private DTO.Session<DTO.NullT> _session;
         private UserDisplayServices _userDisplayServices;
 
         #endregion
-   
+
         #region Properties
 
         public ModuleFeature SelectedFeature
@@ -66,12 +66,10 @@ namespace APLPX.UI.WPF.ViewModels
             set { this.RaiseAndSetIfChanged(ref _selectedAnalytic, value); }
         }
 
-
-        public Display.Pricing SelectedPriceRoutine
+        public Display.PricingEveryday SelectedPricingEveryday
         {
-            get
-            { return _selectedPriceRoutine; }
-            set { this.RaiseAndSetIfChanged(ref _selectedPriceRoutine, value); }
+            get { return _selectedPricingEveryday; }
+            set { this.RaiseAndSetIfChanged(ref _selectedPricingEveryday, value); }
         }
 
         /// <summary>

@@ -12,6 +12,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private decimal _dollarRangeLower;
         private decimal _dollarRangeUpper;
         private List<PriceRoundingRule> _roundingRules;
+        private List<SQLEnumeration> _roundingTypes;
 
         #endregion
 
@@ -49,7 +50,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return _roundingRules; }
             set { this.RaiseAndSetIfChanged(ref _roundingRules, value); }
         }
-
+        public List<SQLEnumeration> RoundingTypes
+        {
+            get { return _roundingTypes; }
+            set { this.RaiseAndSetIfChanged(ref _roundingTypes, value); }
+        }
 
         #endregion
 

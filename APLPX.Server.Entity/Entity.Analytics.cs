@@ -46,7 +46,7 @@ namespace APLPX.Server.Entity
         }
         public Analytic(
             int id,
-            List<AnalyitcPriceListGroup> priceListGroups
+            List<AnalyticPriceListGroup> priceListGroups
             ) {
             Id = id;
             PriceListGroups = priceListGroups;
@@ -63,7 +63,7 @@ namespace APLPX.Server.Entity
             string searchGroupKey,
             AnalyticIdentity identity,
             List<AnalyticValueDriver> valueDrivers,
-            List<AnalyitcPriceListGroup> priceListGroups,
+            List<AnalyticPriceListGroup> priceListGroups,
             List<FilterGroup> filterGroups
             ) {
             Id = id;
@@ -84,7 +84,7 @@ namespace APLPX.Server.Entity
         [DataMember]
         public List<AnalyticValueDriver> ValueDrivers; //CLIENT { get; private set; }
         [DataMember]
-        public List<AnalyitcPriceListGroup> PriceListGroups; //CLIENT { get; private set; }
+        public List<AnalyticPriceListGroup> PriceListGroups; //CLIENT { get; private set; }
         [DataMember]
         public List<FilterGroup> FilterGroups; //CLIENT { get; private set; }
     }
@@ -286,11 +286,11 @@ namespace APLPX.Server.Entity
     }
 
     [DataContract]
-    public class AnalyitcPriceListGroup : PriceListGroup
+    public class AnalyticPriceListGroup : PriceListGroup
     {
         #region Initialize...
-        public AnalyitcPriceListGroup() { }
-        public AnalyitcPriceListGroup(
+        public AnalyticPriceListGroup() { }
+        public AnalyticPriceListGroup(
             int key,
             string name,
             string title,

@@ -17,10 +17,10 @@ namespace APLPX.UI.WPF.Mappers
         {
             var result = new Display.SQLEnumeration();
 
-            result.Sort = dto.Sort;
             result.Value = dto.Value;
             result.Name = dto.Name;
             result.Description = dto.Description;
+            result.Sort = dto.Sort;                        
 
             return result;
         }
@@ -28,10 +28,10 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.SQLEnumeration ToDto(this Display.SQLEnumeration displayEntity)
         {
             var dto = new DTO.SQLEnumeration(
-                                        displayEntity.Sort,
-                                        displayEntity.Value,
+                                        displayEntity.Value,                                                                                
                                         displayEntity.Name,
-                                        displayEntity.Description);
+                                        displayEntity.Description, 
+                                        displayEntity.Sort);
 
             return dto;
         }

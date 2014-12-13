@@ -84,7 +84,7 @@ namespace APLPX.Server.Entity
         [DataMember]
         public UserIdentity Identity; //CLIENT { get; private set; }
         [DataMember]
-        public UserRole Role;  //CLIENT { get; private set; }
+        public UserRole Role; //CLIENT { get; private set; }
         [DataMember]
         public List<Entity.SQLEnumeration> RoleTypes; //CLIENT { get; private set; }
     }

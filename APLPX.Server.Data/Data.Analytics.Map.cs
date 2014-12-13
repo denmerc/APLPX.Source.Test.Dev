@@ -323,14 +323,14 @@ namespace APLPX.Server.Data {
 
         }
 
-        public List<Server.Entity.AnalyitcPriceListGroup> LoadPricelistsMapData(System.Data.DataTable data) {
+        public List<Server.Entity.AnalyticPriceListGroup> LoadPricelistsMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
             Int32 rows = data.Rows.Count;
             String listTypeNow = String.Empty;
             String listTypeLast = String.Empty;
-            List<Server.Entity.AnalyitcPriceListGroup> priceListGroups = new List<Entity.AnalyitcPriceListGroup>();
+            List<Server.Entity.AnalyticPriceListGroup> priceListGroups = new List<Entity.AnalyticPriceListGroup>();
             List<Server.Entity.PriceList> priceLists = new List<Entity.PriceList>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
@@ -350,7 +350,7 @@ namespace APLPX.Server.Data {
                         ));
                     if (listTypeLast != listTypeNow) {
                         priceListGroups.Add(
-                            new Entity.AnalyitcPriceListGroup(
+                            new Entity.AnalyticPriceListGroup(
                                 0, //TODO: DaveJ - Add price list group key
                                 reader[AnalyticMap.Names.priceListTypeName].ToString(),
                                 String.Empty, //TODO: DaveJ - Add price list group title
@@ -383,7 +383,7 @@ namespace APLPX.Server.Data {
             //Build comma delimited key list...
             const System.Char delimiter = ',';
             System.Text.StringBuilder priceKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.AnalyitcPriceListGroup group in session.Data.PriceListGroups) {
+            foreach (Server.Entity.AnalyticPriceListGroup group in session.Data.PriceListGroups) {
                 foreach (Server.Entity.PriceList priceList in group.PriceLists) {
                     if (!priceList.IsSelected) { priceKeys.Append(priceList.Key.ToString() + delimiter); }
                 }

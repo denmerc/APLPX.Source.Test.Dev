@@ -20,6 +20,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _searchKey;
         private string _parentKey;
         private bool _canNameChange;
+        private bool _canSearchKeyChange;
 
         #endregion
 
@@ -28,9 +29,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         public Analytic()
         {
             Identity = new AnalyticIdentity();
+            FilterGroups = new List<FilterGroup>();
             ValueDrivers = new List<AnalyticValueDriver>();
-            FilterGroups = new List<FilterGroup>();           
-            PriceListGroups = new List<AnalyticPriceListGroup>();            
+            PriceListGroups = new List<AnalyticPriceListGroup>();
         }
 
         #endregion
@@ -60,7 +61,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return _priceListGroups; }
             set { this.RaiseAndSetIfChanged(ref _priceListGroups, value); }
         }
-  
+
         public AnalyticIdentity Identity
         {
             get { return _identity; }
@@ -97,7 +98,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public string EntityTypeName
         {
-            get { return this.GetType().Name; }
+            get { return GetType().Name; }
         }
 
         public bool CanNameChange
@@ -105,6 +106,13 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return _canNameChange; }
             set { _canNameChange = value; }
         }
+
+        public bool CanSearchKeyChange
+        {
+            get { return _canSearchKeyChange; }
+            set { _canSearchKeyChange = value; }
+        }
+
         #endregion
 
         #region Overrides

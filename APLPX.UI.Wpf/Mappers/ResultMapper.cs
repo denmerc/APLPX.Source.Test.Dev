@@ -13,54 +13,82 @@ namespace APLPX.UI.WPF.Mappers
     {
         #region Analytic Result
 
-        public static Display.AnalyticResult ToDisplayEntity(this DTO.AnalyticResult dto)
+        public static Display.AnalyticResult ToDisplayEntity(this DTO.AnalyticResultValueDriverGroup dto)
         {
             var displayEntity = new Display.AnalyticResult();
-
-            displayEntity.Group = dto.Group;
+            displayEntity.Id = dto.Id;
             displayEntity.MinValue = dto.MinValue;
             displayEntity.MaxValue = dto.MaxValue;
+            displayEntity.Value = dto.Value;
+            displayEntity.MinOutlier = dto.MinOutlier;
+            displayEntity.MaxOutlier = dto.MaxOutlier;
             displayEntity.SalesValue = dto.SalesValue;
             displayEntity.Sort = dto.Sort;
+
+            displayEntity.SkuCount = dto.SkuCount;
+            displayEntity.SalesValue = dto.SalesValue;
 
             return displayEntity;
         }
 
-        public static DTO.AnalyticResult ToDto(this Display.AnalyticResult displayEntity)
+        public static DTO.AnalyticResultValueDriverGroup ToDto(this Display.AnalyticResult displayEntity)
         {
-            var dto = new DTO.AnalyticResult(
-                                        displayEntity.Group,
-                                        displayEntity.MinValue,
-                                        displayEntity.MaxValue,
-                                        displayEntity.SalesValue,
-                                        displayEntity.Sort);
+            var dto = new DTO.AnalyticResultValueDriverGroup(
+                                        displayEntity.Id,
+                                        displayEntity.Value,
+                                        displayEntity.MinOutlier,
+                                        displayEntity.MaxOutlier,
+                                        displayEntity.Sort,
+                                        displayEntity.SkuCount,
+                                        displayEntity.SalesValue);
 
             return dto;
         }
 
         #endregion
 
-        #region Pricing Result
+        #region Pricing Everyday Result
 
-        public static Display.PricingResult ToDisplayEntity(this DTO.PricingResult dto)
+        public static Display.PricingEverydayResult ToDisplayEntity(this DTO.PricingEverydayResult dto)
         {
-            var displayEntity = new Display.PricingResult();
+            var displayEntity = new Display.PricingEverydayResult();
 
-            //TODO: map when client class properties are added.
-            //displayEntity.Group = dto.Group;
-            //displayEntity.MinValue = dto.MinValue;
-            //displayEntity.MaxValue = dto.MaxValue;
-            //displayEntity.SalesValue = dto.SalesValue;
-            //displayEntity.Sort = dto.Sort;
+            displayEntity.Id = dto.Id;
+            displayEntity.SkuName = dto.SkuName;
+            displayEntity.SkuTitle = dto.SkuTitle;
+            if (dto.Groups != null)
+            {
+                foreach (DTO.PricingResultDriverGroup group in dto.Groups)
+                {
+                    displayEntity.Groups.Add(group.ToDisplayEntity());
+                }
+            }
+            displayEntity.Sort = dto.Sort;
 
             return displayEntity;
         }
 
-        public static DTO.PricingResult ToDto(this Display.PricingResult displayEntity)
+        public static DTO.PricingEverydayResult ToDto(this Display.PricingEverydayResult displayEntity)
         {
-            var dto = new DTO.PricingResult();
+            var driverGroups = new List<DTO.PricingResultDriverGroup>();
+            foreach (Display.PricingResultDriverGroup group in displayEntity.Groups)
+            {
+                driverGroups.Add(group.ToDto());
+            }
 
-            //TODO: map when client class properties are added.
+            var priceLists = new List<DTO.PricingEverydayResultPriceList>();
+            foreach (Display.PricingEverydayResultPriceList priceList in displayEntity.PriceLists)
+            {
+                priceLists.Add(priceList.ToDto());
+            }
+
+            var dto = new DTO.PricingEverydayResult(
+                                            displayEntity.Id, 
+                                            displayEntity.SkuName,
+                                            displayEntity.SkuTitle, 
+                                            displayEntity.Sort, 
+                                            driverGroups,
+                                            priceLists);
             return dto;
         }
 

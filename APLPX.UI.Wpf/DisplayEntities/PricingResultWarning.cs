@@ -1,4 +1,5 @@
 ﻿using System;
+using APLPX.Client.Entity;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
@@ -9,7 +10,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private string _name;
         private string _title;
-        //private PricingResultsWarningType _type;
+        private PricingResultsWarningType _type;
 
         #endregion
 
@@ -35,11 +36,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
-        //public PricingResultsWarningType Type
-        //{
-        //    get { return _type; }
-        //    set { this.RaiseAndSetIfChanged(ref _type, value); }
-        //}
+        public PricingResultsWarningType Type
+        {
+            get { return _type; }
+            set { this.RaiseAndSetIfChanged(ref _type, value); }
+        }
 
         #endregion
 

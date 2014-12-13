@@ -98,35 +98,35 @@ namespace APLPX.UI.WPF.Helpers
                 //steps.Add(new ModuleFeatureStep { Name = "Planning Home", TypeId = DTO.ModuleFeatureStepType.PlanningHomeMyHomePage });
                 if (feature.TypeId == DTO.ModuleFeatureType.PlanningAnalytics)
                 {
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Analytics", Title = "Search saved Analytics", TypeId = (DTO.ModuleFeatureStepType)113, Sort = 1 });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Analytics with a unique name and description", TypeId = (DTO.ModuleFeatureStepType)119, Sort = 2, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Analytics product filters & define a product set", TypeId = (DTO.ModuleFeatureStepType)125, Sort = 3, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "3) Price Lists", Title = "Configure Analytics price list metrics & aggregation", TypeId = (DTO.ModuleFeatureStepType)130, Sort = 4, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Value Drivers", Title = "Configure Analytics Value Driver metrics and optimization", TypeId = (DTO.ModuleFeatureStepType)135, Sort = 5, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Results", Title = "Compare Analytics result set & view reports", TypeId = (DTO.ModuleFeatureStepType)139, Sort = 6, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Analytics", Title = "Search saved Analytics", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsSearchAnalytics, Sort = 1 });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Analytics with a unique name and description", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsIdentity, Sort = 2, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Analytics product filters & define a product set", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsFilters, Sort = 3, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "3) Price Lists", Title = "Configure Analytics price list metrics & aggregation", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsPriceLists, Sort = 4, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Value Drivers", Title = "Configure Analytics Value Driver metrics and optimization", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsValueDrivers, Sort = 5, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Results", Title = "Compare Analytics result set & view reports", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsResults, Sort = 6, });
                 }
                 else if (feature.TypeId == DTO.ModuleFeatureType.PlanningEverydayPricing)
                 {
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Everyday", Title = "Search saved Pricing campaigns", TypeId = (DTO.ModuleFeatureStepType)115, Sort = 1, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Price routines with a unique name and description", TypeId = (DTO.ModuleFeatureStepType)121, Sort = 2, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "3) Price Lists", Title = "Configure Price routine price lists ", TypeId = (DTO.ModuleFeatureStepType)132, Sort = 4, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Rounding", Title = "Configure Price routine rounding", TypeId = (DTO.ModuleFeatureStepType)136, Sort = 5, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Strategy", Title = "Configure Price routine optimization strategy", TypeId = (DTO.ModuleFeatureStepType)140, Sort = 6, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "6) Results", Title = "Compare and edit Price routine results", TypeId = (DTO.ModuleFeatureStepType)143, Sort = 7, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Forecast", Title = "Create a Price routine forecast", TypeId = (DTO.ModuleFeatureStepType)146, Sort = 8, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Approval", Title = "Submit this Price routine for approval", TypeId = (DTO.ModuleFeatureStepType)149, Sort = 9, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Everyday", Title = "Search saved Pricing campaigns", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingSearchEveryday, Sort = 1, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Price routines with a unique name and description", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingIdentity, Sort = 2, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "3) Price Lists", Title = "Configure Price routine price lists ", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists, Sort = 4, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Rounding", Title = "Configure Price routine rounding", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingRounding, Sort = 5, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Strategy", Title = "Configure Price routine optimization strategy", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingStrategy, Sort = 6, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "6) Results", Title = "Compare and edit Price routine results", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingResults, Sort = 7, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Forecast", Title = "Create a Price routine forecast", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingForecast, Sort = 8, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingApproval, Sort = 9, });
                 }
                 else if (feature.TypeId == DTO.ModuleFeatureType.PlanningPromotionPricing)
                 {
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Promotions", Title = "Search saved Pricing campaigns", TypeId = (DTO.ModuleFeatureStepType)116, Sort = 1, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Price routines with a unique name and description", TypeId = (DTO.ModuleFeatureStepType)122, Sort = 2, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Price routine product filters & define a product set", TypeId = (DTO.ModuleFeatureStepType)128, Sort = 3, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "3) Price Lists", Title = "Configure Price routine price lists ", TypeId = (DTO.ModuleFeatureStepType)133, Sort = 4, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Rounding", Title = "Configure Price routine rounding", TypeId = (DTO.ModuleFeatureStepType)137, Sort = 5, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Strategy", Title = "Configure Price routine optimization strategy", TypeId = (DTO.ModuleFeatureStepType)141, Sort = 6, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "6) Results", Title = "Compare and edit Price routine results", TypeId = (DTO.ModuleFeatureStepType)144, Sort = 7, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Forecast", Title = "Create a Price routine forecast", TypeId = (DTO.ModuleFeatureStepType)147, Sort = 8, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Approval", Title = "Submit this Price routine for approval", TypeId = (DTO.ModuleFeatureStepType)150, Sort = 9, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Promotions", Title = "Search saved Pricing campaigns", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingSearchPromotions, Sort = 1, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Price routines with a unique name and description", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingIdentity, Sort = 2, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Price routine product filters & define a product set", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingFilters, Sort = 3, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "3) Price Lists", Title = "Configure Price routine price lists ", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingPriceLists, Sort = 4, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Rounding", Title = "Configure Price routine rounding", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingRounding, Sort = 5, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Strategy", Title = "Configure Price routine optimization strategy", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingStrategy, Sort = 6, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "6) Results", Title = "Compare and edit Price routine results", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingResults, Sort = 7, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Forecast", Title = "Create a Price routine forecast", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingForecast, Sort = 8, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingApproval, Sort = 9, });
                 }
                 else
                 {
@@ -225,6 +225,7 @@ namespace APLPX.UI.WPF.Helpers
             //Make "My Folder names" editable.
             var editables = searchGroups.Where(sg => sg.ParentName == "My Folders").ToList();
             editables.ForEach(item => item.CanNameChange = true);
+            editables.ForEach(item => item.CanSearchKeyChange = true);
             return searchGroups;
         }
 
@@ -314,7 +315,7 @@ namespace APLPX.UI.WPF.Helpers
                     Sort = 0,
                     IsSelected = true
                 };
-                ValueDriverGroup group = new ValueDriverGroup { Id = 68, Value = 3, MinOutlier = 0.0M, MaxOutlier = 5.0M, Sort = 3 };
+                ValueDriverGroup group = new ValueDriverGroup { Id = 68, Value = 3, MinOutlier = 0, MaxOutlier = 5, Sort = 3 };
 
                 mode = new AnalyticValueDriverMode
                 {
@@ -323,11 +324,11 @@ namespace APLPX.UI.WPF.Helpers
                     Sort = 1,
                     IsSelected = false
                 };
-                decimal minOutlier = 0.0M;
+                int minOutlier = 0;
                 for (int groupIndex = 1; groupIndex <= 5; groupIndex++)
                 {
-                    minOutlier += 1.0M;
-                    group = new ValueDriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1.0M, Sort = (short)groupIndex };
+                    minOutlier += 1;
+                    group = new ValueDriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1, Sort = (short)groupIndex };
                     mode.Groups.Add(group);
                 }
                 driver.Modes.Add(mode);
@@ -357,15 +358,15 @@ namespace APLPX.UI.WPF.Helpers
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureType.PlanningEverydayPricing:
-                    result = GetSamplePriceRoutine(id, "Everyday");
+                    result = GetSamplePricingEveryday(id, "Everyday");
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureType.PlanningPromotionPricing:
-                    result = GetSamplePriceRoutine(id, "Promotion");
+                    result = GetSamplePricingPromotion(id, "Promotion");
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureType.PlanningKitPricing:
-                    result = GetSamplePriceRoutine(id, "Kit");
+                    //result = GetSamplePriceRoutine(id, "Kit");
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureType.AdministrationUserMaintenance:
@@ -397,9 +398,22 @@ namespace APLPX.UI.WPF.Helpers
             return result;
         }
 
-        private static Pricing GetSamplePriceRoutine(int id, string name)
+        private static PricingEveryday GetSamplePricingEveryday(int id, string name)
         {
-            var result = new Pricing();
+            var result = new PricingEveryday();
+
+            result.Identity.Name = String.Format("{0} Pricing #{1}", name, id);
+            result.Identity.Description = String.Format("Sample description for {0} Pricing #{1}", name, id);
+            result.Identity.Notes = String.Format("These are some sample notes that were entered for this {0} Pricing #{1}", name, id);
+            result.Identity.Created = DateTime.Now.AddDays(-8);
+            result.Identity.Edited = DateTime.Now.AddDays(-3);
+
+            return result;
+        }
+
+        private static PricingPromotion GetSamplePricingPromotion(int id, string name)
+        {
+            var result = new PricingPromotion();
 
             result.Identity.Name = String.Format("{0} Price Routine #{1}", name, id);
             result.Identity.Description = String.Format("Sample description for {0} Price Routine #{1}", name, id);
@@ -432,37 +446,32 @@ namespace APLPX.UI.WPF.Helpers
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsSearchAnalytics:
-                    result.Add(new DisplayEntities.Action { Name = "Copy", ParentName = "Copy", Title = "Workflow View Step Action, Copy Analytics", TypeId = (DTO.ModuleFeatureStepActionType)217, Sort = 3, });
-                    result.Add(new DisplayEntities.Action { Name = "Edit", ParentName = "Edit", Title = "Workflow View Step Action, Edit Analytics", TypeId = (DTO.ModuleFeatureStepActionType)185, Sort = 2, });
-                    result.Add(new DisplayEntities.Action { Name = "New", ParentName = "New", Title = "Workflow View Step Action, New Analytics", TypeId = (DTO.ModuleFeatureStepActionType)152, Sort = 1, });
+                    result.Add(new DisplayEntities.Action { Name = "Copy", ParentName = "Copy", Title = "Workflow View Step Action, Copy Analytics", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsCopy, Sort = 3, });
+                    result.Add(new DisplayEntities.Action { Name = "Edit", ParentName = "Edit", Title = "Workflow View Step Action, Edit Analytics", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit, Sort = 2, });
+                    result.Add(new DisplayEntities.Action { Name = "New", ParentName = "New", Title = "Workflow View Step Action, New Analytics", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew, Sort = 1, });
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingSearchEveryday:
-                    result.Add(new DisplayEntities.Action { Name = "Copy", ParentName = "Copy", Title = "Workflow View Step Action, Copy Everyday", TypeId = (DTO.ModuleFeatureStepActionType)218, Sort = 3, });
-                    result.Add(new DisplayEntities.Action { Name = "Edit", ParentName = "Edit", Title = "Workflow View Step Action, Edit Everyday", TypeId = (DTO.ModuleFeatureStepActionType)186, Sort = 2, });
-                    result.Add(new DisplayEntities.Action { Name = "New", ParentName = "New", Title = "Workflow View Step Action, New Everyday", TypeId = (DTO.ModuleFeatureStepActionType)153, Sort = 1, });
+                    result.Add(new DisplayEntities.Action { Name = "Copy", ParentName = "Copy", Title = "Workflow View Step Action, Copy Everyday", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayCopy, Sort = 3, });
+                    result.Add(new DisplayEntities.Action { Name = "Edit", ParentName = "Edit", Title = "Workflow View Step Action, Edit Everyday", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayEdit, Sort = 2, });
+                    result.Add(new DisplayEntities.Action { Name = "New", ParentName = "New", Title = "Workflow View Step Action, New Everyday", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayNew, Sort = 1, });
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingSearchPromotions:
-                    result.Add(new DisplayEntities.Action { Name = "Copy", ParentName = "Copy", Title = "Workflow View Step Action, Copy Promotions", TypeId = (DTO.ModuleFeatureStepActionType)219, Sort = 3, });
-                    result.Add(new DisplayEntities.Action { Name = "Edit", ParentName = "Edit", Title = "Workflow View Step Action, Edit Promotions", TypeId = (DTO.ModuleFeatureStepActionType)187, Sort = 2, });
-                    result.Add(new DisplayEntities.Action { Name = "New", ParentName = "New", Title = "Workflow View Step Action, New Promotions", TypeId = (DTO.ModuleFeatureStepActionType)154, Sort = 1, });
+                    result.Add(new DisplayEntities.Action { Name = "Copy", ParentName = "Copy", Title = "Workflow View Step Action, Copy Promotions", TypeId = DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsCopy, Sort = 3, });
+                    result.Add(new DisplayEntities.Action { Name = "Edit", ParentName = "Edit", Title = "Workflow View Step Action, Edit Promotions", TypeId = DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsEdit, Sort = 2, });
+                    result.Add(new DisplayEntities.Action { Name = "New", ParentName = "New", Title = "Workflow View Step Action, New Promotions", TypeId = DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsNew, Sort = 1, });
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsIdentity:
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingIdentity:
 
-                    result.Add(new DisplayEntities.Action { Name = "Clear", Title = "Discard all changes since the last save.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentitySave, Sort = 2 });
-                    result.Add(new DisplayEntities.Action { Name = "Copy", Title = "Create a copy of this item", Sort = 3 });
+
+                    result.Add(new DisplayEntities.Action { Name = "Clear", Title = "Discard all changes since the last save.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentityCancel, Sort = 2 });
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentitySave, Sort = 4 });
-                    if (step.TypeId == DTO.ModuleFeatureStepType.PlanningAnalyticsIdentity)
-                    {
-                        result.Add(new DisplayEntities.Action { Name = "Add Analytic", Title = "Add a new Analytic", Sort = 1 });
-                    }
-                    else
-                    {
-                        result.Add(new DisplayEntities.Action { Name = "Add Price Routine", Title = "Add a new Price Routine", Sort = 1 });
-                    }
+                    result.Add(new DisplayEntities.Action { Name = "Add Analytic", Title = "Add a new Analytic", Sort = 1 });
+                    break;
+
+                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingIdentity:
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsFilters:

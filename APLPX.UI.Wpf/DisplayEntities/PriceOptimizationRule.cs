@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
@@ -14,7 +10,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _id;
         private decimal _dollarRangeLower;
         private decimal _dollarRangeUpper;
-        private decimal _percentChange;
+        private int _percentChange;
         private short _sort;
 
         #endregion
@@ -47,7 +43,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _dollarRangeUpper, value); }
         }
 
-        public decimal PercentChange
+        public int PercentChange
         {
             get { return _percentChange; }
             set { this.RaiseAndSetIfChanged(ref _percentChange, value); }

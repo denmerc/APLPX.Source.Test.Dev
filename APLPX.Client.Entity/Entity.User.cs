@@ -81,17 +81,17 @@ namespace APLPX.Client.Entity
         public MongoDB.Bson.ObjectId _id { get; set; }
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get; private set; }
         [DataMember]
-        public string Key; //CLIENT { get; private set; }
+        public string Key { get; private set; }
         [DataMember]
-        public UserCredential Credential; //CLIENT { get; private set; }
+        public UserCredential Credential { get; private set; }
         [DataMember]
-        public UserIdentity Identity; //CLIENT { get; private set; }
+        public UserIdentity Identity { get; private set; }
         [DataMember]
-        public UserRole Role;  //CLIENT { get; private set; }
+        public UserRole Role { get; private set; }
         [DataMember]
-        public List<Entity.SQLEnumeration> RoleTypes; //CLIENT { get; private set; }
+        public List<Entity.SQLEnumeration> RoleTypes { get; private set; }
     }
 
     [DataContract]
@@ -142,31 +142,31 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public string Email; //CLIENT { get; set; }
+        public string Email { get; set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string FirstName; //CLIENT { get; set; }
+        public string FirstName { get; set; }
         [DataMember]
-        public string LastName; //CLIENT { get; set; }
+        public string LastName { get; set; }
         [DataMember]
-        public string Greeting; //CLIENT { get; private set; }
+        public string Greeting { get; private set; }
         [DataMember]
-        public DateTime LastLogin; //CLIENT { get; private set; }
+        public DateTime LastLogin { get; private set; }
         [DataMember]
-        public string LastLoginText; //CLIENT { get; private set; }
+        public string LastLoginText { get; private set; }
         [DataMember]
-        public DateTime Created; //CLIENT { get; private set; }
+        public DateTime Created { get; private set; }
         [DataMember]
-        public string CreatedText; //CLIENT { get; private set; }
+        public string CreatedText { get; private set; }
         [DataMember]
-        public DateTime Edited; //CLIENT { get; private set; }
+        public DateTime Edited { get; private set; }
         [DataMember]
-        public string EditedText; //CLIENT { get; private set; }
+        public string EditedText { get; private set; }
         [DataMember]
-        public string Editor; //CLIENT { get; private set; }
+        public string Editor { get; private set; }
         [DataMember]
-        public bool Active; //CLIENT { get; set; }
+        public bool Active { get; set; }
     }
 
     [DataContract]
@@ -192,11 +192,11 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get; private set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Description; //CLIENT { get; private set; }
+        public string Description { get; private set; }
     }
 
     [DataContract]
@@ -224,10 +224,10 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public string Login; //CLIENT { get; set; }
+        public string Login { get; set; }
         [DataMember]
-        public string OldPassword; //CLIENT { get; set; }
+        public string OldPassword { get; set; }
         [DataMember]
-        public string NewPassword; //CLIENT { get; set; }
+        public string NewPassword { get; set; }
     }
 }

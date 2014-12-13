@@ -59,6 +59,15 @@ namespace APLPX.UI.WPF.ViewModels
         public MainViewModel(DTO.Session<DTO.NullT> session, IAnalyticService analyticService, IUserService userService)
             : this()
         {
+
+            var loadFiltersCommand = ReactiveCommand.CreateAsyncTask<List<DTO.FilterGroup>>(async _ =>
+            await Task.Run(() =>
+            {
+                return new Data.MockUserService().FilterGroups;
+            })).ExecuteAsync().Subscribe(x =>
+            {
+                session.FilterGroups = x;
+            });
             if (session == null)
             {
                 throw new ArgumentNullException("session", "session cannot be null.");
@@ -75,13 +84,17 @@ namespace APLPX.UI.WPF.ViewModels
             }
 
             base.Session = session;
+
             base.UserServices = new UserDisplayServices(userService);
             _analyticService = analyticService;
             _userService = userService;
             
             CurrentUser = session.User.ToDisplayEntity();
+        
+            //TODO: COMMENT THIS OUT WHEN UserService is updated to work with new entity model:
+            //Modules = DisplayModuleGenerator.CreateSampleModules();
 
-            
+            //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
             Modules = session.Modules.ToDisplayEntities();
             //Modules = userService.Authenticate(Session).Modules.ToDisplayEntities();
             SelectedModule = Modules.Where(x => x.TypeId == DTO.ModuleType.Planning).FirstOrDefault();
@@ -108,6 +121,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void InitializeCommands()
         {
+
             ActionCommand = ReactiveCommand.Create();
             ActionCommand.Subscribe(x => ActionCommandExecuted(x));
 
@@ -126,8 +140,19 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     var id = new DTO.Analytic(SelectedEntity.Id);
                     var a = ((APLPX.UI.WPF.Data.MockAnalyticService)_analyticService).LoadAnalytic(new DTO.Session<DTO.Analytic>() { Data = id });
+                    a.Data.FilterGroups = Session.FilterGroups;
                     SelectedAnalytic = a.Data.ToDisplayEntity();
                 }));
+
+            LoadPricingEverydayCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+                await Task.Run(() =>
+                {
+                    var id = new DTO.PricingEveryday(SelectedEntity.Id);
+                    var a = ((APLPX.UI.WPF.Data.MockAnalyticService)_analyticService).LoadPricingEveryday(new DTO.Session<DTO.PricingEveryday>() { Data = id });
+                    a.Data.FilterGroups = Session.FilterGroups;
+                    SelectedPricingEveryday = a.Data.ToDisplayEntity();
+                }));
+
 
             SaveAnalyticIdentityCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -326,20 +351,21 @@ namespace APLPX.UI.WPF.ViewModels
                 //TODO: refactor logic. This is for demo and prototyping only.
                 bool result = false;
 
-                DTO.ModuleFeatureStepType[] hiddenSteps = {DTO.ModuleFeatureStepType.PlanningHomeDashboard,
-                                                           DTO.ModuleFeatureStepType.PlanningEverydayPricingSearchEveryday,
-                                                           DTO.ModuleFeatureStepType.PlanningPromotionPricingSearchPromotions,
-                                                           DTO.ModuleFeatureStepType.PlanningKitPricingSearchKits};
+                //DTO.ModuleFeatureStepType[] hiddenSteps = {DTO.ModuleFeatureStepType.PlanningHomeDashboard,
+                //                                           //DTO.ModuleFeatureStepType.PlanningEverydayPricingSearchEveryday,
+                //                                           DTO.ModuleFeatureStepType.PlanningPromotionPricingSearchPromotions,
+                //                                           DTO.ModuleFeatureStepType.PlanningKitPricingSearchKits};
 
-                if (SelectedStep != null)
-                {
-                    result = !hiddenSteps.Contains(SelectedStep.TypeId);
-                    if (!result)
-                    {
-                        SelectedStep.IsVisible = false;
-                    }
-                }
+                //if (SelectedStep != null)
+                //{
+                //    result = !hiddenSteps.Contains(SelectedStep.TypeId);
+                //    if (!result)
+                //    {
+                //        SelectedStep.IsVisible = false;
+                //    }
+                //}
 
+                result = true;
                 return result;
             }
         }
@@ -388,6 +414,11 @@ namespace APLPX.UI.WPF.ViewModels
         /// Command for loading an analytic.
         /// </summary>
         protected ReactiveCommand<Unit> LoadAnalyticCommand { get; private set; }
+
+        /// <summary>
+        /// Command for loading an analytic.
+        /// </summary>
+        protected ReactiveCommand<Unit> LoadPricingEverydayCommand { get; private set; }
 
         /// <summary>
         /// Command for saving an analytic identity.
@@ -447,18 +478,20 @@ namespace APLPX.UI.WPF.ViewModels
                     SelectedFeature.DisableRemainingSteps();
                     break;
 
-                case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayNew:
-                case DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsNew:
-                case DTO.ModuleFeatureStepActionType.PlanningKitPricingSearchKitsNew:
+                case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayNew:              
                     //Create a new (blank) entity. TODO: refactor.
-                    var newPriceRoutine = new DisplayEntities.Pricing();
-                    newPriceRoutine.Identity.Name = "Analytic name (new)";
+                    var newPriceRoutine = new DisplayEntities.PricingEveryday();
+                    newPriceRoutine.Identity.Name = "Pricing Everyday name (new)";
                     newPriceRoutine.Identity.Description = "Description (new)";
                     newPriceRoutine.IsDirty = true;
 
-                    SelectedPriceRoutine = newPriceRoutine;
+                    SelectedPricingEveryday = newPriceRoutine;
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                     SelectedFeature.DisableRemainingSteps();
+                    break;
+
+                case DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsNew:
+                case DTO.ModuleFeatureStepActionType.PlanningKitPricingSearchKitsNew:
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit:
@@ -467,12 +500,15 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayEdit:
-                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsEdit:
-                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningKitPricingSearchKitsEdit:
                     //TODO: get the full entity from the server and load edit screen.
                     //This is a simulation only.
-                    SelectedPriceRoutine = SelectedEntity as DisplayEntities.Pricing;
+                    SelectedPricingEveryday = SelectedEntity as DisplayEntities.PricingEveryday;
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
+                    ExecuteAsyncCommand(LoadPricingEverydayCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Retrieving pricing...", "PriceRoutine was successfully retrieved.");
+                    break;
+
+                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsEdit:
+                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningKitPricingSearchKitsEdit:
                     break;
 
                 //Copy current entity.
@@ -483,13 +519,15 @@ namespace APLPX.UI.WPF.ViewModels
                     SelectedFeature.DisableRemainingSteps();
                     break;
 
-                case DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsCopy:
                 case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayCopy:
-                case DTO.ModuleFeatureStepActionType.PlanningKitPricingSearchKitsCopy:
                     //Create a copy of the existing entity and load edit screen.                   
-                    SelectedPriceRoutine = SelectedPriceRoutine.Copy();
+                    SelectedPricingEveryday = SelectedPricingEveryday.Copy();
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                     SelectedFeature.DisableRemainingSteps();
+                    break;
+
+                case DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsCopy:
+                case DTO.ModuleFeatureStepActionType.PlanningKitPricingSearchKitsCopy:
                     break;
 
                 //Save the current entity.
@@ -501,13 +539,15 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningEverydayPricingIdentitySave:
-                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningPromotionPricingIdentitySave:
-                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningKitPricingIdentitySave:
+                
                     //TODO: call price routine save method on service.
-                    SelectedPriceRoutine.IsDirty = false;
+                    SelectedPricingEveryday.IsDirty = false;
                     SelectedFeature.EnableRemainingSteps();
                     break;
 
+                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningPromotionPricingIdentitySave:
+                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningKitPricingIdentitySave:
+                    break;
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningAnalyticsFiltersSave:
                     ExecuteAsyncCommand(SaveFiltersCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Filters saving...", "Filters saved.");
                     break;
@@ -553,8 +593,12 @@ namespace APLPX.UI.WPF.ViewModels
 
                         if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
-                            var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
-                            var displayAnalytics = analyticDtos.ToDisplayEntities();
+                            //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
+
+                            var displayAnalytics = base.Session.Analytics.ToDisplayEntities();
+                            //var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
+                            //var displayAnalytics = analyticDtos.ToDisplayEntities();
+
                             var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
                             SelectedFeature.SearchableEntities = iSearchables;
                             _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
@@ -570,7 +614,17 @@ namespace APLPX.UI.WPF.ViewModels
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningPromotionPricing:
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningEverydayPricing:
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningKitPricing:
-                        SelectedFeatureViewModel = new SearchViewModel(SelectedFeature);
+                        //SelectedFeatureViewModel = new SearchViewModel(SelectedFeature);
+                        if( !_featureCache.ContainsKey(SelectedFeature.TypeId))
+                        {
+                            var pricing = base.Session.Pricing.ToDisplayEntities();
+                            SelectedFeature.SearchableEntities = pricing.Cast<ISearchableEntity>().ToList();
+                        }
+                        else
+                        {
+                            SelectedFeatureViewModel.SelectedFeature = _featureCache[SelectedFeature.TypeId];
+                        }
+                        SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep;
                         break;
 
                     default:
@@ -619,9 +673,10 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingIdentity:
+                     result = new PricingIdentityViewModel(SelectedPricingEveryday);
+                    break;
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingIdentity:
-                case DTO.ModuleFeatureStepType.PlanningKitPricingIdentity:
-                    result = new PricingIdentityViewModel(SelectedPriceRoutine);
+                case DTO.ModuleFeatureStepType.PlanningKitPricingIdentity:                    
                     break;
 
                 //Filters
@@ -629,9 +684,11 @@ namespace APLPX.UI.WPF.ViewModels
                     result = new FilterViewModel(SelectedAnalytic);
                     break;
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingFilters:
+                    result = new FilterViewModel(SelectedPricingEveryday);
+                    break;
+
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingFilters:
-                case DTO.ModuleFeatureStepType.PlanningKitPricingFilters:
-                    result = new FilterViewModel(SelectedPriceRoutine);
+                case DTO.ModuleFeatureStepType.PlanningKitPricingFilters:                    
                     break;
 
                 //Price Lists
@@ -639,12 +696,13 @@ namespace APLPX.UI.WPF.ViewModels
                     result = new PriceListViewModel(SelectedEntity, SelectedAnalytic.PriceListGroups);
                     break;
 
-                case DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:
-                case DTO.ModuleFeatureStepType.PlanningPromotionPricingPriceLists:
-                case DTO.ModuleFeatureStepType.PlanningKitPricingPriceLists:
-                    result = new PriceListViewModel(SelectedEntity, SelectedPriceRoutine.PriceListGroups);
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:              
+                    //result = newPriceListViewModel(SelectedEntity, SelectedPricingEveryday.PriceListGroups);
                     break;
 
+                case DTO.ModuleFeatureStepType.PlanningPromotionPricingPriceLists:
+                case DTO.ModuleFeatureStepType.PlanningKitPricingPriceLists:
+                    break;
                 //Value Drivers
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsValueDrivers:
                     result = new AnalyticDriverViewModel(SelectedAnalytic);
@@ -656,30 +714,40 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingResults:
+                    break;
+
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingResults:
                 case DTO.ModuleFeatureStepType.PlanningKitPricingResults:
                     break;
 
                 //Rounding
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingRounding:
+                    break;
+
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingRounding:
                 case DTO.ModuleFeatureStepType.PlanningKitPricingRounding:
                     break;
 
-                //Stragegy
+                //Strategy
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingStrategy:
+                    break;
+
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingStrategy:
                 case DTO.ModuleFeatureStepType.PlanningKitPricingStrategy:
                     break;
 
                 //Forecast
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingForecast:
+                    break;
+
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingForecast:
                 case DTO.ModuleFeatureStepType.PlanningKitPricingForecast:
                     break;
 
                 //Approval
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingApproval:
+                    break;
+
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingApproval:
                 case DTO.ModuleFeatureStepType.PlanningKitPricingApproval:
                     break;
@@ -696,8 +764,8 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepType.AdministrationUserMaintenanceSearchUsers:
                     break;
 
-                case DTO.ModuleFeatureStepType.AdministrationUserMaintenanceUserLogin:
-                    break;
+                //case DTO.ModuleFeatureStepType.AdministrationUserMaintenanceUserLogin:
+                //    break;
 
                 case DTO.ModuleFeatureStepType.AdministrationUserMaintenanceUserIdentity:
                     break;
@@ -805,8 +873,8 @@ namespace APLPX.UI.WPF.ViewModels
         /// </summary>        
         private void OnSelectedEntityChanged(ISearchableEntity entity)
         {
-            SelectedAnalytic = entity as DisplayEntities.Analytic;
-            SelectedPriceRoutine = entity as DisplayEntities.Pricing;
+            SelectedAnalytic = entity as DisplayEntities.Analytic;           
+            SelectedPricingEveryday = entity as DisplayEntities.PricingEveryday;
 
             this.RaisePropertyChanged("IsEntitySelected");
             this.RaisePropertyChanged("SelectedEntity");

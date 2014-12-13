@@ -15,10 +15,10 @@ using APLPX.Client.Contracts;
 
 namespace APLPX.UI.WPF.Data
 {
-    public class MockUserSevice : IUserService
+    public class MockUserService : IUserService
     {
 
-        public MockUserSevice()
+        public MockUserService()
         {
             client = new MongoClient(connectionString);
             server = client.GetServer();
@@ -52,7 +52,23 @@ namespace APLPX.UI.WPF.Data
         {
             get
             {
-                return database.GetCollection<Module>("Modules_Role");
+                return database.GetCollection<Module>("AllModules_Role");
+            }
+        }
+
+        public MongoCollection<SessionList> Sessions
+        {
+            get
+            {
+                return database.GetCollection<SessionList>("Sessions");
+            }
+        }
+
+        public List<FilterGroup> FilterGroups
+        {
+            get
+            {
+                return database.GetCollection<FilterGroup>("FilterGroups").AsQueryable().ToList();
             }
         }
 
@@ -84,26 +100,36 @@ namespace APLPX.UI.WPF.Data
                 //var qLicFeatures = Query.ElemMatch("Features.Roles" , Query.EQ( "Id" , 3));
                 //var q = Query.And(new IMongoQuery[] {qLicFeatures, qLicMods });
                 //var lModsandFeats = Modules.Find(qLicFeatures);
+                
+                //find  session based on 
+                var owner = user.Identity.FirstName + " " + user.Identity.LastName;
+                var s = Sessions.AsQueryable().Where(x => x.Owner == owner).FirstOrDefault();
 
+                //var fg = FilterGroups.AsQueryable().ToList();
+                
 
-                var modules = Modules.AsQueryable().ToList();
+                //var modules = Modules.AsQueryable().ToList();
               
-                var licensedMods = from m in modules
-                                   where m.Roles.Any(r => r.Id == user.Role.Id)
-                                         select new Module
-                                         {
-                                            Type = m.Type,
-                                            Name =  m.Name,
-                                            Title = m.Title,
-                                            Sort = m.Sort,
-                                            Roles = m.Roles,
-                                            Features = m.Features.Where( fe => fe.Roles.Any( r => r.Id == user.Role.Id)).ToList()
-                                         };
+                //var licensedMods = from m in modules
+                //                   where m.Roles.Any(r => r.Id == user.Role.Id)
+                //                         select new Module
+                //                         {
+                //                            Type = m.Type,
+                //                            Name =  m.Name,
+                //                            Title = m.Title,
+                //                            Sort = m.Sort,
+                //                            Roles = m.Roles,
+                //                            Features = m.Features.Where( fe => fe.Roles.Any( r => r.Id == user.Role.Id)).ToList()
+                //                         };
 
                 return new Session<NullT>()
                     { 
                         User = session.User,
-                        Modules = licensedMods.ToList(),
+                        Modules = s.Modules,
+                        Analytics = s.Analytics,
+                        Pricing = s.Pricing,
+                        FilterGroups = null,
+                        //Mo<pdules = licensedMods.ToList(),
                         //Modules = lModsandFeats.ToList(), 
                         SessionOk = true
                     };

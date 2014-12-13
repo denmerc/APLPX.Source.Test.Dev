@@ -16,7 +16,7 @@ namespace APLPX.UI.Wpf.Tests
     {
         private SERVICES.MockAnalyticService AnalyticService = new SERVICES.MockAnalyticService();
 
-        private SERVICES.MockUserSevice UserService = new SERVICES.MockUserSevice();
+        private SERVICES.MockUserService UserService = new SERVICES.MockUserService();
         //private User User;
         //private Session<NullT> InitSession;
         //private Session<NullT> AuthSession;

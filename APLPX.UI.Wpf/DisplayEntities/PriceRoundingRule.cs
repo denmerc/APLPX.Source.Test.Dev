@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
@@ -16,7 +13,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private decimal _dollarRangeLower;
         private decimal _dollarRangeUpper;
         private decimal _valueChange;
-        private System.Int16 _sort;
+        private short _sort;
         private List<SQLEnumeration> _roundingTypes;
 
         #endregion
@@ -62,7 +59,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _valueChange, value); }
         }
 
-        public System.Int16 Sort
+        public short Sort
         {
             get { return _sort; }
             set { this.RaiseAndSetIfChanged(ref _sort, value); }

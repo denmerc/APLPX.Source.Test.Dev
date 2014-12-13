@@ -27,9 +27,9 @@ namespace APLPX.UI.WPF.Interfaces
 
         Session<List<Filter>> SaveFilters(Session<Analytic> session);
 
-        Session<List<AnalyticDriver>> LoadDrivers(Session<AnalyticIdentity> session);
+        Session<List<AnalyticValueDriver>> LoadDrivers(Session<AnalyticIdentity> session);
 
-        Session<List<AnalyticDriver>> SaveDrivers(Session<Analytic> session);
+        Session<List<AnalyticValueDriver>> SaveDrivers(Session<Analytic> session);
 
     }
 }

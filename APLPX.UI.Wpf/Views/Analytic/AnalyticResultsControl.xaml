@@ -12,10 +12,10 @@
         <ResourceDictionary>
         <CollectionViewSource x:Key="cvsResults" Source="{Binding Results}">
             <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Group"></PropertyGroupDescription>
+                <PropertyGroupDescription PropertyName="Id"></PropertyGroupDescription>
             </CollectionViewSource.GroupDescriptions>
                 <CollectionViewSource.SortDescriptions>
-                    <scm:SortDescription PropertyName="Group"></scm:SortDescription>
+                    <scm:SortDescription PropertyName="Id"></scm:SortDescription>
                     
 
                 </CollectionViewSource.SortDescriptions>
@@ -43,7 +43,7 @@
                   AutoGenerateColumns="False" Visibility="Visible">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Driver Name" Binding="{Binding DriverName}" />
-                <DataGridTextColumn Header="Group" Binding="{Binding Group}" />
+                <DataGridTextColumn Header="Group" Binding="{Binding Id}" />
                 <DataGridTextColumn Header="Sku Count" Binding="{Binding SkuCount}" />
                 <DataGridTextColumn Header="Min Value" Binding="{Binding MinValue}" />
                 <DataGridTextColumn Header="Max Value" Binding="{Binding MaxValue}" />

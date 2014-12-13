@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.Analytics.cs" />
+    <Compile Include="Client.Pricing.Everyday.cs" />
     <Compile Include="Client.User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

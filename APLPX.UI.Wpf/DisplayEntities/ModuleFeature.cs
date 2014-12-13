@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+
 using APLPX.Client.Entity;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
@@ -386,6 +387,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                 {
                     entity.ParentKey = searchGroup.ParentName;
                     entity.CanNameChange = searchGroup.CanNameChange;
+                    entity.CanSearchKeyChange = searchGroup.CanSearchKeyChange;
                 }
             }
         }

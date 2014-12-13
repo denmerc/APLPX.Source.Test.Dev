@@ -6,16 +6,24 @@ using Display = APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Mappers
 {
+    //TODO: rename PricingEverydayMapper
+
     /// <summary>
-    /// Extension methods for mapping Pricing display and client entities.
+    /// Extension methods for mapping PricingEveryday display and client entities.
     /// </summary>
     public static class PricingMapper
     {
-        public static Display.Pricing ToDisplayEntity(this DTO.Pricing dto)
+        public static Display.PricingEveryday ToDisplayEntity(this DTO.PricingEveryday dto)
         {
-            var displayEntity = new Display.Pricing();
+            var displayEntity = new Display.PricingEveryday();
 
-            displayEntity.Identity = dto.Identity.ToDisplayEntity();
+            displayEntity.Id = dto.Id;
+            displayEntity.SearchKey = dto.SearchGroupKey;
+
+            if (dto.Identity != null)
+            {
+                displayEntity.Identity = dto.Identity.ToDisplayEntity();
+            }
 
             if (dto.FilterGroups != null)
             {
@@ -25,11 +33,33 @@ namespace APLPX.UI.WPF.Mappers
                 }
             }
 
-            if (dto.Drivers != null)
+            if (dto.ValueDrivers != null)
             {
-                foreach (var driver in dto.Drivers)
+                foreach (var driver in dto.ValueDrivers)
                 {
-                    displayEntity.Drivers.Add(driver.ToDisplayEntity());
+                    displayEntity.ValueDrivers.Add(driver.ToDisplayEntity());
+                }
+            }
+
+            if (dto.KeyValueDriver != null)
+            {
+                displayEntity.KeyValueDriver = dto.KeyValueDriver.ToDisplayEntity();
+            }
+
+
+            if (dto.LinkedValueDrivers != null)
+            {
+                foreach (var driver in dto.LinkedValueDrivers)
+                {
+                    displayEntity.LinkedValueDrivers.Add(driver.ToDisplayEntity());
+                }
+            }
+
+            if (dto.PricingModes != null)
+            {
+                foreach (var mode in dto.PricingModes)
+                {
+                    displayEntity.PricingModes.Add(mode.ToDisplayEntity());
                 }
             }
 
@@ -41,9 +71,22 @@ namespace APLPX.UI.WPF.Mappers
                 }
             }
 
+            if (dto.KeyPriceListRule != null)
+            {
+                displayEntity.KeyPriceListRule = dto.KeyPriceListRule.ToDisplayEntity();
+            }
+
+            if (dto.LinkedPriceListRules != null)
+            {
+                foreach (var rule in dto.LinkedPriceListRules)
+                {
+                    displayEntity.LinkedPriceListRules.Add(rule.ToDisplayEntity());
+                }
+            }
+
             if (dto.Results != null)
             {
-                foreach (var result in dto.Results)
+                foreach (DTO.PricingEverydayResult result in dto.Results)
                 {
                     displayEntity.Results.Add(result.ToDisplayEntity());
                 }
@@ -52,8 +95,21 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
-        public static DTO.Pricing ToDto(this Display.Pricing displayEntity)
+        public static List<Display.PricingEveryday> ToDisplayEntities(this List<DTO.PricingEveryday> dtoList)
         {
+            var displayList = new List<Display.PricingEveryday>();
+
+            foreach (DTO.PricingEveryday dto in dtoList)
+            {
+                displayList.Add(dto.ToDisplayEntity());
+            }
+
+            return displayList;
+        }
+
+        public static DTO.PricingEveryday ToDto(this Display.PricingEveryday displayEntity)
+        {
+            DTO.PricingIdentity identity = displayEntity.Identity.ToDto();
 
             var filterGroups = new List<DTO.FilterGroup>();
             foreach (var filterGroup in displayEntity.FilterGroups)
@@ -61,32 +117,59 @@ namespace APLPX.UI.WPF.Mappers
                 filterGroups.Add(filterGroup.ToDto());
             }
 
-            var drivers = new List<DTO.PricingDriver>();
-            foreach (var driver in displayEntity.Drivers)
+            var valueDrivers = new List<DTO.PricingEverydayValueDriver>();
+            foreach (var driver in displayEntity.ValueDrivers)
             {
-                drivers.Add(driver.ToDto());
+                valueDrivers.Add(driver.ToDto());
             }
 
-            var priceListGroups = new List<DTO.PriceListGroup>();
+            DTO.PricingEverydayKeyValueDriver keyValueDriver = displayEntity.KeyValueDriver.ToDto();
+
+            var linkedValueDrivers = new List<DTO.PricingEverydayLinkedValueDriver>();
+            foreach (var driver in displayEntity.LinkedValueDrivers)
+            {
+                linkedValueDrivers.Add(driver.ToDto());
+            }
+
+            var pricingModes = new List<DTO.PricingMode>();
+            foreach (var mode in displayEntity.PricingModes)
+            {
+                pricingModes.Add(mode.ToDto());
+            }
+
+            var priceListGroups = new List<DTO.PricingEverydayPriceListGroup>();
             foreach (var priceListGroup in displayEntity.PriceListGroups)
             {
                 priceListGroups.Add(priceListGroup.ToDto());
             }
 
-            var results = new List<DTO.PricingResult>();
+            DTO.PricingKeyPriceListRule keyPriceListRule = displayEntity.KeyPriceListRule.ToDto();
+
+            var linkedPriceListRules = new List<DTO.PricingLinkedPriceListRule>();
+            foreach (var rule in displayEntity.LinkedPriceListRules)
+            {
+                linkedPriceListRules.Add(rule.ToDto());
+            }
+
+            var results = new List<DTO.PricingEverydayResult>();
             foreach (var result in displayEntity.Results)
             {
                 results.Add(result.ToDto());
             }
 
-            var dto = new DTO.Pricing(
-                                displayEntity.Id,
-                                displayEntity.Identity.ToDto(),
-                                drivers,
-                                priceListGroups,
-                                filterGroups,
-                                results);
-
+            DTO.PricingEveryday dto = new DTO.PricingEveryday(
+                                                displayEntity.Id,
+                                                displayEntity.SearchKey,
+                                                identity,
+                                                filterGroups,
+                                                valueDrivers,
+                                                keyValueDriver,
+                                                linkedValueDrivers,
+                                                pricingModes,
+                                                priceListGroups,
+                                                keyPriceListRule,
+                                                linkedPriceListRules,
+                                                results);
             return dto;
         }
     }

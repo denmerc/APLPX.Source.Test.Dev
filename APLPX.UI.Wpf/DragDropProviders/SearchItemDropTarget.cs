@@ -26,7 +26,9 @@ namespace APLPX.UI.WPF.DragDropProviders
 
             var targetSearchGroup = target.DataContext as FeatureSearchGroup;
 
-            if (targetSearchGroup.CanNameChange && obj.GetDataPresent(DataFormats.StringFormat, true))
+            if (targetSearchGroup != null &&
+                targetSearchGroup.CanSearchKeyChange &&
+                obj.GetDataPresent(DataFormats.StringFormat, true))
             {
                 ISearchableEntity sourceEntity = obj.GetData(DataFormats.StringFormat) as ISearchableEntity;
                 if (sourceEntity != null)

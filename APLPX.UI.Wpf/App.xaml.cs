@@ -6,6 +6,10 @@ using APLPX.UI.WPF.Data;
 using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.ViewModels;
 using DTO = APLPX.Client.Entity;
+using ReactiveUI;
+using System.Reactive;
+using System.Threading.Tasks;
+using APLPX.Client.Entity;
 
 namespace APLPX.UI.WPF
 {
@@ -18,13 +22,16 @@ namespace APLPX.UI.WPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            var userService = new MockUserService();
+            var analyticService = new MockAnalyticService();
+
             var eventManager = new EventAggregator();
             App.Current.Resources.Add("EventManager", eventManager);
 
             if (ConfigurationManager.AppSettings["Environment"] != "DEV")
             {
                 var loginWindow = new LoginWindow();
-                loginWindow.DataContext = new LoginViewModel(new MockUserSevice());
+                loginWindow.DataContext = new LoginViewModel(userService);
                 loginWindow.ShowMaxRestoreButton = false;
                 loginWindow.ShowMinButton = false;
                 loginWindow.ShowDialog();
@@ -44,16 +51,20 @@ namespace APLPX.UI.WPF
                                  
                                        )
                 };
-
-                var userService = new MockUserSevice();
+                //TODO: UNCOMMENT WHEN UserService is updated to work with new entity model:
+                //var userService = new MockUserSevice();
                 DTO.Session<DTO.NullT> response = userService.Authenticate(session);
                 if (response.SessionOk)
                 {
                     session.Modules = response.Modules;
-                    var mvm = new MainViewModel(session, new MockAnalyticService(), new MockUserSevice());
+                    session.Analytics = response.Analytics;
+                    session.Pricing = response.Pricing;
+                    //session.FilterGroups = FilterGroups;
+                    var mvm = new MainViewModel(session, analyticService, userService);
                     var mainWindow = new MainWindow();
                     mainWindow.DataContext = mvm;
                     mainWindow.Show();
+                //TODO: UNCOMMENT WHEN UserService is updated to work with new entity model:
                 }
                 else
                 {
@@ -70,5 +81,8 @@ namespace APLPX.UI.WPF
         {
             base.OnExit(e);
         }
+
+        protected ReactiveCommand<Unit> LoadFiltersCommand { get; private set; }
+        public List<FilterGroup> FilterGroups { get; set; }
     }
 }

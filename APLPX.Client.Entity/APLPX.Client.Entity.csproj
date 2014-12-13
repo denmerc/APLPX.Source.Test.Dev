@@ -75,8 +75,10 @@
   <ItemGroup>
     <Compile Include="Entity.Analytics.cs" />
     <Compile Include="Entity.Common.cs" />
+    <Compile Include="Entity.Common.Navigation.cs" />
+    <Compile Include="Entity.Common.Pricing.cs" />
     <Compile Include="Entity.Enumerations.cs" />
-    <Compile Include="Entity.Pricing.cs" />
+    <Compile Include="Entity.Pricing.Everyday.cs" />
     <Compile Include="Entity.Session.cs" />
     <Compile Include="Entity.User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEveryday : DisplayEntityBase, ISearchableEntity
     {
         #region Private Fields
 
-        private int _id;        
+        private int _id;
         private PricingIdentity _identity;
         private List<FilterGroup> _filterGroups;
         private List<PricingEverydayValueDriver> _valueDrivers;
         private PricingEverydayKeyValueDriver _keyValueDriver;
-        private List<PricingEverydayLinkedValueDriverGroup> _linkedValueDrivers;
+        private List<PricingEverydayLinkedValueDriver> _linkedValueDrivers;
         private List<PricingMode> _pricingModes;
         private List<PricingEverydayPriceListGroup> _priceListGroups;
         private PricingKeyPriceListRule _keyPriceListRule;
@@ -23,6 +26,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _searchGroupKey;
         private string _parentKey;
         private bool _canNameChange;
+        private bool _canSearchKeyChange;
 
         #endregion
 
@@ -34,7 +38,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             FilterGroups = new List<FilterGroup>();
             ValueDrivers = new List<PricingEverydayValueDriver>();
             KeyValueDriver = new PricingEverydayKeyValueDriver();
-            LinkedValueDrivers = new List<PricingEverydayLinkedValueDriverGroup>();
+            LinkedValueDrivers = new List<PricingEverydayLinkedValueDriver>();
             PricingModes = new List<PricingMode>();
             PriceListGroups = new List<PricingEverydayPriceListGroup>();
             KeyPriceListRule = new PricingKeyPriceListRule();
@@ -82,7 +86,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _keyValueDriver, value); }
         }
 
-        public List<PricingEverydayLinkedValueDriverGroup> LinkedValueDrivers
+        public List<PricingEverydayLinkedValueDriver> LinkedValueDrivers
         {
             get { return _linkedValueDrivers; }
             set { this.RaiseAndSetIfChanged(ref _linkedValueDrivers, value); }
@@ -134,12 +138,17 @@ namespace APLPX.UI.WPF.DisplayEntities
         }
 
         #endregion
-   
 
         public bool CanNameChange
         {
             get { return _canNameChange; }
             set { _canNameChange = value; }
+        }
+
+        public bool CanSearchKeyChange
+        {
+            get { return _canSearchKeyChange; }
+            set { _canSearchKeyChange = value; }
         }
     }
 }

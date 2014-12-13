@@ -9,12 +9,13 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
-        private int _id;        
+        private int _id;
         private PricingIdentity _identity;
         private List<FilterGroup> _filterGroups;
         private string _searchGroupKey;
         private string _parentKey;
         private bool _canNameChange;
+        private bool _canSearchKeyChange;
 
         #endregion
 
@@ -63,7 +64,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _parentKey; }
             set { _parentKey = value; }
-        }   
+        }
 
         public string EntityTypeName
         {
@@ -76,6 +77,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { _canNameChange = value; }
         }
 
+        public bool CanSearchKeyChange
+        {
+            get { return _canSearchKeyChange; }
+            set { _canSearchKeyChange = value; }
+        }
         #endregion
     }
 }

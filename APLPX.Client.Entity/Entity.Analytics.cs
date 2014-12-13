@@ -6,18 +6,17 @@ using System.Runtime.Serialization;
 namespace APLPX.Client.Entity
 {
     [DataContract]
-    //[BsonNoId]
-    [BsonIgnoreExtraElements]
     public class Analytic
     {
+
         [BsonId]
         public MongoDB.Bson.ObjectId _id { get; set; }
         #region Initialize...
-        public Analytic() {}
+        public Analytic() { }
         public Analytic(
             int id
             ) {
-            Id=id;
+            Id = id;
         }
         public Analytic(
             int id,
@@ -37,14 +36,21 @@ namespace APLPX.Client.Entity
         }
         public Analytic(
             int id,
-            List<AnalyticDriver> drivers
+            AnalyticIdentity identity
             ) {
             Id = id;
-            Drivers = drivers;
+            Identity = identity;
         }
         public Analytic(
             int id,
-            List<PriceListGroup> priceListGroups
+            List<AnalyticValueDriver> valueDrivers
+            ) {
+            Id = id;
+            ValueDrivers = valueDrivers;
+        }
+        public Analytic(
+            int id,
+            List<AnalyticPriceListGroup> priceListGroups
             ) {
             Id = id;
             PriceListGroups = priceListGroups;
@@ -60,14 +66,14 @@ namespace APLPX.Client.Entity
             int id,
             string searchGroupKey,
             AnalyticIdentity identity,
-            List<AnalyticDriver> drivers,
-            List<PriceListGroup> priceListGroups,
+            List<AnalyticValueDriver> valueDrivers,
+            List<AnalyticPriceListGroup> priceListGroups,
             List<FilterGroup> filterGroups
             ) {
             Id = id;
             SearchGroupKey = searchGroupKey;
             Identity = identity;
-            Drivers = drivers;
+            ValueDrivers = valueDrivers;
             PriceListGroups = priceListGroups;
             FilterGroups = filterGroups;
         }
@@ -79,15 +85,16 @@ namespace APLPX.Client.Entity
         [DataMember]
         public string SearchGroupKey { get; private set; }
         [DataMember]
-        public AnalyticIdentity Identity { get; set; }
+        public AnalyticIdentity Identity { get; private set; }
         [DataMember]
-        public List<AnalyticDriver> Drivers { get; set; }
+        public List<AnalyticValueDriver> ValueDrivers { get; private set; }
         [DataMember]
-        public List<PriceListGroup> PriceListGroups { get; set; }
+        public List<AnalyticPriceListGroup> PriceListGroups { get; private set; }
         [DataMember]
         public List<FilterGroup> FilterGroups { get; set; }
     }
 
+    [BsonNoId]
     [DataContract]
     public class AnalyticIdentity
     {
@@ -169,80 +176,62 @@ namespace APLPX.Client.Entity
         public bool Active { get; set; }
     }
 
-    [DataContract]
     [BsonNoId]
-    [BsonIgnoreExtraElements]
-    public class AnalyticDriver
+    [DataContract]
+    public class AnalyticValueDriver : ValueDriver
     {
         #region Initialize...
-        public AnalyticDriver() { }
-        public AnalyticDriver(
+        public AnalyticValueDriver() { }
+        public AnalyticValueDriver(
             int id,
             int key,
-            List<AnalyticDriverMode> modes
-            ) {
-            Id = id;
-            Key = key;
-            IsSelected = true;
+            bool isSelected
+            )
+            : base(id, key, isSelected) { }
+        public AnalyticValueDriver(
+            int id,
+            int key,
+            bool isSelected,
+            List<AnalyticValueDriverMode> modes
+            )
+            : base(id, key, isSelected) {
             Modes = modes;
         }
-        public AnalyticDriver(
+        public AnalyticValueDriver(
             int id,
             int key,
-            string name,
-            string title,
-            List<AnalyticResult> results
-            ) {
-            Id=id;
-            Key = key;
-            Name = name;
-            Title = title;
-            IsSelected = true;
+            bool isSelected,
+            List<AnalyticResultValueDriverGroup> results
+            )
+            : base(id, key, isSelected) {
             Results = results;
         }
-        public AnalyticDriver(
+        public AnalyticValueDriver(
             int id,
             int key,
+            bool isSelected,
             string name,
             string title,
             short sort,
-            bool isSelected,
-            List<AnalyticResult> results,
-            List<AnalyticDriverMode> modes
-            ) {
-            Id=id;
-            Key = key;
-            Name = name;
-            Title = title;
-            Sort = sort;
-            IsSelected = isSelected;
+            List<AnalyticResultValueDriverGroup> results,
+            List<AnalyticValueDriverMode> modes
+           )
+            : base(id, key, isSelected, name, title, sort) {
             Results = results;
             Modes = modes;
         }
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public List<AnalyticValueDriverMode> Modes { get; private set; }
         [DataMember]
-        public int Key { get; private set; }
-        [DataMember]
-        public string Name { get; private set; }
-        [DataMember]
-        public string Title { get; private set; }
-        [DataMember]
-        public short Sort { get; private set; }
-        [DataMember]
-        public bool IsSelected { get; set; }
-        [DataMember]
-        public List<AnalyticDriverMode> Modes { get; private set; }
-        [DataMember]
-        public List<AnalyticResult> Results { get; private set; }
+        public List<AnalyticResultValueDriverGroup> Results { get; private set; }
 
         #region Driver mode name indexer...
-        public AnalyticDriverMode this[string index] {
+        public AnalyticValueDriverMode this[string index] {
             get {
-                AnalyticDriverMode mode = new AnalyticDriverMode();
-                foreach (AnalyticDriverMode item in Modes) {
+                AnalyticValueDriverMode mode = new AnalyticValueDriverMode();
+                foreach (AnalyticValueDriverMode item in Modes) {
                     if (item.Name == index) {
                         mode = item;
                         break;
@@ -254,125 +243,92 @@ namespace APLPX.Client.Entity
         #endregion
     }
 
-    [DataContract]
     [BsonNoId]
-    [BsonIgnoreExtraElements]
-    public class AnalyticDriverMode
+    [DataContract]
+    public class AnalyticValueDriverMode : ValueDriverMode
     {
         #region Initialize...
-        public AnalyticDriverMode() { }
-        public AnalyticDriverMode(
+        public AnalyticValueDriverMode() { }
+        public AnalyticValueDriverMode(
             int key,
-            List<AnalyticDriverGroup> groups
-            ) {
-            Key = key;
-            IsSelected = true;
+            bool isSelected,
+            List<ValueDriverGroup> groups
+            )
+            : base(key, isSelected) {
             Groups = groups;
         }
-        public AnalyticDriverMode(
+        public AnalyticValueDriverMode(
             int key,
+            bool isSelected,
             string name,
             string title,
             short sort,
-            bool isSelected,
-            List<AnalyticDriverGroup> groups
-            ) {
-            Key = key;
-            Name = name;
-            Title = title;
-            Sort = sort;
-            IsSelected = isSelected;
+            List<ValueDriverGroup> groups
+            )
+            : base(key, isSelected, name, title, sort) {
             Groups = groups;
         }
         #endregion
 
         [DataMember]
-        public int Key { get; private set; }
-        [DataMember]
-        public string Name { get; private set; }
-        [DataMember]
-        public string Title { get; private set; }
-        [DataMember]
-        public short Sort { get; private set; }
-        [DataMember]
-        public bool IsSelected { get; set; }
-        [DataMember]
-        public List<AnalyticDriverGroup> Groups { get; private set; }
+        public List<ValueDriverGroup> Groups { get; private set; }
     }
 
-    [DataContract]
     [BsonNoId]
-    [BsonIgnoreExtraElements]
-    public class AnalyticDriverGroup
+    [DataContract]
+    public class AnalyticResultValueDriverGroup : ValueDriverGroup
     {
         #region Initialize...
-        public AnalyticDriverGroup() { }
-        public AnalyticDriverGroup(
-            int id
-            ) {
-            Id = id;
-            Value = 0;
-            MinOutlier = 0;
-            MaxOutlier = 0;
-        }
-        public AnalyticDriverGroup(
+        public AnalyticResultValueDriverGroup() { }
+        public AnalyticResultValueDriverGroup(
             int id,
             short value,
             decimal minOutlier,
             decimal maxOutlier,
-            short sort
-            ) {
-            Id = id;
-            Value = value;
-            MinOutlier = minOutlier;
-            MaxOutlier = maxOutlier;
-            Sort = sort;
+            short sort,
+            int skuCount,
+            string salesValue
+            )
+            : base(id, value, minOutlier, maxOutlier, sort) {
+            SkuCount = skuCount;
+            SalesValue = salesValue;
         }
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public string MinValue { get; set; }
         [DataMember]
-        public short Value { get; set; }
+        public string MaxValue { get; set; }
+        //[DataMember]
+        //public int Group { get; set; }
         [DataMember]
-        public decimal MinOutlier { get; set; }
+        public int SkuCount { get; private set; }
         [DataMember]
-        public decimal MaxOutlier { get; set; }
-        [DataMember]
-        public short Sort { get; private set; }
+        public string SalesValue { get; private set; }
     }
 
     [DataContract]
-    public class AnalyticResult
+    [BsonNoId]
+    public class AnalyticPriceListGroup : PriceListGroup
     {
         #region Initialize...
-        public AnalyticResult() { }
-        public AnalyticResult(
-            short group,
-            decimal minValue,
-            decimal maxValue,
-            string salesValue,
-            short sort
-            ) {
-            Group = group;
-            MinValue = minValue;
-            MaxValue = maxValue;
-            SalesValue = salesValue;
-            Sort = sort;
+        public AnalyticPriceListGroup() { }
+        public AnalyticPriceListGroup(
+            int key,
+            string name,
+            string title,
+            short sort,
+            List<PriceList> priceLists
+            )
+            : base(key, name, title, sort) {
+            PriceLists = priceLists;
         }
         #endregion
 
         [DataMember]
-        public short Group { get; private set; }
+        public List<PriceList> PriceLists { get; private set; }
         [DataMember]
-        public decimal MinValue { get; private set; }
-        [DataMember]
-        public decimal MaxValue { get; private set; }
-        [DataMember]
-        public string SalesValue { get; private set; }
-        [DataMember]
-        public short Sort { get; private set; }
-
+        public string TypeName { get; private set; }
     }
 }
 

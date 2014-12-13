@@ -1,4 +1,5 @@
 ﻿using System;
+using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
@@ -7,16 +8,16 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
     /// <summary>
     /// View model for price routine identity-related views.
     /// </summary>
-    public class PricingIdentityViewModel:ViewModelBase
+    public class PricingIdentityViewModel : ViewModelBase
     {
-        private Display.Pricing _priceRoutine;
+        private ISearchableEntity _priceRoutine;
 
-        public PricingIdentityViewModel(Display.Pricing pricing)
+        public PricingIdentityViewModel(ISearchableEntity entity)
         {
-            _priceRoutine = pricing;
+            _priceRoutine = entity;
         }
 
-        public Display.Pricing PriceRoutine
+        public ISearchableEntity PriceRoutine
         {
             get { return _priceRoutine; }
             private set

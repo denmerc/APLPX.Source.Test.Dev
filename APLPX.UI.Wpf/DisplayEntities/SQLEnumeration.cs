@@ -13,7 +13,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private short _sort;
-        private short _value;
+        private int _value;
         private string _name;
         private string _description;
 
@@ -35,7 +35,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
-        public short Value
+        public int Value
         {
             get { return _value; }
             set { this.RaiseAndSetIfChanged(ref _value, value); }

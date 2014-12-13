@@ -75,11 +75,27 @@ namespace APLPX.UI.WPF.Data
             }
         }
 
+        public MongoCollection<PricingEveryday> PricingEveryday
+        {
+            get
+            {
+                return database.GetCollection<PricingEveryday>("test2");
+            }
+        }
+
         public MongoCollection<Analytic> AnalyticList
         {
             get
             {
                 return database.GetCollection<Analytic>("AnalyticList");
+            }
+        }
+
+        public MongoCollection<Analytic> AnalyticAll_NoFilters
+        {
+            get
+            {
+                return database.GetCollection<Analytic>("AnalyticsAll_NoFilters");
             }
         }
 
@@ -99,30 +115,43 @@ namespace APLPX.UI.WPF.Data
 
         public Session<List<Analytic>> LoadList(Session<NullT> session)
         {
+            //var ids = Modules.AsQueryable().Where()
             var analytics = AnalyticList.AsQueryable().ToList();
-            return new Session<List<Analytic>> { Data = analytics};
+            return new Session<List<Analytic>> { Data = analytics };
         }
 
         public Session<Analytic> SaveIdentity(Session<Analytic> session)
         {
-            var a = Analytics.AsQueryable().First(x => x.Id == session.Data.Id);
-            a.Identity = session.Data.Identity;
-            Analytics.Save(a);
+            //var a = Analytics.AsQueryable().First(x => x.Id == session.Data.Id);
+            //a.Identity = session.Data.Identity;
+            Analytics.Save(session.Data);
 
             ////var newA  = new Analytic(a.Id, a.Identity);
             ////return new Session<Analytic>{Data = newA}; //TODO: return keys
-            return new Session<Analytic> { Data = null}; //TODO: return keys
+            return new Session<Analytic> { Data = null }; //TODO: return keys
         }
 
         public Session<Analytic> LoadAnalytic(Session<Analytic> session)
         {
 
             var a = session.Data as Analytic;
-            var newA = Analytics.AsQueryable()
+            var newA = AnalyticAll_NoFilters.AsQueryable()
                 .Where(x => x.Id == a.Id).SingleOrDefault();
 
 
             return new Session<Analytic> { Data = newA };
+
+        }
+
+        public Session<PricingEveryday> LoadPricingEveryday(Session<PricingEveryday> session)
+        {
+
+            var pe = session.Data as PricingEveryday;
+            var newPE = PricingEveryday.AsQueryable()
+                .Where(x => x.Id == pe.Id).SingleOrDefault();
+
+
+            return new Session<PricingEveryday> { Data = newPE };
 
         }
 
@@ -134,16 +163,16 @@ namespace APLPX.UI.WPF.Data
                 .Where(x => x.Id == a.Id).SingleOrDefault().FilterGroups;
 
             //a.FilterGroups = filterGroups;
-            return new Session<Analytic> { Data = new Analytic(a.Id, filterGroups)};
-            
+            return new Session<Analytic> { Data = new Analytic(a.Id, filterGroups) };
+
         }
 
 
         public Session<Analytic> LoadDrivers(Session<Analytic> session)
         {
             var a = session.Data as Analytic;
-            var drivers = Analytics.AsQueryable().Where(x => x.Id == a.Id).SingleOrDefault().Drivers.ToList();
-            return new Session<Analytic>(){ Data = new Analytic(a.Id, drivers)};
+            var drivers = Analytics.AsQueryable().Where(x => x.Id == a.Id).SingleOrDefault().ValueDrivers.ToList();
+            return new Session<Analytic>() { Data = new Analytic(a.Id, drivers) };
         }
 
         public Session<Analytic> LoadPriceLists(Session<Analytic> session)
@@ -156,7 +185,7 @@ namespace APLPX.UI.WPF.Data
         public Session<Analytic> SaveFilters(Session<Analytic> session)
         {
             var a = Analytics.AsQueryable().First(x => x.Id == session.Data.Id);
-            a.FilterGroups = session.Data.FilterGroups;
+            a.FilterGroups.AddRange(session.Data.FilterGroups);
             Analytics.Save(a);
             //session.Data = newA;
             return session;
@@ -165,10 +194,10 @@ namespace APLPX.UI.WPF.Data
         public Session<Analytic> SaveDrivers(Session<Analytic> session)
         {
             var a = Analytics.AsQueryable().First(x => x.Id == session.Data.Id);
-            
-            a.Drivers = session.Data.Drivers;
+
+            a.ValueDrivers.AddRange(session.Data.ValueDrivers);
             Analytics.Save(a);
-            
+
             //var newA = new Analytic(a.Id, session.Data.Drivers);
             //session.Data = newA;
             return session;
@@ -177,7 +206,7 @@ namespace APLPX.UI.WPF.Data
         public Session<Analytic> SavePriceLists(Session<Analytic> session)
         {
             var a = Analytics.AsQueryable().First(x => x.Id == session.Data.Id);
-            a.PriceListGroups = session.Data.PriceListGroups;
+            a.PriceListGroups.AddRange(session.Data.PriceListGroups);
             Analytics.Save(a);
 
             //var newA = new Analytic(a.Id, session.Data.PriceListGroups);

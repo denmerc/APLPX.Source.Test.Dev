@@ -28,9 +28,9 @@ namespace APLPX.UI.WPF.Mappers
                 }
             }
 
-            if (dto.Drivers != null)
+            if (dto.ValueDrivers != null)
             {
-                foreach (DTO.AnalyticDriver driver in dto.Drivers)
+                foreach (DTO.AnalyticValueDriver driver in dto.ValueDrivers)
                 {
                     displayEntity.ValueDrivers.Add(driver.ToDisplayEntity());
                 }
@@ -38,7 +38,7 @@ namespace APLPX.UI.WPF.Mappers
 
             if (dto.PriceListGroups != null)
             {
-                foreach (DTO.PriceListGroup priceListGroup in dto.PriceListGroups)
+                foreach (var priceListGroup in dto.PriceListGroups)
                 {
                     displayEntity.PriceListGroups.Add(priceListGroup.ToDisplayEntity());
                 }
@@ -59,14 +59,14 @@ namespace APLPX.UI.WPF.Mappers
                 filterGroups.Add(filterGroup.ToDto());
             }            
 
-            var drivers = new List<DTO.AnalyticDriver>();
+            var drivers = new List<DTO.AnalyticValueDriver>();
             foreach (Display.AnalyticValueDriver driver in displayEntity.ValueDrivers)
             {
                 drivers.Add(driver.ToDto());
-            }           
+            }
 
-            var priceListGroups = new List<DTO.PriceListGroup>();
-            foreach (var priceListGroup in displayEntity.PriceListGroups)
+            var priceListGroups = new List<DTO.AnalyticPriceListGroup>();
+            foreach (Display.AnalyticPriceListGroup priceListGroup in displayEntity.PriceListGroups)
             {
                 priceListGroups.Add(priceListGroup.ToDto());
             }                      

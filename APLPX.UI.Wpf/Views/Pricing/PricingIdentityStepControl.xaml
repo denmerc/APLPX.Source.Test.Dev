@@ -32,13 +32,13 @@
             <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
                 <StackPanel Orientation="Horizontal">
                     <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="Price Routine Name:" HorizontalContentAlignment="Right"></Label>
-                    <TextBox x:Name="NameTextBox" Text ="{Binding SelectedPriceRoutine.Name}" FontSize="16" Foreground="{StaticResource Foreground}" Width="289" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}"></TextBox>
+                    <TextBox x:Name="NameTextBox" Text ="{Binding PriceRoutine.Identity.Name}" FontSize="16" Foreground="{StaticResource Foreground}" Width="289" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}"></TextBox>
                 </StackPanel>
             </ListBoxItem>
             <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178" HorizontalContentAlignment="Right">Description:</Label>
-                    <TextBox x:Name="DescriptionTextBox"  Text ="{Binding SelectedPriceRoutine.Description}" FontSize="16" Foreground="{StaticResource Foreground}" Width="450" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                    <TextBox x:Name="DescriptionTextBox"  Text ="{Binding PriceRoutine.Identity.Description}" FontSize="16" Foreground="{StaticResource Foreground}" Width="450" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
                 </StackPanel>
             </ListBoxItem>
             <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
@@ -50,7 +50,7 @@
             <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178" HorizontalContentAlignment="Right">Analytic Name:</Label>
-                    <TextBox x:Name="AnalyticTextBox" Text ="{Binding SelectedPriceRoutine.Analytic.Name}" FontSize="16" Foreground="{StaticResource Foreground}" 
+                    <TextBox x:Name="AnalyticTextBox" Text ="{Binding PriceRoutine.Identity.Analytic.Name}" FontSize="16" Foreground="{StaticResource Foreground}" 
                              Width="450" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
                     <!--<ComboBox FontSize="16" Background="#FF333337" Foreground="{StaticResource Foreground}" Width="450" BorderBrush="Transparent"></ComboBox>-->
                 </StackPanel>

@@ -54,7 +54,7 @@
             <BeginStoryboard>
                 <Storyboard>
                     <DoubleAnimation x:Name="fadeIn"
-                                     Duration="0:0:2.0"
+                                     Duration="0:0:1"
                                      From="0"
                                      Storyboard.TargetProperty="(UIElement.Opacity)"
                                      To="1" />

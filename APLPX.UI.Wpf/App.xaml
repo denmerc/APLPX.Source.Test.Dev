@@ -5,6 +5,7 @@
              xmlns:local="clr-namespace:APLPX.UI.WPF"
              xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
              xmlns:viewsCommon="clr-namespace:APLPX.UI.WPF.Views.Common"
+             xmlns:viewsPricing="clr-namespace:APLPX.UI.WPF.Views.Pricing"
              xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
              xmlns:vmAdmin="clr-namespace:APLPX.UI.WPF.ViewModels.Admin"
              xmlns:vma="clr-namespace:APLPX.UI.WPF.ViewModels.Analytic"
@@ -356,6 +357,10 @@
                 <local:AnalyticResultsControl />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayPriceListListViewModel}">
+                <viewsPricing:PricingEverydayPriceListControl/>
+            </DataTemplate>
+            
             <DataTemplate DataType="{x:Type vm:WaitViewModel}">
                 <views:WaitView />
             </DataTemplate>

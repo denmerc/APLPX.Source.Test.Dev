@@ -53,7 +53,7 @@ namespace APLPX.UI.WPF.Mappers
         {
             var displayEntity = new Display.PricingEverydayResult();
 
-            displayEntity.Id = dto.Id;
+            displayEntity.SkuId = dto.SkuId;
             displayEntity.SkuName = dto.SkuName;
             displayEntity.SkuTitle = dto.SkuTitle;
             if (dto.Groups != null)
@@ -62,8 +62,7 @@ namespace APLPX.UI.WPF.Mappers
                 {
                     displayEntity.Groups.Add(group.ToDisplayEntity());
                 }
-            }
-            displayEntity.Sort = dto.Sort;
+            }          
 
             return displayEntity;
         }
@@ -83,10 +82,9 @@ namespace APLPX.UI.WPF.Mappers
             }
 
             var dto = new DTO.PricingEverydayResult(
-                                            displayEntity.Id, 
+                                            displayEntity.SkuId, 
                                             displayEntity.SkuName,
-                                            displayEntity.SkuTitle, 
-                                            displayEntity.Sort, 
+                                            displayEntity.SkuTitle,                                              
                                             driverGroups,
                                             priceLists);
             return dto;

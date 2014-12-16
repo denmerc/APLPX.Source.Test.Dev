@@ -88,9 +88,9 @@ namespace APLPX.UI.WPF.ViewModels
             base.UserServices = new UserDisplayServices(userService);
             _analyticService = analyticService;
             _userService = userService;
-            
+
             CurrentUser = session.User.ToDisplayEntity();
-        
+
             //TODO: COMMENT THIS OUT WHEN UserService is updated to work with new entity model:
             //Modules = DisplayModuleGenerator.CreateSampleModules();
 
@@ -126,15 +126,15 @@ namespace APLPX.UI.WPF.ViewModels
             ActionCommand.Subscribe(x => ActionCommandExecuted(x));
 
             LogoutCommand = ReactiveCommand.Create();
-            LogoutCommand.Subscribe(x => 
-                    {
-                        var loginWindow = new LoginWindow();
-                        loginWindow.DataContext = new LoginViewModel(_userService);
-                        loginWindow.ShowMaxRestoreButton = false;
-                        loginWindow.ShowMinButton = false;
-                        loginWindow.Show();
-                        App.Current.Windows[0].Close();
-                    });
+            LogoutCommand.Subscribe(x =>
+            {
+                var loginWindow = new LoginWindow();
+                loginWindow.DataContext = new LoginViewModel(_userService);
+                loginWindow.ShowMaxRestoreButton = false;
+                loginWindow.ShowMinButton = false;
+                loginWindow.Show();
+                App.Current.Windows[0].Close();
+            });
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
                 {
@@ -243,7 +243,7 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     SelectedModule.SelectedFeature = value;
                     this.RaisePropertyChanged("SelectedFeature");
-                    
+
                     Navigate();
                 }
             }
@@ -460,7 +460,7 @@ namespace APLPX.UI.WPF.ViewModels
         /// Handles the action requested by the ActionCommand.
         /// </summary>
         /// <param name="action"></param>
-   
+
         private void HandleSelectedAction(DisplayEntities.Action action)
         {
             switch (action.TypeId)
@@ -478,7 +478,7 @@ namespace APLPX.UI.WPF.ViewModels
                     SelectedFeature.DisableRemainingSteps();
                     break;
 
-                case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayNew:              
+                case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayNew:
                     //Create a new (blank) entity. TODO: refactor.
                     var newPriceRoutine = new DisplayEntities.PricingEveryday();
                     newPriceRoutine.Identity.Name = "Pricing Everyday name (new)";
@@ -539,7 +539,7 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningEverydayPricingIdentitySave:
-                
+
                     //TODO: call price routine save method on service.
                     SelectedPricingEveryday.IsDirty = false;
                     SelectedFeature.EnableRemainingSteps();
@@ -673,10 +673,10 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingIdentity:
-                     result = new PricingIdentityViewModel(SelectedPricingEveryday);
+                    result = new PricingIdentityViewModel(SelectedPricingEveryday);
                     break;
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingIdentity:
-                case DTO.ModuleFeatureStepType.PlanningKitPricingIdentity:                    
+                case DTO.ModuleFeatureStepType.PlanningKitPricingIdentity:
                     break;
 
                 //Filters
@@ -688,16 +688,16 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingFilters:
-                case DTO.ModuleFeatureStepType.PlanningKitPricingFilters:                    
+                case DTO.ModuleFeatureStepType.PlanningKitPricingFilters:
                     break;
 
                 //Price Lists
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsPriceLists:
-                    result = new PriceListViewModel(SelectedEntity, SelectedAnalytic.PriceListGroups);
+                    result = new PriceListViewModel(SelectedAnalytic, SelectedAnalytic.PriceListGroups);
                     break;
 
-                case DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:              
-                    //result = newPriceListViewModel(SelectedEntity, SelectedPricingEveryday.PriceListGroups);
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:
+                    result = new PricingEverydayPriceListListViewModel(SelectedPricingEveryday);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingPriceLists:
@@ -824,7 +824,7 @@ namespace APLPX.UI.WPF.ViewModels
         }
 
         private void HandleException(Exception error)
-        {            
+        {
             ShowMessageBox(error.Message, MessageBoxImage.Error);
             ReenableUserInterface();
         }
@@ -873,7 +873,7 @@ namespace APLPX.UI.WPF.ViewModels
         /// </summary>        
         private void OnSelectedEntityChanged(ISearchableEntity entity)
         {
-            SelectedAnalytic = entity as DisplayEntities.Analytic;           
+            SelectedAnalytic = entity as DisplayEntities.Analytic;
             SelectedPricingEveryday = entity as DisplayEntities.PricingEveryday;
 
             this.RaisePropertyChanged("IsEntitySelected");
@@ -882,15 +882,15 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void OnSearchGroupReassigned(SearchGroupsUpdatedEvent data)
         {
-            if (data.SourceEntity.SearchKey!= data.DestinationSearchGroup.SearchKey)
+            if (data.SourceEntity.SearchKey != data.DestinationSearchGroup.SearchKey)
             {
                 data.SourceEntity.SearchKey = data.DestinationSearchGroup.SearchKey;
                 SelectedFeature.RecalculateSearchItemCounts();
 
                 //Re-select the reassigned entity within its new search group.
-                SelectedFeature.SelectedSearchGroup = data.DestinationSearchGroup;                
-                SelectedFeature.SelectedEntity = data.SourceEntity;        
-            }          
+                SelectedFeature.SelectedSearchGroup = data.DestinationSearchGroup;
+                SelectedFeature.SelectedEntity = data.SourceEntity;
+            }
         }
 
         #endregion

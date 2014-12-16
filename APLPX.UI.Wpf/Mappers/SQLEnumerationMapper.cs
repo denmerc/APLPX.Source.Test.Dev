@@ -52,7 +52,7 @@ namespace APLPX.UI.WPF.Mappers
             return displayList;
         }
 
-        public static List<DTO.SQLEnumeration> ToDTOs(this List<Display.SQLEnumeration> displayEntities)
+        public static List<DTO.SQLEnumeration> ToDTOList(this List<Display.SQLEnumeration> displayEntities)
         {
             var dtoList = new List<DTO.SQLEnumeration>();
 

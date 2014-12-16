@@ -233,6 +233,7 @@
                   BeginningEdit="DriverGroupsDataGrid_BeginningEdit"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
+                  CanUserSortColumns="False"
                   ItemsSource="{Binding Path=Entity.SelectedValueDriver.SelectedMode.Groups}"
                   Visibility="{Binding Path=IsValueDriverModeSelected,
                                        Converter={StaticResource BooleanToVisibilityConverter}}">

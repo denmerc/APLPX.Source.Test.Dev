@@ -252,6 +252,7 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
+        [BsonElement("PriceList")]
         public List<PricingEverydayPriceList> PriceLists { get; private set; }
     }
 
@@ -295,24 +296,22 @@ namespace APLPX.Client.Entity
         #region initialize...
         public PricingEverydayResult() { }
         public PricingEverydayResult(
-            int id,
+            int skuId,
             string skuName,
             string skuTitle,
-            short sort,
             List<PricingResultDriverGroup> groups,
             List<PricingEverydayResultPriceList> priceLists
             ) {
-            Id = id;
+            SkuId = skuId;
             SkuName = skuName;
             SkuTitle = skuTitle;
             Groups = groups;
             PriceLists = priceLists;
-            Sort = sort;
         }
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public int SkuId { get; private set; }
         [DataMember]
         public string SkuName { get; private set; }
         [DataMember]
@@ -321,8 +320,6 @@ namespace APLPX.Client.Entity
         public List<PricingResultDriverGroup> Groups { get; private set; }
         [DataMember]
         public List<PricingEverydayResultPriceList> PriceLists { get; private set; }
-        [DataMember]
-        public short Sort { get; private set; }
     }
 
     [BsonNoId]

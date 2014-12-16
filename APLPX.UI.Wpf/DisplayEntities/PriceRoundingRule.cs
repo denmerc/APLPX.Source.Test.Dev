@@ -13,7 +13,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         private decimal _dollarRangeLower;
         private decimal _dollarRangeUpper;
         private decimal _valueChange;
-        private short _sort;
         private List<SQLEnumeration> _roundingTypes;
 
         #endregion
@@ -59,12 +58,6 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _valueChange, value); }
         }
 
-        public short Sort
-        {
-            get { return _sort; }
-            set { this.RaiseAndSetIfChanged(ref _sort, value); }
-        }
-
         public List<SQLEnumeration> RoundingTypes
         {
             get { return _roundingTypes; }
@@ -73,5 +66,16 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        #region Overrides
+
+        public override string ToString()
+        {
+            object[] values = { GetType().Name, DollarRangeLower, DollarRangeUpper, ValueChange, Type };
+            string result = String.Format("{0}:Lower=${1};Upper=${2};Change={3};Type={4}", values);
+
+            return result;
+        }
+
+        #endregion
     }
 }

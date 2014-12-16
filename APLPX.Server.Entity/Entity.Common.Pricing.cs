@@ -171,12 +171,14 @@ namespace APLPX.Server.Entity
             int priceListId,
             decimal dollarRangeLower,
             decimal dollarRangeUpper,
-            List<PriceRoundingRule> roundingRules
+            List<PriceRoundingRule> roundingRules,
+            List<SQLEnumeration> roundingTypes
             ) {
             PriceListId = priceListId;
             DollarRangeLower = dollarRangeLower;
             DollarRangeUpper = dollarRangeUpper;
             RoundingRules = roundingRules;
+            RoundingTypes = roundingTypes;
         }
         #endregion
 
@@ -188,6 +190,8 @@ namespace APLPX.Server.Entity
         public decimal DollarRangeUpper; //CLIENT { get; set; }
         [DataMember]
         public List<PriceRoundingRule> RoundingRules; //CLIENT { get; set; }
+        [DataMember]
+        public List<SQLEnumeration> RoundingTypes; //CLIENT { get; private set; }
     }
 
     [DataContract]
@@ -212,11 +216,13 @@ namespace APLPX.Server.Entity
         public PricingLinkedPriceListRule(
             int priceListId,
             int percentChange,
-            List<PriceRoundingRule> roundingRules
+            List<PriceRoundingRule> roundingRules,
+            List<SQLEnumeration> roundingTypes
             ) {
             PriceListId = priceListId;
             PercentChange = percentChange;
             RoundingRules = roundingRules;
+            RoundingTypes = roundingTypes;
         }
         #endregion
 
@@ -226,6 +232,8 @@ namespace APLPX.Server.Entity
         public int PercentChange; //CLIENT { get; set; }     
         [DataMember]
         public List<PriceRoundingRule> RoundingRules; //CLIENT { get; set; }
+        [DataMember]
+        public List<SQLEnumeration> RoundingTypes; //CLIENT { get; private set; }
     }
 
     [DataContract]

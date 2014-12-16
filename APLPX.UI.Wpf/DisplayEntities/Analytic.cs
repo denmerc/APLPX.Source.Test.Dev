@@ -16,6 +16,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private List<FilterGroup> _filterGroups;
         private List<AnalyticPriceListGroup> _priceListGroups;
         private FilterGroup _selectedFilterGroup;
+        private AnalyticPriceListGroup _selectedPriceListGroup;
         private AnalyticValueDriver _selectedValueDriver;
         private string _searchKey;
         private string _parentKey;
@@ -72,6 +73,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _selectedFilterGroup; }
             set { this.RaiseAndSetIfChanged(ref _selectedFilterGroup, value); }
+        }
+
+        public AnalyticPriceListGroup SelectedPriceListGroup
+        {
+            get { return _selectedPriceListGroup; }
+            set { this.RaiseAndSetIfChanged(ref _selectedPriceListGroup, value); }
         }
 
         public AnalyticValueDriver SelectedValueDriver

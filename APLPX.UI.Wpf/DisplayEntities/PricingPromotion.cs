@@ -83,5 +83,17 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        public override string ToString()
+        {
+            string identityDescription = "Identity=null";
+            if (identityDescription != null)
+            {
+                identityDescription = String.Format("Name={0};Owner={1}", Identity.Name, Identity.Owner);
+            }
+
+            string result = String.Format("{0}:Id={1};{2}", GetType().Name, Id, identityDescription);
+
+            return result;
+        }
     }
 }

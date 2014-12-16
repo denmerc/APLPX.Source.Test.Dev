@@ -22,12 +22,6 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.DollarRangeLower = dto.DollarRangeLower;
             displayEntity.DollarRangeUpper = dto.DollarRangeUpper;
             displayEntity.ValueChange = dto.ValueChange;
-            displayEntity.Sort = dto.Sort;
-
-            if (dto.RoundingTypes != null)
-            {
-                displayEntity.RoundingTypes = dto.RoundingTypes.ToDisplayEntities();
-            }
 
             return displayEntity;
         }
@@ -105,14 +99,13 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.PricingKeyPriceListRule ToDto(this Display.PricingKeyPriceListRule displayEntity)
         {
             List<DTO.PriceRoundingRule> roundingRules = displayEntity.RoundingRules.ToDtoList();
-            List<DTO.SQLEnumeration> roundingTypes = displayEntity.RoundingTypes.ToDtoList();
+            List<DTO.SQLEnumeration> roundingTypes = displayEntity.RoundingTypes.ToDTOList();
 
             var dto = new DTO.PricingKeyPriceListRule(
                                         displayEntity.PriceListId,
                                         displayEntity.DollarRangeLower,
                                         displayEntity.DollarRangeUpper,
-                                        roundingRules,
-                                        roundingTypes);
+                                        roundingRules, roundingTypes);
             return dto;
         }
 
@@ -137,14 +130,13 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.PricingLinkedPriceListRule ToDto(this Display.PricingLinkedPriceListRule displayEntity)
         {
             List<DTO.PriceRoundingRule> roundingRules = displayEntity.RoundingRules.ToDtoList();
-            List<DTO.SQLEnumeration> roundingTypes = displayEntity.RoundingTypes.ToDtoList();
+            List<DTO.SQLEnumeration> roundingTypes = displayEntity.RoundingTypes.ToDTOList();
 
             var dto = new DTO.PricingLinkedPriceListRule(
                                         displayEntity.PriceListId,
                                         displayEntity.PercentChange,
                                         roundingRules,
-                                        roundingTypes
-                                        );
+                                        roundingTypes);
 
             return dto;
         }
@@ -161,7 +153,6 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.DollarRangeUpper = dto.DollarRangeUpper;
             displayEntity.PercentLimitLower = dto.PercentLimitLower;
             displayEntity.PercentLimitUpper = dto.PercentLimitUpper;
-            displayEntity.Sort = dto.Sort;
 
             return displayEntity;
         }
@@ -173,8 +164,7 @@ namespace APLPX.UI.WPF.Mappers
                                     displayEntity.DollarRangeLower,
                                     displayEntity.DollarRangeUpper,
                                     displayEntity.PercentLimitLower,
-                                    displayEntity.PercentLimitUpper,
-                                    displayEntity.Sort);
+                                    displayEntity.PercentLimitUpper);
 
             return dto;
         }
@@ -190,7 +180,6 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.DollarRangeLower = dto.DollarRangeLower;
             displayEntity.DollarRangeUpper = dto.DollarRangeUpper;
             displayEntity.PercentChange = dto.PercentChange;
-            displayEntity.Sort = dto.Sort;
 
             return displayEntity;
         }

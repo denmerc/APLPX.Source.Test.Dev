@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="APLPX.UI.WPF.PricingIdentityStepControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- for design-time support, already in app.xml-->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid x:Name="LayoutRoot">
+      <!--  <Grid.Background>
+            <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg"
+                        Stretch="UniformToFill"/>
+        </Grid.Background>  -->
+        <ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto">
+            <!--<ListBox.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>-->
+            <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal">
+                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="Price Routine Name:" HorizontalContentAlignment="Right"></Label>
+                    <TextBox x:Name="NameTextBox" Text ="{Binding PriceRoutine.Identity.Name}" FontSize="16" Foreground="{StaticResource Foreground}" Width="289" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}"></TextBox>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178" HorizontalContentAlignment="Right">Description:</Label>
+                    <TextBox x:Name="DescriptionTextBox"  Text ="{Binding PriceRoutine.Identity.Description}" FontSize="16" Foreground="{StaticResource Foreground}" Width="450" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178" HorizontalContentAlignment="Right">Price Routine Type:</Label>
+                    <ComboBox FontSize="16"  Background="#FF333337" Foreground="{StaticResource Foreground}" Width="255" VerticalAlignment="Bottom" BorderBrush="Transparent"></ComboBox>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178" HorizontalContentAlignment="Right">Analytic Name:</Label>
+                    <TextBox x:Name="AnalyticTextBox" Text ="{Binding PriceRoutine.Identity.Analytic.Name}" FontSize="16" Foreground="{StaticResource Foreground}" 
+                             Width="450" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                    <!--<ComboBox FontSize="16" Background="#FF333337" Foreground="{StaticResource Foreground}" Width="450" BorderBrush="Transparent"></ComboBox>-->
+                </StackPanel>
+            </ListBoxItem>
+            <!--<ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">-->
+                    <!--<StackPanel.Resources>
+														<Style TargetType="{x:Type Button}">
+															<Setter Property="Margin" Value="2"/>
+														</Style>
+													</StackPanel.Resources>-->
+                    <!--<Button>Save</Button>
+                    <Button>Cancel</Button>-->
+                <!--</StackPanel>
+            </ListBoxItem>-->
+        </ListBox>
+    </Grid>
+</UserControl>

@@ -8,12 +8,11 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
-        private int _id;
+        private int _skuId;
         private string _skuName;
         private string _skuTitle;
         private List<PricingResultDriverGroup> _groups;
         private List<PricingEverydayResultPriceList> _priceLists;
-        private short _sort;
 
         #endregion
 
@@ -29,10 +28,10 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Properties
 
-        public int Id
+        public int SkuId
         {
-            get { return _id; }
-            set { this.RaiseAndSetIfChanged(ref _id, value); }
+            get { return _skuId; }
+            set { this.RaiseAndSetIfChanged(ref _skuId, value); }
         }
 
         public string SkuName
@@ -57,12 +56,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _priceLists; }
             set { this.RaiseAndSetIfChanged(ref _priceLists, value); }
-        }
-
-        public short Sort
-        {
-            get { return _sort; }
-            set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Private Fields
 
-        private string _typeName;
+        private string _name;
         private short _sort;
         private List<Filter> _filters;
 
@@ -27,10 +27,10 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Properties
 
-        public string TypeName
+        public string Name
         {
-            get { return _typeName; }
-            set { this.RaiseAndSetIfChanged(ref _typeName, value); }
+            get { return _name; }
+            set { this.RaiseAndSetIfChanged(ref _name, value); }
         }
 
         public short Sort

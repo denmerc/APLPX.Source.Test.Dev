@@ -131,7 +131,7 @@ namespace APLPX.UI.WPF.Helpers
             var copy = new FilterGroup();
 
             copy.Sort = source.Sort;
-            copy.TypeName = source.TypeName;
+            copy.Name = source.Name;
 
             foreach (Filter filter in source.Filters)
             {

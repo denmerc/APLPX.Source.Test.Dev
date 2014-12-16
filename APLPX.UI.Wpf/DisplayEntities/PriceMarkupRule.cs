@@ -12,7 +12,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         private decimal _dollarRangeUpper;
         private int _percentLimitLower;
         private int _percentLimitUpper;
-        private short _sort;
 
         #endregion
 
@@ -56,14 +55,19 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _percentLimitUpper, value); }
         }
 
-        public short Sort
-        {
-            get { return _sort; }
-            set { this.RaiseAndSetIfChanged(ref _sort, value); }
-        }
-
 
         #endregion
 
+        #region Overrides
+
+        public override string ToString()
+        {
+            object[] values = { GetType().Name, DollarRangeLower, DollarRangeLower, PercentLimitLower, PercentLimitUpper };
+            string result = String.Format("{0}:Lower=${1};Upper=${2};Lower={3}%;Upper={4}%", values);
+
+            return result;
+        }
+
+        #endregion
     }
 }

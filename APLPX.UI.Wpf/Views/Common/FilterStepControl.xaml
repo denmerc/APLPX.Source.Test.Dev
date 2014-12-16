@@ -63,7 +63,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Width="200"
-                           Content="{Binding Path=TypeName}"
+                           Content="{Binding Path=Name}"
                            FontSize="16"
                            Foreground="{StaticResource Foreground}" />
                 </DataTemplate>

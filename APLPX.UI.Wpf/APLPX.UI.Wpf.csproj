@@ -180,7 +180,6 @@
     <Compile Include="DisplayEntities\Analytic.cs" />
     <Compile Include="DisplayEntities\PricingResult.cs" />
     <Compile Include="DisplayEntities\AnalyticPriceListGroup.cs" />
-    <Compile Include="DisplayEntities\PricingDriver.cs" />
     <Compile Include="DisplayEntities\FeatureSearchGroup.cs" />
     <Compile Include="DisplayEntities\ModuleFeatureStep.cs" />
     <Compile Include="DisplayEntities\FilterGroup.cs" />
@@ -198,7 +197,6 @@
     <Compile Include="DisplayEntities\AnalyticIdentity.cs" />
     <Compile Include="DisplayEntities\AnalyticValueDriverMode.cs" />
     <Compile Include="DisplayEntities\PriceList.cs" />
-    <Compile Include="DisplayEntities\Pricing.cs" />
     <Compile Include="DisplayEntities\UserRole.cs" />
     <Compile Include="DisplayEntities\User.cs" />
     <Compile Include="DragDropProviders\SearchableEntityDragSource.cs">
@@ -255,6 +253,7 @@
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PriceListViewModel.cs" />
+    <Compile Include="ViewModels\Pricing\PricingEverydayPriceListListViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingIdentityViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\WaitViewModel.cs" />
@@ -269,6 +268,9 @@
     </Compile>
     <Compile Include="Views\MessageToaster.xaml.cs">
       <DependentUpon>MessageToaster.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayPriceListControl.xaml.cs">
+      <DependentUpon>PricingEverydayPriceListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SearchGroupSelector.xaml.cs">
       <DependentUpon>SearchGroupSelector.xaml</DependentUpon>
@@ -311,6 +313,10 @@
     <Page Include="Views\MessageToaster.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayPriceListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pricing\PricingIdentityStepControl.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -24,6 +24,8 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public PricingEverydayResultPriceList()
         {
+            PriceEdit = new PricingResultEdit();
+            PriceWarning = new PricingResultWarning();
         }
 
         #endregion

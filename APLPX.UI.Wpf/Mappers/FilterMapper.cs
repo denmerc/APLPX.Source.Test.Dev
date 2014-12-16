@@ -50,7 +50,7 @@ namespace APLPX.UI.WPF.Mappers
             var displayEntity = new Display.FilterGroup();
             
             displayEntity.Sort = dto.Sort;
-            displayEntity.TypeName = dto.TypeName;
+            displayEntity.Name = dto.Name;
 
             if (dto.Filters != null)
             {
@@ -74,7 +74,7 @@ namespace APLPX.UI.WPF.Mappers
             
             var result = new DTO.FilterGroup(
                                         displayEntity.Sort,
-                                        displayEntity.TypeName,
+                                        displayEntity.Name,
                                         filters);
             return result;
         }

@@ -264,24 +264,22 @@ namespace APLPX.Server.Entity
         #region initialize...
         public PricingEverydayResult() { }
         public PricingEverydayResult(
-            int id,
+            int skuId,
             string skuName,
             string skuTitle,
-            short sort,
             List<PricingResultDriverGroup> groups,
             List<PricingEverydayResultPriceList> priceLists
             ) {
-                Id = id;
+                SkuId = skuId;
                 SkuName = skuName;
                 SkuTitle = skuTitle;
                 Groups = groups;
                 PriceLists = priceLists;
-                Sort = sort;
         }
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int SkuId; //CLIENT { get; private set; }
         [DataMember]
         public string SkuName; //CLIENT { get; private set; }
         [DataMember]
@@ -290,8 +288,6 @@ namespace APLPX.Server.Entity
         public List<PricingResultDriverGroup> Groups; //CLIENT { get; private set; }
         [DataMember]
         public List<PricingEverydayResultPriceList> PriceLists; //CLIENT { get; private set; }
-        [DataMember]
-        public short Sort; //CLIENT { get; private set; }
     }
 
     [DataContract]

@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using APLPX.UI.WPF.DisplayEntities;
+using Display = APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.Interfaces;
 
 namespace APLPX.UI.WPF.ViewModels
 {
     public class PriceListViewModel : ViewModelBase
     {
-        private ISearchableEntity _owner;
-        private List<AnalyticPriceListGroup> _priceListGroups;
+        private Display.Analytic _entity;
+        private List<Display.AnalyticPriceListGroup> _priceListGroups;
 
-        public PriceListViewModel(ISearchableEntity owner, List<AnalyticPriceListGroup> priceListGroups)
+        public PriceListViewModel(Display.Analytic entity, List<Display.AnalyticPriceListGroup> priceListGroups)
         {
-            _owner = owner;
+            _entity = entity;
             _priceListGroups = priceListGroups;
         }
 
-        public List<AnalyticPriceListGroup> PriceListGroups
+        public Display.Analytic Entity
+        {
+            get { return _entity; }
+            private set { _entity = value; }
+        }
+
+        public List<Display.AnalyticPriceListGroup> PriceListGroups
         {
             get { return _priceListGroups; }
             private set { _priceListGroups = value; }

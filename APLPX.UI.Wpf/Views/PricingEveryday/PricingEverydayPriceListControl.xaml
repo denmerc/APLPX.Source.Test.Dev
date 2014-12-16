@@ -1,12 +1,19 @@
-﻿<UserControl x:Class="APLPX.UI.WPF.Views.Common.PriceListControl"
+﻿<UserControl x:Class="APLPX.UI.WPF.Views.Pricing.PricingEverydayPriceListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:viewsCommon="clr-namespace:APLPX.UI.WPF.Views.Common"
              mc:Ignorable="d">
 
     <UserControl.Resources>
+        <CollectionViewSource x:Key="cvsModes" Source="{Binding Path=PriceRoutine.PricingModes}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
+            </CollectionViewSource.SortDescriptions>
+
+        </CollectionViewSource>
         <!--  TODO: move this to common styles. Intended for use with titles of list boxes, data grids. etc.  -->
         <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Center" />
@@ -14,56 +21,44 @@
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Margin" Value="5" />
         </Style>
-
-        <CollectionViewSource x:Key="cvsPriceListGroups"
-                              IsLiveSortingRequested="True"
-                              Source="{Binding Path=Entity.PriceListGroups}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
     </UserControl.Resources>
 
-    <Grid x:Name="layoutRoot" Background="Black">
+    <Grid x:Name="layoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0"
+        <TextBlock x:Name="txtPricingModes"
+                   Grid.Row="0"
                    Grid.Column="0"
+                   Width="70"
                    Style="{StaticResource ListTitleTextStyle}"
-                   Text="Price List Groups" />
+                   Text="Logic/Behavior"
+                   TextWrapping="Wrap" />
 
-        <TextBlock Grid.Row="0"
+        <TextBlock x:Name="txtPriceListsTitle"
+                   Grid.Row="0"
                    Grid.Column="1"
                    Style="{StaticResource ListTitleTextStyle}"
-                   Text="{Binding ElementName=lstPriceListGroups,
+                   Text="{Binding ElementName=dgPriceLists,
                                   Path=Items.Count,
                                   StringFormat={}Price Lists ({0})}" />
-
-        <ListBox x:Name="lstPriceListGroups"
+        <ListBox x:Name="lstPricingModes"
                  Grid.Row="1"
                  Grid.Column="0"
-                 Margin="10,5"
-                 ItemsSource="{Binding Path=Entity.PriceListGroups}"
-                 SelectedItem="{Binding Path=Entity.SelectedPriceListGroup}">
-            <!--  this does not retain selection:  -->
-            <!--  ItemsSource="{Binding Source={StaticResource cvsPriceListGroups}}"  -->
+                 ItemsSource="{Binding Source={StaticResource cvsModes}}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=Name}" />
+                    <TextBlock Text="{Binding Path=Name}" ToolTip="{Binding Path=Title}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
         <DataGrid x:Name="dgPriceLists"
                   Grid.Row="1"
                   Grid.Column="1"
@@ -71,8 +66,7 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
-                  ItemsSource="{Binding ElementName=lstPriceListGroups,
-                                        Path=SelectedItem.PriceLists}">
+                  ItemsSource="{Binding Path=PriceListGroups[0].PriceLists}">
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected" />

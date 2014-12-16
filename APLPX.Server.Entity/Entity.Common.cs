@@ -16,17 +16,17 @@ namespace APLPX.Server.Entity
         }
         public FilterGroup(
             short sort,
-            string typeName,
+            string name,
             List<Filter> filters
             ) {
             Sort = sort;
-            TypeName = typeName;
+            Name = name;
             Filters = filters;
         }
         #endregion
 
         [DataMember]
-        public string TypeName; //CLIENT { get; private set; }
+        public string Name; //CLIENT { get; private set; }
         [DataMember]
         public List<Filter> Filters; //CLIENT { get; private set; }
         [DataMember]

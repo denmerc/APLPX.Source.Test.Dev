@@ -38,7 +38,7 @@ namespace APLPX.UI.WPF.Mappers
                                 displayEntity.Role.ToDto(),
                                 displayEntity.Identity.ToDto(),
                                 credential,
-                                displayEntity.RoleTypes.ToDTOs());
+                                displayEntity.RoleTypes.ToDTOList());
 
             return dto;
         }

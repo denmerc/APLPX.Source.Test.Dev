@@ -19,18 +19,19 @@ namespace APLPX.Client.Entity
         }
         public FilterGroup(
             short sort,
-            string typeName,
+            string name,
             List<Filter> filters
             ) {
             Sort = sort;
-            TypeName = typeName;
+            Name = name;
             Filters = filters;
         }
         #endregion
         [BsonId]
         public MongoDB.Bson.ObjectId _id { get; set; }
         [DataMember]
-        public string TypeName { get; private set; }
+        [BsonElement("TypeName")]
+        public string Name { get; private set; }
         [DataMember]
         public List<Filter> Filters { get; private set; }
         [DataMember]
@@ -338,21 +339,6 @@ namespace APLPX.Client.Entity
             PercentLimitLower = percentLimitLower;
             PercentLimitUpper = percentLimitUpper;
         }
-        public PriceMarkupRule(
-            int id,
-            decimal dollarRangeLower,
-            decimal dollarRangeUpper,
-            int percentLimitLower,
-            int percentLimitUpper,
-            short sort
-            ) {
-            Id = id;
-            DollarRangeLower = dollarRangeLower;
-            DollarRangeUpper = dollarRangeUpper;
-            PercentLimitLower = percentLimitLower;
-            PercentLimitUpper = percentLimitUpper;
-            Sort = sort;
-        }
         #endregion
 
         [DataMember]
@@ -365,8 +351,6 @@ namespace APLPX.Client.Entity
         public int PercentLimitLower { get; set; }
         [DataMember]
         public int PercentLimitUpper { get; set; }
-        [DataMember]
-        public short Sort { get; set; }
     }
 
     [DataContract]
@@ -397,19 +381,6 @@ namespace APLPX.Client.Entity
             DollarRangeUpper = dollarRangeUpper;
             PercentChange = percentChange;
         }
-        public PriceOptimizationRule(
-            int id,
-            decimal dollarRangeLower,
-            decimal dollarRangeUpper,
-            int percentChange,
-            short sort
-            ) {
-            Id = id;
-            DollarRangeLower = dollarRangeLower;
-            DollarRangeUpper = dollarRangeUpper;
-            PercentChange = percentChange;
-            Sort = sort;
-        }
         #endregion
 
         [DataMember]
@@ -420,8 +391,6 @@ namespace APLPX.Client.Entity
         public decimal DollarRangeUpper { get; set; }
         [DataMember]
         public int PercentChange { get; set; }
-        [DataMember]
-        public short Sort { get; set; }
     }
 
     [DataContract]
@@ -456,23 +425,6 @@ namespace APLPX.Client.Entity
             DollarRangeUpper = dollarRangeUpper;
             ValueChange = valueChange;
         }
-        public PriceRoundingRule(
-            int id,
-            int type,
-            decimal dollarRangeLower,
-            decimal dollarRangeUpper,
-            decimal valueChange,
-            short sort,
-            List<SQLEnumeration> roundingTypes
-            ) {
-            Id = id;
-            Type = type;
-            DollarRangeLower = dollarRangeLower;
-            DollarRangeUpper = dollarRangeUpper;
-            ValueChange = valueChange;
-            Sort = sort;
-            RoundingTypes = roundingTypes;
-        }
         #endregion
 
         [DataMember]
@@ -485,10 +437,6 @@ namespace APLPX.Client.Entity
         public decimal DollarRangeUpper { get; set; }
         [DataMember]
         public decimal ValueChange { get; set; }        
-        [DataMember]
-        public short Sort { get; set; }
-        [DataMember]
-        public List<SQLEnumeration> RoundingTypes { get; private set; }
     }
 
     [DataContract]

@@ -26,7 +26,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
-        #region Properties    
+        #region Properties
 
         public List<AnalyticValueDriverMode> Modes
         {
@@ -68,16 +68,5 @@ namespace APLPX.UI.WPF.DisplayEntities
                 mode.IsSelected = (mode == SelectedMode);
             }
         }
-
-        #region Overrides
-
-        public override string ToString()
-        {
-            string result = String.Format("{0}:Id={1};Name={2};Key={3};IsSelected={4}", GetType().Name, Id, Name, Key, IsSelected);
-
-            return result;
-        }
-
-        #endregion
     }
 }

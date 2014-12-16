@@ -56,5 +56,17 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        #region Overrides
+
+        public override string ToString()
+        {
+            object[] values = { GetType().Name, Name, Value, Sort };
+            string result = String.Format("{0}:Name=\"{1}\";Value={2};Sort={3}", values);
+
+            return result;
+        }
+
+        #endregion
+
     }
 }

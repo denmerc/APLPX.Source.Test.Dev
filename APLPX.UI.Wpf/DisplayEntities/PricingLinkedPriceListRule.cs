@@ -20,6 +20,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         public PricingLinkedPriceListRule()
         {
             RoundingRules = new List<PriceRoundingRule>();
+            RoundingTypes = new List<SQLEnumeration>();
         }
 
         #endregion
@@ -43,12 +44,12 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return _roundingRules; }
             set { this.RaiseAndSetIfChanged(ref _roundingRules, value); }
         }
+
         public List<SQLEnumeration> RoundingTypes
         {
             get { return _roundingTypes; }
             set { this.RaiseAndSetIfChanged(ref _roundingTypes, value); }
         }
-
         #endregion
 
     }

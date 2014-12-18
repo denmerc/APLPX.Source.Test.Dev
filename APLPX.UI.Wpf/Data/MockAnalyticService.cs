@@ -79,7 +79,15 @@ namespace APLPX.UI.WPF.Data
         {
             get
             {
-                return database.GetCollection<PricingEveryday>("test2");
+                return database.GetCollection<PricingEveryday>("PricingAll_NoFilters");
+            }
+        }
+
+        public MongoCollection<PricingResults> Results
+        {
+            get
+            {
+                return database.GetCollection<PricingResults>("Results");
             }
         }
 
@@ -152,6 +160,18 @@ namespace APLPX.UI.WPF.Data
 
 
             return new Session<PricingEveryday> { Data = newPE };
+
+        }
+
+        public Session<List<PricingEverydayResult>> RunPricing(int pricingId)
+        {
+
+
+            var results = Results.AsQueryable()
+                .Where(x => x.PricingId == pricingId).SingleOrDefault().Results;
+
+
+            return new Session<List<PricingEverydayResult>> { Data = results };
 
         }
 

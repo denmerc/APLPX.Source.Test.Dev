@@ -82,6 +82,13 @@ namespace APLPX.UI.Wpf.Tests
         }
 
         [TestMethod]
+        public void RunPriceRoutine()
+        {
+            var list = AnalyticService.RunPricing(1);
+            Assert.IsNotNull(list);
+        }
+
+        [TestMethod]
         public void Load_Analytic()
         {
             var id = new ENTITY.Analytic(3);

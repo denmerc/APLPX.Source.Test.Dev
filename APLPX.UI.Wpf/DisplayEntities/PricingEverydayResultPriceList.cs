@@ -1,5 +1,6 @@
 ﻿using System;
 using ReactiveUI;
+using DTO = APLPX.Client.Entity;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
@@ -10,13 +11,13 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _resultId;
         private decimal _currentPrice;
         private decimal _newPrice;
-        private int _currentMarkupPercent;
-        private int _newMarkupPercent;
+        private decimal _currentMarkupPercent;
+        private decimal _newMarkupPercent;
         private decimal _keyValueChange;
         private decimal _influenceValueChange;
         private decimal _priceChange;
-        private PricingResultEdit _priceEdit;
-        private PricingResultWarning _priceWarning;
+        private DTO.PricingResultsEditType _priceEdit;
+        private DTO.PricingResultsWarningType _priceWarning;
 
         #endregion
 
@@ -24,8 +25,8 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public PricingEverydayResultPriceList()
         {
-            PriceEdit = new PricingResultEdit();
-            PriceWarning = new PricingResultWarning();
+            //PriceEdit = new PricingResultEdit();
+            //PriceWarning = new PricingResultWarning();
         }
 
         #endregion
@@ -50,13 +51,13 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _newPrice, value); }
         }
 
-        public int CurrentMarkupPercent
+        public decimal CurrentMarkupPercent
         {
             get { return _currentMarkupPercent; }
             set { this.RaiseAndSetIfChanged(ref _currentMarkupPercent, value); }
         }
 
-        public int NewMarkupPercent
+        public decimal NewMarkupPercent
         {
             get { return _newMarkupPercent; }
             set { this.RaiseAndSetIfChanged(ref _newMarkupPercent, value); }
@@ -80,13 +81,13 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _priceChange, value); }
         }
 
-        public PricingResultEdit PriceEdit
+        public DTO.PricingResultsEditType PriceEdit
         {
             get { return _priceEdit; }
             set { this.RaiseAndSetIfChanged(ref _priceEdit, value); }
         }
 
-        public PricingResultWarning PriceWarning
+        public DTO.PricingResultsWarningType PriceWarning
         {
             get { return _priceWarning; }
             set { this.RaiseAndSetIfChanged(ref _priceWarning, value); }

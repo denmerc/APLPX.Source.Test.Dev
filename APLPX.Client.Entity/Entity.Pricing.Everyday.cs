@@ -299,7 +299,7 @@ namespace APLPX.Client.Entity
             int skuId,
             string skuName,
             string skuTitle,
-            List<PricingResultDriverGroup> groups,
+            PricingResultDriverGroup groups,
             List<PricingEverydayResultPriceList> priceLists
             ) {
             SkuId = skuId;
@@ -309,7 +309,7 @@ namespace APLPX.Client.Entity
             PriceLists = priceLists;
         }
         #endregion
-
+ 
         [DataMember]
         public int SkuId { get; private set; }
         [DataMember]
@@ -317,10 +317,26 @@ namespace APLPX.Client.Entity
         [DataMember]
         public string SkuTitle { get; private set; }
         [DataMember]
-        public List<PricingResultDriverGroup> Groups { get; private set; }
+        [BsonElement("Group")]
+        public PricingResultDriverGroup Groups { get; private set; }
         [DataMember]
+        [BsonElement("PriceList")]
         public List<PricingEverydayResultPriceList> PriceLists { get; private set; }
     }
+
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
+    public class PricingResults
+    {
+        [DataMember]
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public int PricingId { get; set; }
+
+        [DataMember]
+        public List<PricingEverydayResult> Results { get; set; }
+
+    }
+
 
     [BsonNoId]
     [BsonIgnoreExtraElements]
@@ -359,13 +375,13 @@ namespace APLPX.Client.Entity
             bool isKey,
             decimal currentPrice,
             decimal newPrice,
-            int currentMarkupPercent,
-            int newMarkupPercent,
+            decimal currentMarkupPercent,
+            decimal newMarkupPercent,
             decimal keyValueChange,
             decimal influenceValueChange,
             decimal priceChange,
-            PricingResultEdit priceEdit,
-            PricingResultWarning priceWarning
+            PricingResultsEditType priceEdit,
+            PricingResultsWarningType priceWarning
             ) : base(priceListId, key, code, name, sort, isSelected, isKey) {
             ResultId = resultId;    
             CurrentPrice = currentPrice;
@@ -387,9 +403,9 @@ namespace APLPX.Client.Entity
         [DataMember]
         public decimal NewPrice { get; set; }
         [DataMember]
-        public int CurrentMarkupPercent { get; private set; }
+        public decimal CurrentMarkupPercent { get; private set; }
         [DataMember]
-        public int NewMarkupPercent { get; set; }
+        public decimal NewMarkupPercent { get; set; }
         [DataMember]
         public decimal KeyValueChange { get; private set; }
         [DataMember]
@@ -397,8 +413,8 @@ namespace APLPX.Client.Entity
         [DataMember]
         public decimal PriceChange { get; private set; }
         [DataMember]
-        public PricingResultEdit PriceEdit { get; private set; }
+        public PricingResultsEditType PriceEdit { get; private set; }
         [DataMember]
-        public PricingResultWarning PriceWarning { get; private set; }
+        public PricingResultsWarningType PriceWarning { get; private set; }
     }
 }

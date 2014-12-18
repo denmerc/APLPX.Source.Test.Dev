@@ -444,6 +444,8 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingResultDriverGroup : ValueDriverGroup
     {
         #region initialize...

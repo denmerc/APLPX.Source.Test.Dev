@@ -11,7 +11,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _skuId;
         private string _skuName;
         private string _skuTitle;
-        private List<PricingResultDriverGroup> _groups;
+        private PricingResultDriverGroup _groups;
         private List<PricingEverydayResultPriceList> _priceLists;
 
         #endregion
@@ -20,7 +20,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public PricingEverydayResult()
         {
-            Groups = new List<PricingResultDriverGroup>();
+            Groups = new PricingResultDriverGroup();
             PriceLists = new List<PricingEverydayResultPriceList>();
         }
 
@@ -46,7 +46,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _skuTitle, value); }
         }
 
-        public List<PricingResultDriverGroup> Groups
+        public PricingResultDriverGroup Groups
         {
             get { return _groups; }
             set { this.RaiseAndSetIfChanged(ref _groups, value); }

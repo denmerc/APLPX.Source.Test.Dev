@@ -714,6 +714,8 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingResults:
+                    var response = ((APLPX.UI.WPF.Data.MockAnalyticService)_analyticService).RunPricing(SelectedEntity.Id);
+                    result = new PricingResultsViewModel(response.Data);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingResults:

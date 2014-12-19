@@ -13,7 +13,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private decimal _dollarRangeLower;
         private decimal _dollarRangeUpper;
         private decimal _valueChange;
-        private List<SQLEnumeration> _roundingTypes;
+        private List<SQLEnumeration> _roundingTypes;   
 
         #endregion
 
@@ -37,7 +37,17 @@ namespace APLPX.UI.WPF.DisplayEntities
         public int Type
         {
             get { return _type; }
-            set { this.RaiseAndSetIfChanged(ref _type, value); }
+            set 
+            {
+                if (_type!=value)
+                {
+                    _type = value;
+                    this.RaisePropertyChanged("Type");
+
+                    //Update dependent property.
+                    this.RaisePropertyChanged("RoundingTypeName");
+                }                
+            }
         }
 
         public decimal DollarRangeLower
@@ -62,6 +72,25 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _roundingTypes; }
             set { this.RaiseAndSetIfChanged(ref _roundingTypes, value); }
+        }
+
+        /// <summary>
+        /// Gets the name of this rule's rounding type. 
+        /// </summary>
+        public string RoundingTypeName
+        {
+            get
+            {
+                string result = String.Empty;
+
+                SQLEnumeration roundingType = RoundingTypes.Find(item => item.Value == this.Type);
+                if (roundingType != null)
+                {
+                    result = roundingType.Name;
+                }
+
+                return result;
+            }
         }
 
         #endregion

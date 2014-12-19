@@ -19,11 +19,16 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="LayoutRoot">
-      <!--  <Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="143*"/>
+        </Grid.RowDefinitions>
+        <!--  <Grid.Background>
             <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg"
                         Stretch="UniformToFill"/>
         </Grid.Background>  -->
-        <ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto">
+        <ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto" Grid.RowSpan="3">
             <!--<ListBox.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ListBoxItem}">
                                                     <Setter Property="Background" Value="Transparent" />
@@ -31,8 +36,8 @@
                                             </ListBox.ItemContainerStyle>-->
             <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
                 <StackPanel Orientation="Horizontal">
-                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="Price Routine Name:" HorizontalContentAlignment="Right"></Label>
-                    <TextBox x:Name="NameTextBox" Text ="{Binding PriceRoutine.Identity.Name}" FontSize="16" Foreground="{StaticResource Foreground}" Width="289" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}"></TextBox>
+                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="Price Routine Name:" HorizontalContentAlignment="Right"/>
+                    <TextBox x:Name="NameTextBox" Text ="{Binding PriceRoutine.Identity.Name}" FontSize="16" Foreground="{StaticResource Foreground}" Width="289" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}"/>
                 </StackPanel>
             </ListBoxItem>
             <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
@@ -57,14 +62,14 @@
             </ListBoxItem>
             <!--<ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">-->
-                    <!--<StackPanel.Resources>
+            <!--<StackPanel.Resources>
 														<Style TargetType="{x:Type Button}">
 															<Setter Property="Margin" Value="2"/>
 														</Style>
 													</StackPanel.Resources>-->
-                    <!--<Button>Save</Button>
+            <!--<Button>Save</Button>
                     <Button>Cancel</Button>-->
-                <!--</StackPanel>
+            <!--</StackPanel>
             </ListBoxItem>-->
         </ListBox>
     </Grid>

@@ -94,10 +94,18 @@ namespace APLPX.UI.WPF.Mappers
 
         public static Display.AnalyticPriceListGroup ToDisplayEntity(this DTO.AnalyticPriceListGroup dto)
         {
-            var displayEntity = new Display.AnalyticPriceListGroup();
-            displayEntity.TypeName = dto.TypeName;
+            var displayEntity = new Display.AnalyticPriceListGroup();            
             displayEntity.Key = dto.Key;
-            displayEntity.Name = dto.Name;
+
+            //TEMP: until remove TypeName property from the DTO.
+            if (!String.IsNullOrWhiteSpace(dto.Name))
+            {
+                displayEntity.Name = dto.Name;
+            }
+            else if (!String.IsNullOrWhiteSpace(dto.TypeName))
+            {
+                displayEntity.Name = dto.TypeName;
+            }
             displayEntity.Title = dto.Title;
             displayEntity.Sort = dto.Sort;
 

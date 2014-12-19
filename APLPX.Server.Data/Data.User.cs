@@ -19,7 +19,11 @@ namespace APLPX.Server.Data {
         #region Constants...
         const String INVALID = "Invalid:";
         const String CONNECTIONNAME = "defaultConnectionString";
-        const String APLSERVICEEVENTNLOG = "APLServiceEventLog";
+        const String APLSERVICEEVENTLOG = "APLServiceEventLog";
+        const Int32 identityData = (Int32)UserMap.DataSets.entitydata;
+        const Int32 moduleData = (Int32)UserMap.DataSets.workflowModules;
+        const Int32 searchData = (Int32)UserMap.DataSets.workflowSearchGroups;
+        const Int32 enumerationData = (Int32)UserMap.DataSets.enumeration;
         #endregion
 
         #region Variables...
@@ -41,7 +45,7 @@ namespace APLPX.Server.Data {
             //if (!System.Diagnostics.EventLog.SourceExists(APLServiceEventLog)) EventLog.CreateEventSource(APLServiceEventLog, "Application");
             //Setup <APLServiceEventLog> event source manually through registry key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Application
             //To resolve message IDs create a RG_EXPAND_SZ attribute, named "EventMessageFile" to: "C:\WINDOWS\Microsoft.NET\Framework\<current version>\EventLogMessages.dll"
-            localServiceLog.Source = APLSERVICEEVENTNLOG;
+            localServiceLog.Source = APLSERVICEEVENTLOG;
         }
 
         ~UserData() {
@@ -64,13 +68,13 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Data.UserMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Data.UserMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut = sqlMapper.InitializeMapData(dataSet.Tables[(Int32)UserMap.DataSets.entitydata]);
+                        sessionOut = sqlMapper.InitializeMapData(dataSet.Tables[identityData]);
                         sessionOut.SessionOk = true;
                     }
                 }
             }
             catch (Exception ex) {
-                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
+                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
             }
             finally {
@@ -78,14 +82,13 @@ namespace APLPX.Server.Data {
                 if (!sqlService.SqlStatusOk) {
                     sessionOut.SessionOk = sqlService.SqlStatusOk;
                     sessionOut.ClientMessage = sqlService.SqlStatusMessage;
-                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
+                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
                 }
                 //SQL Validation warning...
                 else if (sqlRequest != sqlResponse) {
                     sessionOut.ClientMessage = sqlResponse;
                 }
             }
-
             return sessionOut;
         }
 
@@ -103,18 +106,16 @@ namespace APLPX.Server.Data {
                     sqlRequest = sqlService.sqlParameters[Data.UserMap.Names.sqlMessage].dbValue;
                     sqlResponse = sqlService.sqlParameters[Data.UserMap.Names.sqlMessage].dbOutput;
                     if (sqlRequest == sqlResponse) {
-                        sessionOut.User = sqlMapper.AuthenticateMapData(dataSet.Tables[(Int32)UserMap.DataSets.entitydata]);
-                        sessionOut.SqlKey = sessionOut.User.Key;
-                        sessionOut.User.RoleTypes = sqlMapper.EnumerationMapData(dataSet.Tables[(Int32)UserMap.DataSets.enumeration]);
-                        //TODO: Move to Season...
-                        //sessionOut.User.Modules = sqlMapper.AuthenticateMapWorkflowModules(dataSet.Tables[(Int32)UserMap.DataSets.workflowModules]);
+                        sessionOut.User = sqlMapper.AuthenticateMapData(dataSet.Tables[identityData]);
+                        sessionOut.Modules = sqlMapper.AuthenticateMapWorkflowModules(dataSet.Tables[moduleData], dataSet.Tables[searchData]);
                         sessionOut.SessionOk = true;
+                        sessionOut.SqlKey = sessionOut.User.Key;
                         sessionOut.Authenticated = sessionOut.SessionOk;
                     }
                 }
             }
             catch (Exception ex) {
-                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
+                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
             }
             finally {
@@ -122,14 +123,13 @@ namespace APLPX.Server.Data {
                 if (!sqlService.SqlStatusOk) {
                     sessionOut.SessionOk = sqlService.SqlStatusOk;
                     sessionOut.ClientMessage = sqlService.SqlStatusMessage;
-                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
+                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
                 }
                 //SQL Validation warning...
                 else if (sqlRequest != sqlResponse) {
                     sessionOut.ClientMessage = sqlResponse;
                 }
             }
-
             return sessionOut;
         }
 
@@ -153,7 +153,7 @@ namespace APLPX.Server.Data {
                 }
             }
             catch (Exception ex) {
-                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
+                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
             }
             finally {
@@ -161,7 +161,7 @@ namespace APLPX.Server.Data {
                 if (!sqlService.SqlStatusOk) {
                     sessionOut.SessionOk = sqlService.SqlStatusOk;
                     sessionOut.ClientMessage = sqlService.SqlStatusMessage;
-                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
+                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
                 }
                 //SQL Validation warning...
                 else if (sqlRequest != sqlResponse) {
@@ -190,7 +190,7 @@ namespace APLPX.Server.Data {
                 }
             }
             catch (Exception ex) {
-                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
+                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
             }
             finally {
@@ -198,7 +198,7 @@ namespace APLPX.Server.Data {
                 if (!sqlService.SqlStatusOk) {
                     sessionOut.SessionOk = sqlService.SqlStatusOk;
                     sessionOut.ClientMessage = sqlService.SqlStatusMessage;
-                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
+                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
                 }
                 //SQL Validation warning...
                 else if (sqlRequest != sqlResponse) {
@@ -228,7 +228,7 @@ namespace APLPX.Server.Data {
                 }
             }
             catch (Exception ex) {
-                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
+                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
             }
             finally {
@@ -236,7 +236,7 @@ namespace APLPX.Server.Data {
                 if (!sqlService.SqlStatusOk) {
                     sessionOut.SessionOk = sqlService.SqlStatusOk;
                     sessionOut.ClientMessage = sqlService.SqlStatusMessage;
-                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
+                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
                 }
                 //SQL Validation warning...
                 else if (sqlRequest != sqlResponse) {
@@ -263,7 +263,7 @@ namespace APLPX.Server.Data {
                 }
             }
             catch (Exception ex) {
-                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
+                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
             }
             finally {
@@ -271,7 +271,7 @@ namespace APLPX.Server.Data {
                 if (!sqlService.SqlStatusOk) {
                     sessionOut.SessionOk = sqlService.SqlStatusOk;
                     sessionOut.ClientMessage = sqlService.SqlStatusMessage;
-                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTNLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
+                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
                 }
                 //SQL Validation warning...
                 else if (sqlRequest != sqlResponse) {
@@ -287,6 +287,5 @@ namespace APLPX.Server.Data {
                 if (!sqlService.ExecuteCloseConnection())
                     this.localServiceLog.WriteEntry(sqlService.SqlStatusMessage);
         }
-
     }
 }

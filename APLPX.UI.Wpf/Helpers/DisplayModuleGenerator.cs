@@ -271,10 +271,17 @@ namespace APLPX.UI.WPF.Helpers
         {
             var result = new List<FilterGroup>();
 
-            for (int groupIndex = 1; groupIndex <= 3; groupIndex++)
+            string[] groupNames = { "Discount Type", "Hierarchy", "Inventory Catalog Line", 
+                                    "Inventory Status", "Product Introduction date", "Product Type", 
+                                    "Stock Supply Classification", "Vendor Code", "Location", 
+                                    "Pricing Type", "Package Type" };
+
+            for (int groupIndex = 0; groupIndex < groupNames.Length; groupIndex++)
             {
-                FilterGroup group = new FilterGroup { Name = "Filter Group " + groupIndex, Sort = (short)groupIndex };
-                for (int filterIndex = 1; filterIndex <= 5; filterIndex++)
+                string groupName = groupNames[groupIndex];
+                FilterGroup group = new FilterGroup { Name = groupName, Sort = (short)(groupIndex + 1) };
+
+                for (int filterIndex = 1; filterIndex <= groupIndex + 10; filterIndex++)
                 {
                     string id = String.Format("{0}-{1}", groupIndex, filterIndex);
                     Filter filter = new Filter
@@ -283,7 +290,7 @@ namespace APLPX.UI.WPF.Helpers
                         Code = "Code " + id,
                         Key = (groupIndex * 100) + filterIndex,
                         Sort = (short)filterIndex,
-                        IsSelected = (filterIndex == 1)
+                        IsSelected = (filterIndex % 2) == 1
                     };
                     group.Filters.Add(filter);
                 }
@@ -298,11 +305,13 @@ namespace APLPX.UI.WPF.Helpers
         private static List<AnalyticPriceListGroup> GetSampleAnalyticPriceListGroups()
         {
             var result = new List<AnalyticPriceListGroup>();
+            string[] grouoNames = { "Everyday", "Price List Group 2" };
 
-            for (int groupIndex = 1; groupIndex <= 3; groupIndex++)
+            for (int groupIndex = 0; groupIndex < grouoNames.Length; groupIndex++)
             {
-                AnalyticPriceListGroup group = new AnalyticPriceListGroup { Name = "Price List Group " + groupIndex, Sort = (short)groupIndex };
-                group.PriceLists = GetSamplePriceLists(groupIndex, 3);
+                string name = grouoNames[groupIndex];
+                AnalyticPriceListGroup group = new AnalyticPriceListGroup { Name = name, Sort = (short)groupIndex, Title = name + " title" };
+                group.PriceLists = GetSamplePriceLists(groupIndex);
                 result.Add(group);
             }
 
@@ -345,28 +354,32 @@ namespace APLPX.UI.WPF.Helpers
             foreach (int id in uniquePriceListIds)
             {
                 int percentChange = _random.Next(3, 15);
-                var rule = new PricingLinkedPriceListRule { PercentChange = percentChange, PriceListId = id };
+                var roundingRules = GetRoundingRules();
+                var rule = new PricingLinkedPriceListRule { PercentChange = percentChange, PriceListId = id, RoundingRules = roundingRules };
                 rules.Add(rule);
             }
             return rules;
         }
 
-        private static List<PriceList> GetSamplePriceLists(int groupIndex, int count)
+        private static List<PriceList> GetSamplePriceLists(int groupIndex)
         {
             var result = new List<PriceList>();
 
-            for (int priceListIndex = 1; priceListIndex <= count; priceListIndex++)
+            result.Add(new PriceList { Id = 1, Key = 1, Code = "0", Name = "Cost", IsSelected = false, Sort = 1 });
+            result.Add(new PriceList { Id = 4, Key = 2, Code = "L", Name = "Retail List price", IsSelected = true, Sort = 2 });
+            result.Add(new PriceList { Id = 2, Key = 3, Code = "LF", Name = "Retail List price *FUTURE PRICE*", IsSelected = false, Sort = 3 });
+            result.Add(new PriceList { Id = 3, Key = 4, Code = "R", Name = "Retail Sale price", IsSelected = false, Sort = 4 });
+            result.Add(new PriceList { Id = 5, Key = 5, Code = "RF", Name = "Retail Sale price *FUTURE PRICE*", IsSelected = false, Sort = 5 });
+            result.Add(new PriceList { Id = 6, Key = 6, Code = "C", Name = "Dealer Sugg Retail", IsSelected = false, Sort = 6 });
+            result.Add(new PriceList { Id = 7, Key = 7, Code = "J", Name = "Jobber - Trim Shop", IsSelected = false, Sort = 7 });
+
+            if (groupIndex == 0)
             {
-                string id = String.Format("{0}-{1}", groupIndex, priceListIndex);
-                PriceList priceList = new PriceList
-                {
-                    Name = "Price List " + id,
-                    Code = "Code " + id,
-                    Key = (groupIndex * 100) + priceListIndex,
-                    Sort = (short)priceListIndex,
-                    IsSelected = (priceListIndex == 1)
-                };
-                result.Add(priceList);
+                result.Add(new PriceList { Id = 8, Key = 8, Code = "D", Name = "Dealer Std Price", IsSelected = false, Sort = 8 });
+                result.Add(new PriceList { Id = 9, Key = 9, Code = "1", Name = "Dealer 1", IsSelected = false, Sort = 9 });
+                result.Add(new PriceList { Id = 10, Key = 10, Code = "2", Name = "Dealer 2", IsSelected = false, Sort = 10 });
+                result.Add(new PriceList { Id = 10, Key = 11, Code = "3", Name = "Dealer 3", IsSelected = false, Sort = 11 });
+                result.Add(new PriceList { Id = 12, Key = 12, Code = "4", Name = "Dealer 4", IsSelected = false, Sort = 12 });
             }
 
             return result;
@@ -411,16 +424,20 @@ namespace APLPX.UI.WPF.Helpers
 
         #endregion
 
+        #region Value Drivers
+
         private static List<AnalyticValueDriver> GetSampleAnalyticDrivers()
         {
             var result = new List<AnalyticValueDriver>();
 
             string[] driverNames = { "Markup", "Movement", "Days On Hand" };
 
+            var analyticResults = GetSampleAnalyticResults();
+
             for (int driverIndex = 0; driverIndex < driverNames.Length; driverIndex++)
             {
                 ValueDriverGroup group;
-                var driver = new AnalyticValueDriver { Id = driverIndex + 21, Name = driverNames[driverIndex], Sort = (short)driverIndex };
+                var driver = new AnalyticValueDriver { Id = driverIndex + 21, Name = driverNames[driverIndex], Sort = (short)driverIndex, Results = analyticResults };
                 //Auto generated
                 var mode = new AnalyticValueDriverMode
                 {
@@ -460,6 +477,52 @@ namespace APLPX.UI.WPF.Helpers
 
             return result;
         }
+
+        private List<PricingResultDriverGroup> GetPricingResultDriverGroups()
+        {
+            var list = new List<PricingResultDriverGroup>();
+            string title = "Product Analytic metric driver is based on Aggregate units sold";
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "0", SkuCount = 20928, SalesValue = "0", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "0", SkuCount = 20928, SalesValue = "0", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "4", SkuCount = 20928, SalesValue = "759.96", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "0", SkuCount = 20928, SalesValue = "0", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "11", SkuCount = 1916, SalesValue = "1168.09", Id = 4, Value = 4, MinOutlier = 8, MaxOutlier = 23, Sort = 4 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "4", SkuCount = 20928, SalesValue = "1512.32", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "5", SkuCount = 20928, SalesValue = "1699.9", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "4", SkuCount = 20928, SalesValue = "455.16", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "1", SkuCount = 20928, SalesValue = "173.34", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "0", SkuCount = 20928, SalesValue = "0", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+            list.Add(new PricingResultDriverGroup { Name = "Movement", Title = title, Actual = "0", SkuCount = 20928, SalesValue = "0", Id = 5, Value = 5, MinOutlier = 0, MaxOutlier = 8, Sort = 5 });
+
+            return list;
+        }
+
+        #endregion
+
+        #region Analytic Results
+
+        private static List<AnalyticResult> GetSampleAnalyticResults()
+        {
+            var list = new List<AnalyticResult>();
+
+            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "1645", MaxValue = "19880", Id = 1, SalesValue = "16020.43", SkuCount = 20 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "1215.26", MaxValue = "1563", Id = 2, SalesValue = "7574.79", SkuCount = 18 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "802.9", MaxValue = "1181", Id = 3, SalesValue = "34918", SkuCount = 27 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "331.67", MaxValue = "799", Id = 4, SalesValue = "67442.4", SkuCount = 42 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "-24.95", MaxValue = "289.7", Id = 5, SalesValue = "16182.75", SkuCount = 19 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "2298", MaxValue = "2298", Id = 1, SalesValue = "6848", SkuCount = 1 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "674", MaxValue = "674", Id = 2, SalesValue = "4010.3", SkuCount = 1 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "217", MaxValue = "411", Id = 3, SalesValue = "17583", SkuCount = 3 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "102", MaxValue = "179", Id = 4, SalesValue = "35942", SkuCount = 12 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "0", MaxValue = "98", Id = 5, SalesValue = "77734", SkuCount = 109 });
+            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "21", MaxValue = "90541", Id = 1, SalesValue = "74986.08", SkuCount = 58 });
+            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "13", MaxValue = "178", Id = 4, SalesValue = "1143.12", SkuCount = 1 });
+            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "48", MaxValue = "141", Id = 5, SalesValue = "65989.34", SkuCount = 67 });
+
+            return list;
+        }
+
+        #endregion
 
 
         /// <summary>
@@ -536,8 +599,9 @@ namespace APLPX.UI.WPF.Helpers
                 result.PriceListGroups = GetSamplePricingEverydayPriceListGroups(mode);
             }
 
-            result.KeyPriceListRule = new PricingKeyPriceListRule { DollarRangeLower = 10.25M, DollarRangeUpper = 115.00M };
+            result.KeyPriceListRule = new PricingKeyPriceListRule { DollarRangeLower = 10.25M, DollarRangeUpper = 115.00M, RoundingRules = GetRoundingRules() };
             result.LinkedPriceListRules = GetSampleLinkedPriceListRules(result);
+            result.Results = GetSamplePricingEverydayResults();
 
             return result;
         }
@@ -639,14 +703,14 @@ namespace APLPX.UI.WPF.Helpers
                 case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsValueDrivers:
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversSave, Sort = 1 });
                     result.Add(new DisplayEntities.Action { Name = "Cancel", Title = "Discard all changes since the last save.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversCancel, Sort = 2 });
+                    result.Add(new DisplayEntities.Action { Name = "Run", Title = "Calculate results.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsResultsRun, Sort = 3 });
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:
-                    result.Add(new DisplayEntities.Action { Name = "Run", Title = "Run calculations", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingPriceListsSave, Sort = 1 });
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingRounding:
-                    result.Add(new DisplayEntities.Action { Name = "Run", Title = "Run calculations", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingRoundingSave, Sort = 1 });
+                    //result.Add(new DisplayEntities.Action { Name = "Run", Title = "Run calculations", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingRoundingSave, Sort = 1 });
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsResults:
@@ -733,7 +797,7 @@ namespace APLPX.UI.WPF.Helpers
                 HasKeyPriceListRule = true,
                 HasLinkedPriceListRule = true,
                 KeyPriceListGroupKey = 7,
-                LinkedPriceListGroupKey = 8,
+                LinkedPriceListGroupKey = 7,
                 Sort = 4
 
             });
@@ -743,24 +807,36 @@ namespace APLPX.UI.WPF.Helpers
 
         #region Pricing Rules
 
+        public static List<PricingRoundingTemplate> GetSampleRoundingTemplates()
+        {
+            var list = new List<PricingRoundingTemplate>();
+
+            for (short i = 1; i < +5; i++)
+            {
+                var roundingRules = GetRoundingRules().Take(10 - i).ToList();
+                PricingRoundingTemplate template = new PricingRoundingTemplate { Id = i, Name = "Rounding Template " + i, Description = "Rounding Template " + i, Rules = roundingRules, Sort = i };
+                list.Add(template);
+            }
+
+            return list;
+        }
+
         private static List<PriceRoundingRule> GetRoundingRules()
         {
-            var list = new List<PriceRoundingRule>();
-            var lookups = GetRoundingRuleTypes();
+            var ruleTypes = GetRoundingRuleTypes();
 
-            for (int i = 0; i < 10; i++)
-            {              
-                list.Add(new PriceRoundingRule { Id = 101, DollarRangeLower = 0.01M, DollarRangeUpper = 20M, ValueChange = 0.89M,  Type = 1, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 102, DollarRangeLower = 20.01M, DollarRangeUpper = 25M, ValueChange = 0.99M, Type = 2, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 103, DollarRangeLower = 25.01M, DollarRangeUpper = 30M, ValueChange = 0.79M,Type = 3, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 104, DollarRangeLower = 30.01M, DollarRangeUpper = 75M, ValueChange = 0.99M,Type = 1, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 105, DollarRangeLower = 75.01M, DollarRangeUpper = 100M, ValueChange = 0.99M,Type = 2, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 106, DollarRangeLower = 100.01M, DollarRangeUpper = 110M, ValueChange = 0.99M,Type = 1, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 107, DollarRangeLower = 110.01M, DollarRangeUpper = 500M, ValueChange = 0.99M,Type = 3, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 108, DollarRangeLower = 500.01M, DollarRangeUpper = 800M, ValueChange = 0.99M,Type = 2, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 109, DollarRangeLower = 800.01M, DollarRangeUpper = 1000M, ValueChange = 0.99M,Type = 1, RoundingTypes = lookups });
-                list.Add(new PriceRoundingRule { Id = 110, DollarRangeLower = 1000.01M, DollarRangeUpper = 99999M, ValueChange = 0.99M, Type = 3, RoundingTypes = lookups });
-            }
+            var list = new List<PriceRoundingRule>();
+
+            list.Add(new PriceRoundingRule { Id = 101, DollarRangeLower = 0.01M, DollarRangeUpper = 20M, ValueChange = 0.89M, Type = ruleTypes[1].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 102, DollarRangeLower = 20.01M, DollarRangeUpper = 25M, ValueChange = 0.99M, Type = ruleTypes[1].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 103, DollarRangeLower = 25.01M, DollarRangeUpper = 30M, ValueChange = 0.79M, Type = ruleTypes[1].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 104, DollarRangeLower = 30.01M, DollarRangeUpper = 75M, ValueChange = 0.99M, Type = ruleTypes[1].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 105, DollarRangeLower = 75.01M, DollarRangeUpper = 100M, ValueChange = 0.99M, Type = ruleTypes[1].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 106, DollarRangeLower = 100.01M, DollarRangeUpper = 110M, ValueChange = 0.99M, Type = ruleTypes[0].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 107, DollarRangeLower = 110.01M, DollarRangeUpper = 500M, ValueChange = 0.99M, Type = ruleTypes[0].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 108, DollarRangeLower = 500.01M, DollarRangeUpper = 800M, ValueChange = 0.99M, Type = ruleTypes[0].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 109, DollarRangeLower = 800.01M, DollarRangeUpper = 1000M, ValueChange = 0.99M, Type = ruleTypes[0].Value, RoundingTypes = ruleTypes });
+            list.Add(new PriceRoundingRule { Id = 110, DollarRangeLower = 1000.01M, DollarRangeUpper = 99999M, ValueChange = 0.99M, Type = ruleTypes[0].Value, RoundingTypes = ruleTypes });
 
             return list;
         }
@@ -803,9 +879,8 @@ namespace APLPX.UI.WPF.Helpers
         {
             var list = new List<SQLEnumeration>();
 
-            list.Add(new SQLEnumeration { Name = "Round Nearest", Description = "Round to the nearest value.", Value = 1, Sort = 1 });
-            list.Add(new SQLEnumeration { Name = "Round Up", Description = "Round up to the next value.", Value = 2, Sort = 2 });
-            list.Add(new SQLEnumeration { Name = "Round Down", Description = "Round down to the next value.", Value = 3, Sort = 3 });
+            list.Add(new SQLEnumeration { Name = "Round Up", Description = "Psychological rounding up to change value", Value = 53, Sort = 1 });
+            list.Add(new SQLEnumeration { Name = "Round Near", Description = "Psychological rounding nearest to change value", Value = 54, Sort = 2 });
 
             return list;
         }
@@ -814,34 +889,35 @@ namespace APLPX.UI.WPF.Helpers
 
         #region Pricing Results
 
-        List<PricingEverydayResult> GetPricingEverydayResults()
+        private static List<PricingEverydayResult> GetSamplePricingEverydayResults()
         {
+            List<PricingEverydayResultPriceList> priceLists = GetSamplePricingEverydayResultPricelists();
             var list = new List<PricingEverydayResult>();
-            list.Add(new PricingEverydayResult { SkuId = 123, SkuName = "CE01402", SkuTitle = "1959-60 Cadillac Pitman Arm" });
-            list.Add(new PricingEverydayResult { SkuId = 126, SkuName = "PSP0013", SkuTitle = "Pump, Power Steering, 75-76 Cadillac, New" });
-            list.Add(new PricingEverydayResult { SkuId = 288, SkuName = "CE12161", SkuTitle = "1968-70 Cadillac Power Steering Pump & Reservoir" });
-            list.Add(new PricingEverydayResult { SkuId = 604, SkuName = "CE11863", SkuTitle = "1954-56 Cadillac 3 Front Low Profile Springs" });
-            list.Add(new PricingEverydayResult { SkuId = 612, SkuName = "CE01363", SkuTitle = "Outer Tie Rod, 1961-63 PONT/1963-69 Cadillac/1963 Skylark" });
-            list.Add(new PricingEverydayResult { SkuId = 696, SkuName = "CE11871", SkuTitle = "1961-64 Cadillac 2 Front Low Profile Springs" });
-            list.Add(new PricingEverydayResult { SkuId = 959, SkuName = "PSP0053", SkuTitle = "Pump, Power Steering, 60-67 Multi, New" });
-            list.Add(new PricingEverydayResult { SkuId = 991, SkuName = "CE01472", SkuTitle = "1961-64 Cadillac Rear Control Arm Bushing, upper" });
-            list.Add(new PricingEverydayResult { SkuId = 1352, SkuName = "CH28562", SkuTitle = "Flaming River Tilt Steering Column Acc 1-48 x 3/4 - DD SS U-Joint" });
-            list.Add(new PricingEverydayResult { SkuId = 1757, SkuName = "CE12163", SkuTitle = "1975-76 Cadillac Power Steering Pump & Reservoir" });
-            list.Add(new PricingEverydayResult { SkuId = 1771, SkuName = "CE01523", SkuTitle = "1976 Seville (diesel) Front Coil Springs" });
-            list.Add(new PricingEverydayResult { SkuId = 2123, SkuName = "ADD0943", SkuTitle = "1971-76 Eldorado/Bonneville/Catalina 1 Rear Anti-Sway Bar" });
-            list.Add(new PricingEverydayResult { SkuId = 2165, SkuName = "CE03380", SkuTitle = "1965-67 Cadillac Transmission Mount exc. 1967 Eldorado" });
-            list.Add(new PricingEverydayResult { SkuId = 2337, SkuName = "C980100", SkuTitle = "64-7 KYB REAR GAS-A-JUST SHOCK" });
-            list.Add(new PricingEverydayResult { SkuId = 2379, SkuName = "ADD0930", SkuTitle = "1965-70 Eldorado 3/4 Rear Anti-Sway Bar" });
-            list.Add(new PricingEverydayResult { SkuId = 2516, SkuName = "CE01334", SkuTitle = "1967-76 Eldorado Upper Control Arm Bushing" });
-            list.Add(new PricingEverydayResult { SkuId = 2601, SkuName = "CE12041", SkuTitle = "1975-76 Seville Gas-A-Just Shocks" });
-            list.Add(new PricingEverydayResult { SkuId = 2608, SkuName = "CE01398", SkuTitle = "1976 Cadillac Seville Idler Arm" });
-            list.Add(new PricingEverydayResult { SkuId = 2738, SkuName = "CE12164", SkuTitle = "1976 Cadillac Eldorado, CC, Limo & Series 75 Power Steering Pump & Reservoir" });  
+            list.Add(new PricingEverydayResult { SkuId = 123, SkuName = "CE01402", SkuTitle = "1959-60 Cadillac Pitman Arm", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 126, SkuName = "PSP0013", SkuTitle = "Pump, Power Steering, 75-76 Cadillac, New", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 288, SkuName = "CE12161", SkuTitle = "1968-70 Cadillac Power Steering Pump & Reservoir", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 604, SkuName = "CE11863", SkuTitle = "1954-56 Cadillac 3 Front Low Profile Springs", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 612, SkuName = "CE01363", SkuTitle = "Outer Tie Rod, 1961-63 PONT/1963-69 Cadillac/1963 Skylark", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 696, SkuName = "CE11871", SkuTitle = "1961-64 Cadillac 2 Front Low Profile Springs", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 959, SkuName = "PSP0053", SkuTitle = "Pump, Power Steering, 60-67 Multi, New", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 991, SkuName = "CE01472", SkuTitle = "1961-64 Cadillac Rear Control Arm Bushing, upper", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 1352, SkuName = "CH28562", SkuTitle = "Flaming River Tilt Steering Column Acc 1-48 x 3/4 - DD SS U-Joint", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 1757, SkuName = "CE12163", SkuTitle = "1975-76 Cadillac Power Steering Pump & Reservoir", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 1771, SkuName = "CE01523", SkuTitle = "1976 Seville (diesel) Front Coil Springs", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 2123, SkuName = "ADD0943", SkuTitle = "1971-76 Eldorado/Bonneville/Catalina 1 Rear Anti-Sway Bar", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 2165, SkuName = "CE03380", SkuTitle = "1965-67 Cadillac Transmission Mount exc. 1967 Eldorado", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 2337, SkuName = "C980100", SkuTitle = "64-7 KYB REAR GAS-A-JUST SHOCK", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 2379, SkuName = "ADD0930", SkuTitle = "1965-70 Eldorado 3/4 Rear Anti-Sway Bar", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 2516, SkuName = "CE01334", SkuTitle = "1967-76 Eldorado Upper Control Arm Bushing", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 2601, SkuName = "CE12041", SkuTitle = "1975-76 Seville Gas-A-Just Shocks", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 2608, SkuName = "CE01398", SkuTitle = "1976 Cadillac Seville Idler Arm", PriceLists = priceLists });
+            list.Add(new PricingEverydayResult { SkuId = 2738, SkuName = "CE12164", SkuTitle = "1976 Cadillac Eldorado, CC, Limo & Series 75 Power Steering Pump & Reservoir", PriceLists = priceLists });
 
 
             return list;
         }
 
-        List<PricingEverydayResultPriceList> GetPricingEverydayResultPricelists()
+        private static List<PricingEverydayResultPriceList> GetSamplePricingEverydayResultPricelists()
         {
             var list = new List<PricingEverydayResultPriceList>();
 
@@ -943,6 +1019,7 @@ namespace APLPX.UI.WPF.Helpers
 
             return list;
         }
+
         #endregion
     }
 

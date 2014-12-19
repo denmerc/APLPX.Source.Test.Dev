@@ -35,14 +35,14 @@
                    Grid.Row="0"
                    Width="300"
                    VerticalAlignment="Bottom"
-                   Visibility="Visible" 
-                   Style="{DynamicResource SearchControlSeparatorStyle}" 
-                   Panel.ZIndex="1000"/>
+                   Panel.ZIndex="1000"
+                   Style="{DynamicResource SearchControlSeparatorStyle}"
+                   Visibility="Visible" />
 
         <Border Grid.Row="0"
                 Grid.RowSpan="2"
                 Width="350"
-                Style="{DynamicResource SearchControlStyle}"/>
+                Style="{DynamicResource SearchControlStyle}" />
 
 
         <Label x:Name="txtSearchGroupsTitle"
@@ -58,10 +58,10 @@
                    Grid.Column="2"
                    Width="300"
                    VerticalAlignment="Bottom"
-                   Visibility="{Binding Path=IsSearchFilterSelected,
-                                        Converter={StaticResource BooleanToVisibilityConverter}}"
+                   Panel.ZIndex="1000"
                    Style="{DynamicResource SearchControlSeparatorStyle}"
-                   Panel.ZIndex="1000"/>
+                   Visibility="{Binding Path=IsSearchFilterSelected,
+                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <Border Grid.Row="0"
                 Grid.RowSpan="2"
@@ -106,8 +106,7 @@
                                     ToolTip="{Binding Path=SearchKey}">
                             <Label x:Name="lblValue"
                                    Margin="4,2"
-                                   Foreground="{DynamicResource SearchControlListBoxTitleTextColor}"
-                                   Style="{StaticResource SearchLblStyle}">
+                                   Foreground="{DynamicResource SearchControlListBoxTitleTextColor}">
                                 <Label.Content>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -206,7 +205,7 @@
         <ListBox x:Name="lstFiltered"
                  Grid.Row="1"
                  Grid.Column="2"
-                 Margin="20,5"
+                 Margin="20,-7"
                  ItemsSource="{Binding Path=SelectedFeature.FilteredSearchableEntities}"
                  Padding="5,25,5,25"
                  SelectedItem="{Binding Path=SelectedFeature.SelectedEntity}"
@@ -215,7 +214,7 @@
 
             <ListBox.ItemContainerStyle>
                 <Style BasedOn="{StaticResource searchControlStyle2}" TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="helpers:DragDropHelper.DragSource" Value="{StaticResource searchableEntityDragSource}" /> 
+                    <Setter Property="helpers:DragDropHelper.DragSource" Value="{StaticResource searchableEntityDragSource}" />
                     <!--  <EventSetter Event="MouseMove" Handler="Entity_MouseMove" />  -->
                 </Style>
             </ListBox.ItemContainerStyle>
@@ -224,7 +223,9 @@
                 <DataTemplate>
                     <Label Margin="4,2" ToolTip="{Binding Path=SearchKey}">
                         <Label.Content>
-                            <AccessText Text="{Binding Path=Identity.Name}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource SearchControlListBoxItemTextColor}" />
+                            <AccessText Foreground="{DynamicResource SearchControlListBoxItemTextColor}"
+                                        Text="{Binding Path=Identity.Name}"
+                                        TextTrimming="CharacterEllipsis" />
                         </Label.Content>
                     </Label>
                 </DataTemplate>

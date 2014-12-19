@@ -10,12 +10,6 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <!--  TODO: move this to common styles. Intended for use with titles of list boxes, data grids. etc.  -->
-            <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
-                <Setter Property="TextAlignment" Value="Center" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="Margin" Value="5" />
-            </Style>
 
             <ResourceDictionary.MergedDictionaries>
                 <!--  for design-time support, already in app.xml  -->
@@ -27,10 +21,26 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="Black">
-    <!--    <Grid.Background>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation x:Name="fadeIn"
+                                     Duration="0:0:1"
+                                     From="0"
+                                     Storyboard.TargetProperty="(UIElement.Opacity)"
+                                     To="1" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
+        <!--
+            <Grid.Background>
             <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg" Stretch="UniformToFill" />
-        </Grid.Background>  -->
+            </Grid.Background>
+        -->
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -46,19 +56,12 @@
                    Style="{StaticResource ListTitleTextStyle}"
                    Text="Filter Groups" />
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
-                   Text="{Binding ElementName=FilterGrid,
-                                  Path=Items.Count,
-                                  StringFormat={}Filters ({0})}" />
-
         <ListBox x:Name="FilterGroupsListBox"
                  Grid.Row="1"
                  Grid.Column="0"
                  ItemsSource="{Binding Path=Entity.FilterGroups}"
-                 SelectedItem="{Binding Path=Entity.SelectedFilterGroup}"
-                 SelectedIndex="0">
+                 SelectedIndex="0"
+                 SelectedItem="{Binding Path=Entity.SelectedFilterGroup}">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -70,6 +73,13 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
+        <TextBlock Grid.Row="0"
+                   Grid.Column="1"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="{Binding ElementName=FilterGrid,
+                                  Path=Items.Count,
+                                  StringFormat={}Filters ({0})}" />
+        
         <DataGrid x:Name="FilterGrid"
                   Grid.Row="1"
                   Grid.Column="1"

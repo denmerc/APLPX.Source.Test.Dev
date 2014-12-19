@@ -8,12 +8,6 @@
 
     <UserControl.Resources>
         <!--  TODO: move this to common styles. Intended for use with titles of list boxes, data grids. etc.  -->
-        <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
-            <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Margin" Value="5" />
-        </Style>
 
         <CollectionViewSource x:Key="cvsPriceListGroups"
                               IsLiveSortingRequested="True"
@@ -24,11 +18,25 @@
         </CollectionViewSource>
     </UserControl.Resources>
 
-    <Grid x:Name="layoutRoot" Background="Black">
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation x:Name="fadeIn"
+                                     Duration="0:0:1"
+                                     From="0"
+                                     Storyboard.TargetProperty="(UIElement.Opacity)"
+                                     To="1" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -42,27 +50,29 @@
                    Style="{StaticResource ListTitleTextStyle}"
                    Text="Price List Groups" />
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
-                   Text="{Binding ElementName=lstPriceListGroups,
-                                  Path=Items.Count,
-                                  StringFormat={}Price Lists ({0})}" />
-
         <ListBox x:Name="lstPriceListGroups"
                  Grid.Row="1"
                  Grid.Column="0"
-                 Margin="10,5"
                  ItemsSource="{Binding Path=Entity.PriceListGroups}"
                  SelectedItem="{Binding Path=Entity.SelectedPriceListGroup}">
             <!--  this does not retain selection:  -->
             <!--  ItemsSource="{Binding Source={StaticResource cvsPriceListGroups}}"  -->
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=Name}" />
+                    <Label Width="200"
+                           Content="{Binding Path=Name}"
+                           FontSize="16"
+                           Foreground="{StaticResource Foreground}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="1"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="{Binding ElementName=dgPriceLists,
+                                  Path=Items.Count,
+                                  StringFormat={}Price Lists ({0})}" />
 
         <DataGrid x:Name="dgPriceLists"
                   Grid.Row="1"
@@ -79,11 +89,7 @@
 
                 <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
 
-                <DataGridTextColumn Binding="{Binding Path=Code}" Header="Code" />
-
-                <DataGridCheckBoxColumn Binding="{Binding Path=IsKey}"
-                                        Header="Key"
-                                        IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Path=Code}" Header="Code" />            
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

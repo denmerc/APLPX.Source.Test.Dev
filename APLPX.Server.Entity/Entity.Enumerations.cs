@@ -58,6 +58,24 @@ namespace APLPX.Server.Entity
     }
 
     [DataContract]
+    public enum ModuleFeatureSearchGroupType
+    {
+        #region Common step types...
+        [EnumMember]
+        Null = 0,
+        #endregion
+
+        [EnumMember]
+        PlanningSearchFoldersAnalytics = 49, // Step Folders Analytics
+        [EnumMember]
+        PlanningSearchFoldersEveryday = 50, // Step Folders Everyday
+        [EnumMember]
+        PlanningSearchFoldersKits = 52, // Step Folders Kits
+        [EnumMember]
+        PlanningSearchFoldersPromotion = 51, // Step Folders Promotion
+    }
+
+    [DataContract]
     public enum ModuleFeatureStepType
     {
         #region Common step types...

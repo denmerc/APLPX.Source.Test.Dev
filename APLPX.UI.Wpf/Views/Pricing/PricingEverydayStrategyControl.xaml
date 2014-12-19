@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="APLPX.UI.WPF.Views.Pricing.PricingEverydayStrategyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Margin="10,5"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="{Binding Path=PriceRoutine.Identity.Name,
+                                  StringFormat=Strategy - {0}}" />
+    </Grid>
+</UserControl>

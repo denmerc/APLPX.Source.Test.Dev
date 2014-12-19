@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using APLPX.UI.WPF.Interfaces;
-using ReactiveUI;
+
+//TODO: MUST REMOVE ALL REFERENCES TO MONGO IN DISPLAY ENTITIES!
 using MongoDB.Bson.Serialization.Attributes;
+using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
@@ -177,8 +180,9 @@ namespace APLPX.UI.WPF.DisplayEntities
             private set
             {
                 this.RaiseAndSetIfChanged(ref _keyPriceListGroup, value);
-                if (_keyPriceListGroup != null)
+                if (_keyPriceListGroup != null && SelectedKeyPriceList == null)
                 {
+                    //Default the selected key price list to the first one marked IsSelected.
                     SelectedKeyPriceList = _keyPriceListGroup.PriceLists.Where(pl => pl.IsSelected).FirstOrDefault();
                 }
             }
@@ -194,43 +198,44 @@ namespace APLPX.UI.WPF.DisplayEntities
         }
 
         /// <summary>
-        /// Gets/sets the selected key price list. This price list is contained within the current KeyPricelistGroup.
+        /// Gets/sets the selected Key price list. This price list is contained within the current KeyPriceListGroup.
         /// </summary>
         public PricingEverydayPriceList SelectedKeyPriceList
         {
             get { return _selectedKeyPriceList; }
+
             private set
             {
                 if (_selectedKeyPriceList != value)
                 {
+                    //Clear the current key price list's key and selected properties.
+                    if (_selectedKeyPriceList != null)
+                    {
+                        _selectedKeyPriceList.IsKey = false;
+                        _selectedKeyPriceList.IsSelected = false;
+                    }
+
                     _selectedKeyPriceList = value;
                     this.RaisePropertyChanged("SelectedKeyPriceList");
 
-                    //Update dependent properties.
-                    UpdateIsKeyForAllPriceLists();
+
+                    //Set the new key price list's key and selected properties.
+                    if (_selectedKeyPriceList != null)
+                    {
+                        _selectedKeyPriceList.IsKey = true;
+                        _selectedKeyPriceList.IsSelected = true;
+                    }
+
+                    //Update dependent properties.                    
                     RecalculateLinkedPriceLists();
-                }
-            }
-        }
-
-        private void UpdateIsKeyForAllPriceLists()
-        {
-            if (SelectedKeyPriceList != null)
-            {
-                SelectedKeyPriceList.IsKey = true;
-
-                var nonKeyPriceLists = KeyPriceListGroup.PriceLists.Where(list => list.Id != SelectedKeyPriceList.Id);
-                foreach (PricingEverydayPriceList priceList in nonKeyPriceLists)
-                {
-                    priceList.IsKey = false;
                 }
             }
         }
 
         private void RecalculateLinkedPriceLists()
         {
-            if (SelectedKeyPriceList != null &&
-                LinkedPriceListGroup != null &&
+            if (LinkedPriceListGroup != null &&
+                SelectedKeyPriceList != null &&
                 KeyPriceListGroup != null)
             {
                 if (LinkedPriceListGroup.Key == KeyPriceListGroup.Key)
@@ -241,6 +246,35 @@ namespace APLPX.UI.WPF.DisplayEntities
                 {
                     LinkedPriceListGroup.RecalculateFilteredPriceLists();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Exposes the price lists for which rounding rules can be set. 
+        /// These are the key price list plus any other price list marked IsSelected.
+        /// </summary>
+        public ObservableCollection<PricingEverydayPriceList> RoundingRulePriceLists
+        {
+            get
+            {                
+                var result = new ObservableCollection<PricingEverydayPriceList>();
+
+                //The list contains the Key price list plus all linked price lists marked IsSelected.
+                if (KeyPriceListGroup != null)
+                {
+                    var keyList = KeyPriceListGroup.PriceLists.Where(pl => pl.IsKey);
+                    var linkedLists = Enumerable.Empty<PricingEverydayPriceList>();
+
+                    if (LinkedPriceListGroup != null)
+                    {
+                        linkedLists = LinkedPriceListGroup.FilteredPriceLists.Where(pl => pl.IsSelected);
+                    }
+                    List<PricingEverydayPriceList> list = keyList.Union(linkedLists).ToList();
+
+                    result = new ObservableCollection<PricingEverydayPriceList>(list);
+                }
+
+                return result;
             }
         }
 

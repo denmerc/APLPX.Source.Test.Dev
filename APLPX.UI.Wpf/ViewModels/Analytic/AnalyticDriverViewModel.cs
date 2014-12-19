@@ -45,7 +45,22 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         public DisplayEntities.Analytic Entity
         {
             get { return _entity; }
-            private set { this.RaiseAndSetIfChanged(ref _entity, value); }
+            private set
+            {
+                if (_entity != value)
+                {
+                    _entity = value;
+                    this.RaisePropertyChanged("Entity");
+
+                    if (_entity.SelectedValueDriver == null &&
+                        _entity.ValueDrivers != null &&
+                        _entity.ValueDrivers.Count > 0)
+                    {
+                        //Select the first value driver by default.
+                        _entity.SelectedValueDriver = _entity.ValueDrivers[0];
+                    }
+                }
+            }
         }
 
         /// <summary>

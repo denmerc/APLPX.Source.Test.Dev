@@ -136,5 +136,35 @@ namespace APLPX.UI.WPF.Helpers
 
             return copy;
         }
+
+        public static PriceRoundingRule Copy(this PriceRoundingRule source)
+        {
+            var copy = new PriceRoundingRule();
+
+            copy.DollarRangeLower = source.DollarRangeLower;
+            copy.DollarRangeUpper = source.DollarRangeUpper;
+            copy.Type = source.Type;
+            copy.ValueChange = source.ValueChange;
+
+            foreach (SQLEnumeration roundingType in source.RoundingTypes)
+            {
+                SQLEnumeration valueCopy = roundingType.Copy();
+                copy.RoundingTypes.Add(valueCopy);
+            }
+
+            return copy;
+        }
+
+        public static SQLEnumeration Copy(this SQLEnumeration source)
+        {
+            var copy = new SQLEnumeration();  
+          
+            copy.Name = source.Name;
+            copy.Description = source.Description;
+            copy.Value = source.Value;
+            copy.Sort = source.Sort;
+
+            return copy;
+        }
     }
 }

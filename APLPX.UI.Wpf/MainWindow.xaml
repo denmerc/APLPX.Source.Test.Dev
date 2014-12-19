@@ -9,16 +9,16 @@
                       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
                       xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
                       Title="PRICEXPERT"
-                      WindowTitleBrush="{DynamicResource ApplicationTitleBarColor}"
-                      NonActiveWindowTitleBrush="{DynamicResource ApplicationTitleBarColorInactive}"
                       Height="900"
                       MinWidth="1080"
                       MinHeight="530"
+                      BorderThickness="1"
                       GlowBrush="{DynamicResource ApplicationGlowBrushBorderColor}"
+                      NonActiveWindowTitleBrush="{DynamicResource ApplicationTitleBarColorInactive}"
                       ShowIconOnTitleBar="True"
                       WindowStartupLocation="CenterScreen"
-                      BorderThickness="1"
                       WindowState="Maximized"
+                      WindowTitleBrush="{DynamicResource ApplicationTitleBarColor}"
                       d:DesignHeight="1354"
                       mc:Ignorable="d">
 
@@ -128,12 +128,12 @@
     <controls:MetroWindow.IconTemplate>
         <DataTemplate>
             <Grid Width="{TemplateBinding Width}"
-                 Height="{TemplateBinding Height}"
-                 Margin="4"
-                 Background="Transparent"
-                 RenderOptions.EdgeMode="Aliased"
-                 RenderOptions.BitmapScalingMode="HighQuality">
-                <Image Source="/APLPX.UI.WPF;component/Resources/APL_logo_new.png"></Image>
+                  Height="{TemplateBinding Height}"
+                  Margin="4"
+                  Background="Transparent"
+                  RenderOptions.BitmapScalingMode="HighQuality"
+                  RenderOptions.EdgeMode="Aliased">
+                <Image Source="/APLPX.UI.WPF;component/Resources/APL_logo_new.png" />
             </Grid>
         </DataTemplate>
     </controls:MetroWindow.IconTemplate>
@@ -147,10 +147,10 @@
                       Margin="1"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Center"
-                      SelectionChanged="themePicker_SelectionChanged" 
-                      Foreground="Black"
                       HorizontalContentAlignment="Center"
-                      VerticalContentAlignment="Center"/>
+                      VerticalContentAlignment="Center"
+                      Foreground="Black"
+                      SelectionChanged="themePicker_SelectionChanged" />
             <Button Content="Pricexpert.com" ToolTip="PRICEXPERT.com web site" />
             <Button Content="About" ToolTip="About PRICEXPERT" />
             <!--  <Button Click="LaunchRibbonDemo" Content="Ribbon Demo (.NET 4.5)" />  -->
@@ -546,6 +546,7 @@
                      Grid.Row="0"
                      Grid.RowSpan="2"
                      Grid.Column="0"
+                     Margin="0,27,0,0"
                      ItemTemplate="{StaticResource featureItemTemplate}"
                      ItemsSource="{Binding Source={StaticResource cvsFeatures}}"
                      SelectedItem="{Binding Path=SelectedModule.SelectedFeature}"
@@ -601,7 +602,7 @@
                           Grid.Column="2"
                           Width="Auto"
                           Height="Auto"
-                          Background="DarkSlateGray"
+                          Background="{DynamicResource MainWindowBackground}"
                           ScrollViewer.HorizontalScrollBarVisibility="Auto"
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                           d:IsEffectDisabled="True">
@@ -609,14 +610,16 @@
                     <DropShadowEffect BlurRadius="10" Opacity="0" />
                 </ScrollViewer.Effect>
 
-                <ContentControl x:Name="ContentMain" Content="{Binding SelectedFeatureViewModel}" />
+                <ContentControl x:Name="ContentMain"
+                                Background="DarkGray"
+                                Content="{Binding SelectedFeatureViewModel}" />
             </ScrollViewer>
 
             <Grid x:Name="ActionGrid"
                   Grid.Row="1"
                   Grid.Column="3"
                   MinWidth="200"
-                  Background="DarkGray"
+                  Background="Gray"
                   Visibility="{Binding Path=IsEntitySelected,
                                        Converter={StaticResource BooleanToVisibilityConverter}}">
 
@@ -651,8 +654,9 @@
                             <MenuItem Command="{Binding ElementName=layoutRoot,
                                                         Path=DataContext.ActionCommand}"
                                       CommandParameter="{Binding}"
+                                      FontFamily="SegoeUI"
                                       FontSize="16"
-                                      Foreground="Blue"
+                                      Foreground="Black"
                                       Header="{Binding Path=Name}"
                                       Style="{x:Null}"
                                       ToolTip="{Binding Path=Title}" />
@@ -665,7 +669,7 @@
             <StackPanel x:Name="StepsPanel"
                         Grid.Row="2"
                         Grid.Column="1"
-                        Background="Black"
+                        Background="Gray"
                         Orientation="Vertical"
                         Visibility="{Binding Path=IsStepSelectorAvailable,
                                              Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -697,11 +701,23 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Style="{x:Null}">
-                                <TextBlock x:Name="txtValue"
-                                           Margin="2"
-                                           Style="{StaticResource AnalyticStepTextStyle}"
-                                           Text="{Binding Path=Name}"
-                                           ToolTip="{Binding Path=Title}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="txtValue"
+                                               Grid.Column="0"
+                                               Margin="2"
+                                               FontFamily="SegoeUI"
+                                               Style="{StaticResource AnalyticStepTextStyle}"
+                                               Text="{Binding Path=Name}"
+                                               ToolTip="{Binding Path=Title}" />
+                                    <Image Grid.Column="1"
+                                           HorizontalAlignment="Right"
+                                           Source="/APLPX.UI.WPF;component/Resources/completed_checkMark.png"
+                                           Visibility="Visible" />
+                                </Grid>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -752,6 +768,7 @@
                              Width="250"
                              Height="20"
                              Background="Transparent"
+                             BorderBrush="Transparent"
                              IsIndeterminate="{Binding Path=IsActionInProgress}">
                     <ProgressBar.Triggers>
                         <EventTrigger RoutedEvent="ProgressBar.Loaded">

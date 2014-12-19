@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Display = APLPX.UI.WPF.DisplayEntities;
-using APLPX.UI.WPF.Interfaces;
+using ReactiveUI;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -15,8 +12,8 @@ namespace APLPX.UI.WPF.ViewModels
 
         public PriceListViewModel(Display.Analytic entity, List<Display.AnalyticPriceListGroup> priceListGroups)
         {
-            _entity = entity;
-            _priceListGroups = priceListGroups;
+            Entity = entity;
+            PriceListGroups = priceListGroups;
         }
 
         public Display.Analytic Entity
@@ -28,7 +25,21 @@ namespace APLPX.UI.WPF.ViewModels
         public List<Display.AnalyticPriceListGroup> PriceListGroups
         {
             get { return _priceListGroups; }
-            private set { _priceListGroups = value; }
+            private set
+            {
+                if (_priceListGroups != value)
+                {
+                    _priceListGroups = value;
+                    this.RaisePropertyChanged("PriceListGroups");
+
+                    //Select the first price list group by default.
+                    if (Entity.SelectedPriceListGroup == null &&
+                        _priceListGroups != null && _priceListGroups.Count > 0)
+                    {
+                        Entity.SelectedPriceListGroup = _priceListGroups[0];
+                    }
+                }
+            }
         }
     }
 }

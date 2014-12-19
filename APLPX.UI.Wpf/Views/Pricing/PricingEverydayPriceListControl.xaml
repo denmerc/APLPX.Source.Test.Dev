@@ -5,7 +5,6 @@
              xmlns:helpers="clr-namespace:APLPX.UI.WPF.Helpers"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             xmlns:viewsCommon="clr-namespace:APLPX.UI.WPF.Views.Common"
              mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -24,7 +23,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid x:Name="layoutRoot" Background="Black">
+    <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -52,15 +51,115 @@
                                   Path=Items.Count,
                                   StringFormat={}Key Price Lists ({0})}" />
 
-        <TextBlock x:Name="txtLinkedPriceListsTitle"
-                   Grid.Row="0"
-                   Grid.Column="2"
-                   Style="{StaticResource ListTitleTextStyle}"
-                   Text="{Binding ElementName=dgLinkedPriceLists,
-                                  Path=Items.Count,
-                                  StringFormat={}Linked Price Lists ({0})}"
-                   Visibility="{Binding ElementName=dgLinkedPriceLists,
-                                        Path=Visibility}" />
+        <Grid x:Name="GlobalRulesGrid"
+              Grid.Row="0"
+              Grid.RowSpan="3"
+              Grid.Column="2"
+              Margin="15,0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--<Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>-->
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="Key Price List Global Price Range" />
+
+
+            <DataGrid x:Name="dgGlobalPriceRange"
+                      Grid.Row="1"
+                      Margin="10,5"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserSortColumns="False"
+                      ItemsSource="{Binding Path=PriceRoutineList}"
+                      SelectionUnit="Cell">
+                <DataGrid.Resources />
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=KeyPriceListRule.DollarRangeLower}" Header="Min $ Value" />
+                    <DataGridTextColumn Binding="{Binding Path=KeyPriceListRule.DollarRangeUpper}" Header="Max $ Value" />
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <!--<Label Grid.Row="1"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Content="Mi_n $ Value"
+                   Target="{Binding ElementName=txtRangeLower}" />
+
+            <TextBox x:Name="txtRangeLower"
+                     Grid.Row="2"
+                     Grid.Column="0"
+                     Margin="5,0"
+                     VerticalAlignment="Center"
+                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeLower}"
+                     helpers:TextBoxHelper.SelectAllTextOnFocus="true" />
+
+
+            <Label Grid.Row="1"
+                   Grid.Column="1"
+                   Content="Ma_x $ Value"
+                   Target="{Binding ElementName=txtRangeUpper}" />
+
+            <TextBox x:Name="txtRangeUpper"
+                     Grid.Row="2"
+                     Grid.Column="1"
+                     Margin="5,0"
+                     VerticalAlignment="Center"
+                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeUpper}"
+                     helpers:TextBoxHelper.SelectAllTextOnFocus="true" />-->
+
+            <TextBlock x:Name="txtLinkedPriceListsTitle"
+                       Grid.Row="3"
+                       Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="0,25,0,5"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="{Binding ElementName=dgLinkedPriceLists,
+                                      Path=Items.Count,
+                                      StringFormat={}Linked Price Lists ({0})}"
+                       Visibility="{Binding ElementName=dgLinkedPriceLists,
+                                            Path=Visibility}" />
+            
+            <DataGrid x:Name="dgLinkedPriceLists"
+                      Grid.Row="4"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      VerticalAlignment="Top"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserSortColumns="False"
+                      ItemsSource="{Binding Path=PriceRoutine.LinkedPriceListGroup.FilteredPriceLists}"
+                      Visibility="{Binding Path=PriceRoutine.SelectedMode.HasLinkedPriceListRule,
+                                           Converter={StaticResource BooleanToVisibilityConverter}}">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,
+                                                              UpdateSourceTrigger=PropertyChanged}"
+                                            EditingElementStyle="{StaticResource MetroDataGridCheckBox}"
+                                            ElementStyle="{StaticResource MetroDataGridCheckBox}"
+                                            Header="Selected" />
+
+                    <DataGridTextColumn Binding="{Binding Path=Name}"
+                                        Header="Price List"
+                                        IsReadOnly="True" />
+
+                    <DataGridTextColumn Binding="{Binding Path=LinkedPriceListRule.PercentChange}" Header="Percentage" />
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
 
         <ListBox x:Name="lstPricingModes"
                  Grid.Row="1"
@@ -79,6 +178,7 @@
 
         <ListBox x:Name="lstKeyPriceLists"
                  Grid.Row="1"
+                 Grid.RowSpan="2"
                  Grid.Column="1"
                  MinWidth="250"
                  Margin="10,5"
@@ -98,101 +198,13 @@
                                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <TextBlock Margin="5"
                                    VerticalAlignment="Center"
-                                   Text="{Binding Path=Name}"
                                    Foreground="{StaticResource Foreground}"
+                                   Text="{Binding Path=Name}"
                                    ToolTip="{Binding Path=Title}" />
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <DataGrid x:Name="dgLinkedPriceLists"
-                  Grid.Row="1"
-                  Grid.Column="2"
-                  Margin="15,5"
-                  VerticalAlignment="Top"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  CanUserSortColumns="False"
-                  ItemsSource="{Binding Path=PriceRoutine.LinkedPriceListGroup.FilteredPriceLists}"
-                  Visibility="{Binding Path=PriceRoutine.SelectedMode.HasLinkedPriceListRule,
-                                       Converter={StaticResource BooleanToVisibilityConverter}}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Name}"
-                                    Header="Price List"
-                                    IsReadOnly="True" />
-
-                <DataGridTextColumn Binding="{Binding Path=LinkedPriceListRule.PercentChange}" Header="Percentage" />
-
-                <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,
-                                                          UpdateSourceTrigger=PropertyChanged}"
-                                        EditingElementStyle="{StaticResource MetroDataGridCheckBox}"
-                                        ElementStyle="{StaticResource MetroDataGridCheckBox}"
-                                        Header="Selected" />
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <Grid x:Name="GlobalRulesGrid"
-              Grid.Row="1"
-              Grid.RowSpan="2"
-              Grid.Column="3"
-              Margin="15,5">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Row="0"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="2"
-                       Margin="5"
-                       Text="Key Price List Global Price Range" />
-
-            <TextBlock Grid.Row="1"
-                       Grid.Column="0"
-                       Text="Min $ Value" />
-
-            <TextBox Grid.Row="1"
-                     Grid.Column="1"
-                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeLower}"
-                     helpers:TextBoxHelper.SelectAllTextOnFocus="true" />
-
-            <TextBlock Grid.Row="2"
-                       Grid.Column="0"
-                       Text="Max $ Value" />
-
-            <TextBox Grid.Row="2"
-                     Grid.Column="1"
-                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeUpper}"
-                     helpers:TextBoxHelper.SelectAllTextOnFocus="true" />
-
-            <Button x:Name="btnApplyPriceRange"
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
-                    MaxWidth="110"
-                    Margin="5"
-                    VerticalAlignment="Top"
-                    Command="{Binding Path=ApplyPriceRangeCommand}">
-                <TextBlock Background="CornflowerBlue"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Foreground="{StaticResource Foreground}"
-                           Opacity=".75"
-                           Text="Set Global Price Range Filter"
-                           TextAlignment="Center"
-                           TextWrapping="Wrap" />
-            </Button>
-        </Grid>
     </Grid>
 </UserControl>

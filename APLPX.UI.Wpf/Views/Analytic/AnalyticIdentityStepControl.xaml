@@ -18,7 +18,23 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid x:Name="LayoutRoot" Background="Black">
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation x:Name="fadeIn"
+                                     Duration="0:0:1"
+                                     From="0"
+                                     Storyboard.TargetProperty="(UIElement.Opacity)"
+                                     To="1" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Grid x:Name="LayoutRoot"
+          Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -27,18 +43,23 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-     <!--   <Grid.Background>
+        <!--
+            <Grid.Background>
             <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg"
-                        Stretch="UniformToFill"/>
-        </Grid.Background>  -->
+            Stretch="UniformToFill"/>
+            </Grid.Background>
+        -->
+        
+        <!--
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label Width="150"
                    HorizontalContentAlignment="Right"
                    Content="Analytic Name:"
+                   FontFamily="SegoeUI"
                    FontSize="16"
                    Foreground="{StaticResource Foreground}" />
             <TextBox x:Name="NameTextBox"
-                     Width="250"
+                     Width="450"
                      VerticalAlignment="Bottom"
                      FontSize="16"
                      Foreground="{StaticResource Foreground}"
@@ -49,12 +70,14 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Width="150"
                    HorizontalContentAlignment="Right"
+                   FontFamily="SegoeUI"
                    FontSize="16"
                    Foreground="{StaticResource Foreground}">
                 Description:
             </Label>
             <TextBox x:Name="DescriptionTextBox"
                      Width="450"
+                     VerticalAlignment="Bottom"
                      FontSize="16"
                      Foreground="{StaticResource Foreground}"
                      Style="{DynamicResource TextBoxStyle1}"
@@ -64,12 +87,13 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label Width="150"
                    HorizontalContentAlignment="Right"
+                   FontFamily="SegoeUI"
                    FontSize="16"
                    Foreground="{StaticResource Foreground}">
                 Status:
             </Label>
             <TextBox x:Name="StatusTextBox"
-                     Width="150"
+                     Width="450"
                      VerticalAlignment="Bottom"
                      FontSize="16"
                      Foreground="{StaticResource Foreground}"
@@ -80,10 +104,60 @@
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Label Width="150"
                    HorizontalContentAlignment="Right"
+                   FontFamily="SegoeUI"
                    FontSize="16"
                    Foreground="{StaticResource Foreground}">
                 Folders:
             </Label>
         </StackPanel>
+        -->
+
+        <ListBox x:Name="StepContentListBox"  Height="Auto" Width="Auto" Grid.RowSpan="3">
+            <!--<ListBox.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>-->
+            <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal">
+                    <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="Analytic Name:" HorizontalContentAlignment="Right"/>
+                    <TextBox x:Name="NameTextBox" Text="{Binding Analytic.Identity.Name}" FontSize="16" Foreground="{StaticResource Foreground}" Width="289" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}"/>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178" HorizontalContentAlignment="Right">Description:</Label>
+                    <TextBox x:Name="DescriptionTextBox"  Text="{Binding Analytic.Identity.Description}" FontSize="16" Foreground="{StaticResource Foreground}" Width="450" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178" HorizontalContentAlignment="Right">Status:</Label>
+                    <TextBox x:Name="StatusTextBox" Text="{Binding SelectedAnalytic.Status}" FontSize="16" Foreground="{StaticResource Foreground}" Width="450" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178" HorizontalContentAlignment="Right">Folders:</Label>
+                    <!-- TODO: Add Folders Binding-->
+                </StackPanel>
+            </ListBoxItem>
+            <!--<ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">-->
+            <!--<StackPanel.Resources>
+														<Style TargetType="{x:Type Button}">
+															<Setter Property="Margin" Value="2"/>
+														</Style>
+													</StackPanel.Resources>-->
+            <!--<Button>Save</Button>
+                    <Button>Cancel</Button>-->
+            <!--</StackPanel>
+            </ListBoxItem>-->
+        </ListBox>
+
+
     </Grid>
+    
+    
+    
 </UserControl>

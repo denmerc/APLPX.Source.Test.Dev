@@ -11,7 +11,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private List<PriceList> _priceLists;
-        private string _typeName;
 
         #endregion
 
@@ -25,12 +24,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region Properties
-
-        public string TypeName 
-        {
-            get { return _typeName; }
-            set { this.RaiseAndSetIfChanged(ref _typeName, value); }
-        }
+ 
         public List<PriceList> PriceLists
         {
             get { return _priceLists; }

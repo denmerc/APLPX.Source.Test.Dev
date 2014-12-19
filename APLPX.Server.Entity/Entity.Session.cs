@@ -30,7 +30,7 @@ namespace APLPX.Server.Entity
         [DataMember]
         public string SqlKey { get; set; }
         [DataMember]
-        List<Server.Entity.Module> Modules { get; set; }
+        public List<Server.Entity.Module> Modules { get; set; }
 
         public Session<Tdata> Clone<Tdata>(Tdata data) where Tdata : class {
 

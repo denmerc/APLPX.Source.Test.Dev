@@ -13,6 +13,17 @@ namespace APLPX.Server.Entity
             string name,
             string title,
             short sort,
+            ModuleType type
+        ) {
+            Name = name;
+            Title = title;
+            Sort = sort;
+            Type = type;
+        }
+        public Module(
+            string name,
+            string title,
+            short sort,
             ModuleType type,
             List<ModuleFeature> features
         ) {
@@ -41,6 +52,21 @@ namespace APLPX.Server.Entity
     {
         #region Initialize...
         public ModuleFeature() { }
+        public ModuleFeature(
+            string name,
+            string title,
+            short sort,
+            ModuleFeatureType type,
+            ModuleFeatureStepType landingStepType,
+            ModuleFeatureStepType actionStepType
+            ) {
+            Name = name;
+            Title = title;
+            Sort = sort;
+            Type = type;
+            LandingStepType = landingStepType;
+            ActionStepType = actionStepType;
+        }
         public ModuleFeature(
             string name,
             string title,
@@ -89,18 +115,57 @@ namespace APLPX.Server.Entity
             string name,
             string title,
             short sort,
+            ModuleFeatureStepType type
+            ) {
+            Name = name;
+            Title = title;
+            Sort = sort;
+            Type = type;
+        }
+        public ModuleFeatureStep(
+            string name,
+            string title,
+            short sort,
             ModuleFeatureStepType type,
-            List<ModuleFeatureStepError> errors,
-            List<ModuleFeatureStepAdvisor> advisors,
-            List<ModuleFeatureStepAction> actions
+            List<ModuleFeatureStepAction> actions,
+            List<ModuleFeatureStepAdvisor> advisors
+            ) {
+            Name = name;
+            Title = title;
+            Sort = sort;
+            Type = type;
+            Actions = actions;
+            Advisors = advisors;
+        }
+        public ModuleFeatureStep(
+            string name,
+            string title,
+            short sort,
+            ModuleFeatureStepType type,
+            List<ModuleFeatureStepError> errors
             ) {
             Name = name;
             Title = title;
             Sort = sort;
             Type = type;
             Errors = errors;
-            Advisors = advisors;
+        }
+        public ModuleFeatureStep(
+            string name,
+            string title,
+            short sort,
+            ModuleFeatureStepType type,
+            List<ModuleFeatureStepAction> actions,
+            List<ModuleFeatureStepAdvisor> advisors,
+            List<ModuleFeatureStepError> errors
+            ) {
+            Name = name;
+            Title = title;
+            Sort = sort;
+            Type = type;
             Actions = actions;
+            Advisors = advisors;
+            Errors = errors;
         }
         #endregion
 
@@ -113,11 +178,11 @@ namespace APLPX.Server.Entity
         [DataMember]
         public short Sort; //CLIENT { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStepError> Errors; //CLIENT { get; private set; }
+        public List<ModuleFeatureStepAction> Actions; //CLIENT { get; private set; }
         [DataMember]
         public List<ModuleFeatureStepAdvisor> Advisors; //CLIENT { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStepAction> Actions; //CLIENT { get; private set; }
+        public List<ModuleFeatureStepError> Errors; //CLIENT { get; private set; }
     }
 
     [DataContract]

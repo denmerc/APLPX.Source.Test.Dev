@@ -64,11 +64,22 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return _isSelected; }
             set { this.RaiseAndSetIfChanged(ref _isSelected, value); }
         }
-        
+
         public short Sort
         {
             get { return _sort; }
             set { this.RaiseAndSetIfChanged(ref _sort, value); }
+        }
+
+        #endregion
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            string result = String.Format("{0}: Id={1};Key{2};Name={3};IsSelected:{4};Sort={5}", GetType().Name, Id, Key, Name, IsSelected, Sort);
+
+            return result;
         }
 
         #endregion

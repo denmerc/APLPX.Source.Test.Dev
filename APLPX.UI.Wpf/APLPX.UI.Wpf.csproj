@@ -254,6 +254,11 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PriceListViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingEverydayPriceListListViewModel.cs" />
+    <Compile Include="ViewModels\Pricing\PricingEverydayResults\PricingEverydayResultsSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Pricing\PricingEverydayResults\PricingEverydayResultsViewModel.cs" />
+    <Compile Include="ViewModels\Pricing\PricingEverydayResults\PricingView.cs" />
+    <Compile Include="ViewModels\Pricing\PricingEverydayRoundingViewModel.cs" />
+    <Compile Include="ViewModels\Pricing\PricingEverydayStrategyViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingIdentityViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
@@ -264,6 +269,9 @@
     <Compile Include="Views\Common\PriceListControl.xaml.cs">
       <DependentUpon>PriceListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\RoundingRuleControl.xaml.cs">
+      <DependentUpon>RoundingRuleControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -272,6 +280,42 @@
     </Compile>
     <Compile Include="Views\Pricing\PricingEverydayPriceListControl.xaml.cs">
       <DependentUpon>PricingEverydayPriceListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsCompetiionControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsCompetiionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsEditedControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsEditedControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsExcludedControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsExcludedControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsMarkupDeltaControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsMarkupDeltaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsPriceDeltaControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsPriceDeltaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsPriceListControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsPriceListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsStepControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsStepControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsSummaryControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsSummaryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsValueDriverGroupsControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsValueDriverGroupsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsWarningsControl.xaml.cs">
+      <DependentUpon>PricingEverydayResultsWarningsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayRoundingControl.xaml.cs">
+      <DependentUpon>PricingEverydayRoundingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pricing\PricingEverydayStrategyControl.xaml.cs">
+      <DependentUpon>PricingEverydayStrategyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SearchGroupSelector.xaml.cs">
       <DependentUpon>SearchGroupSelector.xaml</DependentUpon>
@@ -307,6 +351,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Common\RoundingRuleControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -316,6 +364,54 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Pricing\PricingEverydayPriceListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsCompetiionControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsEditedControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsExcludedControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsMarkupDeltaControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsPriceDeltaControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsPriceListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsStepControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsSummaryControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsValueDriverGroupsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayResults\PricingEverydayResultsWarningsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayRoundingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pricing\PricingEverydayStrategyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -464,7 +560,9 @@
   <ItemGroup>
     <Resource Include="Resources\APL_logo_new.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\completed_checkMark.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -77,9 +77,16 @@
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
+            <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
+                <Setter Property="TextAlignment" Value="Center" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+            
             <Style x:Key="SearchControlSelectedItemDetailStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="Foreground" Value="{DynamicResource SearchControlSelectedItemDetailTextColor}" />
-                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontSize" Value="15" />
                 <Setter Property="Margin" Value="2,2,5,2" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="TextTrimming" Value="CharacterEllipsis" />
@@ -99,7 +106,7 @@
 
             <Style x:Key="SearchLblStyle" TargetType="{x:Type Label}">
                 <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
-                <Setter Property="FontSize" Value="25" />
+                <Setter Property="FontSize" Value="15" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
@@ -109,7 +116,7 @@
                 <Setter Property="Foreground" Value="{DynamicResource SearchControlTitleLabelTextColor}" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
                 <Setter Property="Height" Value="55" />
-                <Setter Property="FontSize" Value="30" />
+                <Setter Property="FontSize" Value="20" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="Padding" Value="5,1" />
                 <Setter Property="FontWeight" Value="Bold" />
@@ -196,7 +203,7 @@
                         <Setter Property="Background" Value="#FF333337" />
                         <Setter Property="Margin" Value="0,2" />
                         <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
-                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="FontSize" Value="15" />
                         <Setter Property="FontFamily" Value="SegoeUI" />
                         <Setter Property="MaxWidth" Value="300" />
                     </DataTrigger>
@@ -205,11 +212,8 @@
                         <Setter Property="IsEnabled" Value="False" />
                         </DataTrigger>
                     -->
-                    <DataTrigger Binding="{Binding Path=HasSubGroups}" Value="True">
-                        <Setter Property="IsEnabled" Value="False" />
-                        <Setter Property="FontStyle" Value="Italic" />
-                        <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxTitleTextColor}" /> 
-                    </DataTrigger>
+
+
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
                             <Condition Binding="{Binding Path=HasSubGroups}" Value="False" />
@@ -221,6 +225,11 @@
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="DimGray" />
                     </Trigger>
+                    <DataTrigger Binding="{Binding Path=HasSubGroups}" Value="True">
+                        <Setter Property="FontSize" Value="17" />
+                        <Setter Property="IsEnabled" Value="False" />
+                        <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxTitleTextColor}" />
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
 
@@ -235,7 +244,7 @@
                 <Setter Property="Background" Value="#FF333337" />
                 <Setter Property="Margin" Value="0,2" />
                 <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
-                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontSize" Value="15" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="Width" Value="300" />
                 <Style.Triggers>
@@ -349,6 +358,14 @@
                 <viewsCommon:PriceListControl />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsViewModel}">
+                <local:PricingEverydayResultsStepControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsSummaryViewModel}">
+                <local:PricingEverydayResultsSummaryControl />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type vma:AnalyticDriverViewModel}">
                 <local:AnalyticValueDriversStepControl />
             </DataTemplate>
@@ -361,6 +378,14 @@
                 <viewsPricing:PricingEverydayPriceListControl/>
             </DataTemplate>
             
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayRoundingViewModel}">
+                <viewsPricing:PricingEverydayRoundingControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayStrategyViewModel}">
+                <viewsPricing:PricingEverydayStrategyControl />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type vm:WaitViewModel}">
                 <views:WaitView />
             </DataTemplate>

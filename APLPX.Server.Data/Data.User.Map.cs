@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Collections.Generic;
 using APLPX.Server.Entity;
 
@@ -94,67 +95,115 @@ namespace APLPX.Server.Data {
             return user;
         }
 
-        public List<Server.Entity.Module> AuthenticateMapWorkflowModules(System.Data.DataTable data) {
+        public List<Server.Entity.Module> AuthenticateMapWorkflowModules(System.Data.DataTable moduleData, DataTable searchData) {
 
-            //Map the entity data...
-            Boolean reading = true;
-            Boolean IsValid = true;
-            Boolean IsActive = false;
-            Int32 rows = data.Rows.Count;
-            String stepNow = String.Empty;
-            String stepLast = String.Empty;
+            List<Module> moduleList = null;
+            List<ModuleFeature> featureList = null;
+            List<ModuleFeatureStep> stepList = null;
+            List<ModuleFeatureStepAction> actionList = null;
+            List<ModuleFeatureStepAdvisor> advisorList = null;
+            //List<ModuleFeatureStepError> errorList = null;
+            List<FeatureSearchGroup> searchGroupList = null;
 
-            List<Module> modules = null;
-            List<ModuleFeature> features = null;
-            List<ModuleFeatureStep> listSteps = new List<Entity.ModuleFeatureStep>();
-            List<ModuleFeatureStepError> listErrors = new List<Entity.ModuleFeatureStepError>();
-            List<ModuleFeatureStepAdvisor> listAdvisor = new List<Entity.ModuleFeatureStepAdvisor>();
-            System.Data.DataTableReader reader = data.CreateDataReader();
+            moduleList = new List<Module>();
+            //Modules...
+            var queryModules = moduleData.AsEnumerable()
+                .Select(modules => new {
+                    Name = modules.Field<string>(UserMap.Names.workflowModuleName),
+                    Title = modules.Field<string>(UserMap.Names.workflowModuleTitle),
+                    Sort = modules.Field<short>(UserMap.Names.workflowModuleSort),
+                    Type = modules.Field<ModuleType>(UserMap.Names.workflowModuleType)
+                }).Distinct();
+            #region Load Modules...
+            foreach (var module in queryModules) {
+                featureList = new List<ModuleFeature>();
+                moduleList.Add(new Entity.Module (module.Name, module.Title, module.Sort, module.Type, featureList));
 
-            //From record set...
-            while (reading) {
-                reading = reader.Read();
+                //Featuers...
+                var queryFeatures = moduleData.AsEnumerable()
+                    .Where(features => features.Field<ModuleType>(UserMap.Names.workflowModuleType) == module.Type)
+                    .Select(features => new {
+                        Name = features.Field<string>(UserMap.Names.workflowFeatureName),
+                        Title = features.Field<string>(UserMap.Names.workflowFeatureTitle),
+                        Sort = features.Field<short>(UserMap.Names.workflowFeatureSort),
+                        Type = features.Field<ModuleFeatureType>(UserMap.Names.workflowFeatureType),
+                        SearchType = features.Field<ModuleFeatureSearchGroupType>(UserMap.Names.workflowFeatureSearchType),
+                        LandingStepType = features.Field<ModuleFeatureStepType>(UserMap.Names.workflowFeatureLandingStepType),
+                        ActionStepType = features.Field<ModuleFeatureStepType>(UserMap.Names.workflowFeatureActionStepType)
+                    }).Distinct();
+                #region Load Features...
+                foreach (var feature in queryFeatures) {
+                    stepList = new List<ModuleFeatureStep>();
+                    searchGroupList = new List<FeatureSearchGroup>();
+                    featureList.Add(new Entity.ModuleFeature (feature.Name, feature.Title, feature.Sort, feature.Type, feature.LandingStepType, feature.ActionStepType, stepList, searchGroupList));
 
-                /*
-                workflow = new ModuleFeature { Title = reader[UserMap.Names.workflowViewTitle].ToString(), Steps = listSteps };
-                stepNow = (reading) ? reader[UserMap.Names.workflowStepTitle].ToString() : String.Empty;
-                if (reading) {
-                    listAdvisor.Add(new Entity.ModuleFeatureStepAdvisor(
-                        Int32.Parse(reader[UserMap.Names.workflowMessageSort].ToString()),
-                        reader[UserMap.Names.workflowMessageTitle].ToString()
-                        ));
-                    if (stepLast != stepNow) {
-                        listSteps.Add(
-                            new Entity.ModuleFeatureStep(
-                                Int16.Parse(reader[UserMap.Names.workflowStepSort].ToString()),
-                                reader[UserMap.Names.workflowStepName].ToString(),
-                                reader[UserMap.Names.workflowStepTitle].ToString(),
-                                IsValid,
-                                IsActive,
-                                Boolean.Parse(reader[UserMap.Names.workflowStepEnablePrevious].ToString()),
-                                Boolean.Parse(reader[UserMap.Names.workflowStepEnableNext].ToString()),
-                                listErrors,
-                                listAdvisor,
-                                (Server.Entity.ModuleFeatureStepType)Int32.Parse(reader[UserMap.Names.workflowStepKey].ToString())
-                            ));
+                    //Steps...
+                    var querySteps = moduleData.AsEnumerable()
+                        .Where(steps => steps.Field<ModuleFeatureType>(UserMap.Names.workflowFeatureType) == feature.Type)
+                        .Select(steps => new {
+                            Name = steps.Field<string>(UserMap.Names.workflowStepName),
+                            Title = steps.Field<string>(UserMap.Names.workflowStepTitle),
+                            Sort = steps.Field<short>(UserMap.Names.workflowStepSort),
+                            Type = steps.Field<ModuleFeatureStepType>(UserMap.Names.workflowStepType)
+                        }).Distinct();
+                    #region Load Steps...
+                    foreach (var step in querySteps) {
+                        actionList = new List<ModuleFeatureStepAction>();
+                        advisorList = new List<ModuleFeatureStepAdvisor>();
+                        stepList.Add(new Entity.ModuleFeatureStep(step.Name, step.Title, step.Sort, step.Type, actionList, advisorList));
+
+                        //Step actions...
+                        var queryActions = moduleData.AsEnumerable()
+                            .Where(actions => actions.Field<ModuleFeatureStepType>(UserMap.Names.workflowStepType) == step.Type)
+                            .Select(actions => new {
+                                Name = actions.Field<string>(UserMap.Names.workflowStepActionName),
+                                ParentName = actions.Field<string>(UserMap.Names.workflowStepActionParentName),
+                                Title = actions.Field<string>(UserMap.Names.workflowModuleTitle),
+                                Sort = actions.Field<short>(UserMap.Names.workflowStepActionSort),
+                                Type = actions.Field<ModuleFeatureStepActionType>(UserMap.Names.workflowStepActionType)
+                            }).Distinct();
+                        foreach (var action in queryActions) {
+                            actionList.Add(new Entity.ModuleFeatureStepAction(action.Name, action.ParentName, action.Title, action.Sort, action.Type));
+                        }
+
+                        //Step advisors...
+                        var queryAdvisors = moduleData.AsEnumerable()
+                            .Where(advisors => advisors.Field<ModuleFeatureStepType>(UserMap.Names.workflowStepType) == step.Type)
+                            .Select(advisors => new {
+                                Sort = advisors.Field<short>(UserMap.Names.workflowStepAdvisorMessageSort),
+                                Message = advisors.Field<string>(UserMap.Names.workflowStepAdvisorMessageTitle)
+                            }).Distinct();
+                        foreach (var advisor in queryAdvisors) {
+                            advisorList.Add(new Entity.ModuleFeatureStepAdvisor(advisor.Sort, advisor.Message));
+                        }
+                        //Note: Step errors collection is initially NULL...
+                    }
+                    #endregion
+
+                    //Search Groups...
+                    var querySearchGroups = searchData.AsEnumerable()
+                        .Where(searchGroups => searchGroups.Field<ModuleFeatureSearchGroupType>(UserMap.Names.workflowFeatureSearchType) == feature.SearchType)
+                        .Select(searchGroups => new {
+                            Name = searchGroups.Field<string>(UserMap.Names.workflowFeatureSearchName),
+                            ItemCount = searchGroups.Field<short>(UserMap.Names.workflowFeatureSearchItemCount),
+                            SearchKey = searchGroups.Field<string>(UserMap.Names.workflowFeatureSearchKey),
+                            ParentName = searchGroups.Field<string>(UserMap.Names.workflowFeatureSearchParentName),
+                            IsNameChanged = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchIsNameChanged),
+                            IsSearchKeyChanged = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchIsSearchKeyChanged),
+                            CanNameChange = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchCanNameChange),
+                            CanSearchKeyChange = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchCanSearchKeyChange),
+                            Sort = searchGroups.Field<short>(UserMap.Names.workflowFeatureSearchSort)
+                        }).Distinct();
+                    foreach (var searchGroup in querySearchGroups) {
+                        searchGroupList.Add(new Entity.FeatureSearchGroup(searchGroup.Name, searchGroup.ItemCount, searchGroup.SearchKey, searchGroup.ParentName,
+                            searchGroup.IsNameChanged, searchGroup.IsSearchKeyChanged, searchGroup.CanNameChange, searchGroup.CanSearchKeyChange, searchGroup.Sort));
                     }
                 }
-                if (!(stepLast.Equals(String.Empty) || stepLast == stepNow)) {
-                    if (stepNow.Equals(String.Empty)) {
-                        listSteps[listSteps.Count - 1].Advisors = listAdvisor.GetRange(0, listAdvisor.Count);
-                    }
-                    else {
-                        listSteps[listSteps.Count - 2].Advisors = listAdvisor.GetRange(0, listAdvisor.Count - 1);
-                        listAdvisor.RemoveRange(0, listAdvisor.Count - 1);
-                    }
-                }
-                stepLast = stepNow;
-                 */
+                #endregion
             }
+            #endregion
 
-            if (reader != null) reader.Dispose();
-            return modules;
-             
+            return moduleList;          
         }
         #endregion
 
@@ -433,19 +482,45 @@ namespace APLPX.Server.Data {
             public const String sharedKey = "72B9ED08-5D12-48FD-9CF7-56A3CA30E660";
             #endregion
 
-            #region Fields ModuleFeature...
-            public const String workflowGroupKey= "workflowGroupKey";
-            public const String workflowGroupName = "workflowGroupName";
-            public const String workflowGroupTitle = "workflowGroupTitle";
-            public const String workflowViewKey = "workflowViewKey";
-            public const String workflowViewName = "workflowViewName";
-            public const String workflowViewTitle = "workflowViewTitle";
-            public const String workflowStepKey = "workflowStepKey";
-            public const String workflowStepName = "workflowStepName";
-            public const String workflowStepTitle = "workflowStepTitle";
-            public const String workflowMessageTitle = "workflowMessageTitle";
-            public const String workflowStepSort = "workflowStepSort";
-            public const String workflowMessageSort = "workflowMessageSort";
+            #region Fields Modules Features Steps Actions Advisors...
+            public const String workflowModuleType = "moduleType";
+            public const String workflowModuleName = "moduleName";
+            public const String workflowModuleTitle = "moduleTitle";
+            public const String workflowModuleSort = "moduleSort"; 
+            
+            public const String workflowFeatureType = "featureType";
+            public const String workflowFeatureName = "featureName";
+            public const String workflowFeatureTitle = "featureTitle";
+            public const String workflowFeatureSort = "featureSort";
+            public const String workflowFeatureActionStepType = "actionStepType";
+            public const String workflowFeatureLandingStepType = "landingStepType";
+                        
+            public const String workflowFeatureSearchType = "featureSearchType";
+            public const String workflowFeatureSearchKey = "searchKey";
+            public const String workflowFeatureSearchName = "name";
+            public const String workflowFeatureSearchParentName = "parentName";
+            public const String workflowFeatureSearchCanNameChange = "canNameChange";
+            public const String workflowFeatureSearchIsNameChanged = "isNameChanged";
+            public const String workflowFeatureSearchCanSearchKeyChange = "canSearchKeyChange";
+            public const String workflowFeatureSearchIsSearchKeyChanged = "isSearchKeyChanged";
+            public const String workflowFeatureSearchItemCount = "itemCount";
+            public const String workflowFeatureSearchSort = "sort";
+
+            public const String workflowStepType = "stepType";
+            public const String workflowStepName = "stepName";
+            public const String workflowStepTitle = "stepTitle";
+            public const String workflowStepSort = "stepSort";
+
+            public const String workflowStepActionParentName = "actionParentName";
+            public const String workflowStepActionName = "actionName";
+            public const String workflowStepActionTitle = "actionTitle";
+            public const String workflowStepActionType = "actionType";
+            public const String workflowStepActionSort = "actionSort";
+
+            public const String workflowStepAdvisorMessageName = "messageName";
+            public const String workflowStepAdvisorMessageTitle = "messageTitle";
+            public const String workflowStepAdvisorMessageSort = "messageSort";
+
             public const String workflowStepEnablePrevious = "workflowStepEnablePrevious";
             public const String workflowStepEnableNext = "workflowStepEnableNext";
             #endregion
@@ -458,241 +533,8 @@ namespace APLPX.Server.Data {
             #endregion
 
         }
-        //Database enumerations...
-        public enum DataSets { entitydata=0, workflowModules=1, enumeration=1 };
+        //Database result set enumerations...
+        public enum DataSets { entitydata=0, workflowModules=1, enumeration=1, workflowSearchGroups=2 };
         #endregion
-
-        #region Message map result sets...
-        //selectInitialize - set 1 authorization: sqlAuthorization,winAuthorization,appOnline,privateKey 
-        //                        set 2 workflow: workflowGroupKey,workflowGroupName,workflowGroupTitle,workflowViewKey,workflowViewName,workflowViewTitle,
-        //		                                workflowStepKey,workflowStepName,workflowStepTitle,workflowMessageTitle,workflowStepSort,workflowMessageSort,workflowStepEnablePrevious,workflowStepEnableNext
-        //selectSqlUser -  set 1: id,session,role,roleName,roleText,login,firstname,lastname,username,email,active,created,createdText,edited,editedText,lastLogin,lastLoginText,lastEditor 
-        //                        set 2 user role enumerations: value,name,description,sort
-        //selectWinUser - id,session,role,roleName,roleText,login,firstname,lastname,username,email,active,created,createdText,edited,editedText,lastLogin,lastLoginText,lastEditor 
-        //selectAuthenticatedUser - id,session,role,roleName,roleText,login,firstname,lastname,username,email,active,created,createdText,edited,editedText,lastLogin,lastLoginText,lastEditor 
-        //selectIdentity - set 1: id,role,roleName,roleText,login,firstname,lastname,username,email,active,created,createdText,edited,editedText,lastLogin,lastLoginText,lastEditor 
-        //                        set 2 user role enumerations: value,name,description,sort
-        //selectIdentities - id,role,roleName,roleText,login,firstname,lastname,username,email,active,created,createdText,edited,editedText,lastLogin,lastLoginText,lastEditor 
-        //selectExplorerPlanning - set 1 identity: userId,userLogin,userSession,userRole,userRoleName,groupId,groupName,groupTitle,viewId,viewName,viewTitle,viewReadonly,nodeId,nodeHeader,nodeName,nodeTitle,entityId,mapId
-        //                                      set 2 workflow: workflowGroupKey,workflowGroupName,workflowGroupTitle,workflowViewKey,workflowViewName,workflowViewTitle,workflowStepKey,workflowStepName,workflowStepTitle,
-		//		                                    workflowMessageTitle,workflowStepSort,workflowMessageSort,workflowStepEnablePrevious,workflowStepEnableNext
-        //updateIdentity - id,role,roleName,roleText,login,firstname,lastname,username,email,active,created,createdText,edited,editedText,lastLogin,lastLoginText,lastEditor 
-        #endregion
-
     }
-
-    #region OBSOLETE...
-    //    #region Load Explorer Planning...
-    //public void LoadExplorerPlanningMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
-
-    //    //Map the command...
-    //    service.SqlProcedure = UserMap.Names.selectCommand;
-
-    //    //Map the parameters...
-    //    APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-    //        new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
-    //        new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-    //        new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerPlanningMessage)
-    //    }; service.sqlParameters.List = parameters;
-    //}
-
-    //public Server.Entity.User.Identity LoadExplorerPlanningMapData(System.Data.DataTable data, Server.Data.SqlService service) {
-
-    //    //Map the entity data...
-    //    Boolean reading = true;
-    //    Int32 entityId = 0;
-    //    Int32 rows = data.Rows.Count;
-    //    String viewNow = String.Empty;
-    //    String viewLast = String.Empty;
-    //    List<Server.Entity.Navigator> listViews = new List<Entity.Navigator>();
-    //    List<Server.Entity.Navigator> listNodes = new List<Entity.Navigator>();
-    //    Server.Entity.User.Identity identity = new User.Identity { Role = new User.Role { Planning = new User.Role.Explorer() } };
-    //    System.Data.DataTableReader reader = data.CreateDataReader();
-
-    //    //From record set...
-    //    while (reading) {
-    //        reading = reader.Read();
-    //        viewNow = (reading) ? reader[UserMap.Names.viewName].ToString() : String.Empty;
-    //        entityId = (reading) ? Int32.Parse(reader[UserMap.Names.entityId].ToString()) : UserMap.Names.nodeEntityZero;
-    //        if (reading) {
-    //            identity.Role.Planning.Title = reader[UserMap.Names.groupText].ToString();
-    //            identity.Role.Planning.Name = reader[UserMap.Names.groupName].ToString();
-    //            identity.Role.Planning.WorkflowGroup = (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString());
-
-    //            if (entityId > UserMap.Names.nodeEntityZero)
-    //                listNodes.Add(new Entity.Navigator(
-    //                    //EntityId, NodeHeader, NodeTitle, NodeCaption, WorkflowType, WorkflowStep, WorkflowGroup, WorkflowReadonly, Nodes
-    //                    Int32.Parse(reader[UserMap.Names.entityId].ToString()),
-    //                    reader[UserMap.Names.nodeHeader].ToString(),
-    //                    reader[UserMap.Names.nodeName].ToString(),
-    //                    reader[UserMap.Names.nodeText].ToString(),
-    //                    (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.viewId].ToString()),
-    //                    (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.nodeId].ToString()),
-    //                    (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString()),
-    //                    Boolean.Parse(reader[UserMap.Names.viewIsReadOnly].ToString()),
-    //                    new List<Navigator>()
-    //                    ));
-    //            if (viewLast != viewNow) {
-    //                listViews.Add(new Entity.Navigator(
-    //                    UserMap.Names.nodeEntityZero,
-    //                    reader[UserMap.Names.viewName].ToString(),
-    //                    reader[UserMap.Names.viewName].ToString(),
-    //                    reader[UserMap.Names.viewText].ToString(),
-    //                    (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.viewId].ToString()),
-    //                    (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.viewDefault].ToString()),
-    //                    (Server.Entity.WorkflowGroupType)Int32.Parse(reader[UserMap.Names.groupId].ToString()),
-    //                    Boolean.Parse(reader[UserMap.Names.viewIsReadOnly].ToString()),
-    //                    new List<Navigator>()
-    //                    ));
-    //            }
-    //        }
-    //        if (!(viewLast.Equals(String.Empty) || viewLast == viewNow || listNodes.Count == 0)) {
-    //            if (viewNow.Equals(String.Empty)) {
-    //                listViews[listViews.Count - 1].Nodes = listNodes.GetRange(0, listNodes.Count);
-    //            }
-    //            else {
-    //                listViews[listViews.Count - 2].Nodes = listNodes.GetRange(0, (entityId > UserMap.Names.nodeEntityZero) ? listNodes.Count - 1 : listNodes.Count);
-    //                listNodes.RemoveRange(0, (entityId > UserMap.Names.nodeEntityZero) ? listNodes.Count - 1 : listNodes.Count);
-    //            }
-    //        }
-    //        viewLast = viewNow;
-    //    }
-
-    //    identity.Role.Planning.Navigators = listViews;
-
-    //    if (reader != null) reader.Dispose();
-    //    return identity;
-    //}
-
-    //public List<Server.Entity.ModuleFeature> LoadExplorerPlanningMapWorkflow(System.Data.DataTable data, Server.Data.SqlService service) {
-
-    //    //Map the entity data...
-    //    Boolean reading = true;
-    //    Boolean IsValid = true;
-    //    Boolean IsActive = false;
-    //    String workflowNow = String.Empty;
-    //    String workflowLast = String.Empty;
-    //    String stepNow = String.Empty;
-    //    String stepLast = String.Empty;
-    //    List<Server.Entity.ModuleFeature> listWorkflows = new List<Entity.ModuleFeature>();
-    //    List<Server.Entity.ModuleFeature.Step> listSteps = new List<Entity.ModuleFeature.Step>();
-    //    List<Server.Entity.ModuleFeature.Error> listErrors = new List<Entity.ModuleFeature.Error>();
-    //    List<Server.Entity.ModuleFeature.Advisor> listAdvisor = new List<Entity.ModuleFeature.Advisor>();
-    //    System.Data.DataTableReader reader = data.CreateDataReader();
-
-    //    //From record set...
-    //    while (reading) {
-    //        reading = reader.Read();
-    //        workflowNow = (reading) ? reader[UserMap.Names.workflowViewName].ToString() : String.Empty;
-    //        stepNow = (reading) ? reader[UserMap.Names.workflowStepName].ToString() : String.Empty;
-    //        if (reading) {
-    //            listAdvisor.Add(new Entity.ModuleFeature.Advisor(
-    //                Int32.Parse(reader[UserMap.Names.workflowMessageSort].ToString()),
-    //                reader[UserMap.Names.workflowMessageTitle].ToString()
-    //                ));
-    //            if (stepLast != stepNow) {
-    //                listSteps.Add(new Entity.ModuleFeature.Step(
-    //                    Int16.Parse(reader[UserMap.Names.workflowStepSort].ToString()),
-    //                    reader[UserMap.Names.workflowStepName].ToString(),
-    //                    reader[UserMap.Names.workflowStepTitle].ToString(),
-    //                    IsValid,
-    //                    IsActive,
-    //                    Boolean.Parse(reader[UserMap.Names.workflowStepEnablePrevious].ToString()),
-    //                    Boolean.Parse(reader[UserMap.Names.workflowStepEnableNext].ToString()),
-    //                    listErrors,
-    //                    listAdvisor,
-    //                    (Server.Entity.WorkflowStepType)Int32.Parse(reader[UserMap.Names.workflowStepKey].ToString())
-    //                    ));
-    //            }
-    //            if (workflowLast != workflowNow) {
-    //                listWorkflows.Add(new Entity.ModuleFeature(
-    //                    reader[UserMap.Names.workflowViewName].ToString(),
-    //                    listSteps,
-    //                    (Server.Entity.WorkflowType)Int32.Parse(reader[UserMap.Names.workflowViewKey].ToString())
-    //                    ));
-    //            }
-    //        }
-    //        if (!(stepLast.Equals(String.Empty) || stepLast == stepNow)) {
-    //            if (stepNow.Equals(String.Empty)) {
-    //                listSteps[listSteps.Count - 1].Advisors = listAdvisor.GetRange(0, listAdvisor.Count);
-    //            }
-    //            else {
-    //                listSteps[listSteps.Count - 2].Advisors = listAdvisor.GetRange(0, listAdvisor.Count - 1);
-    //                listAdvisor.RemoveRange(0, listAdvisor.Count - 1);
-    //            }
-    //        }
-    //        if (!(workflowLast.Equals(String.Empty) || workflowLast == workflowNow)) {
-    //            if (workflowNow.Equals(String.Empty)) {
-    //                listWorkflows[listWorkflows.Count - 1].Steps = listSteps.GetRange(0, listSteps.Count);
-    //            }
-    //            else {
-    //                listWorkflows[listWorkflows.Count - 2].Steps = listSteps.GetRange(0, listSteps.Count - 1);
-    //                listSteps.RemoveRange(0, listSteps.Count - 1);
-    //            }
-    //        }
-    //        stepLast = stepNow;
-    //        workflowLast = workflowNow;
-    //    }
-
-    //    if (reader != null) reader.Dispose();
-    //    return listWorkflows;
-    //}
-    //#endregion
-
-    //#region Load Explorer Tracking...
-    //public void LoadExplorerTrackingMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
-
-    //    //Map the command...
-    //    service.SqlProcedure = UserMap.Names.selectCommand;
-
-    //    //Map the parameters...
-    //    APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-    //        new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
-    //        new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-    //        new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerTrackingMessage)
-    //    }; service.sqlParameters.List = parameters;
-    //}
-
-    //public Server.Entity.User.Identity LoadExplorerTrackingMapData(System.Data.DataTable data, Server.Data.SqlService service) {
-
-    //    //Map the entity data...
-    //    System.Data.DataTableReader reader = data.CreateDataReader();
-    //    Server.Entity.User.Identity identity = new User.Identity();
-    //    //Single record...
-    //    //if (reader.Read()) {
-    //    //    identity.Role.Tracking = reader[UserMap.Names.xmlDataColumn].ToString();
-    //    //}
-    //    if (reader != null) reader.Dispose();
-    //    return identity;
-    //}
-    //#endregion
-
-    //#region Load Explorer Reporting...
-    //public void LoadExplorerReportingMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
-
-    //    //Map the command...
-    //    service.SqlProcedure = UserMap.Names.selectCommand;
-
-    //    //Map the parameters...
-    //    APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-    //        new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.UserIdentity.Id.ToString()),
-    //        new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-    //        new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadExplorerReportingMessage)
-    //    }; service.sqlParameters.List = parameters;
-    //}
-
-    //public Server.Entity.User.Identity LoadExplorerReportingMapData(System.Data.DataTable data, Server.Data.SqlService service) {
-
-    //    //Map the entity data...
-    //    System.Data.DataTableReader reader = data.CreateDataReader();
-    //    Server.Entity.User.Identity identity = new User.Identity();
-    //    //Single record...
-    //    //if (reader.Read()) {
-    //    //    identity.Role.Reporting = reader[UserMap.Names.xmlDataColumn].ToString();
-    //    //}
-    //    if (reader != null) reader.Dispose();
-    //    return identity;
-    //}
-    //#endregion
-    #endregion
 }

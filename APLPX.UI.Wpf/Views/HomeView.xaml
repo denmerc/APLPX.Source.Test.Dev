@@ -3,15 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
              xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
              x:Name="UserControl"
-             d:DesignHeight="1126"
-             d:DesignWidth="951"
-             mc:Ignorable="d" 
-             Background="White">
+             Background="{DynamicResource MainWindowBackground}"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,12 +21,11 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="layoutRoot" >
-        <Grid.Background>
-            <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/APL_logo_new.png"
-                        Stretch="Uniform" />
-        </Grid.Background>
- 
+    <Grid x:Name="layoutRoot">
+        <Image HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Source="/APLPX.UI.WPF;component/Resources/APL_logo_new.png"
+               Stretch="None" />
     </Grid>
 
 </UserControl>

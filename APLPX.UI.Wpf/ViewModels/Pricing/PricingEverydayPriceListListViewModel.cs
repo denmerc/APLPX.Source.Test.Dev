@@ -20,18 +20,8 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
                 throw new ArgumentNullException("priceRoutine");
             }
 
-            PriceRoutine = priceRoutine;
-            InitializeCommands();
+            PriceRoutine = priceRoutine;           
             PriceRoutine.UpdatePriceListGroups();
-        }
-
-        private void InitializeCommands()
-        {
-            ApplyPriceRangeCommand = ReactiveCommand.Create();
-            ApplyPriceRangeCommand.Subscribe(_ => ApplyPriceRangeExecuted(_));
-
-            RecalculateLinkedPriceListsCommand = ReactiveCommand.Create();
-            RecalculateLinkedPriceListsCommand.Subscribe(obj => RecalculateLinkedPriceListsExecuted(obj));
         }
 
         #endregion
@@ -40,37 +30,21 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
         {
             get { return _priceRoutine; }
             private set { _priceRoutine = value; }
-        }
+        } 
 
-        public ReactiveCommand<object> RecalculateLinkedPriceListsCommand { get; private set; }
-
-        public ReactiveCommand<object> ApplyPriceRangeCommand { get; private set; }
-
-        #region Command Handlers
-
-        private object ApplyPriceRangeExecuted(object parameter)
+        /// <summary>
+        /// Gets a collection containing the current price routine.
+        /// Views can use this to bind to a data grid or other items control.
+        /// </summary>
+        public IReadOnlyList<PricingEveryday> PriceRoutineList
         {
-            //TODO: implement logic
-            if (PriceRoutine.SelectedMode.HasKeyPriceListRule)
+            get
             {
+                var list = new List<PricingEveryday>();
+                list.Add(PriceRoutine);
+
+                return list;
             }
-            if (PriceRoutine.SelectedMode.HasLinkedPriceListRule)
-            {
-            }
-            return parameter;
         }
-
-        private object RecalculateLinkedPriceListsExecuted(object parameter)
-        {
-            PricingEverydayPriceListGroup target = PriceRoutine.LinkedPriceListGroup;
-            if (target != null)
-            {
-                target.RecalculateFilteredPriceLists(PriceRoutine.SelectedKeyPriceList.Id);
-            }
-
-            return parameter;
-        }
-
-        #endregion
     }
 }

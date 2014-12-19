@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-
 using APLPX.Client.Contracts;
 using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.DisplayServices;
@@ -30,10 +29,12 @@ namespace APLPX.UI.WPF.ViewModels
 
         private List<Module> _modules;
         private ViewModelBase _selectedFeatureViewModel;
+        private SearchViewModel _searchViewModel;
         private bool _isFeatureSelectorAvailable;
         private string _currentStatusText;
         private bool _isActionInProgress;
 
+        private ISearchableEntity _originalEntity;
         private EventAggregator _eventManager;
         private Dictionary<DTO.ModuleFeatureType, ModuleFeature> _featureCache;
         private ReactiveCommand<Object> _logoutCommand;
@@ -95,9 +96,15 @@ namespace APLPX.UI.WPF.ViewModels
             //Modules = DisplayModuleGenerator.CreateSampleModules();
 
             //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
-            Modules = session.Modules.ToDisplayEntities();
+           Modules = session.Modules.ToDisplayEntities();
             //Modules = userService.Authenticate(Session).Modules.ToDisplayEntities();
             SelectedModule = Modules.Where(x => x.TypeId == DTO.ModuleType.Planning).FirstOrDefault();
+
+            //Pre-select the Home feature.
+            if (SelectedModule.Features.Count > 0)
+            {
+                SelectedFeature = SelectedModule.Features[0];
+        }
         }
 
         private void InitializeEventHandlers()
@@ -331,42 +338,24 @@ namespace APLPX.UI.WPF.ViewModels
         }
 
         /// <summary>
-        /// Gets a value indicating whether a feature is currently selected. This is a convenience property for data binding.
-        /// </summary>
-        public bool IsFeatureSelected
-        {
-            get
-            {
-                return (SelectedFeature != null);
-            }
-        }
-
-        /// <summary>
         /// Gets a value indicating whether step selection should be available.
         /// </summary>
         public bool IsStepSelectorAvailable
         {
             get
             {
-                //TODO: refactor logic. This is for demo and prototyping only.
-                bool result = false;
+                //TODO: finalize logic. This is for demo and prototyping only.
+                bool isAvailable = false;
 
-                //DTO.ModuleFeatureStepType[] hiddenSteps = {DTO.ModuleFeatureStepType.PlanningHomeDashboard,
-                //                                           //DTO.ModuleFeatureStepType.PlanningEverydayPricingSearchEveryday,
-                //                                           DTO.ModuleFeatureStepType.PlanningPromotionPricingSearchPromotions,
-                //                                           DTO.ModuleFeatureStepType.PlanningKitPricingSearchKits};
+                if (SelectedFeature != null)
+                {
+                    isAvailable = (SelectedFeature.TypeId == DTO.ModuleFeatureType.PlanningAnalytics ||
+                                   SelectedFeature.TypeId == DTO.ModuleFeatureType.PlanningEverydayPricing ||
+                                   SelectedFeature.TypeId == DTO.ModuleFeatureType.PlanningPromotionPricing ||
+                                   SelectedFeature.TypeId == DTO.ModuleFeatureType.PlanningKitPricing);
+                }
 
-                //if (SelectedStep != null)
-                //{
-                //    result = !hiddenSteps.Contains(SelectedStep.TypeId);
-                //    if (!result)
-                //    {
-                //        SelectedStep.IsVisible = false;
-                //    }
-                //}
-
-                result = true;
-                return result;
+                return isAvailable;
             }
         }
 
@@ -468,6 +457,7 @@ namespace APLPX.UI.WPF.ViewModels
                 //Create a new current entity.
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew:
                     //Create a new (blank) entity. TODO: refactor.
+                    _originalEntity = SelectedAnalytic;
                     var newAnalytic = new DisplayEntities.Analytic();
                     newAnalytic.Identity.Name = "Analytic name (new)";
                     newAnalytic.Identity.Description = "Description (new)";
@@ -479,6 +469,7 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayNew:
+                    _originalEntity = SelectedPricingEveryday;
                     //Create a new (blank) entity. TODO: refactor.
                     var newPriceRoutine = new DisplayEntities.PricingEveryday();
                     newPriceRoutine.Identity.Name = "Pricing Everyday name (new)";
@@ -530,6 +521,11 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepActionType.PlanningKitPricingSearchKitsCopy:
                     break;
 
+                case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningAnalyticsIdentityCancel:
+                    SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep;
+                    SelectedFeature.DisableRemainingSteps();
+                    break;
+
                 //Save the current entity.
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningAnalyticsIdentitySave:
                     //TODO: call analytic save method on service.
@@ -539,7 +535,6 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningEverydayPricingIdentitySave:
-
                     //TODO: call price routine save method on service.
                     SelectedPricingEveryday.IsDirty = false;
                     SelectedFeature.EnableRemainingSteps();
@@ -558,6 +553,18 @@ namespace APLPX.UI.WPF.ViewModels
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversSave:
                     ExecuteAsyncCommand(SaveValueDriversCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Value Drivers saving...", "Value Drivers saved.");
                     break;
+                case DTO.ModuleFeatureStepActionType.PlanningAnalyticsResultsRun:
+                    if (SelectedAnalytic != null && SelectedAnalytic.SelectedValueDriver != null)
+                    {
+                        //TODO: for testing only. In production, will call server method.
+                        AnalyticValueDriverMode mode = SelectedAnalytic.SelectedValueDriver.SelectedMode;
+                        if (mode != null && mode.Groups.Count > 0)
+                        {
+                            
+                            mode.MockAutoCalculateDriverGroups();                            
+                        }
+                    }
+                    break;
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningEverydayPricingPriceListsSave:
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningPromotionPricingPriceListsSave:
                 case APLPX.Client.Entity.ModuleFeatureStepActionType.PlanningKitPricingPriceListsSave:
@@ -574,36 +581,26 @@ namespace APLPX.UI.WPF.ViewModels
         {
             if (SelectedFeature != null)
             {
-
                 switch (SelectedFeature.TypeId)
                 {
-                    case APLPX.Client.Entity.ModuleFeatureType.Null:
-                        break;
-                    case APLPX.Client.Entity.ModuleFeatureType.StartupLogin:
-                        break;
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningHome:
-                        break;
-                    case APLPX.Client.Entity.ModuleFeatureType.TrackingHome:
-                        break;
-                    case APLPX.Client.Entity.ModuleFeatureType.ReportingHome:
-                        break;
-                    case APLPX.Client.Entity.ModuleFeatureType.AdministrationHome:
+                        SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep; ;
                         break;
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningAnalytics:
 
                         if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
-                            //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
+                            ////TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
 
-                            var displayAnalytics = base.Session.Analytics.ToDisplayEntities();
-                            //var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
-                            //var displayAnalytics = analyticDtos.ToDisplayEntities();
+                            //var displayAnalytics = base.Session.Analytics.ToDisplayEntities();
+                            var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
+                            var displayAnalytics = analyticDtos.ToDisplayEntities();
 
                             var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
                             SelectedFeature.SearchableEntities = iSearchables;
                             _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
                         }
-                        else
+                        else if (SelectedFeatureViewModel != null)
                         {
                             SelectedFeatureViewModel.SelectedFeature = _featureCache[SelectedFeature.TypeId];
                         }
@@ -614,19 +611,29 @@ namespace APLPX.UI.WPF.ViewModels
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningPromotionPricing:
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningEverydayPricing:
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningKitPricing:
-                        //SelectedFeatureViewModel = new SearchViewModel(SelectedFeature);
-                        if( !_featureCache.ContainsKey(SelectedFeature.TypeId))
+                        if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
                             var pricing = base.Session.Pricing.ToDisplayEntities();
                             SelectedFeature.SearchableEntities = pricing.Cast<ISearchableEntity>().ToList();
                         }
-                        else
+                        else if (SelectedFeatureViewModel != null)
                         {
                             SelectedFeatureViewModel.SelectedFeature = _featureCache[SelectedFeature.TypeId];
                         }
                         SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep;
+
+
+
                         break;
 
+
+                    case APLPX.Client.Entity.ModuleFeatureType.Null:
+                    case APLPX.Client.Entity.ModuleFeatureType.StartupLogin:
+
+                    case APLPX.Client.Entity.ModuleFeatureType.TrackingHome:
+                    case APLPX.Client.Entity.ModuleFeatureType.ReportingHome:
+                    case APLPX.Client.Entity.ModuleFeatureType.AdministrationHome:
+                    case APLPX.Client.Entity.ModuleFeatureType.AdministrationUserMaintenance:
                     default:
                         SelectedFeatureViewModel = null;
                         break;
@@ -664,7 +671,15 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingSearchEveryday:
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingSearchPromotions:
                 case DTO.ModuleFeatureStepType.PlanningKitPricingSearchKits:
-                    result = new SearchViewModel(SelectedFeature);
+                    if (_searchViewModel == null)
+                    {
+                        _searchViewModel = new SearchViewModel(SelectedFeature);
+                    }
+                    else if (_searchViewModel.SelectedFeature != SelectedFeature)
+                    {
+                        _searchViewModel.SelectedFeature = SelectedFeature;
+                    }
+                    result = _searchViewModel;
                     break;
 
                 //Identity
@@ -724,6 +739,10 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Rounding
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingRounding:
+                    PricingEverydayRoundingViewModel vm = new PricingEverydayRoundingViewModel(SelectedPricingEveryday);
+                    vm.RoundingTemplates = DisplayModuleGenerator.GetSampleRoundingTemplates();
+                    result = vm;
+
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingRounding:
@@ -732,6 +751,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Strategy
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingStrategy:
+                    result = new PricingEverydayStrategyViewModel(SelectedPricingEveryday);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingStrategy:
@@ -831,18 +851,12 @@ namespace APLPX.UI.WPF.ViewModels
             ReenableUserInterface();
         }
 
-        private void ShowMessageBox(string message, MessageBoxImage image)
-        {
-            MessageBox.Show(message, "PRICEXPERT", MessageBoxButton.OK, image);
-        }
-
         /// <summary>
         /// Updates view model properties with dependencies on the selected module.
         /// </summary>        
         private void OnSelectedModuleChanged(Module module)
         {
             this.RaisePropertyChanged("IsModuleSelected");
-            this.RaisePropertyChanged("IsDetailDisplayed");
 
             //TODO: this property will depend on whether the view is in detail mode (e.g., viewing a specific Analytic, Price Routine, etc.)
             IsFeatureSelectorAvailable = (module != null);
@@ -853,10 +867,18 @@ namespace APLPX.UI.WPF.ViewModels
         /// </summary>        
         private void OnSelectedFeatureChanged(ModuleFeature feature)
         {
-            this.RaisePropertyChanged("IsFeatureSelected");
-            this.RaisePropertyChanged("IsDetailDisplayed");
-
             SelectedFeature = feature;
+
+            if (SelectedFeature != null)
+            {
+                //Pre-select the first search group if one is not already selected.
+                var searchGroups = SelectedFeature.SearchGroupDisplayList;
+                if (SelectedFeature.SelectedSearchGroup == null && searchGroups.Count > 0)
+                {
+                    SelectedFeature.SelectedSearchGroup = searchGroups[0];
+                }
+                OnSelectedEntityChanged(SelectedFeature.SelectedEntity);
+            }
         }
 
         /// <summary>
@@ -864,17 +886,28 @@ namespace APLPX.UI.WPF.ViewModels
         /// </summary>     
         private void OnSelectedStepChanged(ModuleFeatureStep step)
         {
-            this.RaisePropertyChanged("IsStepSelectorAvailable");
             if (step != null)
             {
                 SelectedFeatureViewModel = GetViewModel(step);
             }
+
+            this.RaisePropertyChanged("IsStepSelectorAvailable");
         }
+
         /// <summary>
         /// Updates view model properties with dependencies on the selected search entiy.
         /// </summary>        
         private void OnSelectedEntityChanged(ISearchableEntity entity)
         {
+            if (entity == null)
+            {
+                SelectedFeature.DisableRemainingSteps();
+            }
+            else
+            {
+                SelectedFeature.EnableRemainingSteps();
+            }
+
             SelectedAnalytic = entity as DisplayEntities.Analytic;
             SelectedPricingEveryday = entity as DisplayEntities.PricingEveryday;
 

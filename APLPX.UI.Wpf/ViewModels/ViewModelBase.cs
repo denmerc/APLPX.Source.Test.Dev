@@ -7,6 +7,7 @@ using ReactiveUI;
 
 using DTO = APLPX.Client.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
+using System.Windows;
 
 
 namespace APLPX.UI.WPF.ViewModels
@@ -18,7 +19,7 @@ namespace APLPX.UI.WPF.ViewModels
         private Module _selectedModule;
         private ModuleFeature _selectedFeature;
         private User _currentUser;
-        private Display.Analytic _selectedAnalytic; 
+        private Display.Analytic _selectedAnalytic;
         private Display.PricingEveryday _selectedPricingEveryday;
 
         private DTO.Session<DTO.NullT> _session;
@@ -91,5 +92,18 @@ namespace APLPX.UI.WPF.ViewModels
         }
 
         #endregion
+
+
+        protected void ShowMessageBox(string message, MessageBoxImage image)
+        {
+            MessageBox.Show(message, "PRICEXPERT", MessageBoxButton.OK, image);
+        }
+
+        protected MessageBoxResult ShowPrompt(string message)
+        {
+            MessageBoxResult result = MessageBox.Show(message, "PRICEXPERT", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+
+            return result;
+        }
     }
 }

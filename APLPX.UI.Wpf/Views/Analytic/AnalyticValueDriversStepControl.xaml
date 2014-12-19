@@ -64,7 +64,7 @@
     </UserControl.Triggers>
 
 
-    <Grid x:Name="LayoutRoot" Background="Black">
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -101,16 +101,16 @@
                  Grid.Row="1"
                  Grid.RowSpan="2"
                  Grid.Column="0"
-                 Margin="20, 0"
                  ItemsSource="{Binding Path=Entity.ValueDrivers}"
                  SelectedItem="{Binding Path=Entity.SelectedValueDriver}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding Path=IsSelected}" />
-                        <Label Content="{Binding Path=Name}"
-                               FontSize="16"
-                               Foreground="{StaticResource Foreground}" />
+                        <Label Width="176"
+                           Content="{Binding Path=Name}"
+                           FontSize="16"
+                           Foreground="{StaticResource Foreground}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -222,8 +222,7 @@
                   Header="Run"
                   Style="{x:Null}"
                   ToolTip="Automatically calculate the groups for this value driver."
-                  Visibility="{Binding ElementName=DriverGroupsDataGrid,
-                                       Path=Visibility}" />
+                  Visibility="Collapsed" />
 
         <DataGrid x:Name="DriverGroupsDataGrid"
                   Grid.Row="2"

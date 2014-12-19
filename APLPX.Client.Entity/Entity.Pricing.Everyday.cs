@@ -299,7 +299,7 @@ namespace APLPX.Client.Entity
             int skuId,
             string skuName,
             string skuTitle,
-            PricingResultDriverGroup groups,
+            List<PricingResultDriverGroup> groups,
             List<PricingEverydayResultPriceList> priceLists
             ) {
             SkuId = skuId;
@@ -318,7 +318,7 @@ namespace APLPX.Client.Entity
         public string SkuTitle { get; private set; }
         [DataMember]
         [BsonElement("Group")]
-        public PricingResultDriverGroup Groups { get; private set; }
+        public List<PricingResultDriverGroup> Groups { get; private set; }
         [DataMember]
         [BsonElement("PriceList")]
         public List<PricingEverydayResultPriceList> PriceLists { get; private set; }

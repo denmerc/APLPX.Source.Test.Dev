@@ -58,11 +58,11 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.SkuTitle = dto.SkuTitle;
             if (dto.Groups != null)
             {
-                displayEntity.Groups = dto.Groups.ToDisplayEntity();
-                //foreach (DTO.PricingResultDriverGroup group in dto.Groups)
-                //{
-                //    displayEntity.Groups.Add(group.ToDisplayEntity());
-                //}
+                //displayEntity.Groups = dto.Groups.ToDisplayEntity();
+                foreach (DTO.PricingResultDriverGroup group in dto.Groups)
+                {
+                    displayEntity.Groups.Add(group.ToDisplayEntity());
+                }
             }          
 
             return displayEntity;
@@ -70,11 +70,11 @@ namespace APLPX.UI.WPF.Mappers
 
         public static DTO.PricingEverydayResult ToDto(this Display.PricingEverydayResult displayEntity)
         {
-            //var driverGroups = new List<DTO.PricingResultDriverGroup>();
-            //foreach (Display.PricingResultDriverGroup group in displayEntity.Groups)
-            //{
-            //    driverGroups.Add(group.ToDto());
-            //}
+            var driverGroups = new List<DTO.PricingResultDriverGroup>();
+            foreach (Display.PricingResultDriverGroup group in displayEntity.Groups)
+            {
+                driverGroups.Add(group.ToDto());
+            }
 
             var priceLists = new List<DTO.PricingEverydayResultPriceList>();
             foreach (Display.PricingEverydayResultPriceList priceList in displayEntity.PriceLists)
@@ -86,7 +86,7 @@ namespace APLPX.UI.WPF.Mappers
                                             displayEntity.SkuId, 
                                             displayEntity.SkuName,
                                             displayEntity.SkuTitle,                                              
-                                            displayEntity.Groups.ToDto(),
+                                            driverGroups,
                                             priceLists);
             return dto;
         }

@@ -9,7 +9,8 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private int _valueDriverId;
-        private List<PricingEverydayLinkedValueDriverGroup> _groups;
+        private string _name;
+        private List<PricingEverydayLinkedValueDriverGroup> _groups;        
 
         #endregion
 
@@ -28,6 +29,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _valueDriverId; }
             set { this.RaiseAndSetIfChanged(ref _valueDriverId, value); }
+        }
+
+        public string Name
+        {
+            get { return _name; }
+            set { this.RaiseAndSetIfChanged(ref _name, value); }
         }
 
         public List<PricingEverydayLinkedValueDriverGroup> Groups

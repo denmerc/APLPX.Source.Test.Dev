@@ -5,8 +5,9 @@ namespace APLPX.UI.WPF.DisplayEntities
 {
     public class PricingEverydayPriceList : PriceList
     {
-        private bool _isKey;
+        private bool _isKey;        
         private PricingLinkedPriceListRule _linkedPriceListRule;
+        private int _ordinalPosition;
 
         public bool IsKey
         {
@@ -18,6 +19,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _linkedPriceListRule; }
             set { this.RaiseAndSetIfChanged(ref _linkedPriceListRule, value); }
+        }
+    
+        public int OrdinalPosition
+        {
+            get { return _ordinalPosition; }
+            set { this.RaiseAndSetIfChanged(ref _ordinalPosition, value); }
         }
 
         #region Overrides

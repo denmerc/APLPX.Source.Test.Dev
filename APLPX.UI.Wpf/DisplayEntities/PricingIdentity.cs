@@ -11,6 +11,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private int _analyticsId;
+        private string _analyticName;
         private string _name;
         private string _description;
         private string _notes;
@@ -42,6 +43,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _analyticsId; }
             set { this.RaiseAndSetIfChanged(ref _analyticsId, value); }
+        }
+
+        public string AnalyticName
+        {
+            get { return _analyticName; }
+            set { this.RaiseAndSetIfChanged(ref _analyticName, value); }
         }
 
         public string Name

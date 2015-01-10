@@ -26,6 +26,10 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private Action _selectedAction;
 
+        //DEMO BARRY: isCompleted add
+        private bool _isCompleted;
+        ///////////////////
+
         #endregion
 
         #region Constructors
@@ -37,6 +41,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             Advisors = new List<Advisor>();
 
             //Set default values.
+
+            //DEMO BARRY: IsCompleted set to true
+            IsCompleted = true;
+            ///////////////////
+
             IsEnabled = true;
             IsVisible = true;
         }
@@ -44,6 +53,14 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region Properties
+
+        //DEMO BARRY: IsCompleted property add
+        public bool IsCompleted
+        {
+            get { return _isCompleted; }
+            set { this.RaiseAndSetIfChanged(ref _isCompleted, value); }
+        }
+        ///////////////////
 
         public ModuleFeatureStepType TypeId
         {
@@ -59,7 +76,13 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public string Name
         {
-            get { return _name; }
+            get {
+                //DEMO BARRY: Get Case add for check mark
+                if (_name == null || _name == "7) Impact Analysis" || _name == "8) Request Approval" || _name == "Search Everyday")
+                    IsCompleted = false;
+                ////////////////////////////////
+                return _name; 
+            }
             set { this.RaiseAndSetIfChanged(ref _name, value); }
         }
 

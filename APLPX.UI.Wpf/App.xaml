@@ -4,18 +4,18 @@
              xmlns:converters="clr-namespace:APLPX.UI.WPF.Converters"
              xmlns:local="clr-namespace:APLPX.UI.WPF"
              xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
+             xmlns:viewsAdmin="clr-namespace:APLPX.UI.WPF.Views.Admin"
+             xmlns:viewsAnalytic="clr-namespace:APLPX.UI.WPF.Views.Analytic"
              xmlns:viewsCommon="clr-namespace:APLPX.UI.WPF.Views.Common"
              xmlns:viewsPricing="clr-namespace:APLPX.UI.WPF.Views.Pricing"
              xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
              xmlns:vmAdmin="clr-namespace:APLPX.UI.WPF.ViewModels.Admin"
              xmlns:vma="clr-namespace:APLPX.UI.WPF.ViewModels.Analytic"
              xmlns:vmp="clr-namespace:APLPX.UI.WPF.ViewModels.Pricing">
-    <!--  StartupUri="MainWindow.xaml"  -->
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -24,14 +24,19 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
-                <!--  <ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />  -->
-
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <Storyboard x:Key="sbDefaultFadeIn">
+                <DoubleAnimation x:Name="fadeIn"
+                                     Duration="0:0:1"
+                                     From="0"
+                                     Storyboard.TargetProperty="(UIElement.Opacity)"
+                                     To="1" />
+            </Storyboard>
+            
             <!--  Application Styles  -->
 
-            
-            
             <LinearGradientBrush x:Key="ContentBack">
                 <LinearGradientBrush.GradientStops>
                     <GradientStop Offset="0" Color="#121212" />
@@ -44,6 +49,27 @@
                 <GradientStop Offset="1" Color="#373737" />
                 <GradientStop Offset="0" Color="AliceBlue" />
             </LinearGradientBrush>
+
+
+            <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock Margin="10,10,10,10"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Background="Gray"
+                                       Foreground="White"
+                                       Text="{Binding}"
+                                       TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Background" Value="Gray" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderBrush" Value="White" />
+                <Setter Property="BorderThickness" Value="1" />     
+            </Style>
 
             <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
                 <Setter Property="Background" Value="#FF333337" />
@@ -83,7 +109,7 @@
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="Margin" Value="5" />
             </Style>
-            
+
             <Style x:Key="SearchControlSelectedItemDetailStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="Foreground" Value="{DynamicResource SearchControlSelectedItemDetailTextColor}" />
                 <Setter Property="FontSize" Value="15" />
@@ -136,6 +162,23 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="IdentityLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="Foreground" Value="{StaticResource Foreground}" />
+                <Setter Property="HorizontalContentAlignment" Value="Right" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="5,2" />
+            </Style>
+            
+            <Style x:Key="IdentityTextBoxStyle"
+                   BasedOn="{StaticResource TextBoxStyle1}"
+                   TargetType="TextBox">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="{StaticResource Foreground}" />
+            </Style>
+            
             <Style x:Key="commandButtonStyle" TargetType="{x:Type Button}">
                 <Setter Property="Height" Value="50" />
                 <Setter Property="Width" Value="50" />
@@ -244,7 +287,7 @@
                 <Setter Property="Background" Value="#FF333337" />
                 <Setter Property="Margin" Value="0,2" />
                 <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
-                <Setter Property="FontSize" Value="15" />
+                <Setter Property="FontSize" Value="14" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="Width" Value="300" />
                 <Style.Triggers>
@@ -335,7 +378,7 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vmAdmin:AdminUsersViewModel}">
-                <views:UserAdminControl />
+                <viewsAdmin:UserAdminControl />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vm:SearchViewModel}">
@@ -343,19 +386,19 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vmp:PricingIdentityViewModel}">
-                <local:PricingIdentityStepControl />
+                <viewsPricing:PricingIdentityStepControl />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vma:AnalyticIdentityViewModel}">
-                <local:AnalyticIdentityStepControl />
+                <viewsAnalytic:AnalyticIdentityStepControl />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vm:FilterViewModel}">
-                <local:FilterStepControl />
+                <viewsCommon:FilterStepControl />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type vm:PriceListViewModel}">
-                <viewsCommon:PriceListControl />
+            <DataTemplate DataType="{x:Type vma:AnalyticPriceListViewModel}">
+                <viewsAnalytic:AnalyticPriceListsControl />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsViewModel}">
@@ -366,18 +409,50 @@
                 <local:PricingEverydayResultsSummaryControl />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsWarningsViewModel}">
+                <local:PricingEverydayResultsWarningsControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsPriceChangeViewModel}">
+                <local:PricingEverydayResultsPriceChangeControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsMarkupChangeViewModel}">
+                <local:PricingEverydayResultsMarkupChangeControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsPriceListViewModel}">
+                <local:PricingEverydayResultsPriceListControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsCompetitionViewModel}">
+                <local:PricingEverydayResultsCompetitionControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsValueDriverGroupsViewModel}">
+                <local:PricingEverydayResultsValueDriverGroupsControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsEditedViewModel}">
+                <local:PricingEverydayResultsEditedControl />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vmp:PricingEverydayResultsExcludedViewModel}">
+                <local:PricingEverydayResultsExcludedControl />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type vma:AnalyticDriverViewModel}">
-                <local:AnalyticValueDriversStepControl />
+                <viewsAnalytic:AnalyticValueDriversStepControl />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vma:AnalyticResultsViewModel}">
-                <local:AnalyticResultsControl />
+                <viewsAnalytic:AnalyticResultsControl />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vmp:PricingEverydayPriceListListViewModel}">
-                <viewsPricing:PricingEverydayPriceListControl/>
+                <viewsPricing:PricingEverydayPriceListControl />
             </DataTemplate>
-            
+
             <DataTemplate DataType="{x:Type vmp:PricingEverydayRoundingViewModel}">
                 <viewsPricing:PricingEverydayRoundingControl />
             </DataTemplate>

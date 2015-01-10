@@ -8,7 +8,7 @@
              xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
              xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
              x:Name="UserControl"
-             Background="{DynamicResource MainWindowBackground}"
+             Background="White"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>

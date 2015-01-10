@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace APLPX.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for PricingEverydayResultsCompetiionControl.xaml
+    /// Interaction logic for PricingEverydayResultsMarkupDeltaControl.xaml
     /// </summary>
-    public partial class PricingEverydayResultsCompetiionControl : UserControl
+    public partial class PricingEverydayResultsMarkupChangeControl : UserControl
     {
-        public PricingEverydayResultsCompetiionControl()
+        public PricingEverydayResultsMarkupChangeControl()
         {
             InitializeComponent();
         }

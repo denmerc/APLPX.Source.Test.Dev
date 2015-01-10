@@ -6,20 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d">
 
-    <UserControl.Triggers>
-        <EventTrigger RoutedEvent="UserControl.Loaded">
-            <BeginStoryboard>
-                <Storyboard>
-                    <DoubleAnimation x:Name="fadeIn"
-                                     Duration="0:0:1"
-                                     From="0"
-                                     Storyboard.TargetProperty="(UIElement.Opacity)"
-                                     To="1" />
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-    </UserControl.Triggers>
-
+ 
     <Grid x:Name="layoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

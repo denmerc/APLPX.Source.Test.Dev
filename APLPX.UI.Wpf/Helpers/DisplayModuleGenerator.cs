@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.Interfaces;
+using ReactiveUI;
 using DTO = APLPX.Client.Entity;
 
 namespace APLPX.UI.WPF.Helpers
@@ -12,8 +14,20 @@ namespace APLPX.UI.WPF.Helpers
     /// </summary>
     public class DisplayModuleGenerator
     {
+        #region Private Fields
+
         private static Random _random = new Random();
 
+        private static string[] _analyticNames = { "Admin - Everyday - All Filters - Movement Only", "Admin - Everyday - Movement & Markup", "Admin - Everyday - Movement & Days On Hand", "Analyst - Promo - Movement Markup Days On Hand ", "Analyst - Promo - Movement with Outliers", "Admin - Everyday - Movement with Manual Groups", "Analyst - Promo - Movement & Markup w/Man Grps ", "Admin - Movement, Markup, & DOH w/Manual Groups", "Admin - Movement, MarkUp, & DOH w/Custom - 1 prod Description", "Analyst - Promo - All Drivers One-to-many Analytic", "Approver - Everyday - All Drivers One-to-One Analysis", "Approver - Everyday - Movement & Markup w/small Filters", "Approver - Everyday - Movement & DOH w/small Filters", "Approver - Everyday - Movement w/Pontiac Filters", "Approver - Everyday - Move. w/Caddy filt & 15 grps" };
+
+        private static string[] _pricingEverydayNames = { "Admin - Everyday - All Filters - Movement Only", "Admin - Everyday - Movement & Days On Hand", "Admin - Everyday - Movement & Markup", "Admin - Everyday - Movement with Manual Groups", "Admin - Everyday - MarkUp, & DOH w/Custom - 1 Prod", "Admin - Everyday - Movement, Markup, & DOH+ManGrps", "Analyst Everyday All Drivers One-to-many Analytic1", "Analyst Everyday All Drivers one-to-many Analytic2", "Analyst Everyday All Drivers one-to-many Analytic3", "Analyst - Everyday - Movement & Markup w/ManGrps", "Analyst - Everyday - Movement with Outliers", "Approver - All Drivers - one-to-one Analytic", "Approver - Everyday - Movement & DOH w/small Filt", "Approver - Everyday - Movement & Markup w/sml Filt", "Approver - Everyday - Movement w/Pontiac Filters", "Approver - Everyday - Move. w/Caddy filt & 15 grps", "Analyst - Everyday - All Driver Analytic mismatch", "Approver - Everyday - all driver mismatch", "Admin - Everyday - Analytic Mismatch + global" };
+
+
+        private static string[] _ownerNames = { "Admin User Active", "Admin User Active", "Admin User Active", "Analyst User Active", "Analyst User Active", "Admin User Active", "Analyst User Active", "Admin User Active", "Admin User Active", "Analyst User Active", "Approver User Active", "Approver User Active", "Approver User Active", "Approver User Active", "Approver User Active" };
+
+
+        #endregion
+       
         #region Modules, Features, and Steps
 
         public static List<Module> CreateSampleModules()
@@ -31,7 +45,7 @@ namespace APLPX.UI.WPF.Helpers
             var modules = new List<Module>();
             for (int i = 0; i < names.Length; i++)
             {
-                Module module = new Module { Name = names[i], TypeId = types[i], Title = names[i] + " short description..." };
+                Module module = new Module { Name = names[i], TypeId = types[i], Title = names[i] };    //Formally "short description..."
                 module.Features = CreateSampleFeatures(module);
                 modules.Add(module);
             }
@@ -86,7 +100,31 @@ namespace APLPX.UI.WPF.Helpers
                 feature.SearchableEntities = GetSampleSearchEntities(feature);
             }
 
+            SetSourceAnalyticName(features);
+
             return features;
+        }
+
+        private static void SetSourceAnalyticName(List<ModuleFeature> features)
+        {
+            //For display purposes, use the first analytic as the source for each price routine
+            Analytic sourceAnalytic = null;
+            var analytics = features.FirstOrDefault(f => f.Name == "Analytics");
+            if (analytics != null && analytics.SearchableEntities.Count > 0)
+            {
+                sourceAnalytic = analytics.SearchableEntities[0] as Analytic;
+                if (sourceAnalytic != null)
+                {
+                    var everyday = features.FirstOrDefault(f => f.Name == "Everyday Pricing");
+                    if (everyday != null)
+                    {
+                        foreach (PricingEveryday item in everyday.SearchableEntities)
+                        {
+                            item.Identity.AnalyticName = sourceAnalytic.Identity.Name;
+                        }
+                    }
+                }
+            }
         }
 
         private static List<ModuleFeatureStep> GetSampleSteps(string moduleName, ModuleFeature feature)
@@ -114,8 +152,8 @@ namespace APLPX.UI.WPF.Helpers
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Rounding", Title = "Configure Price routine rounding", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingRounding, Sort = 5, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Strategy", Title = "Configure Price routine optimization strategy", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingStrategy, Sort = 6, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "6) Results", Title = "Compare and edit Price routine results", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingResults, Sort = 7, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Forecast", Title = "Create a Price routine forecast", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingForecast, Sort = 8, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingApproval, Sort = 9, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Impact Analysis", Title = "Create a Price routine forecast", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingForecast, Sort = 8, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Request Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingApproval, Sort = 9, });
                 }
                 else if (feature.TypeId == DTO.ModuleFeatureType.PlanningPromotionPricing)
                 {
@@ -126,35 +164,21 @@ namespace APLPX.UI.WPF.Helpers
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Rounding", Title = "Configure Price routine rounding", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingRounding, Sort = 5, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Strategy", Title = "Configure Price routine optimization strategy", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingStrategy, Sort = 6, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "6) Results", Title = "Compare and edit Price routine results", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingResults, Sort = 7, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Forecast", Title = "Create a Price routine forecast", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingForecast, Sort = 8, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingApproval, Sort = 9, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Impact Analysis", Title = "Create a Price routine forecast", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingForecast, Sort = 8, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Request Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingApproval, Sort = 9, });
                 }
                 else if (feature.TypeId == DTO.ModuleFeatureType.PlanningKitPricing)
                 {
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Promotions", Title = "Search saved Pricing campaigns", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingSearchKits, Sort = 1, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Kits", Title = "Search saved Pricing campaigns", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingSearchKits, Sort = 1, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Price routines with a unique name and description", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingIdentity, Sort = 2, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Price routine product filters & define a product set", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingFilters, Sort = 3, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "3) Price Lists", Title = "Configure Price routine price lists ", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingPriceLists, Sort = 4, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "4) Rounding", Title = "Configure Price routine rounding", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingRounding, Sort = 5, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Strategy", Title = "Configure Price routine optimization strategy", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingStrategy, Sort = 6, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "6) Results", Title = "Compare and edit Price routine results", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingResults, Sort = 7, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Forecast", Title = "Create a Price routine forecast", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingForecast, Sort = 8, });
-                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingApproval, Sort = 9, });
-
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "7) Impact Analysis", Title = "Create a Price routine forecast", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingForecast, Sort = 8, });
+                    steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Request Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingApproval, Sort = 9, });
                 }
-                //else
-                //{
-                //    steps.Add(new ModuleFeatureStep { Name = "Search", Title = "Search saved price routines", Sort = 1 }); //TODO: add enum value for search.
-                //    steps.Add(new ModuleFeatureStep { Name = "Identity", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingIdentity, Title = "Identify Price routines with a unique name and description", Sort = 2 });
-                //    steps.Add(new ModuleFeatureStep { Name = "Filters", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingFilters, Title = "Configure Price routine product filters & define a product set", Sort = 3 });
-                //    steps.Add(new ModuleFeatureStep { Name = "Price Lists", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists, Title = "Configure Price routine price lists ", Sort = 4 });
-                //    steps.Add(new ModuleFeatureStep { Name = "Rounding", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingRounding, Title = "Configure Price routine rounding", Sort = 5 });
-                //    steps.Add(new ModuleFeatureStep { Name = "Strategy", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingStrategy, Title = "Configure Price routine optimization strategy", Sort = 6 });
-                //    steps.Add(new ModuleFeatureStep { Name = "Results", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingResults, Title = "Compare and edit Price routine results", Sort = 7 });
-                //    steps.Add(new ModuleFeatureStep { Name = "Forecast", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingForecast, Title = "Create a Price routine forecast", Sort = 8 });
-                //    steps.Add(new ModuleFeatureStep { Name = "Request Approval", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingApproval, Title = "Submit this Price routine for approval", Sort = 9 });
-                //}
-
                 steps.ForEach(step => step.Actions = GetSampleActions(step));
             }
 
@@ -207,36 +231,36 @@ namespace APLPX.UI.WPF.Helpers
                 searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "This Week", SearchKey = "searchKey001", Sort = 1, ItemCount = 2 });
                 searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Last Week", SearchKey = "searchKey002", Sort = 2, ItemCount = 0 });
                 searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Older", SearchKey = "searchKey003", Sort = 3, ItemCount = 6 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "John Doe", SearchKey = "seerchKey101", Sort = 4, ItemCount = 4 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "Jane Doe", SearchKey = "seerchKey102", Sort = 5, ItemCount = 4 });
+                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "John Doe", SearchKey = "seerchKey101", Sort = 4, ItemCount = 4 });
+                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "Jane Doe", SearchKey = "seerchKey102", Sort = 5, ItemCount = 4 });
                 searchGroups.Add(new FeatureSearchGroup { ParentName = "Scenarios", Name = "Scenario #1", SearchKey = "searchKey112", Sort = 6, ItemCount = 4 });
                 searchGroups.Add(new FeatureSearchGroup { ParentName = "Scenarios", Name = "Scenario #1A", SearchKey = "searchKey113", Sort = 7, ItemCount = 2 });
             }
             else if (feature.Name == "Everyday")
             {
                 searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Recent", SearchKey = "searchKey001", Sort = 1, ItemCount = 2 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User A", SearchKey = "searchKey101", Sort = 2, ItemCount = 0 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User B", SearchKey = "searchKey102", Sort = 3, ItemCount = 0 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 1", SearchKey = "searchKey111", Sort = 4, ItemCount = 4 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 2", SearchKey = "searchKey112", Sort = 5, ItemCount = 2 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 3", SearchKey = "searchKey113", Sort = 6, ItemCount = 0 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 4", SearchKey = "searchKey114", Sort = 7, ItemCount = 3 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 4", SearchKey = "searchKey115", Sort = 8, ItemCount = 2 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 5", SearchKey = "searchKey116", Sort = 9, ItemCount = 1 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 6", SearchKey = "searchKey117", Sort = 10, ItemCount = 3 });
+                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User A", SearchKey = "searchKey101", Sort = 2, ItemCount = 0 });
+                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User B", SearchKey = "searchKey102", Sort = 3, ItemCount = 0 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 1", SearchKey = "searchKey111", Sort = 4, ItemCount = 4 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 2", SearchKey = "searchKey112", Sort = 5, ItemCount = 2 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 3", SearchKey = "searchKey113", Sort = 6, ItemCount = 0 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 4", SearchKey = "searchKey114", Sort = 7, ItemCount = 3 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 4", SearchKey = "searchKey115", Sort = 8, ItemCount = 2 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 5", SearchKey = "searchKey116", Sort = 9, ItemCount = 1 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 6", SearchKey = "searchKey117", Sort = 10, ItemCount = 3 });
             }
             else
             {
                 searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Recent", SearchKey = "searchKey001", Sort = 1, ItemCount = 5 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 1", SearchKey = "searchKey101", Sort = 2, ItemCount = 2 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 2", SearchKey = "searchKey102", Sort = 3, ItemCount = 1 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 3", SearchKey = "searchKey103", Sort = 4, ItemCount = 3 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 1", SearchKey = "searchKey111", Sort = 5, ItemCount = 3 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 2", SearchKey = "searchKey112", Sort = 6, ItemCount = 7 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 3", SearchKey = "searchKey113", Sort = 7, ItemCount = 0 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 4", SearchKey = "searchKey114", Sort = 8, ItemCount = 2 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 5", SearchKey = "searchKey115", Sort = 9, ItemCount = 1 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "My Folders", Name = "Folder 6", SearchKey = "searchKey116", Sort = 10, ItemCount = 3 });
+                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 1", SearchKey = "searchKey101", Sort = 2, ItemCount = 2 });
+                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 2", SearchKey = "searchKey102", Sort = 3, ItemCount = 1 });
+                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 3", SearchKey = "searchKey103", Sort = 4, ItemCount = 3 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 1", SearchKey = "searchKey111", Sort = 5, ItemCount = 3 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 2", SearchKey = "searchKey112", Sort = 6, ItemCount = 7 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 3", SearchKey = "searchKey113", Sort = 7, ItemCount = 0 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 4", SearchKey = "searchKey114", Sort = 8, ItemCount = 2 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 5", SearchKey = "searchKey115", Sort = 9, ItemCount = 1 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 6", SearchKey = "searchKey116", Sort = 10, ItemCount = 3 });
             }
 
             //Make "My Folder names" editable.
@@ -254,7 +278,7 @@ namespace APLPX.UI.WPF.Helpers
             {
                 for (int i = 0; i < searchGroup.ItemCount; i++)
                 {
-                    ISearchableEntity entity = GetSearchEntity(feature);
+                    ISearchableEntity entity = GetSearchEntity(feature, i);
                     if (entity != null)
                     {
                         entity.SearchKey = searchGroup.SearchKey;
@@ -267,45 +291,12 @@ namespace APLPX.UI.WPF.Helpers
 
         #endregion
 
-        private static List<FilterGroup> GetSampleFilterGroups()
-        {
-            var result = new List<FilterGroup>();
-
-            string[] groupNames = { "Discount Type", "Hierarchy", "Inventory Catalog Line", 
-                                    "Inventory Status", "Product Introduction date", "Product Type", 
-                                    "Stock Supply Classification", "Vendor Code", "Location", 
-                                    "Pricing Type", "Package Type" };
-
-            for (int groupIndex = 0; groupIndex < groupNames.Length; groupIndex++)
-            {
-                string groupName = groupNames[groupIndex];
-                FilterGroup group = new FilterGroup { Name = groupName, Sort = (short)(groupIndex + 1) };
-
-                for (int filterIndex = 1; filterIndex <= groupIndex + 10; filterIndex++)
-                {
-                    string id = String.Format("{0}-{1}", groupIndex, filterIndex);
-                    Filter filter = new Filter
-                    {
-                        Name = "Filter " + id,
-                        Code = "Code " + id,
-                        Key = (groupIndex * 100) + filterIndex,
-                        Sort = (short)filterIndex,
-                        IsSelected = (filterIndex % 2) == 1
-                    };
-                    group.Filters.Add(filter);
-                }
-                result.Add(group);
-            }
-
-            return result;
-        }
-
         #region Price Lists
 
         private static List<AnalyticPriceListGroup> GetSampleAnalyticPriceListGroups()
         {
             var result = new List<AnalyticPriceListGroup>();
-            string[] grouoNames = { "Everyday", "Price List Group 2" };
+            string[] grouoNames = { "Regular" };
 
             for (int groupIndex = 0; groupIndex < grouoNames.Length; groupIndex++)
             {
@@ -332,13 +323,15 @@ namespace APLPX.UI.WPF.Helpers
                 if (isLinkedGroup)
                 {
                     group = new PricingEverydayPriceListGroup { Name = "Price List Group " + groupIndex, Sort = (short)groupIndex, Key = key };
-                    group.PriceLists = GetSampleEverydayPriceLists(isLinkedGroup);
+                    var priceLists = GetSampleEverydayPriceLists(isLinkedGroup);
+                    group.PriceLists = new ReactiveList<PricingEverydayPriceList>(priceLists);
                     result.Add(group);
                 }
                 else if (linkedKey > 0 && linkedKey != key)
                 {
                     group = new PricingEverydayPriceListGroup { Name = "Price List Group " + groupIndex, Sort = (short)groupIndex, Key = linkedKey };
-                    group.PriceLists = GetSampleEverydayPriceLists(isLinkedGroup);
+                    var priceLists = GetSampleEverydayPriceLists(isLinkedGroup);
+                    group.PriceLists = new ReactiveList<PricingEverydayPriceList>(priceLists);
                     result.Add(group);
                 }
             }
@@ -407,21 +400,6 @@ namespace APLPX.UI.WPF.Helpers
             return result;
         }
 
-        private static PriceListGroup GetPriceListGroup(ISearchableEntity entity)
-        {
-            PriceListGroup result = null;
-            if (entity is Analytic)
-            {
-                result = new AnalyticPriceListGroup();
-            }
-
-            else if (entity is PricingEveryday)
-            {
-                result = new PricingEverydayPriceListGroup();
-            }
-            return result;
-        }
-
         #endregion
 
         #region Value Drivers
@@ -432,12 +410,15 @@ namespace APLPX.UI.WPF.Helpers
 
             string[] driverNames = { "Markup", "Movement", "Days On Hand" };
 
-            var analyticResults = GetSampleAnalyticResults();
+            
 
+            AnalyticValueDriver driver;
             for (int driverIndex = 0; driverIndex < driverNames.Length; driverIndex++)
             {
+                var analyticResults = GetSampleAnalyticResults(driverNames[driverIndex]);
+
                 ValueDriverGroup group;
-                var driver = new AnalyticValueDriver { Id = driverIndex + 21, Name = driverNames[driverIndex], Sort = (short)driverIndex, Results = analyticResults };
+                driver = new AnalyticValueDriver { Id = driverIndex + 21, Name = driverNames[driverIndex], Sort = (short)driverIndex, Results = analyticResults };
                 //Auto generated
                 var mode = new AnalyticValueDriverMode
                 {
@@ -470,15 +451,91 @@ namespace APLPX.UI.WPF.Helpers
                     group = new ValueDriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1, Sort = (short)groupIndex };
                     mode.Groups.Add(group);
                 }
-                driver.Modes.Add(mode);
+                driver.Modes.Add(mode);              
+
+                //Simulate mode and driver selections.
+                driver.SelectedMode = driver.Modes[driverIndex % 2];
+                driver.IsSelected = (driverIndex % 2 == 0);
 
                 result.Add(driver);
+            }
+
+            //Add in disabled "teaser" drivers for demo only.
+            driver = new AnalyticValueDriver { Id = 97, Key = 37, Name = "Days Lead Time", IsDisplayOnly = true, Sort = 5 };
+            result.Add(driver);
+
+            driver = new AnalyticValueDriver { Id = 99, Key = 38, Name = "In Stock Ratio", IsDisplayOnly = true, Sort = 6 };
+            result.Add(driver);
+
+            driver = new AnalyticValueDriver { Id = 99, Key = 39, Name = "Trend", IsDisplayOnly = true, Sort = 7 };
+            result.Add(driver);
+
+            return result;
+        }
+
+        private static ReactiveList<PricingEverydayValueDriver> GetPricingEverydayValueDrivers()
+        {
+            var drivers = new ReactiveList<PricingEverydayValueDriver>();
+
+            var driver = new PricingEverydayValueDriver { Id = 16, Key = 34, Name = "Markup", IsSelected = true, IsKey = false, Sort = 2 };
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 76, Value = 1, SkuCount = 20, SalesValue = "16,020.43", MinOutlier = 1600, MaxOutlier = 99999, Sort = 1 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 77, Value = 2, SkuCount = 18, SalesValue = "7,574.79", MinOutlier = 1200, MaxOutlier = 1599, Sort = 2 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 78, Value = 3, SkuCount = 27, SalesValue = "34,898.17", MinOutlier = 800, MaxOutlier = 1199, Sort = 3 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 79, Value = 4, SkuCount = 42, SalesValue = "67,442.4", MinOutlier = 300, MaxOutlier = 799, Sort = 4 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 80, Value = 5, SkuCount = 19, SalesValue = "16,182", MinOutlier = 0, MaxOutlier = 299, Sort = 5 });
+            drivers.Add(driver);
+
+            driver = new PricingEverydayValueDriver { Id = 17, Key = 35, Name = "Movement", IsSelected = true, IsKey = true, Sort = 3 };
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 81, Value = 1, SkuCount = 1, SalesValue = "6,848", MinOutlier = 100, MaxOutlier = 2999, Sort = 1 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 82, Value = 2, SkuCount = 1, SalesValue = "4,010", MinOutlier = 500, MaxOutlier = 999, Sort = 2 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 83, Value = 3, SkuCount = 3, SalesValue = "17,583", MinOutlier = 200, MaxOutlier = 499, Sort = 3 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 84, Value = 4, SkuCount = 12, SalesValue = "35,942", MinOutlier = 100, MaxOutlier = 199, Sort = 4 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 85, Value = 5, SkuCount = 109, SalesValue = "77,734.23", MinOutlier = 0, MaxOutlier = 99, Sort = 5 });
+            drivers.Add(driver);
+
+            driver = new PricingEverydayValueDriver { Id = 18, Key = 36, Name = "Days On Hand", IsSelected = true, IsKey = false, Sort = 4 };
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 86, Value = 1, SkuCount = 58, SalesValue = "74,986", MinOutlier = 300, MaxOutlier = 365, Sort = 1 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 87, Value = 2, SkuCount = 0, SalesValue = "0", MinOutlier = 235, MaxOutlier = 299, Sort = 2 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 88, Value = 3, SkuCount = 0, SalesValue = "0", MinOutlier = 200, MaxOutlier = 234, Sort = 3 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 89, Value = 4, SkuCount = 1, SalesValue = "1,143", MinOutlier = 165, MaxOutlier = 199, Sort = 4 });
+            driver.Groups.Add(new PricingValueDriverGroup { Id = 90, Value = 5, SkuCount = 67, SalesValue = "65,989", MinOutlier = 0, MaxOutlier = 164, Sort = 5 });
+            drivers.Add(driver);
+
+            return drivers;
+        }
+
+        private static PricingEverydayKeyValueDriver GetPricingEverydayKeyValueDriver(PricingEverydayValueDriver sourceDriver)
+        {
+            var keyDriver = new PricingEverydayKeyValueDriver { ValueDriverId = sourceDriver.Id };
+
+            foreach (PricingValueDriverGroup group in sourceDriver.Groups)
+            {
+                var keyDriverGroup = new PricingEverydayKeyValueDriverGroup { ValueDriverGroupId = group.Id };
+                keyDriverGroup.OptimizationRules = GetPriceOptimizationRules();
+                keyDriverGroup.MarkupRules = GetMarkupRules();
+                keyDriver.Groups.Add(keyDriverGroup);
+            }
+
+            return keyDriver;
+        }
+
+
+        private static List<PricingEverydayLinkedValueDriver> GetPricingEverydayLinkedValueDrivers(IEnumerable<PricingEverydayValueDriver> sourceDrivers)
+        {
+            var result = new List<PricingEverydayLinkedValueDriver>();
+            int index = 0;
+            foreach (PricingEverydayValueDriver sourceDriver in sourceDrivers)
+            {
+                var linkedDriver = new PricingEverydayLinkedValueDriver { ValueDriverId = sourceDriver.Id, Name = sourceDriver.Name };
+                linkedDriver.Groups.Add(new PricingEverydayLinkedValueDriverGroup { ValueDriverGroupId = 1, PercentChange = 0.1M + index });
+                result.Add(linkedDriver);
+                index++;
             }
 
             return result;
         }
 
-        private List<PricingResultDriverGroup> GetPricingResultDriverGroups()
+        private static List<PricingResultDriverGroup> GetPricingResultDriverGroups()
         {
             var list = new List<PricingResultDriverGroup>();
             string title = "Product Analytic metric driver is based on Aggregate units sold";
@@ -522,6 +579,40 @@ namespace APLPX.UI.WPF.Helpers
             return list;
         }
 
+        private static List<AnalyticResult> GetSampleAnalyticResults(string name)
+        {
+            var list = new List<AnalyticResult>();
+            switch (name)
+            {
+                case "Markup":
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "1645", MaxValue = "19880", Id = 1, SalesValue = "16020.43", SkuCount = 20 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "1215.26", MaxValue = "1563", Id = 2, SalesValue = "7574.79", SkuCount = 18 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "802.9", MaxValue = "1181", Id = 3, SalesValue = "34918", SkuCount = 27 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "331.67", MaxValue = "799", Id = 4, SalesValue = "67442.4", SkuCount = 42 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "-24.95", MaxValue = "289.7", Id = 5, SalesValue = "16182.75", SkuCount = 19 });
+                    break;
+
+                case "Movement":
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "2298", MaxValue = "2298", Id = 1, SalesValue = "6848", SkuCount = 1 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "674", MaxValue = "674", Id = 2, SalesValue = "4010.3", SkuCount = 1 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "217", MaxValue = "411", Id = 3, SalesValue = "17583", SkuCount = 3 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "102", MaxValue = "179", Id = 4, SalesValue = "35942", SkuCount = 12 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "0", MaxValue = "98", Id = 5, SalesValue = "77734", SkuCount = 109 });
+                    break;
+
+                case "Days On Hand":
+                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "21", MaxValue = "90541", Id = 1, SalesValue = "74986.08", SkuCount = 58 });
+                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "13", MaxValue = "178", Id = 4, SalesValue = "1143.12", SkuCount = 1 });
+                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "48", MaxValue = "141", Id = 5, SalesValue = "65989.34", SkuCount = 67 });
+                    break;
+
+                default:
+                    break;
+            }
+
+
+            return list;
+        }
         #endregion
 
 
@@ -530,10 +621,8 @@ namespace APLPX.UI.WPF.Helpers
         /// </summary>
         /// <param name="feature"></param>
         /// <returns>A concrete instance that implements ISearchableEntity.</returns>
-        private static ISearchableEntity GetSearchEntity(ModuleFeature feature)
+        private static ISearchableEntity GetSearchEntity(ModuleFeature feature, int id)
         {
-            int id = _random.Next(101, 10001);
-
             ISearchableEntity result = null;
             switch (feature.TypeId)
             {
@@ -571,28 +660,38 @@ namespace APLPX.UI.WPF.Helpers
 
         private static Analytic GetSampleAnalytic(int id)
         {
+
             var result = new Analytic();
-            string name = "Analytic #" + id;
+
+            result.Id = id + 1;
+            string name = _analyticNames[id];
             result.Identity.Name = name;
             result.Identity.Description = String.Format("Sample description for {0}", name);
             result.Identity.Notes = String.Format("Here are are some sample notes that were entered for this item (\"{0}\").", name);
             result.Identity.Created = DateTime.Now.AddDays(-10);
             result.Identity.Edited = DateTime.Now.AddDays(-2);
-            result.Identity.Owner = name + " Owner";
+            result.Identity.Owner = _ownerNames[id];
 
-            result.FilterGroups = GetSampleFilterGroups();
+            result.FilterGroups = MockFilterGenerator.GetFilterGroupsComplete();
             result.PriceListGroups = GetSampleAnalyticPriceListGroups();
             result.ValueDrivers = GetSampleAnalyticDrivers();
+
+            //Default for display purposes.
+            result.SelectedFilterGroup = result.FilterGroups.FirstOrDefault();
 
             return result;
         }
 
         private static PricingEveryday GetSamplePricingEveryday(int id)
         {
-            var result = new PricingEveryday();
-            result.Identity = GetSamplePricingIdentity("Pricing Everyday", id);
 
-            result.FilterGroups = GetSampleFilterGroups();
+            var result = new PricingEveryday();
+
+            result.Id = id + 1;
+
+            result.Identity = GetSamplePricingIdentity(_pricingEverydayNames[id], _ownerNames[id]);
+
+            result.FilterGroups = MockFilterGenerator.GetFilterGroupsComplete();
             result.PricingModes = GetSamplePricingModes();
             foreach (PricingMode mode in result.PricingModes)
             {
@@ -601,7 +700,22 @@ namespace APLPX.UI.WPF.Helpers
 
             result.KeyPriceListRule = new PricingKeyPriceListRule { DollarRangeLower = 10.25M, DollarRangeUpper = 115.00M, RoundingRules = GetRoundingRules() };
             result.LinkedPriceListRules = GetSampleLinkedPriceListRules(result);
+            result.ValueDrivers = GetPricingEverydayValueDrivers();
+
+            PricingEverydayValueDriver keyDriver = result.ValueDrivers.FirstOrDefault(driver => driver.IsKey);
+            if (keyDriver != null)
+            {
+                PricingEverydayKeyValueDriver key = GetPricingEverydayKeyValueDriver(keyDriver);
+                result.KeyValueDriver = key;
+            }
+            var linked = result.ValueDrivers.Where(driver => !driver.IsKey && driver.IsSelected);
+            var linkedDrivers = GetPricingEverydayLinkedValueDrivers(linked);
+
+            result.LinkedValueDrivers = new ObservableCollection<PricingEverydayLinkedValueDriver>(linkedDrivers);
             result.Results = GetSamplePricingEverydayResults();
+
+            //Default for display purposes.
+            result.SelectedFilterGroup = result.FilterGroups.FirstOrDefault();
 
             return result;
         }
@@ -622,11 +736,25 @@ namespace APLPX.UI.WPF.Helpers
             return result;
         }
 
+        private static PricingIdentity GetSamplePricingIdentity(string name, string ownerName)
+        {
+            PricingIdentity result = new PricingIdentity();
+            result.AnalyticName = "Analytic 5244";
+            result.Name = name;
+            result.Description = String.Format("Sample description for {0}", name);
+            result.Notes = String.Format("Here are are some sample notes that were entered for this item (\"{0}\").", name);
+            result.Created = DateTime.Now.AddDays(-8);
+            result.Edited = DateTime.Now.AddDays(-3);
+            result.Owner = ownerName;
+
+            return result;
+        }
+
         private static PricingIdentity GetSamplePricingIdentity(string entityTypeName, int id)
         {
             PricingIdentity result = new PricingIdentity();
             string name = String.Format("{0} #{1}", entityTypeName, id);
-
+            result.AnalyticName = "Analytic 5244";
             result.Name = name;
             result.Description = String.Format("Sample description for {0}", name);
             result.Notes = String.Format("Here are are some sample notes that were entered for this item (\"{0}\").", name);
@@ -720,7 +848,7 @@ namespace APLPX.UI.WPF.Helpers
 
                 case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingStrategy:
                     result.Add(new DisplayEntities.Action { Name = "Clear", Title = "Discard all changes since the last save.", Sort = 1 });
-                    result.Add(new DisplayEntities.Action { Name = "Full Screen", Title = "Maximize this screen", Sort = 2 });
+                    //result.Add(new DisplayEntities.Action { Name = "Full Screen", Title = "Maximize this screen", Sort = 2 });
                     result.Add(new DisplayEntities.Action { Name = "Edit", Title = "Edit this item", Sort = 3 });
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", Sort = 4 });
                     break;
@@ -753,7 +881,7 @@ namespace APLPX.UI.WPF.Helpers
             result.Add(new PricingMode
             {
                 Key = 19,
-                Name = "One key ",
+                Name = "One key",
                 Title = "Single price list key type selected ",
                 IsSelected = false,
                 HasKeyPriceListRule = true,
@@ -765,7 +893,7 @@ namespace APLPX.UI.WPF.Helpers
             result.Add(new PricingMode
             {
                 Key = 20,
-                Name = "Global key ",
+                Name = "Global key",
                 Title = "Global price list key type selected, user defined percent change ",
                 IsSelected = true,
                 HasKeyPriceListRule = true,
@@ -778,11 +906,11 @@ namespace APLPX.UI.WPF.Helpers
             result.Add(new PricingMode
             {
                 Key = 21,
-                Name = "Global key + ",
+                Name = "Global key +",
                 Title = "Global price list key + selected, using existing percent change ",
                 IsSelected = false,
                 HasKeyPriceListRule = true,
-                HasLinkedPriceListRule = true,
+                HasLinkedPriceListRule = false,
                 KeyPriceListGroupKey = 7,
                 LinkedPriceListGroupKey = 7,
                 Sort = 3
@@ -791,7 +919,7 @@ namespace APLPX.UI.WPF.Helpers
             result.Add(new PricingMode
             {
                 Key = 22,
-                Name = "Cascade ",
+                Name = "Cascade",
                 Title = "Cascading price list key type selected, using hierarchical percent change ",
                 IsSelected = false,
                 HasKeyPriceListRule = true,
@@ -811,10 +939,13 @@ namespace APLPX.UI.WPF.Helpers
         {
             var list = new List<PricingRoundingTemplate>();
 
-            for (short i = 1; i < +5; i++)
+            string[] names = { "Interior", "Moldings-Chrome", "Apparel", "Engine Parts" };
+
+            for (short i = 0; i < names.Length; i++)
             {
                 var roundingRules = GetRoundingRules().Take(10 - i).ToList();
-                PricingRoundingTemplate template = new PricingRoundingTemplate { Id = i, Name = "Rounding Template " + i, Description = "Rounding Template " + i, Rules = roundingRules, Sort = i };
+                string name = names[i];
+                PricingRoundingTemplate template = new PricingRoundingTemplate { Id = i, Name = name, Description = "Rounding template for " + name, Rules = roundingRules, Sort = i };
                 list.Add(template);
             }
 
@@ -912,7 +1043,6 @@ namespace APLPX.UI.WPF.Helpers
             list.Add(new PricingEverydayResult { SkuId = 2601, SkuName = "CE12041", SkuTitle = "1975-76 Seville Gas-A-Just Shocks", PriceLists = priceLists });
             list.Add(new PricingEverydayResult { SkuId = 2608, SkuName = "CE01398", SkuTitle = "1976 Cadillac Seville Idler Arm", PriceLists = priceLists });
             list.Add(new PricingEverydayResult { SkuId = 2738, SkuName = "CE12164", SkuTitle = "1976 Cadillac Eldorado, CC, Limo & Series 75 Power Steering Pump & Reservoir", PriceLists = priceLists });
-
 
             return list;
         }
@@ -1016,6 +1146,9 @@ namespace APLPX.UI.WPF.Helpers
                 IsSelected = false,
                 Sort = 5
             });
+
+            list.ForEach(item => item.PriceEdit.Type = DTO.PricingResultsEditType.DefaultPrice);
+            list.ForEach(item => item.PriceWarning.Type = DTO.PricingResultsWarningType.MarkupBelow);
 
             return list;
         }

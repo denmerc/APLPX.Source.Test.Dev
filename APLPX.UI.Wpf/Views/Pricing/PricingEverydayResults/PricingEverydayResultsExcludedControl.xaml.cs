@@ -36,10 +36,10 @@ namespace APLPX.UI.WPF
                 offset = sv.ContentHorizontalOffset;
             }
 
-            double w = skuColumn.ActualWidth + descriptionColumn.ActualWidth + priceListColumn.ActualWidth + currentPriceColumn.ActualWidth + currentMarkupColumn.ActualWidth - offset;
+            double w = skuColumn.ActualWidth + descriptionColumn.ActualWidth + priceListsColumn.ActualWidth + currentPriceColumn.ActualWidth + currentMarkupColumn.ActualWidth - offset;
             Label1.Width = w < 0 ? 0 : w;
 
-            double w2 = totalValueDriverColumn.ActualWidth + finalPriceColumn.ActualWidth + newMarkupColumn.ActualWidth + editTypeColumn.ActualWidth + warningColumn.ActualWidth;
+            double w2 = totalPriceChangeColumn.ActualWidth + finalPriceColumn.ActualWidth + newMarkupColumn.ActualWidth + editTypeColumn.ActualWidth + warningColumn.ActualWidth;
             Label2.Width = w2;
         }
 

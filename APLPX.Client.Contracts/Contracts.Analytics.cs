@@ -27,5 +27,11 @@ namespace APLPX.Client.Contracts
         Session<Client.Entity.Analytic> LoadPriceLists(Session<Client.Entity.Analytic> session);
         [OperationContract]
         Session<Client.Entity.Analytic> SavePriceLists(Session<Client.Entity.Analytic> session);
+
+        [OperationContract]
+        Session<Client.Entity.Analytic> LoadAnalytic(Session<Client.Entity.Analytic> session);
+        [OperationContract]
+        Session<Client.Entity.Analytic> LoadResults(Session<Client.Entity.Analytic> session);
+
     }
 }

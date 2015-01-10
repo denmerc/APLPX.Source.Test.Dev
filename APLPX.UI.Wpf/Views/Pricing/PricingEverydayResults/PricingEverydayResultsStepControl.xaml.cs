@@ -42,19 +42,21 @@ namespace APLPX.UI.WPF
                         break;
                     case "Price Delta":
                         pricingEverydayCanvas.Children.Clear();
-                        pricingEverydayCanvas.Children.Add(new PricingEverydayResultsPriceDeltaControl());
+                        pricingEverydayCanvas.Children.Add(new PricingEverydayResultsPriceChangeControl());
                         break;
                     case "Mark-Up Delta":
                         pricingEverydayCanvas.Children.Clear();
-                        pricingEverydayCanvas.Children.Add(new PricingEverydayResultsMarkupDeltaControl());
+                        pricingEverydayCanvas.Children.Add(new PricingEverydayResultsMarkupChangeControl());
                         break;
                     case "Price List":
                         pricingEverydayCanvas.Children.Clear();
                         pricingEverydayCanvas.Children.Add(new PricingEverydayResultsPriceListControl());
                         break;
                     case "Competition":
+                        PricingEverydayResultsCompetitionControl competitionControl = new PricingEverydayResultsCompetitionControl();
+                        competitionControl.IsEnabled = false;
                         pricingEverydayCanvas.Children.Clear();
-                        pricingEverydayCanvas.Children.Add(new PricingEverydayResultsCompetiionControl());
+                        pricingEverydayCanvas.Children.Add(competitionControl);
                         break;
                     case "Value Driver Groups":
                         pricingEverydayCanvas.Children.Clear();

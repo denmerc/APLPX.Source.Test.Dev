@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 
-namespace APLPX.UI.WPF
+namespace APLPX.UI.WPF.Views.Analytic
 {
     /// <summary>
     /// Interaction logic for FilterStepControl.xaml

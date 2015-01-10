@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿//using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -6,8 +6,8 @@ using System.Runtime.Serialization;
 namespace APLPX.Client.Entity
 {
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class Module //Workflow groups
     {
         #region Initialize...
@@ -40,8 +40,8 @@ namespace APLPX.Client.Entity
         [DataMember]
         public List<UserRole> Roles;
     }
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     [DataContract]
     public class ModuleFeature  //Workflow Views
     {
@@ -69,28 +69,28 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public ModuleFeatureType Type { get; private set; }
+        public ModuleFeatureType Type { get; set; }
         [DataMember]
-        public ModuleFeatureStepType LandingStepType { get; private set; }
+        public ModuleFeatureStepType LandingStepType { get; set; }
         [DataMember]
-        public ModuleFeatureStepType ActionStepType { get; private set; }
+        public ModuleFeatureStepType ActionStepType { get; set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get; set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get; set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get; set; }
         [DataMember]
-        public List<ModuleFeatureStep> Steps { get; private set; }
+        public List<ModuleFeatureStep> Steps { get; set; }
         [DataMember]
-        public List<FeatureSearchGroup> SearchGroups { get; private set; }
+        public List<FeatureSearchGroup> SearchGroups { get; set; }
         [DataMember]
         public List<UserRole> Roles;
     }
 
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class ModuleFeatureStep //Workflow View Steps
     {
         #region Initialize...
@@ -115,24 +115,24 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public ModuleFeatureStepType Type { get; private set; }
+        public ModuleFeatureStepType Type { get;  set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
-        public List<ModuleFeatureStepError> Errors { get; private set; }
+        public List<ModuleFeatureStepError> Errors { get; set; }
         [DataMember]
-        public List<ModuleFeatureStepAdvisor> Advisors { get; private set; }
+        public List<ModuleFeatureStepAdvisor> Advisors { get; set; }
         [DataMember]
-        public List<ModuleFeatureStepAction> Actions { get; private set; }
+        public List<ModuleFeatureStepAction> Actions { get; set; }
     }
 
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class ModuleFeatureStepAction
     {
         #region Initialize...
@@ -153,15 +153,15 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string ParentName { get; private set; }
+        public string ParentName { get;  set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get; set; }
         [DataMember]
-        public ModuleFeatureStepActionType Type { get; private set; }
+        public ModuleFeatureStepActionType Type { get;  set; }
     }
 
     [DataContract]
@@ -233,22 +233,22 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public string SearchKey { get; private set; }
+        public string SearchKey { get;  set; }
         [DataMember]
         public string Name { get; set; }
         [DataMember]
         public short ItemCount { get; set; }
         [DataMember]
-        public string ParentName { get; private set; }
+        public string ParentName { get;  set; }
         [DataMember]
         public bool IsNameChanged { get; set; }
         [DataMember]
         public bool IsSearchKeyChanged { get; set; }
         [DataMember]
-        public bool CanNameChange { get; private set; }
+        public bool CanNameChange { get;  set; }
         [DataMember]
-        public bool CanSearchKeyChange { get; private set; }
+        public bool CanSearchKeyChange { get;  set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
     }
 }

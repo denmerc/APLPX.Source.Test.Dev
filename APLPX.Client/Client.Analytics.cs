@@ -56,5 +56,16 @@ namespace APLPX.Client
         {
             return Channel.SavePriceLists(session);
         }
+
+        public Session<Client.Entity.Analytic> LoadAnalytic(Session<Client.Entity.Analytic> session)
+        {
+            return Channel.LoadAnalytic(session);
+        }
+
+
+        public Session<Analytic> LoadResults(Session<Analytic> session)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

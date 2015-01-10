@@ -4,14 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using APLPX.UI.WPF.Interfaces;
 
-//TODO: MUST REMOVE ALL REFERENCES TO MONGO IN DISPLAY ENTITIES!
-using MongoDB.Bson.Serialization.Attributes;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
     public class PricingEveryday : DisplayEntityBase, ISearchableEntity
     {
         #region Private Fields
@@ -19,9 +15,11 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _id;
         private PricingIdentity _identity;
         private List<FilterGroup> _filterGroups;
-        private List<PricingEverydayValueDriver> _valueDrivers;
+
+        private ReactiveList<PricingEverydayValueDriver> _valueDrivers;
         private PricingEverydayKeyValueDriver _keyValueDriver;
-        private List<PricingEverydayLinkedValueDriver> _linkedValueDrivers;
+        private ObservableCollection<PricingEverydayLinkedValueDriver> _linkedValueDrivers;
+
         private List<PricingMode> _pricingModes;
         private List<PricingEverydayPriceListGroup> _priceListGroups;
         private PricingKeyPriceListRule _keyPriceListRule;
@@ -31,14 +29,19 @@ namespace APLPX.UI.WPF.DisplayEntities
         private PricingEverydayPriceListGroup _keyPriceListGroup;
         private PricingEverydayPriceListGroup _linkedPriceListGroup;
         private PricingEverydayPriceList _selectedKeyPriceList;
+        private IDisposable _linkedPriceListChangeListener;
 
         private FilterGroup _selectedFilterGroup;
         private PricingMode _selectedMode;
+        private PricingEverydayValueDriver _selectedValueDriver;
 
         private string _searchGroupKey;
         private string _parentKey;
         private bool _canNameChange;
         private bool _canSearchKeyChange;
+
+        private IDisposable _valueDriverChangeListener;
+        private List<PricingEverydayValueDriverWrapper> _valueDriversCache;
 
         #endregion
 
@@ -48,14 +51,16 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             Identity = new PricingIdentity();
             FilterGroups = new List<FilterGroup>();
-            ValueDrivers = new List<PricingEverydayValueDriver>();
+            ValueDrivers = new ReactiveList<PricingEverydayValueDriver>();
             KeyValueDriver = new PricingEverydayKeyValueDriver();
-            LinkedValueDrivers = new List<PricingEverydayLinkedValueDriver>();
+            LinkedValueDrivers = new ObservableCollection<PricingEverydayLinkedValueDriver>();
             PricingModes = new List<PricingMode>();
             PriceListGroups = new List<PricingEverydayPriceListGroup>();
             KeyPriceListRule = new PricingKeyPriceListRule();
             LinkedPriceListRules = new List<PricingLinkedPriceListRule>();
             Results = new List<PricingEverydayResult>();
+
+            _valueDriversCache = new List<PricingEverydayValueDriverWrapper>();
         }
 
         #endregion
@@ -86,22 +91,93 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _filterGroups, value); }
         }
 
-        public List<PricingEverydayValueDriver> ValueDrivers
+        public ReactiveList<PricingEverydayValueDriver> ValueDrivers
         {
             get { return _valueDrivers; }
-            set { this.RaiseAndSetIfChanged(ref _valueDrivers, value); }
+            set
+            {
+                if (_valueDrivers != value)
+                {
+                    if (_valueDrivers != null && _valueDriverChangeListener != null)
+                    {
+                        _valueDriverChangeListener.Dispose();
+                    }
+
+                    _valueDrivers = value;
+                    this.RaisePropertyChanged("ValueDrivers");
+
+                    if (_valueDrivers != null)
+                    {
+                        //Listen for changes to any value driver in the collection. This enables us to detect when a driver is selected or unselected.
+                        _valueDrivers.ChangeTrackingEnabled = true;
+                        _valueDriverChangeListener = _valueDrivers.ItemChanged.Subscribe(driver => OnValueDriverItemChanged(driver));
+
+                        //Set default value if applicable.
+                        if (SelectedValueDriver == null)
+                        {
+                            SelectedValueDriver = _valueDrivers.FirstOrDefault(v => v.IsKey);
+                        }
+                        //InitializeLinkedValueDrivers();
+                        ValueDriversCache = InitializeDriverContainer();
+                    }
+                }
+            }
         }
 
         public PricingEverydayKeyValueDriver KeyValueDriver
         {
             get { return _keyValueDriver; }
-            set { this.RaiseAndSetIfChanged(ref _keyValueDriver, value); }
+            set
+            {
+                if (_keyValueDriver != value)
+                {
+                    //Cache the source value driver if applicable.
+                    bool isInitialSet = (_keyValueDriver != null && _keyValueDriver.ValueDriverId == 0 && value.ValueDriverId > 0);
+                    _keyValueDriver = value;
+                    if (isInitialSet)
+                    {
+                        var existing = ValueDriversCache.Find(i => i.BaseDriver.Id == _keyValueDriver.ValueDriverId);
+                        if (existing != null)
+                        {
+                            existing.KeyDriver = KeyValueDriver;
+                        }
+                    }
+
+                    //Set default value if applicable.
+                    if (_keyValueDriver != null &&
+                        _keyValueDriver.SelectedGroup == null)
+                    {
+                        _keyValueDriver.SelectedGroup = _keyValueDriver.Groups.FirstOrDefault();
+                    }
+
+                    this.RaisePropertyChanged("KeyValueDriver");
+                    this.RaisePropertyChanged("NonKeyValueDrivers");
+                }
+            }
         }
 
-        public List<PricingEverydayLinkedValueDriver> LinkedValueDrivers
+        public ObservableCollection<PricingEverydayLinkedValueDriver> LinkedValueDrivers
         {
             get { return _linkedValueDrivers; }
-            set { this.RaiseAndSetIfChanged(ref _linkedValueDrivers, value); }
+            set
+            {
+                if (_linkedValueDrivers != value)
+                {
+                    _linkedValueDrivers = value;
+                    if (_linkedValueDrivers != null)
+                    {
+                        foreach (PricingEverydayLinkedValueDriver linkedDriver in _linkedValueDrivers)
+                        {
+                            var existing = ValueDriversCache.Find(i => i.BaseDriver.Id == linkedDriver.ValueDriverId);
+                            if (existing != null)
+                            {
+                                existing.LinkedDriver = linkedDriver;
+                            }
+                        }
+                    }
+                    this.RaisePropertyChanged("LinkedValueDrivers");
+                }
+            }
         }
 
         public List<PricingMode> PricingModes
@@ -194,7 +270,36 @@ namespace APLPX.UI.WPF.DisplayEntities
         public PricingEverydayPriceListGroup LinkedPriceListGroup
         {
             get { return _linkedPriceListGroup; }
-            private set { this.RaiseAndSetIfChanged(ref _linkedPriceListGroup, value); }
+            private set
+            {
+                if (_linkedPriceListGroup != value)
+                {
+                    if (_linkedPriceListChangeListener != null)
+                    {
+                        //Clean up memory to prevent leaks.
+                        _linkedPriceListChangeListener.Dispose();
+                        _linkedPriceListChangeListener = null;
+                    }
+
+                    _linkedPriceListGroup = value;
+                    this.RaisePropertyChanged("LinkedPriceListGroup");
+
+                    //Listen for notifications when the IsSelected property changes for any linked price listn.
+                    if (_linkedPriceListGroup != null)
+                    {
+                        _linkedPriceListChangeListener = _linkedPriceListGroup.PriceListSelectedChanges.Subscribe(data => OnLinkedPriceListChanged(data));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called when the IsSelected property changes for any linked price list.
+        /// </summary>
+        private void OnLinkedPriceListChanged(PricingEverydayPriceList priceList)
+        {
+            //Update dependent calculated properties.
+            this.RaisePropertyChanged("RoundingRulePriceLists");
         }
 
         /// <summary>
@@ -224,6 +329,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                     {
                         _selectedKeyPriceList.IsKey = true;
                         _selectedKeyPriceList.IsSelected = true;
+                        _selectedKeyPriceList.OrdinalPosition = 0;
                     }
 
                     //Update dependent properties.                    
@@ -232,6 +338,9 @@ namespace APLPX.UI.WPF.DisplayEntities
             }
         }
 
+        /// <summary>
+        /// Recalculates the collection of linked price lists for this price routine.
+        /// </summary>
         private void RecalculateLinkedPriceLists()
         {
             if (LinkedPriceListGroup != null &&
@@ -247,16 +356,16 @@ namespace APLPX.UI.WPF.DisplayEntities
                     LinkedPriceListGroup.RecalculateFilteredPriceLists();
                 }
             }
+            this.RaisePropertyChanged("RoundingRulePriceLists");
         }
 
         /// <summary>
-        /// Exposes the price lists for which rounding rules can be set. 
-        /// These are the key price list plus any other price list marked IsSelected.
+        /// Exposes a collection containing the price lists for which rounding rules can be set. 
         /// </summary>
         public ObservableCollection<PricingEverydayPriceList> RoundingRulePriceLists
         {
             get
-            {                
+            {
                 var result = new ObservableCollection<PricingEverydayPriceList>();
 
                 //The list contains the Key price list plus all linked price lists marked IsSelected.
@@ -268,14 +377,260 @@ namespace APLPX.UI.WPF.DisplayEntities
                     if (LinkedPriceListGroup != null)
                     {
                         linkedLists = LinkedPriceListGroup.FilteredPriceLists.Where(pl => pl.IsSelected);
-                    }
-                    List<PricingEverydayPriceList> list = keyList.Union(linkedLists).ToList();
 
+                        //Recalculate the ordinal position so views can use as needed.
+                        int ordinal = 1;
+                        foreach (PricingEverydayPriceList linkedList in linkedLists)
+                        {
+                            linkedList.OrdinalPosition = ordinal++;
+                        }
+                    }
+
+                    List<PricingEverydayPriceList> list = keyList.Union(linkedLists).ToList();
                     result = new ObservableCollection<PricingEverydayPriceList>(list);
                 }
 
                 return result;
             }
+        }
+
+        #endregion
+
+        #region Key and Influencer Value Drivers
+
+        public List<PricingEverydayValueDriverWrapper> ValueDriversCache
+        {
+            private set { _valueDriversCache = value; }
+            get { return _valueDriversCache; }
+        }
+
+        public ReactiveList<PricingEverydayValueDriverWrapper> NonKeyValueDriversCache
+        {
+            get
+            {
+                var nonKey = _valueDriversCache.Where(item => !item.IsKey);
+                var result = new ReactiveList<PricingEverydayValueDriverWrapper>(nonKey);
+                return result;
+            }
+        }
+
+        public PricingEverydayValueDriver SelectedValueDriver
+        {
+            get { return _selectedValueDriver; }
+            set
+            {
+                if (_selectedValueDriver != value)
+                {
+                    _selectedValueDriver = value;
+                    if (ValueDriversCache != null && ValueDriversCache.Count > 0)
+                    {
+                        SetKeyValueDriver(_selectedValueDriver);
+                    }
+                    this.RaisePropertyChanged("SelectedValueDriver");
+                    this.RaisePropertyChanged("NonKeyValueDrivers");
+                    this.RaisePropertyChanged("LinkedValueDrivers");
+                    this.RaisePropertyChanged("NonKeyValueDriversCache");
+                    
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets this price routine's key value driver to the specified value driver.
+        /// </summary>
+        /// <param name="newKey"></param>
+        public void SetKeyValueDriver(PricingEverydayValueDriver newKey)
+        {
+            PricingEverydayValueDriverWrapper currentKey = null;
+            if (KeyValueDriver != null)
+            {
+                //Clear the current key driver.
+                currentKey = ValueDriversCache.Find(item => item.Id == KeyValueDriver.ValueDriverId);
+                currentKey.IsKey = false;
+                currentKey.IsSelected = false;
+            }
+
+            //Get the new key driver's item from the cache.
+            PricingEverydayValueDriverWrapper newKeyWrapper = ValueDriversCache.Find(item => item.Id == newKey.Id);
+            newKeyWrapper.IsKey = true;
+            newKeyWrapper.IsSelected = true;
+
+            if (newKeyWrapper.KeyDriver == null)
+            {
+                //Update the key driver concrete instance in the cache.
+                var keyDriverInstance = new PricingEverydayKeyValueDriver { ValueDriverId = newKey.Id };
+                foreach (PricingValueDriverGroup sourceGroup in _selectedValueDriver.Groups)
+                {
+                    keyDriverInstance.Groups.Add(new PricingEverydayKeyValueDriverGroup { ValueDriverGroupId = sourceGroup.Id });
+                }
+                newKeyWrapper.KeyDriver = keyDriverInstance;
+            }
+
+            KeyValueDriver = newKeyWrapper.KeyDriver;
+
+            if (SelectedValueDriver != newKeyWrapper.BaseDriver)
+            {
+                SelectedValueDriver = newKeyWrapper.BaseDriver;
+            }
+        }
+
+        /// <summary>
+        /// Gets the collection of all non-key value drivers for this price routine. 
+        /// This represents the set of candidates for Influencer value drivers.
+        /// </summary>
+        public ObservableCollection<PricingEverydayValueDriver> NonKeyValueDrivers
+        {
+            get
+            {
+                var nonKeyDrivers = ValueDrivers.Where(d => !d.IsKey);
+                var result = new ObservableCollection<PricingEverydayValueDriver>(nonKeyDrivers);
+                return result;
+            }
+        }
+
+        public ObservableCollection<PricingEverydayValueDriver> SelectedNonKeyDrivers
+        {
+            get
+            {
+                var selected = NonKeyValueDrivers.Where(d => d.IsSelected);
+                var result = new ObservableCollection<PricingEverydayValueDriver>(selected);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Occurs when a property changes for any item in the ValueDrivers collection.
+        /// </summary>
+        private object OnValueDriverItemChanged(IReactivePropertyChangedEventArgs<PricingEverydayValueDriver> args)
+        {
+            var driver = args.Sender as PricingEverydayValueDriver;
+
+            this.RaisePropertyChanged("SelectedNonKeyDrivers");
+
+            if (!driver.IsKey)
+            {
+                RecalculateLinkedValueDrivers(driver);
+            }
+            return driver;
+        }
+
+        private void InitializeLinkedValueDrivers()
+        {
+            var selected = SelectedNonKeyDrivers;
+            if (selected != null)
+            {
+                foreach (PricingEverydayValueDriver driver in selected)
+                {
+                    PricingEverydayLinkedValueDriver existing = LinkedValueDrivers.FirstOrDefault(d => d.ValueDriverId == driver.Id);
+                    if (existing == null)
+                    {
+                        //var containerItem = ValueDriversCache.Find(i => i.Id == driver.Id);
+                        //if (containerItem != null && containerItem.LinkedDriver != null)
+                        //{
+                        //    LinkedValueDrivers.Add(containerItem.LinkedDriver);
+                        //}
+
+                        //else
+                        //{
+                        LinkedValueDrivers.Add(new PricingEverydayLinkedValueDriver { ValueDriverId = driver.Id, Name = driver.Name });
+                        //}
+
+                    }
+                }
+            }
+        }
+
+        private void RecalculateLinkedValueDrivers(PricingEverydayValueDriver driver)
+        {
+            PricingEverydayLinkedValueDriver existing = LinkedValueDrivers.FirstOrDefault(d => d.ValueDriverId == driver.Id);
+            if (driver.IsSelected)
+            {
+                if (existing == null)
+                {
+                    PricingEverydayLinkedValueDriver linkedDriver = null;
+
+                    PricingEverydayValueDriverWrapper cachedItem = _valueDriversCache.Find(item => item.Id == driver.Id);
+                    if (cachedItem.LinkedDriver != null)
+                    {
+                        //Get the linked driver from the cache. 
+                        linkedDriver = cachedItem.LinkedDriver;
+                    }
+                    else
+                    {
+                        //Create new linked driver and add it to the cache.
+                        linkedDriver = new PricingEverydayLinkedValueDriver { ValueDriverId = driver.Id, Name = driver.Name };
+                        cachedItem.LinkedDriver = linkedDriver;
+                    }
+                    LinkedValueDrivers.Add(linkedDriver);
+                }
+            }
+            else if (existing != null)
+            {
+                LinkedValueDrivers.Remove(existing);
+            }
+            if (KeyValueDriver != null)
+            {
+                //Remove previously marked key driver from the linked drivers.
+                var keyDriver = LinkedValueDrivers.FirstOrDefault(d => d.ValueDriverId == KeyValueDriver.ValueDriverId);
+                if (keyDriver != null)
+                {
+                    LinkedValueDrivers.Remove(keyDriver);
+                }
+            }
+        }
+
+
+        private PricingEverydayValueDriverWrapper _selectedValueDriverWrapper;
+
+        public PricingEverydayValueDriverWrapper SelectedValueDriverWrapper
+        {
+            get { return _selectedValueDriverWrapper; }
+            set
+            {
+                if (_selectedValueDriverWrapper != value)
+                {
+                    _selectedValueDriverWrapper = value;
+                    this.RaisePropertyChanged("SelectedValueDriverWrapper");
+                }
+            }
+        }
+
+
+        private List<PricingEverydayValueDriverWrapper> InitializeDriverContainer()
+        {
+            var list = new List<PricingEverydayValueDriverWrapper>();
+
+            if (ValueDrivers != null && ValueDriversCache != null)
+            {
+                foreach (PricingEverydayValueDriver baseDriver in ValueDrivers)
+                {
+                    var wrapper = new PricingEverydayValueDriverWrapper(baseDriver);
+                    list.Add(wrapper);
+                }
+
+                if (KeyValueDriver != null && KeyValueDriver.ValueDriverId > 0)
+                {
+                    var existing = list.Find(i => i.BaseDriver.Id == KeyValueDriver.ValueDriverId);
+                    if (existing != null)
+                    {
+                        existing.KeyDriver = KeyValueDriver;
+                    }
+                }
+                if (LinkedValueDrivers != null)
+                {
+                    foreach (PricingEverydayLinkedValueDriver linkedDriver in LinkedValueDrivers)
+                    {
+                        var existing = list.Find(i => i.BaseDriver.Id == linkedDriver.ValueDriverId);
+                        if (existing != null)
+                        {
+                            existing.LinkedDriver = linkedDriver;
+                            existing.IsSelected = true;
+                        }
+                    }
+                }
+                OnPropertyChanged("ValueDriversCache");
+            }
+            return list;
         }
 
         #endregion
@@ -328,10 +683,10 @@ namespace APLPX.UI.WPF.DisplayEntities
                     {
                         priceList.LinkedPriceListRule = LinkedPriceListRules.FirstOrDefault(rule => rule.PriceListId == priceList.Id);
                     }
-                    RecalculateLinkedPriceLists();
-
-                    this.RaisePropertyChanged("SelectedKeyPriceList");
                 }
+
+                RecalculateLinkedPriceLists();
+                this.RaisePropertyChanged("SelectedKeyPriceList");
             }
         }
 

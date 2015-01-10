@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
@@ -13,6 +10,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private int _valueDriverId;
         private List<PricingEverydayKeyValueDriverGroup> _groups;
+        private PricingEverydayKeyValueDriverGroup _selectedGroup;
 
         #endregion
 
@@ -37,6 +35,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _groups; }
             set { this.RaiseAndSetIfChanged(ref _groups, value); }
+        }
+
+        public PricingEverydayKeyValueDriverGroup SelectedGroup
+        {
+            get { return _selectedGroup; }
+            set { this.RaiseAndSetIfChanged(ref _selectedGroup, value); }
         }
 
         #endregion

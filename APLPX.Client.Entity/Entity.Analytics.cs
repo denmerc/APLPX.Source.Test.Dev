@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿//using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -9,8 +9,8 @@ namespace APLPX.Client.Entity
     public class Analytic
     {
 
-        [BsonId]
-        public MongoDB.Bson.ObjectId _id { get; set; }
+        //[BsonId]
+        //public MongoDB.Bson.ObjectId _id { get; set; }
         #region Initialize...
         public Analytic() { }
         public Analytic(
@@ -80,21 +80,21 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public int Id { get; private set; }
+        //[BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public int Id { get; set; }
         [DataMember]
-        public string SearchGroupKey { get; private set; }
+        public string SearchGroupKey { get;  set; }
         [DataMember]
-        public AnalyticIdentity Identity { get; private set; }
+        public AnalyticIdentity Identity { get;  set; }
         [DataMember]
-        public List<AnalyticValueDriver> ValueDrivers { get; private set; }
+        public List<AnalyticValueDriver> ValueDrivers { get;  set; }
         [DataMember]
-        public List<AnalyticPriceListGroup> PriceListGroups { get; private set; }
+        public List<AnalyticPriceListGroup> PriceListGroups { get; set; }
         [DataMember]
         public List<FilterGroup> FilterGroups { get; set; }
     }
 
-    [BsonNoId]
+    //[BsonNoId]
     [DataContract]
     public class AnalyticIdentity
     {
@@ -153,30 +153,30 @@ namespace APLPX.Client.Entity
         [DataMember]
         public string Notes { get; set; }
         [DataMember]
-        public DateTime Refreshed { get; private set; }
+        public DateTime Refreshed { get;  set; }
         [DataMember]
-        public string RefreshedText { get; private set; }
+        public string RefreshedText { get;  set; }
         [DataMember]
-        public DateTime Created { get; private set; }
+        public DateTime Created { get;  set; }
         [DataMember]
-        public string CreatedText { get; private set; }
+        public string CreatedText { get;  set; }
         [DataMember]
-        public DateTime Edited { get; private set; }
+        public DateTime Edited { get;  set; }
         [DataMember]
-        public string EditedText { get; private set; }
+        public string EditedText { get;  set; }
         [DataMember]
-        public string Author { get; private set; }
+        public string Author { get;  set; }
         [DataMember]
-        public string Editor { get; private set; }
+        public string Editor { get;  set; }
         [DataMember]
-        public string Owner { get; private set; }
+        public string Owner { get;  set; }
         [DataMember]
         public bool Shared { get; set; }
         [DataMember]
         public bool Active { get; set; }
     }
 
-    [BsonNoId]
+    //[BsonNoId]
     [DataContract]
     public class AnalyticValueDriver : ValueDriver
     {
@@ -223,7 +223,7 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public List<AnalyticValueDriverMode> Modes { get; private set; }
+        public List<AnalyticValueDriverMode> Modes { get; set; }
         [DataMember]
         public List<AnalyticResultValueDriverGroup> Results { get; private set; }
 
@@ -243,7 +243,7 @@ namespace APLPX.Client.Entity
         #endregion
     }
 
-    [BsonNoId]
+    //[BsonNoId]
     [DataContract]
     public class AnalyticValueDriverMode : ValueDriverMode
     {
@@ -271,10 +271,10 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public List<ValueDriverGroup> Groups { get; private set; }
+        public List<ValueDriverGroup> Groups { get; set; }
     }
 
-    [BsonNoId]
+    //[BsonNoId]
     [DataContract]
     public class AnalyticResultValueDriverGroup : ValueDriverGroup
     {
@@ -308,7 +308,7 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    [BsonNoId]
+    //[BsonNoId]
     public class AnalyticPriceListGroup : PriceListGroup
     {
         #region Initialize...

@@ -1,5 +1,5 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿//using MongoDB.Bson;
+//using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -70,27 +70,27 @@ namespace APLPX.Client.Entity
         [DataMember]
         public string Notes { get; set; }
         [DataMember]
-        public DateTime Refreshed { get; private set; }
+        public DateTime Refreshed { get;  set; }
         [DataMember]
-        public string RefreshedText { get; private set; }
+        public string RefreshedText { get;  set; }
         [DataMember]
-        public DateTime Created { get; private set; }
+        public DateTime Created { get;  set; }
         [DataMember]
-        public string CreatedText { get; private set; }
+        public string CreatedText { get;  set; }
         [DataMember]
-        public DateTime Edited { get; private set; }
+        public DateTime Edited { get;  set; }
         [DataMember]
-        public string EditedText { get; private set; }
+        public string EditedText { get;  set; }
         [DataMember]
-        public string Author { get; private set; }
+        public string Author { get;  set; }
         [DataMember]
-        public string Editor { get; private set; }
+        public string Editor { get;  set; }
         [DataMember]
-        public string Owner { get; private set; }
+        public string Owner { get;  set; }
         [DataMember]
         public bool Shared { get; set; }
         [DataMember]
-        public bool Active { get; private set; }
+        public bool Active { get;  set; }
     }
 
     [DataContract]
@@ -129,24 +129,24 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Key { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
         public bool IsSelected { get; set; }
         [DataMember]
-        public bool HasKeyPriceListRule { get; private set; }
+        public bool HasKeyPriceListRule { get;  set; }
         [DataMember]
-        public bool HasLinkedPriceListRule { get; private set; }
+        public bool HasLinkedPriceListRule { get;  set; }
         [DataMember]
-        public int KeyPriceListGroupKey { get; private set; }
+        public int KeyPriceListGroupKey { get;  set; }
         [DataMember]
-        public int LinkedPriceListGroupKey { get; private set; }
+        public int LinkedPriceListGroupKey { get;  set; }
         [DataMember]
-        [BsonElement("sort")]
-        public short Sort { get; private set; }
+        //[BsonElement("sort")]
+        public short Sort { get;  set; }
     }
 
     [DataContract]
@@ -188,16 +188,16 @@ namespace APLPX.Client.Entity
         [DataMember]
         public int PriceListId { get; set; }
         [DataMember]
-        [BsonElement("RangeLower")]
+        //[BsonElement("RangeLower")]
         public decimal DollarRangeLower { get; set; }
         [DataMember]
-        [BsonElement("RangeUpper")]
+        //[BsonElement("RangeUpper")]
         public decimal DollarRangeUpper { get; set; }
-        [BsonElement("RoundingRule")]
+        //[BsonElement("RoundingRule")]
         [DataMember]
         public List<PriceRoundingRule> RoundingRules { get; set; }
         [DataMember]
-        public List<SQLEnumeration> RoundingTypes { get; private set; }
+        public List<SQLEnumeration> RoundingTypes { get; set; }
     }
 
     [DataContract]
@@ -235,9 +235,9 @@ namespace APLPX.Client.Entity
         [DataMember]
         public int PriceListId { get; set; }
         [DataMember]
-        [BsonRepresentation(BsonType.String)]
+        //[BsonRepresentation(BsonType.String)]
         public decimal PercentChange { get; set; }
-        [BsonElement("RoundingRule")]
+        //[BsonElement("RoundingRule")]
         [DataMember]
         public List<PriceRoundingRule> RoundingRules { get; set; }
         [DataMember]
@@ -340,7 +340,7 @@ namespace APLPX.Client.Entity
         public List<PriceRoundingRule> Rules { get; private set; }
     }
 
-    [BsonNoId][BsonIgnoreExtraElements]
+    //[BsonNoId][BsonIgnoreExtraElements]
     [DataContract]
     public class PricingValueDriverGroup : ValueDriverGroup
     {
@@ -362,9 +362,9 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int SkuCount { get; private set; }
+        public int SkuCount { get; set; }
         [DataMember]
-        public string SalesValue { get; private set; }
+        public string SalesValue { get;  set; }
     }
 
     [DataContract]
@@ -444,8 +444,8 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class PricingResultDriverGroup : ValueDriverGroup
     {
         #region initialize...
@@ -472,14 +472,14 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public string Actual { get; private set; }
+        public string Actual { get;  set; }
         [DataMember]
-        public int SkuCount { get; private set; }
+        public int SkuCount { get;  set; }
         [DataMember]
-        public string SalesValue { get; private set; }
+        public string SalesValue { get;  set; }
     }
 }

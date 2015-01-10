@@ -8,8 +8,6 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
 {
     public class PricingEverydayPriceListListViewModel : ViewModelBase
     {
-        private PricingEveryday _priceRoutine;
-
 
         #region Constructor and Initialization
 
@@ -20,7 +18,7 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
                 throw new ArgumentNullException("priceRoutine");
             }
 
-            PriceRoutine = priceRoutine;           
+            PriceRoutine = priceRoutine;
             PriceRoutine.UpdatePriceListGroups();
         }
 
@@ -28,9 +26,10 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
 
         public PricingEveryday PriceRoutine
         {
-            get { return _priceRoutine; }
-            private set { _priceRoutine = value; }
-        } 
+            get;
+            private set;
+        }
+
 
         /// <summary>
         /// Gets a collection containing the current price routine.

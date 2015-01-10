@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using ReactiveUI;
+
 namespace APLPX.UI.WPF.DisplayEntities
 {
     public class PricingEverydayKeyValueDriverGroup : DisplayEntityBase
@@ -14,6 +13,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private List<PriceMarkupRule> _markupRules;
         private List<PriceOptimizationRule> _optimizationRules;
 
+        private bool _areOptimizationsApplied;
 
         #endregion
 
@@ -45,6 +45,15 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _optimizationRules; }
             set { this.RaiseAndSetIfChanged(ref _optimizationRules, value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether optimizations have bee applied to this group.
+        /// </summary>
+        public bool AreOptimizationsApplied
+        {
+            get { return _areOptimizationsApplied; }
+            set { this.RaiseAndSetIfChanged(ref _areOptimizationsApplied, value); }
         }
 
         #endregion

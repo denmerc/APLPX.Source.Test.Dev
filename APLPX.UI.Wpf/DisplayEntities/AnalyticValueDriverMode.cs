@@ -10,6 +10,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private int _groupCount;
         private ObservableCollection<ValueDriverGroup> _groups;
+        private bool _areResultsAvailable;
 
         #endregion
 
@@ -79,6 +80,17 @@ namespace APLPX.UI.WPF.DisplayEntities
                     RecalculateEditableGroups();
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether calculated results for this mode's value driver groups are available.
+        /// This depends on whether any of the groups has changes since the last calculation (Run).
+        /// Bound views can use this property to show/hide results, etc.
+        /// </summary>
+        public bool AreResultsAvailable
+        {
+            get { return _areResultsAvailable; }
+            set { this.RaiseAndSetIfChanged(ref _areResultsAvailable, value); }
         }
 
         #endregion

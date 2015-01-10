@@ -3,18 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
-            <!--  TODO: move this to common styles. Intended for use with titles of list boxes, data grids. etc.  -->
-            <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
-                <Setter Property="TextAlignment" Value="Center" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="Margin" Value="5" />
-            </Style>
+
+            <CollectionViewSource x:Key="cvsResults" Source="{Binding PriceRoutine.Results}">
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="Id" />
+                </CollectionViewSource.GroupDescriptions>
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="Id" />
+
+
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
 
             <ResourceDictionary.MergedDictionaries>
                 <!--  for design-time support, already in app.xml  -->
@@ -94,42 +99,232 @@
             BorderThickness="1"
             CornerRadius="5">
 
-        <Grid Width="1300">
+
+        <Grid Width="1050" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="750">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Content="Results Table" Grid.Row="0" HorizontalAlignment="Center" />
-            <Grid Width="1300" Grid.Row="1" ShowGridLines="True">
+            <Label Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   Content="Results Table" />
+            <Grid Grid.Row="1"
+                  Width="1050"
+                  ShowGridLines="True">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal">
-                    <Border x:Name="Label1" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch">
-                        <TextBlock Text="Current/Existing"/>
+                    <Border x:Name="Label1"
+                            HorizontalAlignment="Stretch"
+                            BorderBrush="White"
+                            BorderThickness="1">
+                        <TextBlock Text="Current/Existing" />
                     </Border>
-                    <Border x:Name="Label2" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch">
-                        <TextBlock Text="Optimization Results"/>
+                    <Border x:Name="Label2"
+                            HorizontalAlignment="Stretch"
+                            BorderBrush="White"
+                            BorderThickness="1">
+                        <TextBlock Text="Optimization Results" />
                     </Border>
                 </StackPanel>
 
 
-                <DataGrid Grid.Row="1" AutoGenerateColumns="False" Name="dg" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="True" LayoutUpdated="LayoutUpdated" Width="1300">
+                <DataGrid Name="dg"
+                          Grid.Row="1"
+                          Width="1050"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False"
+                          IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding Source={StaticResource cvsResults}}"
+                          LayoutUpdated="LayoutUpdated"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="White"
+                          ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="750">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="SKU #" Width="Auto" x:Name="skuColumn" />
-                        <DataGridTextColumn Header="Description" Width="Auto" x:Name="descriptionColumn"/>
-                        <DataGridTextColumn Header="Price Lists" Width="Auto" x:Name="priceListColumn"/>
-                        <DataGridTextColumn Header="Current Price $" Width="Auto" x:Name="currentPriceColumn"/>
-                        <DataGridTextColumn Header="Current Mark-Up ($/%)" Width="Auto" x:Name="currentMarkupColumn"/>
-                        <DataGridTextColumn Header="Total Value Driver Change $" Width="Auto" x:Name="totalValueDriverColumn"/>
-                        <DataGridTextColumn Header="Final Price $" Width="Auto" x:Name="finalPriceColumn"/>
-                        <DataGridTextColumn Header="New Mark-Up ($/%)" Width="Auto" x:Name="newMarkupColumn"/>
-                        <DataGridTextColumn Header="Edit Type" Width="Auto" x:Name="editTypeColumn"/>
-                        <DataGridTextColumn Header="Warning" Width="Auto" x:Name="warningColumn"/>
+                        <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SkuName}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn  Header="Description" x:Name="descriptionColumn" MaxWidth="425">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SkuTitle}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Price Lists" x:Name="priceListsColumn" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Current Price $" x:Name="currentPriceColumn" MaxWidth="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CurrentPrice}"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Current Mark-Up %" x:Name="currentMarkupColumn" MaxWidth="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CurrentMarkupPercent}"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Total Price Change $" x:Name="totalPriceChangeColumn" MaxWidth="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding PriceChange}"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Final Price $" x:Name="finalPriceColumn" MaxWidth="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="???"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="New Mark-Up %" x:Name="newMarkupColumn" MaxWidth="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding NewMarkupPercent}"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Edit Type" x:Name="editTypeColumn" MaxWidth="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding PriceEdit.Type}"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Warning" x:Name="warningColumn" MaxWidth="70">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding PriceWarning.Type}"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
+
+                    <!-- <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding PriceLists}" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DataContext.SkuName, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Description" x:Name="descriptionColumn">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DataContext.SkuTitle, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding Name}"
+                                                        Header="Price List"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding CurrentPrice}"
+                                                        Header="Current Price $" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding CurrentMarkupPercent}"
+                                                        Header="Current Mark-Up %" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding PriceChange}"
+                                                        Header="Total Price Change $" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        
+                                                        Header="Final Price $" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                      
+                                                        Header="Mark-Up Change %"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding NewMarkupPercent}"
+                                                        Header="New Mark-Up %" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding PriceEdit.Type}"
+                                                        Header="Edit Type" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding PriceWarning.Type}"
+                                                        Header="Warning"
+                                                        IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>      -->
+
                 </DataGrid>
             </Grid>
         </Grid>

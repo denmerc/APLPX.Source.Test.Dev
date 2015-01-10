@@ -8,6 +8,12 @@
              xmlns:vc="clr-namespace:APLPX.UI.WPF.Views.Common"
              mc:Ignorable="d">
 
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}" />
+        </EventTrigger>
+    </UserControl.Triggers>
+
     <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -115,7 +121,9 @@
                      SelectedItem="{Binding Path=SelectedTemplate}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Path=Name}" />
+                        <TextBlock x:Name="txtName"
+                                   Text="{Binding Path=Name}"
+                                   ToolTip="{Binding Path=Description}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

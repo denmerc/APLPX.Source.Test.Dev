@@ -221,18 +221,15 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.InfluenceValueChange = dto.InfluenceValueChange;
             displayEntity.PriceChange = dto.PriceChange;
 
-            displayEntity.PriceEdit = dto.PriceEdit;
-            //if (dto.PriceEdit != null)
-            //{
-            //    displayEntity.PriceEdit = dto.PriceEdit.ToDisplayEntity();
-            //}
+            if (dto.PriceEdit != null)
+            {
+                displayEntity.PriceEdit = dto.PriceEdit.ToDisplayEntity();
+            }
 
-
-            displayEntity.PriceWarning = dto.PriceWarning;
-            //if (dto.PriceWarning != null)
-            //{
-            //    displayEntity.PriceWarning = dto.PriceWarning.ToDisplayEntity();
-            //}
+            if (dto.PriceWarning != null)
+            {
+                displayEntity.PriceWarning = dto.PriceWarning.ToDisplayEntity();
+            }
 
             displayEntity.IsKey = dto.IsKey;
             displayEntity.Id = dto.Id;
@@ -263,8 +260,8 @@ namespace APLPX.UI.WPF.Mappers
                                         displayEntity.KeyValueChange,
                                         displayEntity.InfluenceValueChange,
                                         displayEntity.PriceChange,
-                                        displayEntity.PriceEdit,
-                                        displayEntity.PriceWarning);
+                                        displayEntity.PriceEdit.ToDto(),
+                                        displayEntity.PriceWarning.ToDto());
             return dto;
         }
 

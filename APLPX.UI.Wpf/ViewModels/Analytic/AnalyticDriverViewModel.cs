@@ -63,15 +63,6 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether calculated results are available for the selected value driver.
-        /// The bound view can use this property to show/hide results, etc.
-        /// </summary>
-        public bool AreResultsAvailable
-        {
-            get { return _areResultsAvailable; }
-            private set { this.RaiseAndSetIfChanged(ref _areResultsAvailable, value); }
-        }
 
         public bool IsValueDriverSelected
         {
@@ -111,7 +102,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                 {
                     //TODO: for testing only. In production, will call server method.
                     mode.MockAutoCalculateDriverGroups();
-                    AreResultsAvailable = true;
+                    mode.AreResultsAvailable = true;                    
                 }
             }
             return parameter;

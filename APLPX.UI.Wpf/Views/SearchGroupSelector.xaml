@@ -19,6 +19,12 @@
         <dd:SearchItemDropTarget x:Key="searchItemDropTarget" />
     </UserControl.Resources>
 
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}" />
+        </EventTrigger>
+    </UserControl.Triggers>
+
     <Grid x:Name="layoutRoot" Margin="20,20,20,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -63,23 +69,6 @@
                    Visibility="{Binding Path=IsSearchFilterSelected,
                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-        <Border Grid.Row="0"
-                Grid.RowSpan="2"
-                Grid.Column="2"
-                Width="350"
-                Style="{DynamicResource SearchControlStyle}"
-                Visibility="{Binding Path=IsSearchFilterSelected,
-                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-        <Label x:Name="txtFilteredTitle"
-               Grid.Row="0"
-               Grid.Column="2"
-               Margin="5,10,0,5"
-               Content="{Binding Path=SelectedFeature.Classification}"
-               ContentStringFormat="Select {0}"
-               Style="{StaticResource SearchControlTitleLabelStyle}"
-               Visibility="{Binding Path=IsSearchFilterSelected,
-                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
         <ListBox x:Name="lstSearchGroups"
                  Grid.Row="1"
                  Grid.Column="0"
@@ -87,11 +76,13 @@
                  ItemsSource="{Binding Source={StaticResource cvsSearchGroups}}"
                  Padding="5,0,5,25"
                  SelectedItem="{Binding Path=SelectedFeature.SelectedSearchGroup}">
+
             <ListBox.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="10" />
                 </Style>
             </ListBox.Resources>
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -103,7 +94,7 @@
                         <StackPanel x:Name="listItemPanel"
                                     Grid.Row="0"
                                     Orientation="Horizontal"
-                                    ToolTip="{Binding Path=SearchKey}">
+                                    ToolTip="{Binding Path=Name}">
                             <Label x:Name="lblValue"
                                    Margin="4,2"
                                    Foreground="{DynamicResource SearchControlListBoxTitleTextColor}">
@@ -202,6 +193,25 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
+        <Border Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Width="350"
+                Style="{DynamicResource SearchControlStyle}"
+                Visibility="{Binding Path=IsSearchFilterSelected,
+                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <Label x:Name="txtFilteredTitle"
+               Grid.Row="0"
+               Grid.Column="2"
+               Margin="5,10,0,5"
+               Content="{Binding Path=SelectedFeature.Classification}"
+               ContentStringFormat="Select {0}"
+               Style="{StaticResource SearchControlTitleLabelStyle}"
+               Visibility="{Binding Path=IsSearchFilterSelected,
+                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+
         <ListBox x:Name="lstFiltered"
                  Grid.Row="1"
                  Grid.Column="2"
@@ -221,7 +231,7 @@
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Label Margin="4,2" ToolTip="{Binding Path=SearchKey}">
+                    <Label Margin="4,2" ToolTip="{Binding Path=Identity.Name}">
                         <Label.Content>
                             <AccessText Foreground="{DynamicResource SearchControlListBoxItemTextColor}"
                                         Text="{Binding Path=Identity.Name}"

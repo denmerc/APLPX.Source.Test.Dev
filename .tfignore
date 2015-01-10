@@ -65,3 +65,5 @@
 \APLPX.Server.Services.Mock\Domain\Entity.Session.cs
 \APLPX.Server.Services.Mock\Domain\Entity.User.cs
 \APLPX.Server.Services.Mock\Properties\AssemblyInfo.cs
+\packages
+\APLPX.Server.Services.Host.Web\Properties\PublishProfiles

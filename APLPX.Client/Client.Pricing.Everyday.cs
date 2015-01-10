@@ -53,5 +53,11 @@ namespace APLPX.Client
 
             return Channel.LoadResults(session);
         }
+
+        public Session<Client.Entity.PricingEveryday> LoadPricingEveryday(Session<Client.Entity.PricingEveryday> session)
+        {
+
+            return Channel.LoadPricingEveryday(session);
+        }
     }
 }

@@ -94,6 +94,10 @@
       <Project>{b365c24a-4504-47dd-9305-48c2ae1657f3}</Project>
       <Name>APLPX.Client.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\APLPX.Client.Mock\APLPX.Client.Mock.csproj">
+      <Project>{5cc39bb0-2a4c-4eca-8a8a-3c845b34d504}</Project>
+      <Name>APLPX.Client.Mock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\APLPX.Core\APLPX.Core.csproj">
       <Project>{5216effb-bfe7-4f59-9c07-ae1b4a14139f}</Project>
       <Name>APLPX.Core</Name>

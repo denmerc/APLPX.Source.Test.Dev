@@ -25,5 +25,7 @@ namespace APLPX.Client.Contracts
         Session<Client.Entity.PricingEveryday> SavePriceLists(Session<Client.Entity.PricingEveryday> session);
         [OperationContract]
         Session<Client.Entity.PricingEveryday> LoadResults(Session<Client.Entity.PricingEveryday> session);
+        [OperationContract]
+        Session<Client.Entity.PricingEveryday> LoadPricingEveryday(Session<Client.Entity.PricingEveryday> session);
     }
 }

@@ -87,6 +87,34 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
+        /// Gets a value indicating whether this mode has a key price list.
+        /// NOTE: this is different from HasKeyPriceListRule. 
+        /// For example, A mode can have a key price list but no key price list rule.
+        /// In that case, HasKeyPriceList=true and HasKeyPriceListRule=false.
+        public bool HasKeyPriceList
+        {
+            get
+            {
+                bool result = (KeyPriceListGroupKey > 0);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this mode has a linked price list.
+        /// NOTE: this is different from HasLinkedPriceListRule. 
+        /// For example, A mode can have a linked price list but no linked price list rule.
+        /// In that case, HasLinkedPriceList=true and HasLinkedPriceListRule=false.
+        /// </summary>
+        public bool HasLinkedPriceList
+        {
+            get
+            {
+                bool result = (LinkedPriceListGroupKey > 0);
+                return result;
+            }
+        }
+
         #endregion
 
 

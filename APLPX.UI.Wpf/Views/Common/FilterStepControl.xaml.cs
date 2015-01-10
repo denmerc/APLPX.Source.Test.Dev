@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 
 
-namespace APLPX.UI.WPF
+namespace APLPX.UI.WPF.Views.Common
 {
     /// <summary>
     /// Interaction logic for FilterStepControl.xaml

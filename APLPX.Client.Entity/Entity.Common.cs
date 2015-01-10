@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿//using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -6,8 +6,8 @@ using System.Runtime.Serialization;
 namespace APLPX.Client.Entity
 {
     [DataContract]
-    [BsonNoId]    
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]    
+    //[BsonIgnoreExtraElements]
     public class FilterGroup
     {
         #region Initialize...
@@ -27,20 +27,20 @@ namespace APLPX.Client.Entity
             Filters = filters;
         }
         #endregion
-        [BsonId]
-        public MongoDB.Bson.ObjectId _id { get; set; }
+        //[BsonId]
+        //public MongoDB.Bson.ObjectId _id { get; set; }
         [DataMember]
-        [BsonElement("TypeName")]
-        public string Name { get; private set; }
+        //[BsonElement("TypeName")]
+        public string Name { get; set; }
         [DataMember]
-        public List<Filter> Filters { get; private set; }
+        public List<Filter> Filters { get; set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
     }
 
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class Filter
     {
         #region Initialize...
@@ -72,22 +72,22 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public int Key { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Code { get; private set; }
+        public string Code { get;  set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
         public bool IsSelected { get; set; }
     }
 
     [DataContract]
-    [BsonIgnoreExtraElements]
-    [BsonNoId]
+    //[BsonIgnoreExtraElements]
+    //[BsonNoId]
     public class ValueDriver
     {
         #region Initialize...
@@ -119,21 +119,21 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public int Key { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get; set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get; set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get; set; }
         [DataMember]
         public bool IsSelected { get; set; }
     }
 
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     [DataContract]
     public class ValueDriverMode
     {
@@ -162,19 +162,19 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Key { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
         public bool IsSelected { get; set; }
     }
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class ValueDriverGroup
     {
         #region Initialize...
@@ -215,8 +215,8 @@ namespace APLPX.Client.Entity
         }
         #endregion
         [DataMember]
-        [BsonElement("Group")]
-        public int Id { get; private set; }
+        //[BsonElement("Group")]
+        public int Id { get;  set; }
         [DataMember]
         public short Value { get; set; }
         [DataMember]
@@ -228,8 +228,8 @@ namespace APLPX.Client.Entity
     }
 
 
-    [BsonIgnoreExtraElements]
-    [BsonNoId]
+    //[BsonIgnoreExtraElements]
+    //[BsonNoId]
     [DataContract]
     public class PriceListGroup
     {
@@ -249,18 +249,18 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Key { get; private set; }
+        public int Key { get; set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get; set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get; set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get; set; }
     }
 
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class PriceList
     {
         #region Initialize...
@@ -292,24 +292,24 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public int Key { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Code { get; private set; }
+        public string Code { get;  set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Title { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
         public bool IsSelected { get; set; }
     }
 
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class PriceMarkupRule
     {
         #region initialize...
@@ -342,7 +342,7 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
         public decimal DollarRangeLower { get; set; }
         [DataMember]
@@ -354,8 +354,8 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class PriceOptimizationRule
     {
         #region initialize...
@@ -384,7 +384,7 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public int Id { get; set; }
         [DataMember]
         public decimal DollarRangeLower { get; set; }
         [DataMember]
@@ -394,8 +394,8 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    [BsonNoId]
-    [BsonIgnoreExtraElements]
+    //[BsonNoId]
+    //[BsonIgnoreExtraElements]
     public class PriceRoundingRule
     {
         #region initialize...
@@ -428,7 +428,7 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
         public int Type { get; set; }
         [DataMember]
@@ -458,13 +458,13 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Value { get; private set; }
+        public int Value { get;  set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Description { get; private set; }
+        public string Description { get;  set; }
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
     }
 }
 

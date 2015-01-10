@@ -16,8 +16,8 @@ namespace APLPX.UI.WPF.DisplayEntities
         private decimal _keyValueChange;
         private decimal _influenceValueChange;
         private decimal _priceChange;
-        private DTO.PricingResultsEditType _priceEdit;
-        private DTO.PricingResultsWarningType _priceWarning;
+        private PricingResultEdit _priceEdit;
+        private PricingResultWarning _priceWarning;
 
         #endregion
 
@@ -25,8 +25,8 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public PricingEverydayResultPriceList()
         {
-            //PriceEdit = new PricingResultEdit();
-            //PriceWarning = new PricingResultWarning();
+            PriceEdit = new PricingResultEdit();
+            PriceWarning = new PricingResultWarning();
         }
 
         #endregion
@@ -81,13 +81,13 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _priceChange, value); }
         }
 
-        public DTO.PricingResultsEditType PriceEdit
+        public PricingResultEdit PriceEdit
         {
             get { return _priceEdit; }
             set { this.RaiseAndSetIfChanged(ref _priceEdit, value); }
         }
 
-        public DTO.PricingResultsWarningType PriceWarning
+        public PricingResultWarning PriceWarning
         {
             get { return _priceWarning; }
             set { this.RaiseAndSetIfChanged(ref _priceWarning, value); }

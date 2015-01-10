@@ -18,9 +18,9 @@ namespace APLPX.UI.WPF
     /// <summary>
     /// Interaction logic for PricingEverydayResultsPriceDeltaControl.xaml
     /// </summary>
-    public partial class PricingEverydayResultsPriceDeltaControl : UserControl
+    public partial class PricingEverydayResultsPriceChangeControl : UserControl
     {
-        public PricingEverydayResultsPriceDeltaControl()
+        public PricingEverydayResultsPriceChangeControl()
         {
             InitializeComponent();
         }

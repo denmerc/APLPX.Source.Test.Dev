@@ -1,28 +1,87 @@
-﻿<UserControl x:Class="APLPX.UI.WPF.AnalyticPriceListsControl"
+﻿<UserControl x:Class="APLPX.UI.WPF.Views.Analytic.AnalyticPriceListsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg"
-                        Stretch="UniformToFill"/>
-        </Grid.Background>
-        <TextBlock Text="Price Lists"></TextBlock>
-        <Grid  Margin="5,191,10,-191" VerticalAlignment="Top" Width="200" HorizontalAlignment="Left">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="7*"/>
-                <RowDefinition Height="8*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="PreviousButton" Content="Previous"  Grid.Column="0" Width="100" Height="30"  VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2"></Button>
-            <Button Content="Next"  Width="100" Height="30"  VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="105,0,0,0" Grid.RowSpan="2"/>
-        </Grid>
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"           
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="cvsPriceListGroups"
+                              IsLiveSortingRequested="True"
+                              Source="{Binding Path=Entity.PriceListGroups}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded" >
+            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="Price List Groups" />
+
+        <ListBox x:Name="lstPriceListGroups"
+                 Grid.Row="1"
+                 Grid.Column="0"
+                 ItemsSource="{Binding Path=Entity.PriceListGroups}"
+                 SelectedItem="{Binding Path=Entity.SelectedPriceListGroup}">
+            <!--  this does not retain selection:  -->
+            <!--  ItemsSource="{Binding Source={StaticResource cvsPriceListGroups}}"  -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Label Width="200"
+                           Content="{Binding Path=Name}"
+                           FontSize="16"
+                           Foreground="{StaticResource Foreground}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="1"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="{Binding ElementName=dgPriceLists,
+                                  Path=Items.Count,
+                                  StringFormat={}Price Lists ({0})}" />
+
+        <DataGrid x:Name="dgPriceLists"
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  Margin="10,5"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  ItemsSource="{Binding ElementName=lstPriceListGroups,
+                                        Path=SelectedItem.PriceLists}">
+
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected" />
+
+                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
+
+                <DataGridTextColumn Binding="{Binding Path=Code}" Header="Code" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
-    
+
+
 </UserControl>

@@ -10,14 +10,7 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
-            <!--  TODO: move this to common styles. Intended for use with titles of list boxes, data grids. etc.  -->
-            <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
-                <Setter Property="TextAlignment" Value="Center" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="Margin" Value="5" />
-            </Style>
-
+           
             <ResourceDictionary.MergedDictionaries>
                 <!--  for design-time support, already in app.xml  -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
@@ -63,13 +56,13 @@
                  SelectedIndex="0"
                  SelectedItem="{Binding Path=Entity.SelectedFilterGroup}"
                  SelectionChanged="FilterGroupsListBox_SelectionChanged">
-
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Width="200"
                            Content="{Binding Path=Name}"
                            FontSize="16"
-                           Foreground="{StaticResource Foreground}" />
+                           Foreground="{StaticResource Foreground}" 
+                           IsEnabled="{Binding Path=IsEnabled}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

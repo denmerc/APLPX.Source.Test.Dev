@@ -14,9 +14,12 @@ namespace APLPX.UI.WPF.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        public LoginViewModel(IUserService userService)
+        public LoginViewModel(IUserService userService, IAnalyticService analyticService, IPricingEverydayService pricingService)
         {
             UserService = userService;
+            PricingService = pricingService;
+            AnalyticService = analyticService;
+
             //var sharedKey = UserService.Initialize();
 
 
@@ -37,13 +40,29 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     StatusMessage = "Authenticating...";
 
-                    Session = await Authenticate(UserName, Password);
+                    //var session = await Authenticate(UserName, Password);
                     
-                    if(Session.SessionOk)
+
+                    var session = new Session<NullT>
+                    {
+                        SessionOk = true,
+                        User = new User(
+                                                2,
+                                                "UserKey",
+                                                new UserRole(3, "Administrator", "Role description"),
+                                                new UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
+                                                new UserCredential("", "", null),
+                                                new List<SQLEnumeration>()
+
+                                           )
+                    };
+
+
+                    if(session.SessionOk)
                     {
                         StatusMessage = "Loading modules..."; 
                         //todo: pass IAnalyticService via constructor in the case that user succesfully auths
-                        var mvm = new MainViewModel(Session, new APLPX.UI.WPF.Data.MockAnalyticService(), userService);
+                        var mvm = new MainViewModel(session, analyticService, userService, pricingService);
                         var mainWindow = new MainWindow();
                         mainWindow.DataContext = mvm;
                         App.Current.Windows[0].Close();
@@ -59,6 +78,8 @@ namespace APLPX.UI.WPF.ViewModels
         }
 
         public IUserService UserService { get; set; }
+        public IPricingEverydayService PricingService { get; set; }
+        public IAnalyticService AnalyticService { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         private string _statusMessage;

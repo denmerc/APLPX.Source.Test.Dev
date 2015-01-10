@@ -142,5 +142,10 @@ namespace APLPX.UI.WPF
             // When they change the selection, just set the theme to the selected value.
             manager.SetTheme(themePicker.SelectedValue.ToString());
         }
+
+        private void launch_Webpage(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.advancedpricinglogic.com/");
+        }
     }
 }

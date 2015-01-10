@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+
 
 using APLPX.UI.WPF.DisplayEntities;
 using ReactiveUI;
@@ -20,7 +18,24 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
                 throw new ArgumentNullException("priceRoutine");
             }
 
-            PriceRoutine = priceRoutine; 
+            PriceRoutine = priceRoutine;
+            InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
+            var canSetAsKey = this.WhenAnyValue(vm => vm.PriceRoutine.SelectedValueDriverWrapper, (wrapper) => SetKeyDriverCanExecute(wrapper));
+            SetKeyDriverCommand = ReactiveCommand.Create(canSetAsKey);
+
+            this.WhenAnyObservable(vm => vm.SetKeyDriverCommand).Subscribe(item => SetKeyDriverExecuted(item));
+        }
+
+        #region Properties
+
+        public ReactiveCommand<object> SetKeyDriverCommand
+        {
+            get;
+            private set;
         }
 
         public PricingEveryday PriceRoutine
@@ -28,5 +43,31 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
             get { return _priceRoutine; }
             private set { _priceRoutine = value; }
         }
+
+        #endregion
+
+        #region Command Handlers
+
+        private bool SetKeyDriverCanExecute(PricingEverydayValueDriverWrapper wrapper)
+        {
+            bool result = (wrapper != null && 
+                           wrapper.BaseDriver != null &&
+                          !wrapper.BaseDriver.IsKey);
+
+            return result;
+        }
+
+        private object SetKeyDriverExecuted(object parameter)
+        {
+            var wrapper = parameter as PricingEverydayValueDriverWrapper;
+            if (wrapper != null)
+            {
+                PriceRoutine.SetKeyValueDriver(wrapper.BaseDriver);
+            }
+            return wrapper;
+        }
+
+        #endregion
+
     }
 }

@@ -18,7 +18,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _name;
         private string _title;
         private short _sort;        
-        private bool _isSelected;  
+        private bool _isSelected;
+
+        private bool _isDisplayOnly;
 
         #endregion
 
@@ -68,6 +70,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _isSelected, value); }
         }
 
+        public bool IsDisplayOnly
+        {
+            get { return _isDisplayOnly; }
+            set { this.RaiseAndSetIfChanged(ref _isDisplayOnly, value); }
+        }
         #endregion
 
         #region Overrides

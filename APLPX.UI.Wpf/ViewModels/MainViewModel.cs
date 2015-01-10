@@ -26,6 +26,8 @@ namespace APLPX.UI.WPF.ViewModels
 
         private readonly IUserService _userService;
         private readonly IAnalyticService _analyticService;
+        private readonly IPricingEverydayService _pricingEverydayService;
+
 
         private List<Module> _modules;
         private ViewModelBase _selectedFeatureViewModel;
@@ -57,18 +59,18 @@ namespace APLPX.UI.WPF.ViewModels
         /// <param name="session">An autheticated session for the current user.</param>
         /// <param name="analyticService"An IAnalyticService provider.></param>
         /// <param name="userService">An IUserService provider.</param>
-        public MainViewModel(DTO.Session<DTO.NullT> session, IAnalyticService analyticService, IUserService userService)
+        public MainViewModel(DTO.Session<DTO.NullT> session, IAnalyticService analyticService, IUserService userService, IPricingEverydayService pricingService)
             : this()
         {
 
-            var loadFiltersCommand = ReactiveCommand.CreateAsyncTask<List<DTO.FilterGroup>>(async _ =>
-            await Task.Run(() =>
-            {
-                return new Data.MockUserService().FilterGroups;
-            })).ExecuteAsync().Subscribe(x =>
-            {
-                session.FilterGroups = x;
-            });
+            //var loadFiltersCommand = ReactiveCommand.CreateAsyncTask<List<DTO.FilterGroup>>(async _ =>
+            //await Task.Run(() =>
+            //{
+            //    return new Data.MockUserService().FilterGroups;
+            //})).ExecuteAsync().Subscribe(x =>
+            //{
+            //    session.FilterGroups = x;
+            //});
             if (session == null)
             {
                 throw new ArgumentNullException("session", "session cannot be null.");
@@ -93,10 +95,10 @@ namespace APLPX.UI.WPF.ViewModels
             CurrentUser = session.User.ToDisplayEntity();
 
             //TODO: COMMENT THIS OUT WHEN UserService is updated to work with new entity model:
-            //Modules = DisplayModuleGenerator.CreateSampleModules();
+            Modules = DisplayModuleGenerator.CreateSampleModules();
 
             //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
-           Modules = session.Modules.ToDisplayEntities();
+           //Modules = session.Modules.ToDisplayEntities();
             //Modules = userService.Authenticate(Session).Modules.ToDisplayEntities();
             SelectedModule = Modules.Where(x => x.TypeId == DTO.ModuleType.Planning).FirstOrDefault();
 
@@ -104,7 +106,8 @@ namespace APLPX.UI.WPF.ViewModels
             if (SelectedModule.Features.Count > 0)
             {
                 SelectedFeature = SelectedModule.Features[0];
-        }
+                SelectedFeatureViewModel = new HomeViewModel();
+            }
         }
 
         private void InitializeEventHandlers()
@@ -136,7 +139,7 @@ namespace APLPX.UI.WPF.ViewModels
             LogoutCommand.Subscribe(x =>
             {
                 var loginWindow = new LoginWindow();
-                loginWindow.DataContext = new LoginViewModel(_userService);
+                loginWindow.DataContext = new LoginViewModel(_userService, _analyticService, _pricingEverydayService);
                 loginWindow.ShowMaxRestoreButton = false;
                 loginWindow.ShowMinButton = false;
                 loginWindow.Show();
@@ -146,7 +149,7 @@ namespace APLPX.UI.WPF.ViewModels
                 await Task.Run(() =>
                 {
                     var id = new DTO.Analytic(SelectedEntity.Id);
-                    var a = ((APLPX.UI.WPF.Data.MockAnalyticService)_analyticService).LoadAnalytic(new DTO.Session<DTO.Analytic>() { Data = id });
+                    var a = _analyticService.LoadAnalytic(new DTO.Session<DTO.Analytic>() { Data = id });
                     a.Data.FilterGroups = Session.FilterGroups;
                     SelectedAnalytic = a.Data.ToDisplayEntity();
                 }));
@@ -155,7 +158,7 @@ namespace APLPX.UI.WPF.ViewModels
                 await Task.Run(() =>
                 {
                     var id = new DTO.PricingEveryday(SelectedEntity.Id);
-                    var a = ((APLPX.UI.WPF.Data.MockAnalyticService)_analyticService).LoadPricingEveryday(new DTO.Session<DTO.PricingEveryday>() { Data = id });
+                    var a = _pricingEverydayService.LoadPricingEveryday(new DTO.Session<DTO.PricingEveryday>() { Data = id });
                     a.Data.FilterGroups = Session.FilterGroups;
                     SelectedPricingEveryday = a.Data.ToDisplayEntity();
                 }));
@@ -205,7 +208,11 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Properties
 
-        public ReactiveCommand<object> LogoutCommand { get { return _logoutCommand; } set { this.RaiseAndSetIfChanged(ref _logoutCommand, value); } }
+        public ReactiveCommand<object> LogoutCommand
+        {
+            get { return _logoutCommand; }
+            private set { this.RaiseAndSetIfChanged(ref _logoutCommand, value); }
+        }
 
         /// <summary>
         /// Gets the list of all modules for the current user.
@@ -323,7 +330,7 @@ namespace APLPX.UI.WPF.ViewModels
         public bool IsFeatureSelectorAvailable
         {
             get { return _isFeatureSelectorAvailable; }
-            set { this.RaiseAndSetIfChanged(ref _isFeatureSelectorAvailable, value); }
+            private set { this.RaiseAndSetIfChanged(ref _isFeatureSelectorAvailable, value); }
         }
 
         /// <summary>
@@ -439,7 +446,7 @@ namespace APLPX.UI.WPF.ViewModels
             var action = sender as DisplayEntities.Action;
             if (action != null && SelectedEntity != null)
             {
-                HandleSelectedAction(action);
+                //HandleSelectedAction(action);
             }
 
             return null;
@@ -560,8 +567,8 @@ namespace APLPX.UI.WPF.ViewModels
                         AnalyticValueDriverMode mode = SelectedAnalytic.SelectedValueDriver.SelectedMode;
                         if (mode != null && mode.Groups.Count > 0)
                         {
-                            
-                            mode.MockAutoCalculateDriverGroups();                            
+                            mode.MockAutoCalculateDriverGroups();
+                            mode.AreResultsAvailable = true;
                         }
                     }
                     break;
@@ -584,21 +591,25 @@ namespace APLPX.UI.WPF.ViewModels
                 switch (SelectedFeature.TypeId)
                 {
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningHome:
-                        SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep; ;
+                        SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep; SelectedFeatureViewModel = new HomeViewModel();
                         break;
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningAnalytics:
 
                         if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
+
+                            
                             ////TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
-
                             //var displayAnalytics = base.Session.Analytics.ToDisplayEntities();
-                            var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
-                            var displayAnalytics = analyticDtos.ToDisplayEntities();
+                            //var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
+                            //SelectedFeature.SearchableEntities = iSearchables;
 
-                            var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
-                            SelectedFeature.SearchableEntities = iSearchables;
+                            //var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
+                            //var displayAnalytics = analyticDtos.ToDisplayEntities();
+                            
                             _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
+                            
+
                         }
                         else if (SelectedFeatureViewModel != null)
                         {
@@ -611,19 +622,17 @@ namespace APLPX.UI.WPF.ViewModels
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningPromotionPricing:
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningEverydayPricing:
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningKitPricing:
-                        if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
-                        {
-                            var pricing = base.Session.Pricing.ToDisplayEntities();
-                            SelectedFeature.SearchableEntities = pricing.Cast<ISearchableEntity>().ToList();
-                        }
-                        else if (SelectedFeatureViewModel != null)
-                        {
-                            SelectedFeatureViewModel.SelectedFeature = _featureCache[SelectedFeature.TypeId];
-                        }
+                        //if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
+                        //{
+                        //    var pricing = base.Session.Pricing.ToDisplayEntities();
+                        //    SelectedFeature.SearchableEntities = pricing.Cast<ISearchableEntity>().ToList();
+                        //    _featureCache.Add(SelectedFeature.TypeId, SelectedFeature); 
+                        //}
+                        //else if (SelectedFeatureViewModel != null)
+                        //{
+                        //    SelectedFeatureViewModel.SelectedFeature = _featureCache[SelectedFeature.TypeId];
+                        //}
                         SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep;
-
-
-
                         break;
 
 
@@ -708,7 +717,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Price Lists
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsPriceLists:
-                    result = new PriceListViewModel(SelectedAnalytic, SelectedAnalytic.PriceListGroups);
+                    result = new AnalyticPriceListViewModel(SelectedAnalytic, SelectedAnalytic.PriceListGroups);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:
@@ -729,8 +738,7 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingResults:
-                    var response = ((APLPX.UI.WPF.Data.MockAnalyticService)_analyticService).RunPricing(SelectedEntity.Id);
-                    result = new PricingResultsViewModel(response.Data);
+                    result = new PricingEverydayResultsViewModel(SelectedPricingEveryday);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingResults:

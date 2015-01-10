@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿//using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace APLPX.Client.Entity
 {
     [DataContract]
-    [MongoDB.Bson.Serialization.Attributes.BsonIgnoreExtraElements]
+    //[MongoDB.Bson.Serialization.Attributes.BsonIgnoreExtraElements]
     public class User
     {
         #region Initialize...
@@ -77,8 +77,8 @@ namespace APLPX.Client.Entity
         }
         #endregion
 
-        [MongoDB.Bson.Serialization.Attributes.BsonId]
-        public MongoDB.Bson.ObjectId _id { get; set; }
+        //[MongoDB.Bson.Serialization.Attributes.BsonId]
+        //public MongoDB.Bson.ObjectId _id { get; set; }
 
         [DataMember]
         public int Id { get; private set; }
@@ -170,7 +170,7 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    [BsonNoId]
+    //[BsonNoId]
     public class UserRole
     {
         #region Initialize...
@@ -192,11 +192,11 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public int Id { get; private set; }
+        public int Id { get; set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get; set; }
         [DataMember]
-        public string Description { get; private set; }
+        public string Description { get; set; }
     }
 
     [DataContract]

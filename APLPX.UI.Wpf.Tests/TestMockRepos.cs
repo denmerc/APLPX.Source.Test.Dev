@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using ENTITY = APLPX.Client.Entity;
-using SERVICES = APLPX.UI.WPF.Data; //APLPX.Mock.Services;
+using PROX = APLPX.Client.Mock;
 
 using System.Collections.Generic;
 
@@ -14,9 +14,9 @@ namespace APLPX.UI.Wpf.Tests
     [TestClass]
     public class MockTests
     {
-        private SERVICES.MockAnalyticService AnalyticService = new SERVICES.MockAnalyticService();
-
-        private SERVICES.MockUserService UserService = new SERVICES.MockUserService();
+        private PROX.MockAnalyticClient AnalyticClient = new PROX.MockAnalyticClient();
+        private PROX.MockUserClient UserClient = new PROX.MockUserClient();
+        private PROX.MockPricingEverydayClient PricingClient = new PROX.MockPricingEverydayClient();
         //private User User;
         //private Session<NullT> InitSession;
         //private Session<NullT> AuthSession;
@@ -77,22 +77,16 @@ namespace APLPX.UI.Wpf.Tests
         [TestMethod]
         public void LoadAnalyticList()
         {
-            var list = AnalyticService.LoadList(new ENTITY.Session<ENTITY.NullT>());
+            var list = AnalyticClient.LoadList(new ENTITY.Session<ENTITY.NullT>());
             Assert.IsNotNull(list);
         }
 
-        [TestMethod]
-        public void RunPriceRoutine()
-        {
-            var list = AnalyticService.RunPricing(1);
-            Assert.IsNotNull(list);
-        }
 
         [TestMethod]
         public void Load_Analytic()
         {
             var id = new ENTITY.Analytic(3);
-            var response = AnalyticService.LoadAnalytic(new ENTITY.Session<ENTITY.Analytic>() { Data = id });
+            var response = AnalyticClient.LoadAnalytic(new ENTITY.Session<ENTITY.Analytic>() { Data = id });
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Data);
         }
@@ -103,7 +97,7 @@ namespace APLPX.UI.Wpf.Tests
         {
             var id = new ENTITY.Analytic(3);
 
-            var response = AnalyticService.LoadFilters(new ENTITY.Session<ENTITY.Analytic>() { Data = id});
+            var response = AnalyticClient.LoadFilters(new ENTITY.Session<ENTITY.Analytic>() { Data = id});
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Data);
         }
@@ -113,7 +107,7 @@ namespace APLPX.UI.Wpf.Tests
         {
             var id = new ENTITY.Analytic(3);
 
-            var response = AnalyticService.LoadDrivers(new ENTITY.Session<ENTITY.Analytic>() { Data = id });
+            var response = AnalyticClient.LoadDrivers(new ENTITY.Session<ENTITY.Analytic>() { Data = id });
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Data);
         }
@@ -123,7 +117,7 @@ namespace APLPX.UI.Wpf.Tests
         {
             var id = new ENTITY.Analytic(3);
 
-            var response = AnalyticService.LoadPriceLists(new ENTITY.Session<ENTITY.Analytic>() { Data = id });
+            var response = AnalyticClient.LoadPriceLists(new ENTITY.Session<ENTITY.Analytic>() { Data = id });
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Data);
         }
@@ -136,14 +130,78 @@ namespace APLPX.UI.Wpf.Tests
 
             var session = new ENTITY.Session<ENTITY.NullT>
             {
-                User = new ENTITY.User(2, new ENTITY.UserIdentity
-                                                                    ("dave.jinkerson@advancedpricinglogic.com", 
-                                                                    "Analyst", "User", true))};
-            var modules =  UserService.Authenticate(session);
+                User = new ENTITY.User(
+                                        2,
+                                        "UserKey",
+                                        new ENTITY.UserRole(3, "Administrator", "Role description"),
+                                        new ENTITY.UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
+                                        new ENTITY.UserCredential("admin", "password", "passwordnew"),
+                                        new List<ENTITY.SQLEnumeration>()
+
+                                   )
+            };
+            var modules =  UserClient.Authenticate(session);
 
             Assert.IsNotNull(modules);
 
         }
+
+        [TestMethod]
+        public void RunPriceRoutine()
+        {
+            var list = PricingClient.LoadResults(new ENTITY.Session<ENTITY.PricingEveryday>{ Data = new ENTITY.PricingEveryday { Id = 1}});
+            Assert.IsNotNull(list);
+        }
+
+        [TestMethod]
+        public void Load_Pricing_By_Id()
+        {
+            var p = PricingClient.LoadPricingEveryday(new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+            Assert.IsNotNull(p);
+        }
+
+        [TestMethod]
+        public void Load_Pricing_List()
+        {
+            var p = PricingClient.LoadList(new ENTITY.Session<ENTITY.NullT>());
+            Assert.IsNotNull(p);
+        }
+
+
+        [TestMethod]
+        public void Load_Pricing_Filters()
+        {
+            var p = PricingClient.LoadFilters(
+                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+            Assert.IsNotNull(p);
+        }
+
+
+        [TestMethod]
+        public void Load_Pricing_Results()
+        {
+            var p = PricingClient.LoadResults(
+                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+            Assert.IsNotNull(p);
+        }
+
+        [TestMethod]
+        public void Load_Pricing_Drivers()
+        {
+            var p = PricingClient.LoadDrivers(
+                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+            Assert.IsNotNull(p);
+        }
+
+
+        [TestMethod]
+        public void Load_Pricing_PriceLists()
+        {
+            var p = PricingClient.LoadPriceLists(
+                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+            Assert.IsNotNull(p);
+        }
+
 
         //[TestMethod]
         //public void LoadFilters()

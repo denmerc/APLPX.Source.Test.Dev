@@ -89,7 +89,7 @@ namespace APLPX.UI.WPF
                 }
                 catch (Exception)
                 {
-
+                    App.Current.Windows[0].Close();
                     MessageBox.Show("Application startup failure");
                 }
 

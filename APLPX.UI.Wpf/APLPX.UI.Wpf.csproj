@@ -263,7 +263,6 @@
     <Compile Include="ViewModels\Pricing\PricingEverydayRoundingViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingEverydayStrategyViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingIdentityViewModel.cs" />
-    <Compile Include="ViewModels\Pricing\PricingResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\WaitViewModel.cs" />
     <Compile Include="Views\Admin\UserAdminControl.xaml.cs">

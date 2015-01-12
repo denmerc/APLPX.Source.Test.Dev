@@ -22,7 +22,7 @@ namespace APLPX.Server.Entity
         [DataMember]
         public bool WinAuthorization { get; set; }
         [DataMember]
-        public Boolean SessionOk { get; set; }
+        public bool SessionOk { get; set; }
         [DataMember]
         public string ClientMessage { get; set; }
         [DataMember]

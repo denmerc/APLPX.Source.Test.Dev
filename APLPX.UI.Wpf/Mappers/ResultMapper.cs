@@ -58,7 +58,6 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.SkuTitle = dto.SkuTitle;
             if (dto.Groups != null)
             {
-                //displayEntity.Groups = dto.Groups.ToDisplayEntity();
                 foreach (DTO.PricingResultDriverGroup group in dto.Groups)
                 {
                     displayEntity.Groups.Add(group.ToDisplayEntity());

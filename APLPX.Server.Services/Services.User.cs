@@ -22,12 +22,11 @@ namespace APLPX.Server.Services
 
         public Session<NullT> Initialize(Session<NullT> sessionIn)
         {
-            //APLPX.Server.Entity.Session<NullT> sessionOut = _userData.Initialize(sessionIn);
-            //_userData.Dispose();
+            APLPX.Server.Entity.Session<NullT> sessionOut = _userData.Initialize(sessionIn);
+            _userData.Dispose();
 
-            //return sessionOut;
+            return sessionOut;
 
-            return new Session<NullT> { SessionOk = true}; 
         }
 
         public Session<NullT> Authenticate(Session<NullT> sessionIn)
@@ -44,10 +43,23 @@ namespace APLPX.Server.Services
                 User = new User
                             {
                                 Id = 1,
+                                Key = "User Key",
+                                Identity = new UserIdentity {
+                                    Email = "admin@test.com",
+                                    FirstName = "Admin", LastName = "User",
+                                    Active = true
+                                },
                                 Credential = new UserCredential { Login = "admin", OldPassword = "Password" },
-                                Role = new UserRole { Name = "Admin" }
+                                Role = new UserRole { Id = 3, Name = "Admin", Description = " This is the admin role"  },
+                                RoleTypes = new List<SQLEnumeration>()
                             }
             };
+
+                                            //            "UserKey",
+                                            //new DTO.UserRole(3, "Administrator", "Role description"),
+                                            //new DTO.UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
+                                            //new DTO.UserCredential("admin", "password", "passwordnew"),
+                                            //new List<DTO.SQLEnumeration>()
         }
 
         public Session<List<User>> LoadList(Session<NullT> sessionIn)

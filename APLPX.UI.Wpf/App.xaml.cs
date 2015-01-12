@@ -70,7 +70,7 @@ namespace APLPX.UI.WPF
                 }
                 else
                 {
-                    MessageBox.Show(response.ClientMessage);
+                    
                 }
 
 
@@ -79,11 +79,19 @@ namespace APLPX.UI.WPF
             }
             else
             {
-                var loginWindow = new LoginWindow();
-                loginWindow.DataContext = new LoginViewModel(new UserClient(), new AnalyticClient(), new PricingEverydayClient());
-                loginWindow.ShowMaxRestoreButton = false;
-                loginWindow.ShowMinButton = false;
-                loginWindow.ShowDialog();
+                try
+                {
+                    var loginWindow = new LoginWindow();
+                    loginWindow.DataContext = new LoginViewModel(new UserClient(), new AnalyticClient(), new PricingEverydayClient());
+                    loginWindow.ShowMaxRestoreButton = false;
+                    loginWindow.ShowMinButton = false;
+                    loginWindow.ShowDialog();
+                }
+                catch (Exception)
+                {
+
+                    MessageBox.Show("Application startup failure");
+                }
 
 
             }            

@@ -145,7 +145,6 @@ namespace APLPX.Client.Entity
         [DataMember]
         public int LinkedPriceListGroupKey { get;  set; }
         [DataMember]
-        //[BsonElement("sort")]
         public short Sort { get;  set; }
     }
 
@@ -188,12 +187,9 @@ namespace APLPX.Client.Entity
         [DataMember]
         public int PriceListId { get; set; }
         [DataMember]
-        //[BsonElement("RangeLower")]
         public decimal DollarRangeLower { get; set; }
         [DataMember]
-        //[BsonElement("RangeUpper")]
         public decimal DollarRangeUpper { get; set; }
-        //[BsonElement("RoundingRule")]
         [DataMember]
         public List<PriceRoundingRule> RoundingRules { get; set; }
         [DataMember]
@@ -235,9 +231,7 @@ namespace APLPX.Client.Entity
         [DataMember]
         public int PriceListId { get; set; }
         [DataMember]
-        //[BsonRepresentation(BsonType.String)]
         public decimal PercentChange { get; set; }
-        //[BsonElement("RoundingRule")]
         [DataMember]
         public List<PriceRoundingRule> RoundingRules { get; set; }
         [DataMember]
@@ -340,7 +334,6 @@ namespace APLPX.Client.Entity
         public List<PriceRoundingRule> Rules { get; private set; }
     }
 
-    //[BsonNoId][BsonIgnoreExtraElements]
     [DataContract]
     public class PricingValueDriverGroup : ValueDriverGroup
     {
@@ -444,8 +437,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class PricingResultDriverGroup : ValueDriverGroup
     {
         #region initialize...

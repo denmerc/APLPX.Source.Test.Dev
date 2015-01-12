@@ -6,8 +6,6 @@ using System.Runtime.Serialization;
 namespace APLPX.Client.Entity
 {
     [DataContract]
-    //[BsonNoId]    
-    //[BsonIgnoreExtraElements]
     public class FilterGroup
     {
         #region Initialize...
@@ -27,10 +25,7 @@ namespace APLPX.Client.Entity
             Filters = filters;
         }
         #endregion
-        //[BsonId]
-        //public MongoDB.Bson.ObjectId _id { get; set; }
         [DataMember]
-        //[BsonElement("TypeName")]
         public string Name { get; set; }
         [DataMember]
         public List<Filter> Filters { get; set; }
@@ -39,8 +34,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class Filter
     {
         #region Initialize...
@@ -86,8 +79,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonIgnoreExtraElements]
-    //[BsonNoId]
     public class ValueDriver
     {
         #region Initialize...
@@ -132,8 +123,6 @@ namespace APLPX.Client.Entity
         public bool IsSelected { get; set; }
     }
 
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     [DataContract]
     public class ValueDriverMode
     {
@@ -173,8 +162,6 @@ namespace APLPX.Client.Entity
         public bool IsSelected { get; set; }
     }
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class ValueDriverGroup
     {
         #region Initialize...
@@ -215,7 +202,6 @@ namespace APLPX.Client.Entity
         }
         #endregion
         [DataMember]
-        //[BsonElement("Group")]
         public int Id { get;  set; }
         [DataMember]
         public short Value { get; set; }
@@ -228,8 +214,6 @@ namespace APLPX.Client.Entity
     }
 
 
-    //[BsonIgnoreExtraElements]
-    //[BsonNoId]
     [DataContract]
     public class PriceListGroup
     {
@@ -259,8 +243,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class PriceList
     {
         #region Initialize...
@@ -308,8 +290,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class PriceMarkupRule
     {
         #region initialize...
@@ -354,8 +334,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class PriceOptimizationRule
     {
         #region initialize...
@@ -394,8 +372,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class PriceRoundingRule
     {
         #region initialize...

@@ -52,7 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Tests.Proxy.cs" />
+    <Compile Include="Tests_WCF_Proxies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,10 +67,6 @@
     <ProjectReference Include="..\APLPX.Client\APLPX.Client.csproj">
       <Project>{ab16ff02-1b5b-4009-a989-0cb54c802efa}</Project>
       <Name>APLPX.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\APLPX.Core\APLPX.Core.csproj">
-      <Project>{5216effb-bfe7-4f59-9c07-ae1b4a14139f}</Project>
-      <Name>APLPX.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

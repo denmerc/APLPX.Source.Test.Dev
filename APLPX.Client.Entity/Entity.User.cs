@@ -81,17 +81,17 @@ namespace APLPX.Client.Entity
         //public MongoDB.Bson.ObjectId _id { get; set; }
 
         [DataMember]
-        public int Id { get; private set; }
+        public int Id { get; set; }
         [DataMember]
-        public string Key { get; private set; }
+        public string Key { get; set; }
         [DataMember]
-        public UserCredential Credential { get; private set; }
+        public UserCredential Credential { get;  set; }
         [DataMember]
-        public UserIdentity Identity { get; private set; }
+        public UserIdentity Identity { get;  set; }
         [DataMember]
-        public UserRole Role { get; private set; }
+        public UserRole Role { get;  set; }
         [DataMember]
-        public List<Entity.SQLEnumeration> RoleTypes { get; private set; }
+        public List<Entity.SQLEnumeration> RoleTypes { get;  set; }
     }
 
     [DataContract]
@@ -144,33 +144,32 @@ namespace APLPX.Client.Entity
         [DataMember]
         public string Email { get; set; }
         [DataMember]
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
         public string FirstName { get; set; }
         [DataMember]
         public string LastName { get; set; }
         [DataMember]
-        public string Greeting { get; private set; }
+        public string Greeting { get;  set; }
         [DataMember]
-        public DateTime LastLogin { get; private set; }
+        public DateTime LastLogin { get;  set; }
         [DataMember]
-        public string LastLoginText { get; private set; }
+        public string LastLoginText { get;  set; }
         [DataMember]
-        public DateTime Created { get; private set; }
+        public DateTime Created { get;  set; }
         [DataMember]
-        public string CreatedText { get; private set; }
+        public string CreatedText { get;  set; }
         [DataMember]
-        public DateTime Edited { get; private set; }
+        public DateTime Edited { get;  set; }
         [DataMember]
-        public string EditedText { get; private set; }
+        public string EditedText { get;  set; }
         [DataMember]
-        public string Editor { get; private set; }
+        public string Editor { get;  set; }
         [DataMember]
         public bool Active { get; set; }
     }
 
     [DataContract]
-    //[BsonNoId]
     public class UserRole
     {
         #region Initialize...

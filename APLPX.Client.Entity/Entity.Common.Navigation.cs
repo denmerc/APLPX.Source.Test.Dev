@@ -1,13 +1,10 @@
-﻿//using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace APLPX.Client.Entity
 {
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class Module //Workflow groups
     {
         #region Initialize...
@@ -40,8 +37,6 @@ namespace APLPX.Client.Entity
         [DataMember]
         public List<UserRole> Roles;
     }
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     [DataContract]
     public class ModuleFeature  //Workflow Views
     {
@@ -89,8 +84,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class ModuleFeatureStep //Workflow View Steps
     {
         #region Initialize...
@@ -131,8 +124,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
-    //[BsonIgnoreExtraElements]
     public class ModuleFeatureStepAction
     {
         #region Initialize...

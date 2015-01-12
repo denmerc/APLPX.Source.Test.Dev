@@ -95,10 +95,10 @@ namespace APLPX.UI.WPF.ViewModels
             CurrentUser = session.User.ToDisplayEntity();
 
             //TODO: COMMENT THIS OUT WHEN UserService is updated to work with new entity model:
-            Modules = DisplayModuleGenerator.CreateSampleModules();
+            //Modules = DisplayModuleGenerator.CreateSampleModules();
 
             //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
-           //Modules = session.Modules.ToDisplayEntities();
+            Modules = session.Modules.ToDisplayEntities();
             //Modules = userService.Authenticate(Session).Modules.ToDisplayEntities();
             SelectedModule = Modules.Where(x => x.TypeId == DTO.ModuleType.Planning).FirstOrDefault();
 
@@ -600,9 +600,9 @@ namespace APLPX.UI.WPF.ViewModels
 
                             
                             ////TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
-                            //var displayAnalytics = base.Session.Analytics.ToDisplayEntities();
-                            //var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
-                            //SelectedFeature.SearchableEntities = iSearchables;
+                            var displayAnalytics = base.Session.Analytics.ToDisplayEntities();
+                            var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
+                            SelectedFeature.SearchableEntities = iSearchables;
 
                             //var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
                             //var displayAnalytics = analyticDtos.ToDisplayEntities();
@@ -622,16 +622,16 @@ namespace APLPX.UI.WPF.ViewModels
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningPromotionPricing:
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningEverydayPricing:
                     case APLPX.Client.Entity.ModuleFeatureType.PlanningKitPricing:
-                        //if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
-                        //{
-                        //    var pricing = base.Session.Pricing.ToDisplayEntities();
-                        //    SelectedFeature.SearchableEntities = pricing.Cast<ISearchableEntity>().ToList();
-                        //    _featureCache.Add(SelectedFeature.TypeId, SelectedFeature); 
-                        //}
-                        //else if (SelectedFeatureViewModel != null)
-                        //{
-                        //    SelectedFeatureViewModel.SelectedFeature = _featureCache[SelectedFeature.TypeId];
-                        //}
+                        if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
+                        {
+                            var pricing = base.Session.Pricing.ToDisplayEntities();
+                            SelectedFeature.SearchableEntities = pricing.Cast<ISearchableEntity>().ToList();
+                            _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
+                        }
+                        else if (SelectedFeatureViewModel != null)
+                        {
+                            SelectedFeatureViewModel.SelectedFeature = _featureCache[SelectedFeature.TypeId];
+                        }
                         SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep;
                         break;
 

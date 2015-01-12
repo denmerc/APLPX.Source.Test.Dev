@@ -1,5 +1,4 @@
-﻿//using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -9,8 +8,6 @@ namespace APLPX.Client.Entity
     public class Analytic
     {
 
-        //[BsonId]
-        //public MongoDB.Bson.ObjectId _id { get; set; }
         #region Initialize...
         public Analytic() { }
         public Analytic(
@@ -80,7 +77,6 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        //[BsonRepresentation(MongoDB.Bson.BsonType.String)]
         public int Id { get; set; }
         [DataMember]
         public string SearchGroupKey { get;  set; }
@@ -94,7 +90,6 @@ namespace APLPX.Client.Entity
         public List<FilterGroup> FilterGroups { get; set; }
     }
 
-    //[BsonNoId]
     [DataContract]
     public class AnalyticIdentity
     {
@@ -176,7 +171,6 @@ namespace APLPX.Client.Entity
         public bool Active { get; set; }
     }
 
-    //[BsonNoId]
     [DataContract]
     public class AnalyticValueDriver : ValueDriver
     {
@@ -243,7 +237,6 @@ namespace APLPX.Client.Entity
         #endregion
     }
 
-    //[BsonNoId]
     [DataContract]
     public class AnalyticValueDriverMode : ValueDriverMode
     {
@@ -274,7 +267,6 @@ namespace APLPX.Client.Entity
         public List<ValueDriverGroup> Groups { get; set; }
     }
 
-    //[BsonNoId]
     [DataContract]
     public class AnalyticResultValueDriverGroup : ValueDriverGroup
     {
@@ -308,7 +300,6 @@ namespace APLPX.Client.Entity
     }
 
     [DataContract]
-    //[BsonNoId]
     public class AnalyticPriceListGroup : PriceListGroup
     {
         #region Initialize...

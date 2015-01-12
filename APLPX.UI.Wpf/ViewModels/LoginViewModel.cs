@@ -40,29 +40,17 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     StatusMessage = "Authenticating...";
 
-                    //var session = await Authenticate(UserName, Password);
-                    
+                    Session = await Authenticate(UserName, Password);
 
-                    var session = new Session<NullT>
+                    if(Session.SessionOk)
                     {
-                        SessionOk = true,
-                        User = new User(
-                                                2,
-                                                "UserKey",
-                                                new UserRole(3, "Administrator", "Role description"),
-                                                new UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
-                                                new UserCredential("", "", null),
-                                                new List<SQLEnumeration>()
+                        StatusMessage = "Loading modules...";
+                        Session.Modules = new List<Module>(); //TODO: Load modules from WCF
+                        Session.Analytics = new List<Client.Entity.Analytic>(); //TODO: Load Analytic Identities from WCF
+                        Session.Pricing = new List<PricingEveryday>(); //TODO: Load Pricing Identities from WCF
 
-                                           )
-                    };
-
-
-                    if(session.SessionOk)
-                    {
-                        StatusMessage = "Loading modules..."; 
                         //todo: pass IAnalyticService via constructor in the case that user succesfully auths
-                        var mvm = new MainViewModel(session, analyticService, userService, pricingService);
+                        var mvm = new MainViewModel(Session, analyticService, userService, pricingService);
                         var mainWindow = new MainWindow();
                         mainWindow.DataContext = mvm;
                         App.Current.Windows[0].Close();

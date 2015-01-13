@@ -147,13 +147,6 @@ namespace APLPX.Client.Mock.Tests
         }
 
         [TestMethod]
-        public void RunPriceRoutine()
-        {
-            var list = PricingClient.LoadResults(new ENTITY.Session<ENTITY.PricingEveryday>{ Data = new ENTITY.PricingEveryday { Id = 1}});
-            Assert.IsNotNull(list);
-        }
-
-        [TestMethod]
         public void Load_Pricing_By_Id()
         {
             var p = PricingClient.LoadPricingEveryday(new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
@@ -182,7 +175,7 @@ namespace APLPX.Client.Mock.Tests
         {
             var p = PricingClient.LoadResults(
                 new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
-            Assert.IsNotNull(p);
+            Assert.IsNotNull(p.Data);
         }
 
         [TestMethod]

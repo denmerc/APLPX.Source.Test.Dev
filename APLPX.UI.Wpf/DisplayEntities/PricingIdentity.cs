@@ -135,6 +135,42 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _shared, value); }
         }
 
+        /// <summary>
+        /// Gets a string that describes this identity's status.
+        /// </summary>
+        public string StatusDescription
+        {
+            get
+            {
+                string result = "Inactive";
+
+                if (Active)
+                {
+                    result = "Active";
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets a string that describes whether this identity represents a shared entity.
+        /// </summary>
+        public string SharedDescription
+        {
+            get
+            {
+                string result = "No";
+
+                if (Shared)
+                {
+                    result = "Yes";
+                }
+
+                return result;
+            }
+        }
+
         #endregion
     }
 }

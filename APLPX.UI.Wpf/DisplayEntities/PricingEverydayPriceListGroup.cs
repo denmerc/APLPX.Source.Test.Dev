@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+
+using APLPX.UI.WPF.Helpers;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
@@ -70,6 +72,28 @@ namespace APLPX.UI.WPF.DisplayEntities
             private set { this.RaiseAndSetIfChanged(ref _filteredPriceLists, value); }
         }
 
+        /// <summary>
+        /// Gets the number of price lists in this group where IsSelected is true.
+        /// </summary>
+        public int SelectedCount
+        {
+            get
+            {
+                int result = FilteredPriceLists.Where(priceList => priceList.IsSelected).Count();
+
+                return result;
+            }
+        }
+
+        public bool? AreAllItemsSelected
+        {
+            get
+            {
+                bool? result = FilteredPriceLists.AreAllItemsIncluded(p => p.IsSelected);
+                return result;
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -116,6 +140,10 @@ namespace APLPX.UI.WPF.DisplayEntities
                 !priceList.IsKey)
             {
                 _priceListChangeSubject.OnNext(priceList);
+
+                //Update dependent properties.
+                OnPropertyChanged("AreAllItemsSelected");
+                OnPropertyChanged("SelectedCount");
             }
         }
 

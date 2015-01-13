@@ -41,15 +41,17 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Style="{StaticResource ListTitleTextStyle}"
-                   Visibility="{Binding Path=ShowPriceListGroups,Converter={StaticResource BooleanToVisibilityConverter}}"
-                   Text="Price List Groups" />
+                   Text="Price List Groups"
+                   Visibility="{Binding Path=ShowPriceListGroups,
+                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <ListBox x:Name="lstPriceListGroups"
                  Grid.Row="1"
                  Grid.Column="0"
                  ItemsSource="{Binding Path=Entity.PriceListGroups}"
-                 Visibility="{Binding Path=ShowPriceListGroups,Converter={StaticResource BooleanToVisibilityConverter}}"
-                 SelectedItem="{Binding Path=Entity.SelectedPriceListGroup}">
+                 SelectedItem="{Binding Path=Entity.SelectedPriceListGroup}"
+                 Visibility="{Binding Path=ShowPriceListGroups,
+                                      Converter={StaticResource BooleanToVisibilityConverter}}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Width="200"
@@ -60,12 +62,19 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
-                   Text="{Binding ElementName=dgPriceLists,
-                                  Path=Items.Count,
-                                  StringFormat={}Price Lists ({0})}" />
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <TextBlock x:Name="txtCount"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="{Binding ElementName=dgPriceLists,
+                                      Path=Items.Count,
+                                      StringFormat={}Price Lists ({0})}" />
+
+            <TextBlock x:Name="txtSelectedCount"
+                       Margin="5,0,5,10"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="{Binding Path=Entity.SelectedPriceListGroup.SelectedCount,
+                                      StringFormat={}Included: {0}}" />
+        </StackPanel>
 
         <DataGrid x:Name="dgPriceLists"
                   Grid.Row="1"
@@ -78,7 +87,24 @@
                                         Path=SelectedItem.PriceLists}">
 
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected" />
+                <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,
+                                                          UpdateSourceTrigger=PropertyChanged}"
+                                        EditingElementStyle="{DynamicResource MetroDataGridCheckBox}"
+                                        ElementStyle="{DynamicResource MetroDataGridCheckBox}">
+                    <DataGridCheckBoxColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <CheckBox x:Name="chkSelectAll"
+                                      Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid},
+                                                        Path=DataContext.SelectAllPriceListsCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource Self},
+                                                                 Path=IsChecked}"
+                                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType=DataGrid},
+                                                          Path=DataContext.Entity.SelectedPriceListGroup.AreAllItemsSelected,
+                                                          Mode=OneWay}"
+                                      ToolTip="Check or uncheck to include or exclude all Price Lists." />
+                        </DataTemplate>
+                    </DataGridCheckBoxColumn.HeaderTemplate>
+                </DataGridCheckBoxColumn>
 
                 <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
 

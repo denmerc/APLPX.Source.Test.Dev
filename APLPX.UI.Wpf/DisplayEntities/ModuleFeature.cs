@@ -378,7 +378,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
-        private void AssignSearchProperties()
+        public void AssignSearchProperties()
         {
             foreach (FeatureSearchGroup searchGroup in SearchGroups)
             {

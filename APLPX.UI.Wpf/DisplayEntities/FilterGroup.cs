@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using APLPX.UI.WPF.Helpers;
 using System.Reactive.Subjects;
 using ReactiveUI;
 
@@ -85,23 +86,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get
             {
-                bool? result = false;
+                bool? result = _filters.AreAllItemsIncluded(filter => filter.IsSelected);
 
-                IEnumerable<Filter> filters = _filters as IEnumerable<Filter>;
-
-                if (filters.Count() > 0)
-                {
-                    if (filters.All(filter => filter.IsSelected))
-                    {
-                        result = true;
-                    }
-                    else if (filters.Any(filter => filter.IsSelected))
-                    {
-                        result = null;
-                    }
-                }
-
-                return result;
+                return result;  
             }
         }
 

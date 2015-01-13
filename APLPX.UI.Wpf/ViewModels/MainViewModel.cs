@@ -697,7 +697,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Identity
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsIdentity:
-                    result = new AnalyticIdentityViewModel(SelectedAnalytic);
+                    result = new AnalyticIdentityViewModel(SelectedAnalytic, SelectedFeature);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingIdentity:

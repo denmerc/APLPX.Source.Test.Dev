@@ -63,7 +63,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
+
         <StackPanel Grid.Row="0"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
@@ -81,8 +81,12 @@
                       VerticalAlignment="Center"
                       Command="{Binding Path=SelectAllPriceListsCommand}"
                       CommandParameter="{Binding RelativeSource={RelativeSource Self},
-                                                 Path=IsChecked}">
-                <CheckBox.Style>
+                                                 Path=IsChecked}"
+                      ToolTip="Check or uncheck to include or exclude all non-key price lists."
+                      Content="Include/Exclude All"
+                      IsChecked="{Binding Path=PriceRoutine.LinkedPriceListGroup.AreAllItemsSelected,
+                                          Mode=OneWay}">
+                <!--<CheckBox.Style>
                     <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
                         <Setter Property="Content" Value="Include All" />
                         <Setter Property="ToolTip" Value="Include all price lists under the Key price list" />
@@ -93,7 +97,7 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </CheckBox.Style>
+                </CheckBox.Style>-->
             </CheckBox>
         </StackPanel>
 
@@ -231,11 +235,11 @@
 
                 <ItemsControl x:Name="lstRelationships"
                               Grid.Row="1"
+                              MinWidth="275"
                               Margin="0,5,0,0"
                               VerticalAlignment="Top"
                               Background="Transparent"
                               BorderBrush="Transparent"
-                              MinWidth="275"
                               ItemsSource="{Binding Path=PriceRoutine.RoundingRulePriceLists}"
                               Style="{x:Null}">
                     <ItemsControl.ItemTemplate>
@@ -294,7 +298,7 @@
                                            ToolTip="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name,
                                                              RelativeSource={RelativeSource AncestorType=ListBox}}" />
                             </DockPanel>
-                            
+
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsKey}" Value="True">
                                     <Setter TargetName="arrow" Property="Visibility" Value="Collapsed" />

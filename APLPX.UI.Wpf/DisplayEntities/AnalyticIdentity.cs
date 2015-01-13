@@ -23,8 +23,8 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _author;
         private string _editor;
         private string _owner;
-        private bool _active;
-        private bool _shared;
+        private bool _isActive;
+        private bool _isShared;
 
         #endregion
 
@@ -108,17 +108,74 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public bool IsActive
         {
-            get { return _active; }
-            set { this.RaiseAndSetIfChanged(ref _active, value); }
+            get { return _isActive; }
+
+            set
+            {
+                if (_isActive != value)
+                {
+                    _isActive = value;
+                    this.RaisePropertyChanged("IsActive");
+
+                    //Update dependent value.
+                    this.RaisePropertyChanged("StatusDescription");
+                }
+            }
         }
 
         public bool Shared
         {
-            get { return _shared; }
-            set { this.RaiseAndSetIfChanged(ref _shared, value); }
+            get { return _isShared; }
+            set
+            {
+                if (_isShared != value)
+                {
+                    _isShared = value;
+                    this.RaisePropertyChanged("Shared");
+
+                    //Update dependent value.
+                    this.RaisePropertyChanged("SharedDescription");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a string that describes this identity's status.
+        /// </summary>
+        public string StatusDescription
+        {
+            get
+            {
+                string result = "Inactive";
+
+                if (IsActive)
+                {
+                    result = "Active";
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets a string that describes whether this identity represents a shared entity.
+        /// </summary>
+        public string SharedDescription
+        {
+            get
+            {
+                string result = "No";
+
+                if (Shared)
+                {
+                    result = "Yes";
+                }
+
+                return result;
+            }
         }
 
         #endregion
- 
+
     }
 }

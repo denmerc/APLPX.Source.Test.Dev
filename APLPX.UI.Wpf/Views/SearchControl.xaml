@@ -52,11 +52,19 @@
                       Margin="10,5"
                       DataContext="{Binding Path=SelectedFeature.SelectedEntity}">
                     <Grid.Resources>
-                        <Style BasedOn="{StaticResource SearchControlSelectedItemDetailStyle}" TargetType="{x:Type TextBlock}" />
+                        <Style BasedOn="{StaticResource SearchControlSelectedItemDetailStyle}" TargetType="{x:Type TextBlock}">
+                            <Setter Property="Margin" Value="3,5"/>
+                        </Style>
                     </Grid.Resources>
 
-
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"  />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -68,7 +76,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Row="0"
@@ -77,30 +85,77 @@
                     <TextBlock Grid.Row="0"
                                Grid.Column="1"
                                Text="{Binding Path=Identity.Name}" />
+
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
                                Text="Description:" />
                     <TextBlock Grid.Row="1"
                                Grid.Column="1"
                                Text="{Binding Path=Identity.Description}" />
+
                     <TextBlock Grid.Row="2"
                                Grid.Column="0"
                                Text="Notes:" />
                     <TextBlock Grid.Row="2"
                                Grid.Column="1"
                                Text="{Binding Path=Identity.Notes}" />
+
                     <TextBlock Grid.Row="3"
                                Grid.Column="0"
-                               Text="Created:" />
+                               Text="Status:" />
                     <TextBlock Grid.Row="3"
                                Grid.Column="1"
-                               Text="{Binding Path=Identity.Created}" />
+                               Text="{Binding Path=Identity.StatusDescription}" />
+
                     <TextBlock Grid.Row="4"
                                Grid.Column="0"
-                               Text="Last Edited:" />
+                               Text="Shared:" />
                     <TextBlock Grid.Row="4"
+                               Grid.Column="1"
+                               Text="{Binding Path=Identity.SharedDescription}" />
+
+                    <TextBlock Grid.Row="5"
+                               Grid.Column="0"
+                               Text="Refreshed:" />
+                    <TextBlock Grid.Row="5"
+                               Grid.Column="1"
+                               Text="{Binding Path=Identity.Refreshed}" />
+
+                    <TextBlock Grid.Row="6"
+                               Grid.Column="0"
+                               Text="Updated:" />
+                    <TextBlock Grid.Row="6"
                                Grid.Column="1"
                                Text="{Binding Path=Identity.Edited}" />
+
+                    <TextBlock Grid.Row="7"
+                               Grid.Column="0"
+                               Text="Created:" />
+                    <TextBlock Grid.Row="7"
+                               Grid.Column="1"
+                               Text="{Binding Path=Identity.Created}" />
+
+
+                    <TextBlock Grid.Row="8"
+                               Grid.Column="0"
+                               Text="Author:" />
+                    <TextBlock Grid.Row="8"
+                               Grid.Column="1"
+                               Text="{Binding Path=Identity.Author}" />
+
+                    <TextBlock Grid.Row="9"
+                               Grid.Column="0"
+                               Text="Editor:" />
+                    <TextBlock Grid.Row="9"
+                               Grid.Column="1"
+                               Text="{Binding Path=Identity.Editor}" />
+
+                    <TextBlock Grid.Row="10"
+                               Grid.Column="0"
+                               Text="Owner:" />
+                    <TextBlock Grid.Row="10"
+                               Grid.Column="1"
+                               Text="{Binding Path=Identity.Owner}" />
 
                 </Grid>
             </Border>

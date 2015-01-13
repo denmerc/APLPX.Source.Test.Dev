@@ -41,25 +41,64 @@
             BorderThickness="1"
             CornerRadius="5">
 
-        <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Grid Width="1090" MaxHeight="800" ShowGridLines="True">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0"
-                   Grid.ColumnSpan="2"
                    HorizontalAlignment="Center"
                    Content="Results" FontFamily="SegoeUI" FontSize="16"  />
 
+            <Label Grid.Row="1"
+                   HorizontalAlignment="Left"
+                   Content="Price Range Filter: " FontFamily="SegoeUI" FontSize="13" Margin="25,0,0,0"/>
+            <Label Grid.Row="1"
+                   HorizontalAlignment="Center"
+                   Content="Low: ###,##" FontFamily="SegoeUI" FontSize="13" />
+            <Label Grid.Row="1"
+                   HorizontalAlignment="Right"
+                   Content="High: ###,##" FontFamily="SegoeUI" FontSize="13" Margin="0,0,300,0"/>
+            <Label Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   Content="Price List: " FontFamily="SegoeUI" FontSize="13" Margin="25,0,0,0"/>
+            <Label Grid.Row="4"
+                   HorizontalAlignment="Left"
+                   Content="First Page." FontFamily="SegoeUI" FontSize="13" Margin="50,0,0,0"/>
+            <Label Grid.Row="4"
+                   HorizontalAlignment="Left"
+                   Content="Previous Page." FontFamily="SegoeUI" FontSize="13" Margin="200,0,0,0" />
+            <Label Grid.Row="4"
+                   HorizontalAlignment="Center"
+                   Content="_ of _" FontFamily="SegoeUI" FontSize="13" />
+            <Label Grid.Row="4"
+                   HorizontalAlignment="Right"
+                   Content="Next Pg." FontFamily="SegoeUI" FontSize="13" Margin="0,0,200,0"/>
+            <Label Grid.Row="4"
+                   HorizontalAlignment="Right"
+                   Content="Last Pg." FontFamily="SegoeUI" FontSize="13" Margin="0,0,50,0"/>
+            <Label Grid.Row="5"
+                   HorizontalAlignment="Left"
+                   Content="Prices: " FontFamily="SegoeUI" FontSize="13" Margin="25,0,0,0"/>
+            <Label Grid.Row="5"
+                   HorizontalAlignment="Left"
+                   Content="In Price Routine: ###,###" FontFamily="SegoeUI" FontSize="13" Margin="150,0,0,0"/>
+            <Label Grid.Row="5"
+                   HorizontalAlignment="Center"
+                   Content="In View:  ###" FontFamily="SegoeUI" FontSize="13" Margin="0,0,200,0"/>
+            <Label Grid.Row="5"
+                   HorizontalAlignment="Center"
+                   Content="Selected View: ##" FontFamily="SegoeUI" FontSize="13" Margin="100,0,0,0"/>
+            <Label Grid.Row="5"
+                   HorizontalAlignment="Right"
+                   Content="Per Page: _ &lt; ##,### " FontFamily="SegoeUI" FontSize="13" Margin="0,0,25,0"/>
+
             <DataGrid Grid.Row="3"
-                      Grid.ColumnSpan="2"
-                      Width="1050"
                       ItemsSource="{Binding Source={StaticResource cvsResults}}"
                       ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
                       AutoGenerateColumns="False">

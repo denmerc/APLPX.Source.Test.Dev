@@ -199,6 +199,7 @@
     <Compile Include="DragDropProviders\SearchItemDropTarget.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\CommonExtensions.cs" />
     <Compile Include="Helpers\DragDropHelper.cs" />
     <Compile Include="Events\OperationCompletedEvent.cs" />
     <Compile Include="Events\SearchGroupsUpdatedEvent.cs" />

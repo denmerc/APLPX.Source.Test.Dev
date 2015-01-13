@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Display = APLPX.UI.WPF.DisplayEntities;
 using ReactiveUI;
+using Display = APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.ViewModels.Analytic
 {
@@ -9,6 +9,8 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     {
         private Display.Analytic _entity;
         private List<Display.AnalyticPriceListGroup> _priceListGroups;
+
+        #region Constructor and Initialization
 
         public AnalyticPriceListViewModel(Display.Analytic entity)
         {
@@ -18,9 +20,24 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             }
 
             Entity = entity;
+            PriceListGroups = entity.PriceListGroups;
 
-            PriceListGroups = entity.PriceListGroups;           
+            InitializeCommands();
         }
+
+        private void InitializeCommands()
+        {
+            var canExecute = this.WhenAnyValue(vm => vm.Entity.SelectedPriceListGroup, (plGroup) => SelectAllPriceListsCanExecute(plGroup));
+            SelectAllPriceListsCommand = ReactiveCommand.Create(canExecute);
+
+            this.WhenAnyObservable(vm => vm.SelectAllPriceListsCommand).Subscribe(item => SelectAllPriceListsExecuted(item));
+        }
+
+        #endregion
+
+        #region Properties
+
+        public ReactiveCommand<object> SelectAllPriceListsCommand { get; private set; }
 
         public Display.Analytic Entity
         {
@@ -60,5 +77,26 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                 return result;
             }
         }
+
+        #endregion
+
+        #region Command Handlers
+
+        private bool SelectAllPriceListsCanExecute(Display.AnalyticPriceListGroup priceListGroup)
+        {
+            return (priceListGroup != null);
+        }
+
+        private void SelectAllPriceListsExecuted(object parameter)
+        {
+            bool isSelected = Convert.ToBoolean(parameter);
+
+            foreach (Display.PriceList priceList in Entity.SelectedPriceListGroup.PriceLists)
+            {
+                priceList.IsSelected = isSelected;
+            }
+        }
+
+        #endregion
     }
 }

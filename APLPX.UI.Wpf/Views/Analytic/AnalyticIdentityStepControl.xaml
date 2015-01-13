@@ -10,6 +10,7 @@
     <UserControl.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
+
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="UserControl.Loaded">
             <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}" />
@@ -18,6 +19,13 @@
 
     <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition x:Name="rowSeparator" Height="15" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -33,10 +41,9 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-
         <Label Grid.Row="0"
                Grid.Column="0"
-               Content="Analytic _Name:"
+               Content="_Analytic Name:"
                Style="{StaticResource IdentityLabelStyle}"
                Target="{Binding ElementName=txtName}" />
 
@@ -70,45 +77,163 @@
         <TextBox x:Name="txtNotes"
                  Grid.Row="2"
                  Grid.Column="1"
-                 Width="450"
+                 MinWidth="450"
                  Style="{StaticResource IdentityTextBoxStyle}"
                  Text="{Binding Path=Analytic.Identity.Notes}"
                  TextWrapping="Wrap" />
- 
-        <Label Grid.Row="4"
+
+        <Label Grid.Row="3"
                Grid.Column="0"
                Content="_Folder:"
                Style="{StaticResource IdentityLabelStyle}"
-               Target="{Binding ElementName=txtStatus}" />
+               Target="{Binding ElementName=cboFolder}" />
 
-        <TextBlock Grid.Row="4"
-                   Grid.Column="1"
-                   Style="{StaticResource IdentityTextBlockStyle}"
-                   Text="{Binding Path=Analytic.ParentFolderName}" />
+        <ComboBox x:Name="cboFolder"
+                  Grid.Row="3"
+                  Grid.Column="1"
+                  MinWidth="150"
+                  Margin="0,5"
+                  HorizontalAlignment="Left"
+                  Background="{StaticResource WhiteBrush}"
+                  DisplayMemberPath="Name"
+                  ItemsSource="{Binding Path=AssignableFolders}"
+                  SelectedValue="{Binding Path=Analytic.SearchKey}"
+                  SelectedValuePath="SearchKey"
+                  Style="{StaticResource MetroComboBox}">
+            <ComboBox.Resources>
+                <!--
+                    Fix for display issue with dropdown arrow.
+                    Redefining the brush here causes the implicit style (MetroComboBox)
+                    to use this value as the fill for BtnArrow in the control template.
+                -->
+                <Color x:Key="Gray1">#FFF9F9F9</Color>
+                <SolidColorBrush x:Key="GrayBrush1" Color="{StaticResource Gray1}" />
+            </ComboBox.Resources>
+        </ComboBox>
+
+        <Label Grid.Row="4"
+               Grid.Column="0"
+               Content="Status:"
+               Style="{StaticResource IdentityLabelStyle}" />
+
+        <StackPanel x:Name="StatusPanel"
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+            <RadioButton x:Name="rdoActive"
+                         GroupName="Status"
+                         IsChecked="{Binding Path=Analytic.Identity.IsActive}"
+                         Style="{StaticResource IdentityRadioButtonStyle}">
+                <RadioButton.Content>
+                    <AccessText>Activ_e</AccessText>
+                </RadioButton.Content>
+            </RadioButton>
+            <RadioButton x:Name="rdoInactive"
+                         GroupName="Status"
+                         IsChecked="{Binding ElementName=rdoActive,
+                                             Path=IsChecked,
+                                             Converter={StaticResource InverseBooleanConverter}}"
+                         Style="{StaticResource IdentityRadioButtonStyle}">
+                <RadioButton.Content>
+                    <AccessText>Inact_ive</AccessText>
+                </RadioButton.Content>
+            </RadioButton>
+        </StackPanel>
 
         <Label Grid.Row="5"
                Grid.Column="0"
-               Content="Stat_us:"
+               Content="Shared:"
                Style="{StaticResource IdentityLabelStyle}" />
 
-        <StackPanel Grid.Row="5"
+        <StackPanel x:Name="SharedPanel"
+                    Grid.Row="5"
                     Grid.Column="1"
                     VerticalAlignment="Center"
-                    Orientation="Horizontal">            
-            <RadioButton x:Name="rdoActive"
-                         Margin="5"
-                         Content="Active"
-                         IsChecked="{Binding Path=Analytic.Identity.IsActive}" />
-            <RadioButton x:Name="rdoInactive"
-                         Margin="5"
-                         Content="Inactive"
-                         IsChecked="{Binding ElementName=rdoActive,
+                    Orientation="Horizontal">
+            <RadioButton x:Name="rdoNotShared"
+                         GroupName="Shared"
+                         IsChecked="{Binding ElementName=rdoShared,
                                              Path=IsChecked,
-                                             Converter={StaticResource InverseBooleanConverter}}" />
+                                             Converter={StaticResource InverseBooleanConverter}}"
+                         Style="{StaticResource IdentityRadioButtonStyle}">
+                <RadioButton.Content>
+                    <AccessText>N_o</AccessText>
+                </RadioButton.Content>
+            </RadioButton>
+            <RadioButton x:Name="rdoShared"
+                         GroupName="S_hared"
+                         IsChecked="{Binding Path=Analytic.Identity.Shared}"
+                         Style="{StaticResource IdentityRadioButtonStyle}">
+                <RadioButton.Content>
+                    <AccessText>_Yes</AccessText>
+                </RadioButton.Content>
+            </RadioButton>
         </StackPanel>
 
+        <Separator Grid.Row="6"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2" />
+
+        <Label Grid.Row="7"
+               Grid.Column="0"
+               Content="Refreshed:"
+               Style="{StaticResource IdentityLabelStyle}" />
+
+        <TextBlock Grid.Row="7"
+                   Grid.Column="1"
+                   Style="{StaticResource IdentityTextBlockStyle}"
+                   Text="{Binding Path=Analytic.Identity.Refreshed}" />
+
+        <Label Grid.Row="8"
+               Grid.Column="0"
+               Content="Updated:"
+               Style="{StaticResource IdentityLabelStyle}" />
+
+        <TextBlock Grid.Row="8"
+                   Grid.Column="1"
+                   Style="{StaticResource IdentityTextBlockStyle}"
+                   Text="{Binding Path=Analytic.Identity.Edited}" />
+
+        <Label Grid.Row="9"
+               Grid.Column="0"
+               Content="Created:"
+               Style="{StaticResource IdentityLabelStyle}" />
+
+        <TextBlock Grid.Row="9"
+                   Grid.Column="1"
+                   Style="{StaticResource IdentityTextBlockStyle}"
+                   Text="{Binding Path=Analytic.Identity.Created}" />
+
+        <Label Grid.Row="10"
+               Grid.Column="0"
+               Content="Author:"
+               Style="{StaticResource IdentityLabelStyle}" />
+
+        <TextBlock Grid.Row="10"
+                   Grid.Column="1"
+                   Style="{StaticResource IdentityTextBlockStyle}"
+                   Text="{Binding Path=Analytic.Identity.Author}" />
+
+        <Label Grid.Row="11"
+               Grid.Column="0"
+               Content="Editor:"
+               Style="{StaticResource IdentityLabelStyle}" />
+
+        <TextBlock Grid.Row="11"
+                   Grid.Column="1"
+                   Style="{StaticResource IdentityTextBlockStyle}"
+                   Text="{Binding Path=Analytic.Identity.Editor}" />
+
+        <Label Grid.Row="12"
+               Grid.Column="0"
+               Content="Owner:"
+               Style="{StaticResource IdentityLabelStyle}" />
+
+        <TextBlock Grid.Row="12"
+                   Grid.Column="1"
+                   Style="{StaticResource IdentityTextBlockStyle}"
+                   Text="{Binding Path=Analytic.Identity.Owner}" />
     </Grid>
-
-
 
 </UserControl>

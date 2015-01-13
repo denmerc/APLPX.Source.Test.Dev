@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using APLPX.UI.WPF.DisplayEntities;
-using APLPX.UI.WPF.Helpers;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
@@ -32,11 +31,13 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void InitializeCommands()
         {
-            var canExecute = this.WhenAnyValue(vm => vm.FilterGroups, vm => vm.Entity, (val, b) => SelectAllFiltersCanExecute(val, b));
-            SelectAllFiltersCommand = ReactiveCommand.Create();
+            var canExecute = this.WhenAnyValue(vm => vm.SelectedFilterGroup, (group) => SelectAllFiltersCanExecute(group));
+            SelectAllFiltersCommand = ReactiveCommand.Create(canExecute);
 
             this.WhenAnyObservable(vm => vm.SelectAllFiltersCommand).Subscribe(item => SelectAllFiltersCommandExecuted(item));
         }
+
+    
 
         #endregion
 
@@ -91,12 +92,11 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Command Handlers
 
-        private bool SelectAllFiltersCanExecute(List<FilterGroup> val, ISearchableEntity b)
+        private bool SelectAllFiltersCanExecute(FilterGroup filterGroup)
         {
+            bool result = (filterGroup != null);
 
-            bool canExecute = (SelectedFilterGroup != null);
-
-            return canExecute;
+            return result;
         }
 
         private void SelectAllFiltersCommandExecuted(object parameter)

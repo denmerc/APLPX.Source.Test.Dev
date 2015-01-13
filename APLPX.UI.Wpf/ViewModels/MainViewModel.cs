@@ -101,7 +101,10 @@ namespace APLPX.UI.WPF.ViewModels
 
             //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
             Modules = session.Modules.ToDisplayEntities();
-            //Modules = userService.Authenticate(Session).Modules.ToDisplayEntities();
+            if (Modules == null || Modules.Count <= 0) 
+            {
+                App.Current.Windows[0].Close();
+                ShowMessageBox("No licensed modules", new MessageBoxImage()); Application.Current.Shutdown(); }
             SelectedModule = Modules.Where(x => x.TypeId == DTO.ModuleType.Planning).FirstOrDefault();
 
             //Pre-select the Home feature.

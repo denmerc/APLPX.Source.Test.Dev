@@ -6,6 +6,7 @@ using ENTITY = APLPX.Client.Entity;
 using PROX = APLPX.Client.Mock;
 
 using System.Collections.Generic;
+using System.Configuration;
 
 
 namespace APLPX.Client.Mock.Tests
@@ -154,12 +155,35 @@ namespace APLPX.Client.Mock.Tests
         }
 
         [TestMethod]
+        public void Load_Pricing_List_NotQueryable()
+        {
+
+
+
+
+            string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
+            string databaseName = "promo";
+
+            var client = new MongoDB.Driver.MongoClient(connectionString);
+            var server = client.GetServer();
+            var database = server.GetDatabase(databaseName);
+            var pricing = database.GetCollection<PROX.Entity.PricingEveryday>("PricingAll_NoFilters");
+            var cursor = pricing.FindAll();
+            cursor.SetFields(MongoDB.Driver.Builders.Fields.Include("Identity", "Id"));
+            var items = cursor.ToList();
+
+
+            //var p = PricingClient.LoadList(new ENTITY.Session<ENTITY.NullT>());
+            //Assert.IsNotNull(p);
+        }
+
+
+        [TestMethod]
         public void Load_Pricing_List()
         {
             var p = PricingClient.LoadList(new ENTITY.Session<ENTITY.NullT>());
             Assert.IsNotNull(p);
         }
-
 
         [TestMethod]
         public void Load_Pricing_Filters()

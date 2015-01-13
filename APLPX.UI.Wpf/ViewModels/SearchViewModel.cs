@@ -57,7 +57,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                 if (SelectedFeature != null)
                 {
-                    result = (SelectedFeature.SelectedEntity != null);
+                    result = (SelectedFeature.SelectedSearchGroup != null && SelectedFeature.SelectedEntity != null);
                 }
 
                 return result;

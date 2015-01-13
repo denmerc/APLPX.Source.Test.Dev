@@ -53,16 +53,16 @@
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel LastChildFill="True">
-                        <TextBlock Margin="5"
-                                   DockPanel.Dock="Right"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   Foreground="Gold"
-                                   Text="*"
-                                   ToolTip="This is the Key Price List."
-                                   Visibility="{Binding Path=IsKey,
-                                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <DockPanel MinHeight="30" LastChildFill="True">
+                        <Image x:Name="imgKey"
+                               Width="25"
+                               Height="25"
+                               Margin="5"
+                               DockPanel.Dock="Right"
+                               Source="/APLPX.UI.WPF;component/Resources/key-icon.png"
+                               ToolTip="This is the Key Price List."
+                               Visibility="{Binding Path=IsKey,
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <TextBlock Margin="5"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource Foreground}"

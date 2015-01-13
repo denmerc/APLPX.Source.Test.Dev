@@ -39,6 +39,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _parentKey;
         private bool _canNameChange;
         private bool _canSearchKeyChange;
+        private string _parentFolderName;
 
         private IDisposable _valueDriverChangeListener;
         private List<PricingEverydayValueDriverWrapper> _valueDriversCache;
@@ -329,6 +330,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                     {
                         _selectedKeyPriceList.IsKey = true;
                         _selectedKeyPriceList.IsSelected = true;
+                        _selectedKeyPriceList.CanChangeIsSelected = false;
                         _selectedKeyPriceList.OrdinalPosition = 0;
                     }
 
@@ -349,11 +351,24 @@ namespace APLPX.UI.WPF.DisplayEntities
             {
                 if (LinkedPriceListGroup.Key == KeyPriceListGroup.Key)
                 {
-                    LinkedPriceListGroup.RecalculateFilteredPriceLists(SelectedKeyPriceList.Id);
+                    KeyPriceListGroup.RecalculateFilteredPriceLists(SelectedKeyPriceList.Id);
                 }
                 else
                 {
                     LinkedPriceListGroup.RecalculateFilteredPriceLists();
+                }
+            }
+            else if (KeyPriceListGroup != null &&
+                SelectedMode != null &&
+                !SelectedMode.HasLinkedPriceListRule)
+            {
+                //In one key price list mode: no non-key lists are selected or selectable;
+                // only the key price list is used.
+                var nonKeyLists = KeyPriceListGroup.PriceLists.Where(item => !item.IsKey);
+                foreach (PricingEverydayPriceList nonKeyList in nonKeyLists)
+                {
+                    nonKeyList.IsSelected = false;
+                    nonKeyList.CanChangeIsSelected = false;
                 }
             }
             this.RaisePropertyChanged("RoundingRulePriceLists");
@@ -430,7 +445,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                     this.RaisePropertyChanged("NonKeyValueDrivers");
                     this.RaisePropertyChanged("LinkedValueDrivers");
                     this.RaisePropertyChanged("NonKeyValueDriversCache");
-                    
+
                 }
             }
         }
@@ -461,7 +476,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                 var keyDriverInstance = new PricingEverydayKeyValueDriver { ValueDriverId = newKey.Id };
                 foreach (PricingValueDriverGroup sourceGroup in _selectedValueDriver.Groups)
                 {
-                    keyDriverInstance.Groups.Add(new PricingEverydayKeyValueDriverGroup { ValueDriverGroupId = sourceGroup.Id });
+                    keyDriverInstance.Groups.Add(new PricingEverydayKeyValueDriverGroup { ValueDriverGroupId = sourceGroup.Id, ValueDriverGroupValue = sourceGroup.Value });
                 }
                 newKeyWrapper.KeyDriver = keyDriverInstance;
             }
@@ -642,7 +657,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         public string ParentKey
         {
             get { return _parentKey; }
-            set { _parentKey = value; }
+            set { this.RaiseAndSetIfChanged(ref _parentKey, value); }
         }
 
         public string EntityTypeName
@@ -660,6 +675,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _canSearchKeyChange; }
             set { _canSearchKeyChange = value; }
+        }
+
+        public string ParentFolderName
+        {
+            get { return _parentFolderName; }
+            set { this.RaiseAndSetIfChanged(ref _parentFolderName, value); }
         }
 
         #endregion

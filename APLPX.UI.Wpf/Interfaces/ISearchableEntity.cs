@@ -19,6 +19,11 @@ namespace APLPX.UI.WPF.Interfaces
         string ParentKey { get; set; }
 
         /// <summary>
+        /// Gets/sets the name of this item's parent folder.
+        /// </summary>
+        string ParentFolderName { get; set; }
+
+        /// <summary>
         /// Gets/sets the search key of this item.
         /// </summary>
         string SearchKey { get; set; }

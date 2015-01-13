@@ -61,7 +61,7 @@ namespace APLPX.UI.WPF
                     session.Modules = response.Modules;
                     session.Analytics = response.Analytics;
                     session.Pricing = response.Pricing;
-                    //session.FilterGroups = FilterGroups;
+                    session.FilterGroups = response.FilterGroups;
                     var mvm = new MainViewModel(session, analyticClient, userClient, pricingEverydayClient);
                     var mainWindow = new MainWindow();
                     mainWindow.DataContext = mvm;

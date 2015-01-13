@@ -24,6 +24,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _parentKey;
         private bool _canNameChange;
         private bool _canSearchKeyChange;
+        private string _parentFolderName;
 
         #endregion
 
@@ -98,11 +99,11 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region ISearchableEntity
-
+   
         public string ParentKey
         {
             get { return _parentKey; }
-            set { _parentKey = value; }
+            set { this.RaiseAndSetIfChanged(ref _parentKey, value); }
         }
 
         public string SearchKey
@@ -126,6 +127,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _canSearchKeyChange; }
             set { _canSearchKeyChange = value; }
+        }
+
+        public string ParentFolderName
+        {
+            get { return _parentFolderName; }
+            set { this.RaiseAndSetIfChanged(ref _parentFolderName, value); }
         }
 
         #endregion

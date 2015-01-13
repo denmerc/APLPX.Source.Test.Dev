@@ -6,7 +6,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d">
 
- 
+    <UserControl.Resources>
+        <Style x:Key="DataGridElementCenteredStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid x:Name="layoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -20,7 +25,7 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="{Binding RelativeSource={RelativeSource AncestorType=local:RoundingRuleControl},
                                               Path=IsEditable}"
-                  CanUserSortColumns="False"                
+                  CanUserSortColumns="False"
                   ItemsSource="{Binding}"
                   PreviewKeyDown="dgRoundingRules_PreviewKeyDown"
                   RowHeaderWidth="15"
@@ -29,20 +34,25 @@
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="colDollarRangeLower"
                                     Binding="{Binding Path=DollarRangeLower}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
                                     Header="Min $ Value" />
 
                 <DataGridTextColumn x:Name="colDollarRangeUpper"
                                     Binding="{Binding Path=DollarRangeUpper}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
                                     Header="Max $ Value" />
 
                 <DataGridTextColumn x:Name="colValueChange"
                                     Binding="{Binding Path=ValueChange}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
                                     Header="Rounding Value" />
 
                 <DataGridTemplateColumn Header="Rounding Type">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{x:Null}" Text="{Binding Path=RoundingTypeName}" />
+                            <TextBlock Style="{x:Null}"
+                                       Text="{Binding Path=RoundingTypeName}"
+                                       TextAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>

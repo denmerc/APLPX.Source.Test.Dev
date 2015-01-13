@@ -10,12 +10,16 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     public class AnalyticDriverViewModel : ViewModelBase
     {
         private DisplayEntities.Analytic _entity;
-        private bool _areResultsAvailable;
 
         #region Constructor and Initialization
 
         public AnalyticDriverViewModel(DisplayEntities.Analytic entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
             Entity = entity;
             InitializeCommands();
             InitializeEventHandlers();
@@ -23,7 +27,6 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         private void InitializeCommands()
         {
-            //testing canExecute:
             var canExecute = this.WhenAnyValue(vm => vm.IsValueDriverModeSelected);
             AutoCalculateCommand = ReactiveCommand.Create(canExecute);
             AutoCalculateCommand.Subscribe(_ => AutoCalculateCommandExecuted(_));
@@ -102,7 +105,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                 {
                     //TODO: for testing only. In production, will call server method.
                     mode.MockAutoCalculateDriverGroups();
-                    mode.AreResultsAvailable = true;                    
+                    mode.AreResultsAvailable = true;
                 }
             }
             return parameter;

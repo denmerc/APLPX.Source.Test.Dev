@@ -18,11 +18,11 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
 
             _views.Add(new PricingView("Summary"));
             _views.Add(new PricingView("Warnings"));
-            _views.Add(new PricingView("Price Delta"));
-            _views.Add(new PricingView("Mark-Up Delta"));
+            _views.Add(new PricingView("Price Change"));
+            _views.Add(new PricingView("Mark-Up Change"));
             _views.Add(new PricingView("Price List"));
             _views.Add(new PricingView("Competition"));
-            _views.Add(new PricingView("Value Driver Groups"));
+            //_views.Add(new PricingView("Value Driver Groups"));
             _views.Add(new PricingView("Edited"));
             _views.Add(new PricingView("Excluded"));
 

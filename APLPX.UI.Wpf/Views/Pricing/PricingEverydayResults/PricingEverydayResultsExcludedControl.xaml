@@ -100,17 +100,16 @@
             CornerRadius="5">
 
 
-        <Grid Width="1050" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="750">
+        <Grid Width="1065" MaxHeight="800">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0"
                    HorizontalAlignment="Center"
-                   Content="Results Table" />
+                   Content="Results" FontFamily="SegoeUI" FontSize="16" />
             <Grid Grid.Row="1"
-                  Width="1050"
-                  ShowGridLines="True">
+                  Width="1065">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -121,14 +120,15 @@
                     <Border x:Name="Label1"
                             HorizontalAlignment="Stretch"
                             BorderBrush="White"
-                            BorderThickness="1">
-                        <TextBlock Text="Current/Existing" />
+                            BorderThickness="1"
+                            Margin="8,0,0,0">
+                        <TextBlock Text="Current/Existing" FontFamily="SegoeUI" FontSize="13"/>
                     </Border>
                     <Border x:Name="Label2"
                             HorizontalAlignment="Stretch"
                             BorderBrush="White"
                             BorderThickness="1">
-                        <TextBlock Text="Optimization Results" />
+                        <TextBlock Text="Optimization Results" FontFamily="SegoeUI" FontSize="13"/>
                     </Border>
                 </StackPanel>
 
@@ -144,7 +144,8 @@
                           GridLinesVisibility="Horizontal"
                           HorizontalGridLinesBrush="White"
                           ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="750">
+                          MaxHeight="750"
+                          Margin="5,0,5,5">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn" >
                             <DataGridTemplateColumn.CellTemplate>
@@ -153,17 +154,17 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn  Header="Description" x:Name="descriptionColumn" MaxWidth="425">
+                        <DataGridTemplateColumn  Header="Description" x:Name="descriptionColumn" Width="325">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding SkuTitle}"/>
+                                    <TextBlock Text="{Binding SkuTitle}" TextWrapping="Wrap"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Price Lists" x:Name="priceListsColumn" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Name}"></TextBlock>
@@ -173,10 +174,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Current Price $" x:Name="currentPriceColumn" MaxWidth="65">
+                        <DataGridTemplateColumn Header="Current Price $" x:Name="currentPriceColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding CurrentPrice}"></TextBlock>
@@ -186,10 +187,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Current Mark-Up %" x:Name="currentMarkupColumn" MaxWidth="65">
+                        <DataGridTemplateColumn Header="Current Mark-Up %" x:Name="currentMarkupColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding CurrentMarkupPercent}"></TextBlock>
@@ -199,10 +200,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Total Price Change $" x:Name="totalPriceChangeColumn" MaxWidth="65">
+                        <DataGridTemplateColumn Header="Total Price Change $" x:Name="totalPriceChangeColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding PriceChange}"></TextBlock>
@@ -212,23 +213,23 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Final Price $" x:Name="finalPriceColumn" MaxWidth="65">
+                        <DataGridTemplateColumn Header="Final Price $" x:Name="finalPriceColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="???"></TextBlock>
+                                                <TextBlock Text=""></TextBlock>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="New Mark-Up %" x:Name="newMarkupColumn" MaxWidth="65">
+                        <DataGridTemplateColumn Header="New Mark-Up %" x:Name="newMarkupColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding NewMarkupPercent}"></TextBlock>
@@ -238,26 +239,26 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Edit Type" x:Name="editTypeColumn" MaxWidth="65">
+                        <DataGridTemplateColumn Header="Edit Type" x:Name="editTypeColumn" Width="90">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding PriceEdit.Type}"></TextBlock>
+                                                <TextBlock Text="Default Price"></TextBlock>           <!-- DEMO:BARRY <TextBlock Text="{Binding PriceEdit.Type}"></TextBlock>-->
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Warning" x:Name="warningColumn" MaxWidth="70">
+                        <DataGridTemplateColumn Header="Warning" x:Name="warningColumn" Width="70">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" >
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsCellStyleRed}" Style="{StaticResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding PriceWarning.Type}"></TextBlock>
+                                                <TextBlock Text="Below"></TextBlock>                   <!-- DEMO:BARRY <TextBlock Text="{Binding PriceWarning.Type}"></TextBlock> -->
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>

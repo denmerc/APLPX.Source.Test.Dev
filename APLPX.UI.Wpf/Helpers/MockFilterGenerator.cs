@@ -142,9 +142,9 @@ namespace APLPX.UI.WPF.Helpers
 
             groups.Add(group);
             group = new FilterGroup { Name = "Vendor Code", Sort = 8 };
-            group.Filters.Add(new Filter { Id = 0, Key = 1101, Code = "1800 ", Name = "1800 RADIATOR", IsSelected = true, Sort = 1 });
-            group.Filters.Add(new Filter { Id = 0, Key = 2188, Code = "1800 RADI", Name = "NOT A VALID VENDOR", IsSelected = true, Sort = 1 });
-            group.Filters.Add(new Filter { Id = 0, Key = 2147, Code = "1800 RADI", Name = ".", IsSelected = true, Sort = 1 });
+            group.Filters.Add(new Filter { Id = 0, Key = 1101, Code = "1800 RADI", Name = "1800 RADIATOR", IsSelected = true, Sort = 1 });
+            //group.Filters.Add(new Filter { Id = 0, Key = 2188, Code = "1800 RADI", Name = "NOT A VALID VENDOR", IsSelected = true, Sort = 1 });
+            //group.Filters.Add(new Filter { Id = 0, Key = 2147, Code = "1800 RADI", Name = ".", IsSelected = true, Sort = 1 });
             group.Filters.Add(new Filter { Id = 0, Key = 1102, Code = "1PC  ", Name = "ONE PIECE PRODUCTS", IsSelected = true, Sort = 1 });
             group.Filters.Add(new Filter { Id = 0, Key = 2114, Code = "3D FASTEN", Name = "3d Fasteners", IsSelected = true, Sort = 1 });
             group.Filters.Add(new Filter { Id = 0, Key = 1988, Code = "3S CORPOR", Name = "3s Corporation", IsSelected = true, Sort = 1 });

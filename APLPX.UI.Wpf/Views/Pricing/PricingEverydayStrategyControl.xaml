@@ -161,7 +161,7 @@
                     <TextBlock Width="125"
                                Foreground="{StaticResource Foreground}"
                                Style="{StaticResource ListItemTextStyle}"
-                               Text="{Binding Path=ValueDriverGroupId}"
+                               Text="{Binding Path=ValueDriverGroupValue}"
                                TextAlignment="Center" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -172,24 +172,28 @@
                    Margin="10,5"
                    Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyGroups,
-                                  Path=SelectedItem.ValueDriverGroupId,
+                                  Path=SelectedItem.ValueDriverGroupValue,
                                   StringFormat=Group {0} - Optimization Rules}" />
 
         <DataGrid x:Name="dgOptimizationRules"
                   Grid.Row="1"
                   Grid.Column="2"
                   Margin="10,5"
+                  VerticalAlignment="Top"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding ElementName=lstKeyGroups,
                                         Path=SelectedItem.OptimizationRules}"
                   SelectedIndex="0">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Id}"
-                                    Header="Id"
-                                    IsReadOnly="True" />
-                <DataGridTextColumn Binding="{Binding Path=DollarRangeLower}" Header="Min $ Value" />
-                <DataGridTextColumn Binding="{Binding Path=DollarRangeUpper}" Header="Max $ Value" />
-                <DataGridTextColumn Binding="{Binding Path=PercentChange}" Header=" Opt %" />
+                <DataGridTextColumn Binding="{Binding Path=DollarRangeLower}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    Header="Min $ Value" />
+                <DataGridTextColumn Binding="{Binding Path=DollarRangeUpper}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    Header="Max $ Value" />
+                <DataGridTextColumn Binding="{Binding Path=PercentChange}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    Header=" Opt %" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -198,7 +202,7 @@
                    Margin="10,5"
                    Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyGroups,
-                                  Path=SelectedItem.ValueDriverGroupId,
+                                  Path=SelectedItem.ValueDriverGroupValue,
                                   StringFormat=Group {0} - Markup Rules}" />
 
         <DataGrid x:Name="dgMarkupRules"
@@ -207,15 +211,21 @@
                   Margin="10,5"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding ElementName=lstKeyGroups,
-                                        Path=SelectedItem.MarkupRules}">
+                                        Path=SelectedItem.MarkupRules}"
+                  VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Id}"
-                                    Header="Id"
-                                    IsReadOnly="True" />
-                <DataGridTextColumn Binding="{Binding Path=DollarRangeLower}" Header="$ Lower" />
-                <DataGridTextColumn Binding="{Binding Path=DollarRangeUpper}" Header="$ Upper" />
-                <DataGridTextColumn Binding="{Binding Path=PercentLimitLower}" Header="% Lower" />
-                <DataGridTextColumn Binding="{Binding Path=PercentLimitUpper}" Header="% Upper" />
+                <DataGridTextColumn Binding="{Binding Path=DollarRangeLower}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    Header="$ Lower" />
+                <DataGridTextColumn Binding="{Binding Path=DollarRangeUpper}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    Header="$ Upper" />
+                <DataGridTextColumn Binding="{Binding Path=PercentLimitLower}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    Header="% Lower" />
+                <DataGridTextColumn Binding="{Binding Path=PercentLimitUpper}"
+                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    Header="% Upper" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -298,7 +308,7 @@
                         <TextBlock x:Name="txtGroupId"
                                    DockPanel.Dock="Left"
                                    Style="{StaticResource ListItemTextStyle}"
-                                   Text="{Binding Path=ValueDriverGroupId}" />
+                                   Text="{Binding Path=ValueDriverGroupValue}" />
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

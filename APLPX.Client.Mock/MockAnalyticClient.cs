@@ -289,8 +289,7 @@ namespace APLPX.Client.Mock
             var a = session.Data as ENT.Analytic;
             var newA = AnalyticAll_NoFilters.AsQueryable()
                 .Where(x => x.Id == a.Id).SingleOrDefault();
-
-
+            if (newA.SearchGroupKey == null) { newA.SearchGroupKey = string.Empty; }
             return new ENT.Session<ENT.Analytic>
             {
                 Data = new ENT.Analytic
@@ -336,7 +335,18 @@ namespace APLPX.Client.Mock
                                            Key = pg.Key,
                                            Name = pg.Name,
                                            Sort = pg.Sort,
-                                           Title = pg.Title
+                                           Title = pg.Title,
+                                           PriceLists = (from pl in pg.PriceLists
+                                                         select new ENT.PriceList
+                                                         {
+                                                             Code = pl.Code,
+                                                             Id = pl.Id,
+                                                             IsSelected = pl.IsSelected,
+                                                             Key = pl.Key,
+                                                             Name = pl.Name,
+                                                             Title = pl.Title,
+                                                             Sort = pl.Sort
+                                                         }).ToList(),
                                        }).ToList(),
                     ValueDrivers = (from vd in newA.ValueDrivers
                                     select new ENT.AnalyticValueDriver { 
@@ -363,7 +373,22 @@ namespace APLPX.Client.Mock
                                                                      Sort = g.Sort,
                                                                      Value = g.Value
                                                                  }).ToList()
-                                                  }).ToList()
+                                                  }).ToList(),
+                                                             Results = (from r in vd.Results
+                                                                        select new ENT.AnalyticResultValueDriverGroup 
+                                                                        { 
+                                                                            Id = r.Id,
+                                                                            MaxOutlier = r.MaxOutlier,
+                                                                            MaxValue = r.MaxValue,
+                                                                            MinOutlier = r.MinOutlier,
+                                                                            MinValue = r.MinValue,
+                                                                            SalesValue = r.SalesValue,
+                                                                            SkuCount = r.SkuCount,
+                                                                            Sort = r.Sort,
+                                                                            Value = r.Value
+                                                                        }).ToList()
+
+
                                                   
                                     }).ToList()
                     

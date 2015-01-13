@@ -16,7 +16,9 @@ using APLPX.UI.WPF.Mappers;
 using APLPX.UI.WPF.ViewModels.Analytic;
 using APLPX.UI.WPF.ViewModels.Pricing;
 using ReactiveUI;
+using System.Reactive;
 using DTO = APLPX.Client.Entity;
+using System.Reactive.Linq;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -150,6 +152,8 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     var id = new DTO.Analytic(SelectedEntity.Id);
                     var a = _analyticService.LoadAnalytic(new DTO.Session<DTO.Analytic>() { Data = id });
+                    
+                    
                     a.Data.FilterGroups = Session.FilterGroups;
                     SelectedAnalytic = a.Data.ToDisplayEntity();
                 }));
@@ -446,7 +450,7 @@ namespace APLPX.UI.WPF.ViewModels
             var action = sender as DisplayEntities.Action;
             if (action != null && SelectedEntity != null)
             {
-                //HandleSelectedAction(action);
+                HandleSelectedAction(action);
             }
 
             return null;
@@ -606,7 +610,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                             //var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
                             //var displayAnalytics = analyticDtos.ToDisplayEntities();
-                            
+
                             _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
                             
 
@@ -705,10 +709,10 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Filters
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsFilters:
-                    result = new FilterViewModel(SelectedAnalytic);
+                    result = new FilterViewModel(SelectedAnalytic, SelectedAnalytic.FilterGroups);
                     break;
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingFilters:
-                    result = new FilterViewModel(SelectedPricingEveryday);
+                    result = new FilterViewModel(SelectedPricingEveryday, SelectedPricingEveryday.FilterGroups);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingFilters:
@@ -717,7 +721,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Price Lists
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsPriceLists:
-                    result = new AnalyticPriceListViewModel(SelectedAnalytic, SelectedAnalytic.PriceListGroups);
+                    result = new AnalyticPriceListViewModel(SelectedAnalytic);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:
@@ -748,7 +752,7 @@ namespace APLPX.UI.WPF.ViewModels
                 //Rounding
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingRounding:
                     PricingEverydayRoundingViewModel vm = new PricingEverydayRoundingViewModel(SelectedPricingEveryday);
-                    vm.RoundingTemplates = DisplayModuleGenerator.GetSampleRoundingTemplates();
+                    vm.RoundingTemplates = MockPricingEverydayGenerator.GetRoundingTemplates();
                     result = vm;
 
                     break;
@@ -928,6 +932,7 @@ namespace APLPX.UI.WPF.ViewModels
             if (data.SourceEntity.SearchKey != data.DestinationSearchGroup.SearchKey)
             {
                 data.SourceEntity.SearchKey = data.DestinationSearchGroup.SearchKey;
+                data.SourceEntity.ParentFolderName = data.DestinationSearchGroup.Name;
                 SelectedFeature.RecalculateSearchItemCounts();
 
                 //Re-select the reassigned entity within its new search group.

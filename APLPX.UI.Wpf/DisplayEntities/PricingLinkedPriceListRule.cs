@@ -9,7 +9,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private int _priceListId;
-        private decimal _percentChange;
+        private int _percentChange;
         private List<PriceRoundingRule> _roundingRules;
         private List<SQLEnumeration> _roundingTypes;
 
@@ -33,7 +33,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _priceListId, value); }
         }
 
-        public decimal PercentChange
+        public int PercentChange
         {
             get { return _percentChange; }
             set { this.RaiseAndSetIfChanged(ref _percentChange, value); }

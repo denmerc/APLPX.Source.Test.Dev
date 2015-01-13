@@ -385,9 +385,10 @@ namespace APLPX.UI.WPF.DisplayEntities
                 var matchingEntities = SearchableEntities.Where(item => item.SearchKey == searchGroup.SearchKey);
                 foreach (ISearchableEntity entity in matchingEntities)
                 {
-                    entity.ParentKey = searchGroup.ParentName;
+                    entity.ParentKey = searchGroup.ParentName;                    
                     entity.CanNameChange = searchGroup.CanNameChange;
                     entity.CanSearchKeyChange = searchGroup.CanSearchKeyChange;
+                    entity.ParentFolderName = searchGroup.Name;
                 }
             }
         }

@@ -75,5 +75,14 @@ namespace APLPX.UI.WPF
                 }
             }
         }
+
+        private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
+        {
+            int i = 0;
+            i++;
+
+            //if
+            //e.Accepted = true;
+        }
     }
 }

@@ -219,7 +219,7 @@ namespace APLPX.Client.Entity
         [DataMember]
         public List<AnalyticValueDriverMode> Modes { get; set; }
         [DataMember]
-        public List<AnalyticResultValueDriverGroup> Results { get; private set; }
+        public List<AnalyticResultValueDriverGroup> Results { get; set; }
 
         #region Driver mode name indexer...
         public AnalyticValueDriverMode this[string index] {
@@ -294,9 +294,9 @@ namespace APLPX.Client.Entity
         //[DataMember]
         //public int Group { get; set; }
         [DataMember]
-        public int SkuCount { get; private set; }
+        public int SkuCount { get;  set; }
         [DataMember]
-        public string SalesValue { get; private set; }
+        public string SalesValue { get;  set; }
     }
 
     [DataContract]
@@ -317,9 +317,9 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public List<PriceList> PriceLists { get; private set; }
+        public List<PriceList> PriceLists { get;  set; }
         [DataMember]
-        public string TypeName { get; private set; }
+        public string TypeName { get;  set; }
     }
 }
 

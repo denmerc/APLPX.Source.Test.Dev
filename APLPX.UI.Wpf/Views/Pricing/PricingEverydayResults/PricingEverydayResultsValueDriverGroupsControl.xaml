@@ -30,6 +30,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+    
+    <!--
     <Border Grid.Column="2"
             Width="Auto"
             Height="Auto"
@@ -80,5 +82,5 @@
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
         </Grid>
-    </Border>
+    </Border>       DEMO: BARRY-->
 </UserControl>

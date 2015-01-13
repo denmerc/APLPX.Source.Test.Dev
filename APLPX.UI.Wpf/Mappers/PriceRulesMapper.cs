@@ -117,7 +117,7 @@ namespace APLPX.UI.WPF.Mappers
         {
             var displayEntity = new Display.PricingLinkedPriceListRule();
             displayEntity.PriceListId = dto.PriceListId;
-            displayEntity.PercentChange = dto.PercentChange;
+            displayEntity.PercentChange = (int)dto.PercentChange;
 
             if (dto.RoundingRules != null)
             {
@@ -187,9 +187,9 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.PriceOptimizationRule ToDto(this Display.PriceOptimizationRule displayEntity)
         {
             var dto = new DTO.PriceOptimizationRule(
-                                        displayEntity.Id, 
-                                        displayEntity.DollarRangeLower, 
-                                        displayEntity.DollarRangeUpper, 
+                                        displayEntity.Id,
+                                        displayEntity.DollarRangeLower,
+                                        displayEntity.DollarRangeUpper,
                                         displayEntity.PercentChange);
 
             return dto;

@@ -19,16 +19,13 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _title;
         private bool _isEnabled;
         private bool _isVisible;
+        private bool _isCompleted;
 
         private List<Action> _actions;
         private List<Error> _errors;
         private List<Advisor> _advisors;
 
         private Action _selectedAction;
-
-        //DEMO BARRY: isCompleted add
-        private bool _isCompleted;
-        ///////////////////
 
         #endregion
 
@@ -41,11 +38,6 @@ namespace APLPX.UI.WPF.DisplayEntities
             Advisors = new List<Advisor>();
 
             //Set default values.
-
-            //DEMO BARRY: IsCompleted set to true
-            IsCompleted = true;
-            ///////////////////
-
             IsEnabled = true;
             IsVisible = true;
         }
@@ -54,13 +46,11 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Properties
 
-        //DEMO BARRY: IsCompleted property add
         public bool IsCompleted
         {
             get { return _isCompleted; }
             set { this.RaiseAndSetIfChanged(ref _isCompleted, value); }
         }
-        ///////////////////
 
         public ModuleFeatureStepType TypeId
         {
@@ -76,13 +66,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public string Name
         {
-            get {
-                //DEMO BARRY: Get Case add for check mark
-                if (_name == null || _name == "7) Impact Analysis" || _name == "8) Request Approval" || _name == "Search Everyday")
-                    IsCompleted = false;
-                ////////////////////////////////
-                return _name; 
-            }
+            get { return _name; }
             set { this.RaiseAndSetIfChanged(ref _name, value); }
         }
 
@@ -108,7 +92,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _isVisible; }
             set { this.RaiseAndSetIfChanged(ref _isVisible, value); }
-        }   
+        }
 
         /// <summary>
         /// Gets/sets the actions that apply to this step.

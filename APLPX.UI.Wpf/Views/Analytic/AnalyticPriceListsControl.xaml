@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"           
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d">
     <UserControl.Resources>
+        <Style x:Key="DataGridElementCenteredStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
         <CollectionViewSource x:Key="cvsPriceListGroups"
                               IsLiveSortingRequested="True"
                               Source="{Binding Path=Entity.PriceListGroups}">
@@ -16,8 +20,8 @@
     </UserControl.Resources>
 
     <UserControl.Triggers>
-        <EventTrigger RoutedEvent="UserControl.Loaded" >
-            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}"/>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}" />
         </EventTrigger>
     </UserControl.Triggers>
 
@@ -37,15 +41,15 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Style="{StaticResource ListTitleTextStyle}"
+                   Visibility="{Binding Path=ShowPriceListGroups,Converter={StaticResource BooleanToVisibilityConverter}}"
                    Text="Price List Groups" />
 
         <ListBox x:Name="lstPriceListGroups"
                  Grid.Row="1"
                  Grid.Column="0"
                  ItemsSource="{Binding Path=Entity.PriceListGroups}"
+                 Visibility="{Binding Path=ShowPriceListGroups,Converter={StaticResource BooleanToVisibilityConverter}}"
                  SelectedItem="{Binding Path=Entity.SelectedPriceListGroup}">
-            <!--  this does not retain selection:  -->
-            <!--  ItemsSource="{Binding Source={StaticResource cvsPriceListGroups}}"  -->
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Width="200"
@@ -78,7 +82,9 @@
 
                 <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
 
-                <DataGridTextColumn Binding="{Binding Path=Code}" Header="Code" />
+                <DataGridTextColumn Binding="{Binding Path=Code}"
+                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
+                                    Header="Code" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

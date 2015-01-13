@@ -10,6 +10,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private int _valueDriverGroupId;
+        private short _valueDriverGroupValue;
         private List<PriceMarkupRule> _markupRules;
         private List<PriceOptimizationRule> _optimizationRules;
 
@@ -29,10 +30,22 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Properties
 
+        /// <summary>
+        /// Gets/sets the Id of the <see cref="ValueDriverGroup"/> related to this object.
+        /// </summary>
         public int ValueDriverGroupId
         {
             get { return _valueDriverGroupId; }
             set { this.RaiseAndSetIfChanged(ref _valueDriverGroupId, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets the Value of the <see cref="ValueDriverGroup"/> related to this object.
+        /// </summary>
+        public short ValueDriverGroupValue
+        {
+            get { return _valueDriverGroupValue; }
+            set { this.RaiseAndSetIfChanged(ref _valueDriverGroupValue, value); }
         }
 
         public List<PriceMarkupRule> MarkupRules

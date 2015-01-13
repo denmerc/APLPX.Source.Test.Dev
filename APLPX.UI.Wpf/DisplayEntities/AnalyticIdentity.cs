@@ -106,7 +106,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _owner, value); }
         }
 
-        public bool Active
+        public bool IsActive
         {
             get { return _active; }
             set { this.RaiseAndSetIfChanged(ref _active, value); }

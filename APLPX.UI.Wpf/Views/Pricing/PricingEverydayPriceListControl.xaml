@@ -12,11 +12,14 @@
         <converters:MultiplierConverter x:Key="multiplierConverter" />
         <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
 
-        <CollectionViewSource x:Key="cvsModes" Source="{Binding Path=PriceRoutine.PricingModes}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
+        <SolidColorBrush x:Key="ListBoxSelectionColorBrush" Color="{DynamicResource ListBoxSelectionColor}" />
+
+        <Style x:Key="EditTextStyle"
+               BasedOn="{StaticResource {x:Type TextBox}}"
+               TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="helpers:TextBoxHelper.SelectAllTextOnFocus" Value="true" />
+        </Style>
     </UserControl.Resources>
 
     <UserControl.Triggers>
@@ -60,26 +63,56 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        
+        <StackPanel Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
 
-        <TextBlock x:Name="txtKeyPriceListsTitle"
-                   Grid.Row="0"
-                   Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
-                   Text="{Binding ElementName=lstKeyPriceLists,
-                                  Path=Items.Count,
-                                  StringFormat={}Key Price Lists ({0})}" />
+            <TextBlock x:Name="txtKeyPriceListsTitle"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="{Binding ElementName=lstKeyPriceLists,
+                                      Path=Items.Count,
+                                      StringFormat={}Price Lists ({0})}" />
+            <CheckBox x:Name="chkSelectAllPriceLists"
+                      Margin="20,5,0,0"
+                      VerticalAlignment="Center"
+                      Command="{Binding Path=SelectAllPriceListsCommand}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self},
+                                                 Path=IsChecked}">
+                <CheckBox.Style>
+                    <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
+                        <Setter Property="Content" Value="Include All" />
+                        <Setter Property="ToolTip" Value="Include all price lists under the Key price list" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}" Value="True">
+                                <Setter Property="Content" Value="Exclude All" />
+                                <Setter Property="ToolTip" Value="Exclude all price lists under the Key price list" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </CheckBox.Style>
+            </CheckBox>
+        </StackPanel>
 
         <ListBox x:Name="lstKeyPriceLists"
                  Grid.Row="1"
                  Grid.RowSpan="2"
                  Grid.Column="1"
-                 MinWidth="250"
+                 MinWidth="275"
                  Margin="10,5"
                  ItemsSource="{Binding Path=PriceRoutine.KeyPriceListGroup.PriceLists}"
                  SelectedItem="{Binding Path=PriceRoutine.SelectedKeyPriceList}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel MinHeight="35" LastChildFill="True">
+                        <CheckBox x:Name="chkIsSelected"
+                                  DockPanel.Dock="Left"
+                                  IsChecked="{Binding Path=IsSelected}"
+                                  IsEnabled="{Binding Path=CanChangeIsSelected}" />
+
                         <Image x:Name="imgKey"
                                Width="25"
                                Height="25"
@@ -157,9 +190,8 @@
                      Grid.Row="2"
                      Grid.Column="0"
                      Margin="5,0"
-                     VerticalAlignment="Center"
-                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeLower}"
-                     helpers:TextBoxHelper.SelectAllTextOnFocus="true" />
+                     Style="{StaticResource EditTextStyle}"
+                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeLower}" />
 
             <Label Grid.Row="1"
                    Grid.Column="1"
@@ -170,173 +202,297 @@
                      Grid.Row="2"
                      Grid.Column="1"
                      Margin="5,0"
-                     VerticalAlignment="Center"
-                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeUpper}"
-                     helpers:TextBoxHelper.SelectAllTextOnFocus="true" />
+                     Style="{StaticResource EditTextStyle}"
+                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeUpper}" />
 
+            <Grid x:Name="RelationshipsGrid"
+                  Grid.Row="3"
+                  Grid.RowSpan="2"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Margin="0,25,0,0">
 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <TextBlock x:Name="txtRelationshipsTitle"
+                               Style="{StaticResource ListTitleTextStyle}"
+                               Text="Price List Relationships" />
+                    <TextBlock x:Name="txtRelationshipsSubtitle"
+                               Margin="0"
+                               Style="{StaticResource ListTitleTextStyle}"
+                               Text="{Binding Path=PriceRoutine.SelectedMode.Name,
+                                              StringFormat={}{0} Mode}"
+                               ToolTip="{Binding Path=PriceRoutine.SelectedMode.Title}" />
+                </StackPanel>
+
+                <ItemsControl x:Name="lstRelationships"
+                              Grid.Row="1"
+                              Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              Background="Transparent"
+                              BorderBrush="Transparent"
+                              MinWidth="275"
+                              ItemsSource="{Binding Path=PriceRoutine.RoundingRulePriceLists}"
+                              Style="{x:Null}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel x:Name="itemPanel"
+                                       MinHeight="35"
+                                       Background="Transparent"
+                                       LastChildFill="True">
+
+                                <TextBlock x:Name="txtPercent"
+                                           Margin="0,5"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Right"
+                                           Text="%"
+                                           Visibility="{Binding ElementName=txtPercentChange,
+                                                                Path=Visibility}" />
+
+                                <TextBox x:Name="txtPercentChange"
+                                         Width="35"
+                                         Margin="5"
+                                         DockPanel.Dock="Right"
+                                         Style="{StaticResource EditTextStyle}"
+                                         Text="{Binding Path=LinkedPriceListRule.PercentChange}"
+                                         Visibility="{Binding Path=IsKey,
+                                                              Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+
+                                <Image x:Name="imgKey"
+                                       Width="25"
+                                       Height="25"
+                                       Margin="5"
+                                       DockPanel.Dock="Left"
+                                       Source="/APLPX.UI.WPF;component/Resources/key-icon.png"
+                                       ToolTip="This is the Key price list."
+                                       Visibility="{Binding Path=IsKey,
+                                                            Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <Rectangle x:Name="rectSpacer"
+                                           DockPanel.Dock="Left"
+                                           Fill="Transparent"
+                                           Stroke="Transparent" />
+
+                                <Path x:Name="arrow"
+                                      Grid.Row="1"
+                                      Grid.Column="6"
+                                      Margin="0,5,0,0"
+                                      VerticalAlignment="Center"
+                                      Data="M 0 -10 L 0 0 L 18 0 L12 -4 M 18 0 L12 4"
+                                      Stroke="{StaticResource Foreground}"
+                                      StrokeThickness="1" />
+
+                                <TextBlock x:Name="txtName"
+                                           Margin="5"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Left"
+                                           Text="{Binding Path=Name}"
+                                           ToolTip="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name,
+                                                             RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                            </DockPanel>
+                            
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsKey}" Value="True">
+                                    <Setter TargetName="arrow" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="itemPanel" Property="Background" Value="{StaticResource ListBoxSelectionColorBrush}" />
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Global key" />
+                                        <Condition Binding="{Binding Path=IsKey}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="rectSpacer" Property="Width" Value="10" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Global key +" />
+                                        <Condition Binding="{Binding Path=IsKey}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="rectSpacer" Property="Width" Value="10" />
+                                    <Setter TargetName="txtPercentChange" Property="Visibility" Value="Collapsed" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Cascade" />
+                                        <Condition Binding="{Binding Path=IsKey}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="rectSpacer" Property="Width" Value="{Binding Path=OrdinalPosition, Converter={StaticResource multiplierConverter}, ConverterParameter=10}" />
+                                </MultiDataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
 
             <!--
                 Auxiliary element required to forward DataContext to a DataGridColumn (which is not in the main visual tree).
                 Note: adapted from http://stackoverflow.com/questions/25504769/wpf-datagridcolumn-visibility
             -->
-            <FrameworkElement x:Name="dataContextSource"
-                              Grid.Row="3"
-                              Visibility="Collapsed" />
-
-            <TextBlock x:Name="txtLinkedPriceListsTitle"
-                       Grid.Row="3"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="3"
-                       Margin="0,25,0,5"
-                       Style="{StaticResource ListTitleTextStyle}"
-                       Text="{Binding ElementName=dgLinkedPriceLists,
-                                      Path=Items.Count,
-                                      StringFormat={}Linked Price Lists ({0})}"
-                       Visibility="{Binding ElementName=dgLinkedPriceLists,
-                                            Path=Visibility}" />
-
-            <DataGrid x:Name="dgLinkedPriceLists"
-                      Grid.Row="4"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="3"
-                      Width="350"
-                      VerticalAlignment="Top"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserSortColumns="False"
-                      ItemsSource="{Binding Path=PriceRoutine.LinkedPriceListGroup.FilteredPriceLists}"
-                      Visibility="{Binding Path=PriceRoutine.SelectedMode.HasLinkedPriceList,
-                                           Converter={StaticResource BooleanToVisibilityConverter}}">
+            <!--
+                <FrameworkElement x:Name="dataContextSource"
+                Grid.Row="3"
+                Visibility="Collapsed" />
+                
+                <TextBlock x:Name="txtLinkedPriceListsTitle"
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="0,25,0,5"
+                Style="{StaticResource ListTitleTextStyle}"
+                Text="{Binding ElementName=dgLinkedPriceLists,
+                Path=Items.Count,
+                StringFormat={}Linked Price Lists ({0})}"
+                Visibility="{Binding ElementName=dgLinkedPriceLists,
+                Path=Visibility}" />
+                
+                <DataGrid x:Name="dgLinkedPriceLists"
+                Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Width="350"
+                VerticalAlignment="Top"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserSortColumns="False"
+                ItemsSource="{Binding Path=PriceRoutine.LinkedPriceListGroup.FilteredPriceLists}"
+                Visibility="{Binding Path=PriceRoutine.SelectedMode.HasLinkedPriceList,
+                Converter={StaticResource BooleanToVisibilityConverter}}">
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,
-                                                              UpdateSourceTrigger=PropertyChanged}"
-                                            EditingElementStyle="{StaticResource MetroDataGridCheckBox}"
-                                            ElementStyle="{StaticResource MetroDataGridCheckBox}"
-                                            Header="Selected" />
-
-                    <DataGridTextColumn Binding="{Binding Path=Name}"
-                                        Header="Price List"
-                                        IsReadOnly="True" />
-
-                    <DataGridTextColumn x:Name="colLinkedRulePercentage"
-                                        Binding="{Binding Path=LinkedPriceListRule.PercentChange}"
-                                        Header="Percentage"
-                                        Visibility="{Binding Path=DataContext.PriceRoutine.SelectedMode.HasLinkedPriceListRule,
-                                                             Source={x:Reference dataContextSource},
-                                                             Converter={StaticResource BooleanToVisibilityConverter}}" />
-
+                <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,
+                UpdateSourceTrigger=PropertyChanged}"
+                EditingElementStyle="{StaticResource MetroDataGridCheckBox}"
+                ElementStyle="{StaticResource MetroDataGridCheckBox}"
+                Header="Selected" />
+                
+                <DataGridTextColumn Binding="{Binding Path=Name}"
+                Header="Price List"
+                IsReadOnly="True" />
+                
+                <DataGridTextColumn x:Name="colLinkedRulePercentage"
+                Binding="{Binding Path=LinkedPriceListRule.PercentChange}"
+                Header="Percentage"
+                Visibility="{Binding Path=DataContext.PriceRoutine.SelectedMode.HasLinkedPriceListRule,
+                Source={x:Reference dataContextSource},
+                Converter={StaticResource BooleanToVisibilityConverter}}" />
+                
                 </DataGrid.Columns>
-            </DataGrid>
+                </DataGrid>
+            -->
         </Grid>
 
-        <Grid x:Name="RelationshipsGrid"
-              Grid.Row="0"
-              Grid.RowSpan="2"
-              Grid.Column="4"
-              Margin="15,0">
-
+        <!--
+            <Grid x:Name="RelationshipsGrid"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="4"
+            Margin="15,0">
+            
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
+            
             <StackPanel Grid.Row="0">
-                <TextBlock x:Name="txtRelationshipsTitle"
-                           Style="{StaticResource ListTitleTextStyle}"
-                           Text="Price List Relationships" />
-                <TextBlock x:Name="txtRelationshipsSubtitle"
-                           Margin="0"
-                           Style="{StaticResource ListTitleTextStyle}"
-                           Text="{Binding Path=PriceRoutine.SelectedMode.Name,
-                                          StringFormat={}{0} Mode}" />
+            <TextBlock x:Name="txtRelationshipsTitle"
+            Style="{StaticResource ListTitleTextStyle}"
+            Text="Price List Relationships" />
+            <TextBlock x:Name="txtRelationshipsSubtitle"
+            Margin="0"
+            Style="{StaticResource ListTitleTextStyle}"
+            Text="{Binding Path=PriceRoutine.SelectedMode.Name,
+            StringFormat={}{0} Mode}" />
             </StackPanel>
-
+            
             <ItemsControl x:Name="lstRelationships"
-                          Grid.Row="1"
-                          Margin="0,15,0,0"
-                          VerticalAlignment="Top"
-                          Background="Transparent"
-                          BorderBrush="Transparent"
-                          ItemsSource="{Binding Path=PriceRoutine.RoundingRulePriceLists}"
-                          Style="{x:Null}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel x:Name="itemPanel"
-                                   MinHeight="35"
-                                   Background="Transparent"
-                                   LastChildFill="True">
-                            <TextBlock x:Name="txtPercentChange"
-                                       Margin="5"
-                                       VerticalAlignment="Center"
-                                       DockPanel.Dock="Right"
-                                       Text="{Binding Path=LinkedPriceListRule.PercentChange,
-                                                      StringFormat={}{0:N2}%}"
-                                       Visibility="{Binding Path=IsKey,
-                                                            Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
-                            <Image x:Name="imgKey"
-                                   Width="25"
-                                   Height="25"
-                                   Margin="5"
-                                   DockPanel.Dock="Left"
-                                   Source="/APLPX.UI.WPF;component/Resources/key-icon.png"
-                                   ToolTip="This is the Key price list."
-                                   Visibility="{Binding Path=IsKey,
-                                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-                            <Rectangle x:Name="rectSpacer"
-                                       DockPanel.Dock="Left"
-                                       Fill="Transparent"
-                                       Stroke="Transparent" />
-
-                            <Path x:Name="arrow"
-                                  Grid.Row="1"
-                                  Grid.Column="6"
-                                  Margin="0,5,0,0"
-                                  VerticalAlignment="Center"
-                                  Data="M 0 -10 L 0 0 L 18 0 L12 -4 M 18 0 L12 4"
-                                  Stroke="{StaticResource Foreground}"
-                                  StrokeThickness="1" />
-
-                            <TextBlock x:Name="txtName"
-                                       Margin="5"
-                                       VerticalAlignment="Center"
-                                       DockPanel.Dock="Left"
-                                       Text="{Binding Path=Name}"
-                                       ToolTip="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name,
-                                                         RelativeSource={RelativeSource AncestorType=ListBox}}" />
-                        </DockPanel>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding Path=IsKey}" Value="True">
-                                <Setter TargetName="arrow" Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Global key" />
-                                    <Condition Binding="{Binding Path=IsKey}" Value="False" />
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="rectSpacer" Property="Width" Value="20" />
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Global key +" />
-                                    <Condition Binding="{Binding Path=IsKey}" Value="False" />
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="rectSpacer" Property="Width" Value="20" />
-                                <Setter TargetName="txtPercentChange" Property="Visibility" Value="Collapsed" />
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Cascade" />
-                                    <Condition Binding="{Binding Path=IsKey}" Value="False" />
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="rectSpacer" Property="Width" Value="{Binding Path=OrdinalPosition, Converter={StaticResource multiplierConverter}, ConverterParameter=7}" />
-                            </MultiDataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+            Grid.Row="1"
+            Margin="0,15,0,0"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            ItemsSource="{Binding Path=PriceRoutine.RoundingRulePriceLists}"
+            Style="{x:Null}">
+            <ItemsControl.ItemTemplate>
+            <DataTemplate>
+            <DockPanel x:Name="itemPanel"
+            MinHeight="35"
+            Background="Transparent"
+            LastChildFill="True">
+            <TextBlock x:Name="txtPercentChange"
+            Margin="5"
+            VerticalAlignment="Center"
+            DockPanel.Dock="Right"
+            Text="{Binding Path=LinkedPriceListRule.PercentChange,
+            StringFormat={}{0:N2}%}"
+            Visibility="{Binding Path=IsKey,
+            Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+            <Image x:Name="imgKey"
+            Width="25"
+            Height="25"
+            Margin="5"
+            DockPanel.Dock="Left"
+            Source="/APLPX.UI.WPF;component/Resources/key-icon.png"
+            ToolTip="This is the Key price list."
+            Visibility="{Binding Path=IsKey,
+            Converter={StaticResource BooleanToVisibilityConverter}}" />
+            
+            <Rectangle x:Name="rectSpacer"
+            DockPanel.Dock="Left"
+            Fill="Transparent"
+            Stroke="Transparent" />
+            
+            <Path x:Name="arrow"
+            Grid.Row="1"
+            Grid.Column="6"
+            Margin="0,5,0,0"
+            VerticalAlignment="Center"
+            Data="M 0 -10 L 0 0 L 18 0 L12 -4 M 18 0 L12 4"
+            Stroke="{StaticResource Foreground}"
+            StrokeThickness="1" />
+            
+            <TextBlock x:Name="txtName"
+            Margin="5"
+            VerticalAlignment="Center"
+            DockPanel.Dock="Left"
+            Text="{Binding Path=Name}"
+            ToolTip="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name,
+            RelativeSource={RelativeSource AncestorType=ListBox}}" />
+            </DockPanel>
+            <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=IsKey}" Value="True">
+            <Setter TargetName="arrow" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+            <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Global key" />
+            <Condition Binding="{Binding Path=IsKey}" Value="False" />
+            </MultiDataTrigger.Conditions>
+            <Setter TargetName="rectSpacer" Property="Width" Value="20" />
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+            <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Global key +" />
+            <Condition Binding="{Binding Path=IsKey}" Value="False" />
+            </MultiDataTrigger.Conditions>
+            <Setter TargetName="rectSpacer" Property="Width" Value="20" />
+            <Setter TargetName="txtPercentChange" Property="Visibility" Value="Collapsed" />
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+            <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Cascade" />
+            <Condition Binding="{Binding Path=IsKey}" Value="False" />
+            </MultiDataTrigger.Conditions>
+            <Setter TargetName="rectSpacer" Property="Width" Value="{Binding Path=OrdinalPosition, Converter={StaticResource multiplierConverter}, ConverterParameter=7}" />
+            </MultiDataTrigger>
+            </DataTemplate.Triggers>
+            </DataTemplate>
+            </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </Grid>
+            </Grid>
+        -->
     </Grid>
 </UserControl>

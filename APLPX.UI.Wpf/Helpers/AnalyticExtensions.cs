@@ -37,7 +37,7 @@ namespace APLPX.UI.WPF.Helpers
             copy.Identity.Created = createdDate;
             copy.Identity.Edited = createdDate;
             copy.Identity.Refreshed = createdDate;
-            copy.Identity.Active = source.Identity.Active;
+            copy.Identity.IsActive = source.Identity.IsActive;
             copy.Identity.Author = source.Identity.Author;
 
             string copySuffix = " (Copy)";

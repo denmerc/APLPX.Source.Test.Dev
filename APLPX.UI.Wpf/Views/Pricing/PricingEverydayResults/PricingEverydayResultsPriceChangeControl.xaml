@@ -55,7 +55,7 @@
             <Label Grid.Row="0"
                    Grid.ColumnSpan="2"
                    HorizontalAlignment="Center"
-                   Content="Results Table" />
+                   Content="Results" FontFamily="SegoeUI" FontSize="16"  />
 
             <DataGrid Grid.Row="3"
                       Grid.ColumnSpan="2"
@@ -64,14 +64,14 @@
                       AutoGenerateColumns="False"
                       ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="Auto" Header="SKU #" Binding="{Binding SkuName}"/>
-                    <DataGridTextColumn Width="Auto" Header="Description" Binding="{Binding SkuTitle}"/>
-                    <DataGridTextColumn Width="Auto" Header="Price Lists" Binding="{Binding PriceLists[0].Name}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Current Price $" Binding="{Binding PriceLists[0].CurrentPrice}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Total Value Driver Change $" Binding="{Binding PriceLists[0].PriceChange}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Final Price $" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Edit Type" Binding="{Binding PriceLists[0].PriceEdit.Type}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Warning" Binding="{Binding PriceLists[0].PriceWarning.Type}" MaxWidth="70"/>
+                    <DataGridTextColumn Width="Auto" Header="SKU #" Binding="{Binding SkuName}" />
+                    <DataGridTextColumn Header="Description" Binding="{Binding SkuTitle}" Width="400" ElementStyle="{StaticResource StandardDataGridAlphabeticalCellStyle}"/>
+                    <DataGridTextColumn Width="Auto" Header="Price Lists" Binding="{Binding PriceLists[0].Name}" />
+                    <DataGridTextColumn Header="Current Price $" Binding="{Binding PriceLists[0].CurrentPrice}" Width="65" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Header="Total Value Driver Change $" Binding="{Binding PriceLists[0].PriceChange}" Width="110" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn  Header="Final Price $" Width="65" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Header="Edit Type" Width="65"/>         <!-- Binding="{Binding PriceLists[0].PriceEdit.Type}" MaxWidth="65"/> DEMO:BARRY -->
+                    <DataGridTextColumn Header="Warning" Width="70"/>              <!-- Binding="{Binding PriceLists[0].PriceWarning.Type}" MaxWidth="70"/> DEMO: BARRY-->
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>

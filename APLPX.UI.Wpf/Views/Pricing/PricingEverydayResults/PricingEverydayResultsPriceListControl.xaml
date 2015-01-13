@@ -10,16 +10,21 @@
     <UserControl.Resources>
         <ResourceDictionary>
 
-            <CollectionViewSource x:Key="cvsResults" Source="{Binding PriceRoutine.Results}">
+            <CollectionViewSource x:Key="cvsResults" Source="{Binding PriceRoutine.Results}" >
                 <CollectionViewSource.GroupDescriptions>
                     <PropertyGroupDescription PropertyName="Id" />
                 </CollectionViewSource.GroupDescriptions>
                 <CollectionViewSource.SortDescriptions>
                     <scm:SortDescription PropertyName="Id" />
-
-
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
+
+            <CollectionViewSource x:Key="cvsResultsDemo" Source="{Binding PriceRoutine.Results.PriceLists}" >
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="Name" />
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+
 
             <ResourceDictionary.MergedDictionaries>
                 <!--  for design-time support, already in app.xml  -->
@@ -60,17 +65,16 @@
                 Grid.Column="1">
 
 
-            <Grid Width="850" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="750" Grid.Column="1">
+            <Grid Width="890" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="800" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0"
                    HorizontalAlignment="Center"
-                   Content="Results Table" />
+                   Content="Results" FontFamily="SegoeUI" FontSize="16" />
                 <Grid Grid.Row="1"
-                  Width="850"
-                  ShowGridLines="True">
+                  Width="890">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -81,21 +85,22 @@
                         <Border x:Name="Label1"
                             HorizontalAlignment="Stretch"
                             BorderBrush="White"
-                            BorderThickness="1">
-                            <TextBlock Text="Current/Existing" />
+                            BorderThickness="1"
+                                Margin="8,0,0,0">
+                            <TextBlock Text="Current/Existing" FontFamily="SegoeUI" FontSize="13" />
                         </Border>
                         <Border x:Name="Label2"
                             HorizontalAlignment="Stretch"
                             BorderBrush="White"
                             BorderThickness="1">
-                            <TextBlock Text="Optimization Results" />
+                            <TextBlock Text="Optimization Results" FontFamily="SegoeUI" FontSize="13"/>
                         </Border>
                     </StackPanel>
 
 
                     <DataGrid Name="dg"
                           Grid.Row="1"
-                          Width="850"
+                          Width="875"
                           AutoGenerateColumns="False"
                           CanUserReorderColumns="False"
                           IsSynchronizedWithCurrentItem="True"
@@ -113,17 +118,17 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn  Header="Description" x:Name="descriptionColumn" MaxWidth="150">
+                            <DataGridTemplateColumn  Header="Description" x:Name="descriptionColumn" Width="150">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding SkuTitle}"/>
+                                        <TextBlock Text="{Binding SkuTitle}" TextWrapping="Wrap"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Price Lists" x:Name="priceListsColumn" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Name}"></TextBlock>
@@ -133,10 +138,10 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Current Price $" x:Name="currentPriceColumn" MaxWidth="65">
+                            <DataGridTemplateColumn Header="Current Price $" x:Name="currentPriceColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding CurrentPrice}"></TextBlock>
@@ -146,10 +151,10 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Current Mark-Up %" x:Name="currentMarkupColumn" MaxWidth="65">
+                            <DataGridTemplateColumn Header="Current Mark-Up %" x:Name="currentMarkupColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding CurrentMarkupPercent}"></TextBlock>
@@ -159,10 +164,10 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Total Price Change $" x:Name="totalPriceChangeColumn" MaxWidth="65">
+                            <DataGridTemplateColumn Header="Total Price Change $" x:Name="totalPriceChangeColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding PriceChange}"></TextBlock>
@@ -172,36 +177,36 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Final Price $" x:Name="finalPriceColumn" MaxWidth="65">
+                            <DataGridTemplateColumn Header="Final Price $" x:Name="finalPriceColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="???"></TextBlock>
+                                                    <TextBlock Text=""></TextBlock>
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Mark-Up Change %" x:Name="markupChangeColumn" MaxWidth="65">
+                            <DataGridTemplateColumn Header="Mark-Up Change %" x:Name="markupChangeColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="???"></TextBlock>
+                                                    <TextBlock Text=""></TextBlock>
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="New Mark-Up %" x:Name="newMarkupColumn" MaxWidth="65">
+                            <DataGridTemplateColumn Header="New Mark-Up %" x:Name="newMarkupColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding NewMarkupPercent}"></TextBlock>
@@ -211,26 +216,26 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Edit Type" x:Name="editTypeColumn" MaxWidth="65">
+                            <DataGridTemplateColumn Header="Edit Type" x:Name="editTypeColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding PriceEdit.Type}"></TextBlock>
+                                                    <TextBlock Text=""></TextBlock>         <!-- <TextBlock Text="{Binding PriceEdit.Type}"></TextBlock>-->
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Warning" x:Name="warningColumn" MaxWidth="70">
+                            <DataGridTemplateColumn Header="Warning" x:Name="warningColumn" Width="70">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" >
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding PriceWarning.Type}"></TextBlock>
+                                                    <TextBlock Text=""></TextBlock>    <!-- <TextBlock Text="{Binding PriceWarning.Type}"></TextBlock>-->
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
@@ -327,18 +332,212 @@
             </ListBox>
             -->
 
-            <ListBox x:Name="FilterGroupsListBox"
-                     Grid.Row="0"
-                     Grid.Column="0"
-                     SelectedIndex="0"
-                     SelectedItem="{Binding Path=Entity.SelectedFilterGroup}">
+            <ListBox x:Name="lstKeyPriceLists"
+                 Grid.Row="1"
+                 Grid.RowSpan="2"
+                 Grid.Column="1"
+                 MinWidth="175"
+                 Margin="10,5"
+                 ItemsSource="{Binding Source={StaticResource cvsResultsDemo}}" Width="175">
 
-                <ListBoxItem>
-                    <Label Width="200"
-                               Content="Everyday"
-                               FontSize="16"
-                               Foreground="{StaticResource Foreground}" />
-                </ListBoxItem>
+                <ListBox.Items>
+                    <ListBoxItem>
+                        <DockPanel MinHeight="35" LastChildFill="True">
+                            <CheckBox 
+                                  DockPanel.Dock="Left" 
+                                      IsChecked="True"
+                                  IsEnabled="False" />
+                            <!-- DEMO: BARRY
+                                  IsChecked="{Binding Path=IsSelected}"
+                                  IsEnabled="{Binding Path=CanChangeIsSelected}" />     -->
+                            <!--
+                            <TextBlock x:Name="txtLinkedPercentage"
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding Path=LinkedPriceListRule.PercentChange,
+                                                  StringFormat={}{0}%}"
+                                   Visibility="Collapsed" />        -->
+
+                            <Image 
+                               Width="25"
+                               Height="25"
+                               Margin="5"
+                               DockPanel.Dock="Right"
+                               Source="/APLPX.UI.WPF;component/Resources/key-icon.png"
+                               ToolTip="This is the Key Price List."
+                               Visibility="{Binding Path=IsKey,
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <TextBlock Margin="5"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Foreground}"
+                                   Text="Retail List Price"
+                                   ToolTip="{Binding Path=Title}" />
+
+                        </DockPanel>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <DockPanel MinHeight="35" LastChildFill="True">
+                            <CheckBox 
+                                  DockPanel.Dock="Left" 
+                                      IsChecked="True"
+                                  IsEnabled="False" />
+                            <!-- DEMO: BARRY
+                                  IsChecked="{Binding Path=IsSelected}"
+                                  IsEnabled="{Binding Path=CanChangeIsSelected}" />     -->
+                            <!--
+                            <TextBlock x:Name="txtLinkedPercentage"
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding Path=LinkedPriceListRule.PercentChange,
+                                                  StringFormat={}{0}%}"
+                                   Visibility="Collapsed" />        -->
+
+    
+
+                            <TextBlock Margin="5"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Foreground}"
+                                   Text="Retail Sale Price"
+                                   ToolTip="{Binding Path=Title}" />
+
+                        </DockPanel>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <DockPanel MinHeight="35" LastChildFill="True">
+                            <CheckBox 
+                                  DockPanel.Dock="Left" 
+                                      IsChecked="True"
+                                  IsEnabled="False" />
+                            <!-- DEMO: BARRY
+                                  IsChecked="{Binding Path=IsSelected}"
+                                  IsEnabled="{Binding Path=CanChangeIsSelected}" />     -->
+                            <!--
+                            <TextBlock x:Name="txtLinkedPercentage"
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding Path=LinkedPriceListRule.PercentChange,
+                                                  StringFormat={}{0}%}"
+                                   Visibility="Collapsed" />        -->
+
+
+                            <TextBlock Margin="5"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Foreground}"
+                                   Text="Jobber - Trim Shop"
+                                   ToolTip="{Binding Path=Title}" />
+
+                        </DockPanel>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                    <DockPanel MinHeight="35" LastChildFill="True">
+                            <CheckBox x:Name="chkIsSelected"
+                                  DockPanel.Dock="Left" 
+                                      IsChecked="True"
+                                  IsEnabled="False" />
+                            <!-- DEMO: BARRY
+                                  IsChecked="{Binding Path=IsSelected}"
+                                  IsEnabled="{Binding Path=CanChangeIsSelected}" />     -->
+                            <!--
+                            <TextBlock x:Name="txtLinkedPercentage"
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding Path=LinkedPriceListRule.PercentChange,
+                                                  StringFormat={}{0}%}"
+                                   Visibility="Collapsed" />        -->
+
+
+                            <TextBlock Margin="5"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Foreground}"
+                                   Text="Dealer 1"
+                                   ToolTip="{Binding Path=Title}" />
+
+                        </DockPanel>
+                    </ListBoxItem>
+
+                    <ListBoxItem>
+                        <DockPanel MinHeight="35" LastChildFill="True">
+                            <CheckBox 
+                                  DockPanel.Dock="Left" 
+                                      IsChecked="True"
+                                  IsEnabled="False" />
+                            <!-- DEMO: BARRY
+                                  IsChecked="{Binding Path=IsSelected}"
+                                  IsEnabled="{Binding Path=CanChangeIsSelected}" />     -->
+                            <!--
+                            <TextBlock x:Name="txtLinkedPercentage"
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding Path=LinkedPriceListRule.PercentChange,
+                                                  StringFormat={}{0}%}"
+                                   Visibility="Collapsed" />        -->
+
+
+                            <TextBlock Margin="5"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Foreground}"
+                                   Text="Dealer 2"
+                                   ToolTip="{Binding Path=Title}" />
+
+                        </DockPanel>
+                    </ListBoxItem>
+                </ListBox.Items>
+
+            <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel MinHeight="35" LastChildFill="True">
+                            <CheckBox x:Name="chkIsSelected"
+                                  DockPanel.Dock="Left" 
+                                      IsChecked="True"
+                                  IsEnabled="{Binding Path=CanChangeIsSelected}" />  <!-- DEMO: BARRY
+                                  IsChecked="{Binding Path=IsSelected}"
+                                  IsEnabled="{Binding Path=CanChangeIsSelected}" />     -->
+<!--
+                            <TextBlock x:Name="txtLinkedPercentage"
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding Path=LinkedPriceListRule.PercentChange,
+                                                  StringFormat={}{0}%}"
+                                   Visibility="Collapsed" />        -->
+
+                            <Image x:Name="imgKey"
+                               Width="25"
+                               Height="25"
+                               Margin="5"
+                               DockPanel.Dock="Right"
+                               Source="/APLPX.UI.WPF;component/Resources/key-icon.png"
+                               ToolTip="This is the Key Price List."
+                               Visibility="{Binding Path=IsKey,
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <TextBlock Margin="5"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Foreground}"
+                                   Text="{Binding Path=Name}"
+                                   ToolTip="{Binding Path=Title}" />
+
+                        </DockPanel>
+                        <DataTemplate.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=DataContext.PriceRoutine.SelectedMode.HasLinkedPriceListRule, RelativeSource={RelativeSource AncestorType=ListBox}}" Value="True" />
+
+                                    <Condition Binding="{Binding Path=CanChangeIsSelected}" Value="True" />
+                                    <Condition Binding="{Binding Path=IsKey}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                          <!--      <Setter TargetName="txtLinkedPercentage" Property="Visibility" Value="Visible" />   -->
+                                <!--  <Setter TargetName="txtLinkedPercentage" Property="Foreground" Value="Green"/>  -->
+                            </MultiDataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
         </StackPanel>
 

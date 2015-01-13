@@ -10,10 +10,16 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         private Display.Analytic _entity;
         private List<Display.AnalyticPriceListGroup> _priceListGroups;
 
-        public AnalyticPriceListViewModel(Display.Analytic entity, List<Display.AnalyticPriceListGroup> priceListGroups)
+        public AnalyticPriceListViewModel(Display.Analytic entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
             Entity = entity;
-            PriceListGroups = priceListGroups;
+
+            PriceListGroups = entity.PriceListGroups;           
         }
 
         public Display.Analytic Entity
@@ -39,6 +45,19 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                         Entity.SelectedPriceListGroup = _priceListGroups[0];
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the price list groups should be displayed.
+        /// </summary>
+        public bool ShowPriceListGroups
+        {
+            get
+            {
+                bool result = (PriceListGroups.Count > 1);
+
+                return result;
             }
         }
     }

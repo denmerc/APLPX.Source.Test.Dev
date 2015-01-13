@@ -14,6 +14,11 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         public AnalyticIdentityViewModel(Display.Analytic analytic)
         {
+            if (analytic == null)
+            {
+                throw new ArgumentNullException("analytic");
+            }
+
             _analytic = analytic;
         }
 

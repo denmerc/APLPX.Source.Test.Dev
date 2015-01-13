@@ -29,7 +29,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Author = dto.Author;
             displayEntity.Editor = dto.Editor;
             displayEntity.Owner = dto.Owner;
-            displayEntity.Active = dto.Active;
+            displayEntity.IsActive = dto.Active;
             displayEntity.Shared = dto.Shared;
 
             return displayEntity;
@@ -51,7 +51,7 @@ namespace APLPX.UI.WPF.Mappers
                                         displayEntity.Editor,
                                         displayEntity.Owner,
                                         displayEntity.Shared,
-                                        displayEntity.Active);
+                                        displayEntity.IsActive);
 
             return dto;
         }

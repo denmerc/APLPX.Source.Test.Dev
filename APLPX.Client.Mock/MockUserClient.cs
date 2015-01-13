@@ -191,8 +191,8 @@ namespace APLPX.Client.Mock
                                                                            SearchKey = sg.SearchKey,
                                                                            Sort = sg.Sort
                                                                        }).ToList(),
-                                                      Sort = f.Sort,
-                                                      Steps = ( from st in f.Steps
+                                                       Sort = f.Sort,
+                                                       Steps = (from st in f.Steps
                                                                 select new ENT.ModuleFeatureStep
                                                                 {
                                                                     Actions = (from a in st.Actions
@@ -209,10 +209,10 @@ namespace APLPX.Client.Mock
                                                                     Title = st.Title,
                                                                     Type = st.Type
                                                                 }).ToList(),
-                                                      Title = f.Title,
-                                                      Type = f.Type
+                                                       Title = f.Title,
+                                                       Type = f.Type
                                                    }).ToList()
-                                                   //,
+                                       //,
 
                                        //Roles = (from r in mod.Roles select new ENT.UserRole { Name = r.Name }).ToList()
                                    }).ToList(),
@@ -255,14 +255,6 @@ namespace APLPX.Client.Mock
                                                                             Sort = f.Sort
                                                                         }).ToList()
                                                          }).ToList(),
-                                         PriceListGroups = (from pg in a.PriceListGroups
-                                                            select new ENT.AnalyticPriceListGroup
-                                                            {
-                                                                Key = pg.Key,
-                                                                Name = pg.Name,
-                                                                Sort = pg.Sort,
-                                                                Title = pg.Title
-                                                            }).ToList(),
                                          ValueDrivers = (from vd in a.ValueDrivers
                                                          select new ENT.AnalyticValueDriver
                                                          {
@@ -290,7 +282,6 @@ namespace APLPX.Client.Mock
                                                                                         Value = g.Value
                                                                                     }).ToList()
                                                                       }).ToList()
-
                                                          }).ToList()
                                      }).ToList(),
                         Pricing = (from p in s.Pricing
@@ -509,7 +500,22 @@ namespace APLPX.Client.Mock
                                        //                    Title = vd.Title
                                        //                }).ToList()
                                    }).ToList(),
-                        FilterGroups = null,
+                        FilterGroups = (from fg in FilterGroups
+                                        select new ENT.FilterGroup
+                                        {
+                                            Name = fg.Name,
+                                            Sort = fg.Sort,
+                                            Filters = (from f in fg.Filters
+                                                       select new ENT.Filter
+                                                       {
+                                                           Code = f.Code,
+                                                           Id = f.Id,
+                                                           IsSelected = f.IsSelected,
+                                                           Key = f.Key,
+                                                           Name = f.Name,
+                                                           Sort = f.Sort
+                                                       }).ToList()
+                                        }).ToList(),
                         //Mo<pdules = licensedMods.ToList(),
                         //Modules = lModsandFeats.ToList(), 
                         SessionOk = true

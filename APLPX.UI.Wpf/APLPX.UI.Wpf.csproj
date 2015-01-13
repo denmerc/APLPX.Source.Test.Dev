@@ -206,7 +206,9 @@
     <Compile Include="Helpers\DisplayModuleGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\MockAnalyticGenerator.cs" />
     <Compile Include="Helpers\MockFilterGenerator.cs" />
+    <Compile Include="Helpers\MockPricingEverydayGenerator.cs" />
     <Compile Include="Helpers\PricingExtensions.cs" />
     <Compile Include="Helpers\PasswordExtension.cs" />
     <Compile Include="Helpers\TextBoxHelper.cs" />
@@ -249,6 +251,8 @@
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingEverydayPriceListListViewModel.cs" />
+    <Compile Include="ViewModels\Pricing\PricingEverydayResults\CompetitivePriceList.cs" />
+    <Compile Include="ViewModels\Pricing\PricingEverydayResults\CompetitivePriceObject.cs" />
     <Compile Include="ViewModels\Pricing\PricingEverydayResults\PricingEverydayResultsCompetitionViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingEverydayResults\PricingEverydayResultsEditedViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingEverydayResults\PricingEverydayResultsExcludedViewModel.cs" />

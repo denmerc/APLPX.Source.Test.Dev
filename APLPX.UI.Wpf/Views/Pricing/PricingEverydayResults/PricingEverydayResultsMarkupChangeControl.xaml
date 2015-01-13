@@ -55,7 +55,7 @@
             <Label Grid.Row="0"
                    Grid.ColumnSpan="2"
                    HorizontalAlignment="Center"
-                   Content="Results Table" />
+                   Content="Results" FontFamily="SegoeUI" FontSize="16"  />
 
             <DataGrid Grid.Row="3"
                       Grid.ColumnSpan="2"
@@ -64,17 +64,17 @@
                       ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="Auto" Header="SKU #" Binding="{Binding SkuName}"/>
-                    <DataGridTextColumn Width="Auto" Header="Description" Binding="{Binding SkuTitle}" MaxWidth="375"/>
-                    <DataGridTextColumn Width="Auto" Header="Price Lists" Binding="{Binding PriceLists[0].Name}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Current Price $" Binding="{Binding PriceLists[0].CurrentPrice}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Total Value Driver Change $" Binding="{Binding PriceLists[0].PriceChange}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Final Price $" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Current Mark-Up ($/%)" Binding="{Binding PriceLists[0].CurrentMarkupPercent}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Mark-Up Change ($/%)" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="New Mark-Up ($/%)" Binding="{Binding PriceLists[0].NewMarkupPercent}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Edit Type" Binding="{Binding PriceLists[0].PriceEdit.Type}" MaxWidth="65"/>
-                    <DataGridTextColumn Width="Auto" Header="Warning" Binding="{Binding PriceLists[0].PriceWarning.Type}" MaxWidth="70"/>
+                    <DataGridTextColumn Width="Auto" Header="SKU #" Binding="{Binding SkuName}" />
+                    <DataGridTextColumn Width="325" Header="Description" Binding="{Binding SkuTitle}" ElementStyle="{StaticResource StandardDataGridAlphabeticalCellStyle}"/>
+                    <DataGridTextColumn Width="Auto" Header="Price Lists" Binding="{Binding PriceLists[0].Name}" />
+                    <DataGridTextColumn Width="Auto" Header="Current Price $" Binding="{Binding PriceLists[0].CurrentPrice}" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Width="65" Header="Total Value Driver Change $" Binding="{Binding PriceLists[0].PriceChange}" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Width="Auto" Header="Final Price $" MaxWidth="65" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Width="65" Header="Current Mark-Up ($/%)" Binding="{Binding PriceLists[0].CurrentMarkupPercent}" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Width="Auto" Header="Mark-Up Change ($/%)" MaxWidth="65" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Width="65" Header="New Mark-Up ($/%)" Binding="{Binding PriceLists[0].NewMarkupPercent}" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Width="Auto" Header="Edit Type" MaxWidth="65" /> <!--Binding="{Binding PriceLists[0].PriceEdit.Type}" MaxWidth="65"/>   DEMO:BARRY -->
+                    <DataGridTextColumn Width="Auto" Header="Warning" MaxWidth="70"/> <!-- Binding="{Binding PriceLists[0].PriceWarning.Type}" MaxWidth="70"/> DEMO: BARRY -->
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>

@@ -85,6 +85,15 @@ namespace APLPX.UI.WPF.DisplayEntities
                 {
                     short keySort = keyPriceList.Sort;
                     includedLists = includedLists.Where(p => p.Sort > keySort).ToList();
+                    includedLists.ForEach(item => item.CanChangeIsSelected = true);
+
+                    //Price lists above the key price list cannot be marked IsSelected.
+                    var excludedLists = PriceLists.Where(p => p.Sort < keySort);
+                    foreach (PricingEverydayPriceList priceList in excludedLists)
+                    {
+                        priceList.IsSelected = false;
+                        priceList.CanChangeIsSelected = false;
+                    }                    
                 }
             }
 

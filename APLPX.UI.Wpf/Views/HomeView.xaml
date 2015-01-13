@@ -25,7 +25,8 @@
         <Image HorizontalAlignment="Center"
                VerticalAlignment="Center"
                Source="/APLPX.UI.WPF;component/Resources/APL_logo_new.png"
-               Stretch="None" />
+               Stretch="None" 
+               Visibility="Collapsed"/>
     </Grid>
 
 </UserControl>

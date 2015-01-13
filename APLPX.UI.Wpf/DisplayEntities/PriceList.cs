@@ -16,6 +16,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _title;
         private bool _isSelected;
         private short _sort;
+        private bool _canChangeIsSelected;
 
         #endregion
 
@@ -69,6 +70,15 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _sort; }
             set { this.RaiseAndSetIfChanged(ref _sort, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets a value indicating whether is IsSelected property of this price list can be changed.
+        /// </summary>
+        public bool CanChangeIsSelected
+        {
+            get { return _canChangeIsSelected; }
+            set { this.RaiseAndSetIfChanged(ref _canChangeIsSelected, value); }
         }
 
         #endregion

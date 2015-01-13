@@ -8,6 +8,14 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
+            <CollectionViewSource x:Key="cvsResults" Source="{Binding PriceRoutine.Results}">
+                <!--              <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="SkuName" />
+                </CollectionViewSource.GroupDescriptions>       -->
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="Id" />
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
 
             <ResourceDictionary.MergedDictionaries>
                 <!--  for design-time support, already in app.xml  -->
@@ -18,7 +26,278 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-            
-    </Grid>
+    <Border Width="Auto"
+            Height="Auto"
+            Margin="0,0,0,600"
+            Background="{DynamicResource SearchControlSelectedItemDetailBackgroundColor}"
+            BorderBrush="#828790"
+            BorderThickness="1"
+            CornerRadius="5">
+
+
+        <Grid Width="1065" MaxHeight="800">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   Content="Results" FontFamily="SegoeUI" FontSize="16" />
+            <Grid Grid.Row="1"
+                  Width="1065">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <Border x:Name="Label1"
+                            HorizontalAlignment="Stretch"
+                            BorderBrush="White"
+                            BorderThickness="1"
+                            Margin="8,0,0,0">
+                        <TextBlock Text="Current" FontFamily="SegoeUI" FontSize="13"/>
+                    </Border>
+                    <Border x:Name="Label2"
+                            HorizontalAlignment="Stretch"
+                            BorderBrush="White"
+                            BorderThickness="1">
+                        <TextBlock Text="Competitive Analysis" FontFamily="SegoeUI" FontSize="13"/>
+                    </Border>
+                </StackPanel>
+
+
+                <DataGrid Name="dg"
+                          Grid.Row="1"
+                          Width="1050"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False"
+                          IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding Path=CompetiveList}"
+                          LayoutUpdated="LayoutUpdated"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="White"
+                          ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
+                          MaxHeight="750" Margin="5,0,5,5">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn" Width="65" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Sku}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn  Header="Description" x:Name="descriptionColumn" Width="225">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Competitor Name" x:Name="priceListsColumn" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}" Padding="2,0,0,0"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Current Price $" x:Name="currentPriceColumn" Width="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CurrentPrice}" Padding="2,0,0,0"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Current Mark-Up %" x:Name="currentMarkupColumn" Width="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CurrentMarkup}" Padding="2,0,0,0"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Optimized Price $" x:Name="totalPriceChangeColumn" Width="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding OptimizedPrice}" Padding="2,0,0,0"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Competitor Price $" x:Name="finalPriceColumn" Width="65" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CompetitorPrice}"  Padding="2,0,0,0" />
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Competitor Price Difference $" x:Name="markupChangeColumn" Width="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CompetitorPriceDifference}" Padding="2,0,0,0">
+                                                    <TextBlock.Style>
+                                                        <Style>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=CompetitorPriceDifference}" Value="(0.18)">
+                                                                    <Setter Property="TextBlock.Foreground" Value="Tomato"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=CompetitorPriceDifference}" Value="(1.92)">
+                                                                    <Setter Property="TextBlock.Foreground" Value="Tomato"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=CompetitorPriceDifference}" Value="(0.43)">
+                                                                    <Setter Property="TextBlock.Foreground" Value="Tomato"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=CompetitorPriceDifference}" Value="(1.35)">
+                                                                    <Setter Property="TextBlock.Foreground" Value="Tomato"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Path=CompetitorPriceDifference}" Value="(0.05)">
+                                                                    <Setter Property="TextBlock.Foreground" Value="Tomato"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="As Of" x:Name="newMarkupColumn" Width="75">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding AsOf}" Padding="2,0,0,0"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Edit Type" x:Name="editTypeColumn" Width="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding EditType}" Padding="2,0,0,0"></TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Final Price" x:Name="warningColumn" Width="70" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding FinalPrice}" Background="Transparent" Padding="2,0,0,0"></TextBlock>
+                                                <!-- <TextBlock Text="{Binding PriceWarning.Type}" Background="Transparent" Padding="2,0,0,0"></TextBlock> DEMO:BARRY-->
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                    <!-- <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding PriceLists}" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DataContext.SkuName, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Description" x:Name="descriptionColumn">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DataContext.SkuTitle, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding Name}"
+                                                        Header="Price List"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding CurrentPrice}"
+                                                        Header="Current Price $" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding CurrentMarkupPercent}"
+                                                        Header="Current Mark-Up %" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding PriceChange}"
+                                                        Header="Total Price Change $" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        
+                                                        Header="Final Price $" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                      
+                                                        Header="Mark-Up Change %"
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding NewMarkupPercent}"
+                                                        Header="New Mark-Up %" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding PriceEdit.Type}"
+                                                        Header="Edit Type" 
+                                                        IsReadOnly="True"/>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding PriceWarning.Type}"
+                                                        Header="Warning"
+                                                        IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>      -->
+
+                </DataGrid>
+            </Grid>
+        </Grid>
+    </Border>
 </UserControl>

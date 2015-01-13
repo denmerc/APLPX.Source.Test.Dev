@@ -40,11 +40,11 @@ namespace APLPX.UI.WPF
                         pricingEverydayCanvas.Children.Clear();
                         pricingEverydayCanvas.Children.Add(new PricingEverydayResultsWarningsControl());
                         break;
-                    case "Price Delta":
+                    case "Price Change":
                         pricingEverydayCanvas.Children.Clear();
                         pricingEverydayCanvas.Children.Add(new PricingEverydayResultsPriceChangeControl());
                         break;
-                    case "Mark-Up Delta":
+                    case "Mark-Up Change":
                         pricingEverydayCanvas.Children.Clear();
                         pricingEverydayCanvas.Children.Add(new PricingEverydayResultsMarkupChangeControl());
                         break;
@@ -53,10 +53,8 @@ namespace APLPX.UI.WPF
                         pricingEverydayCanvas.Children.Add(new PricingEverydayResultsPriceListControl());
                         break;
                     case "Competition":
-                        PricingEverydayResultsCompetitionControl competitionControl = new PricingEverydayResultsCompetitionControl();
-                        competitionControl.IsEnabled = false;
                         pricingEverydayCanvas.Children.Clear();
-                        pricingEverydayCanvas.Children.Add(competitionControl);
+                        pricingEverydayCanvas.Children.Add(new PricingEverydayResultsCompetitionControl());
                         break;
                     case "Value Driver Groups":
                         pricingEverydayCanvas.Children.Clear();

@@ -1,16 +1,15 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("APLPX.Server.Entity")]
+[assembly: AssemblyTitle("APLPX.Server.Data.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("APLPX.Server.Entity")]
+[assembly: AssemblyProduct("APLPX.Server.Data.Test")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +20,7 @@ using System.Runtime.Serialization;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f88f9ff8-7172-4134-90dd-f02dc040af36")]
+[assembly: Guid("e092e01d-a6cd-416d-b4b8-dacc0845867d")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -35,5 +34,3 @@ using System.Runtime.Serialization;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: ContractNamespace("http://www.apl.com/promoter",
-                              ClrNamespace = "APLPX.Server.Entity")]

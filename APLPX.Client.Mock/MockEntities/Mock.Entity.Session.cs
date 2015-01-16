@@ -30,7 +30,7 @@ namespace APLPX.Client.Mock.Entity
         [DataMember]
         public String SqlKey { get; set; }
         [DataMember]
-        public List<Client.Entity.Module> Modules { get; set; }
+        public List<Module> Modules { get; set; }
         [DataMember]
         public List<Analytic> Analytics { get; set; }
         [DataMember]

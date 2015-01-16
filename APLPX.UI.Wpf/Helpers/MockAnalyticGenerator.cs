@@ -57,6 +57,83 @@ namespace APLPX.UI.WPF.Helpers
             return result;
         }
 
+        public static List<DisplayEntities.Analytic> GetSampleAnalytics()
+        {
+            var list = new List<DisplayEntities.Analytic>();
+
+            Analytic entity = new Analytic { Id = 1, SearchKey = "FoldersAnalytics76" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - All Filters - Movement Only", Description = "Admin - Everyday - All Filters - Movement Only" };
+            list.Add(entity);
+
+            entity = new Analytic { Id = 2, SearchKey = "FoldersAnalytics76" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - Movement & Markup", Description = "Admin - Everyday - Movement &Markup" };
+            list.Add(entity);
+
+            entity = new Analytic { Id = 3, SearchKey = "FoldersAnalytics76" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - Movement & Days On Hand", Description = "Admin - Everyday - Movement &Days On Hand" };
+            list.Add(entity);
+
+            entity = new Analytic { Id = 6, SearchKey = "FoldersAnalytics75" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - Movement with Manual Groups", Description = "Admin - Everyday - Movement with Manual Groups" };
+            list.Add(entity);
+
+            entity = new Analytic { Id = 8, SearchKey = "FoldersAnalytics74" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Movement, Markup, & DOH w/Manual Groups", Description = "Admin - Movement, Markup, & DOH with Manual Groups" };
+            list.Add(entity);
+
+            entity = new Analytic { Id = 9, SearchKey = "FoldersAnalytics73" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Movement, MarkUp, & DOH w/Custom - 1 prod", Description = "All value drivers with Custom groups - with only 1 intersection " };
+            list.Add(entity);
+
+            //Note: the following entities, which already tagged to a user folder, are also tagged to the Recent folder.
+            entity = new Analytic { Id = 1, SearchKey = "RecentAnalytics" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - All Filters - Movement Only", Description = "Admin - Everyday - All Filters - Movement Only" };
+            list.Add(entity);
+
+            entity = new Analytic { Id = 8, SearchKey = "RecentAnalytics" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Movement, Markup, & DOH w/Manual Groups", Description = "Admin - Movement, Markup, & DOH with Manual Groups" };
+            list.Add(entity);
+
+            entity = new Analytic { Id = 9, SearchKey = "RecentAnalytics" };
+            entity.Identity = new AnalyticIdentity { Name = "Admin - Movement, MarkUp, & DOH w/Custom - 1 prod", Description = "All value drivers with Custom groups - with only 1 intersection " };
+            list.Add(entity);
+
+            foreach (DisplayEntities.Analytic analytic in list)
+            {
+                analytic.Identity.IsActive = true;
+                analytic.Identity.Owner = "Admin User";
+                analytic.Identity.Editor = "APL Administrator";
+                analytic.Identity.Author = "APL Administrator";
+                analytic.Identity.Notes = "Optional notes...";
+            }
+
+            return list;
+        }
+
+        public static List<FeatureSearchGroup> GetAnalyticSearchGroups()
+        {
+            string myFolders = "Folders Analytics";
+
+            var list = new List<FeatureSearchGroup>();
+
+            list.Add(new FeatureSearchGroup { SearchKey = "RecentAnalytics", Name = "Recent Analytics", ItemCount = 3, ParentName = "Recent Analytics", Sort = 1 });
+            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics73", Name = "Engine", ItemCount = 1, ParentName = myFolders, Sort = 10 });
+            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics74", Name = "Apparel", ItemCount = 1, ParentName = myFolders, Sort = 20 });
+            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics75", Name = "Nuts-Bolts", ItemCount = 1, ParentName = myFolders, Sort = 30 });
+            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics76", Name = "Interior Parts", ItemCount = 3, ParentName = myFolders, Sort = 40 });
+            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics77", Name = "Sheet Metal Parts", ItemCount = 0, ParentName = myFolders, Sort = 50 });
+            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics78", Name = "Moldings", ItemCount = 0, ParentName = myFolders, Sort = 60 });
+
+            var editableGroups = list.Where(item => item.ParentName.Equals(myFolders));
+            foreach (FeatureSearchGroup editableGroup in editableGroups)
+            {
+                editableGroup.CanNameChange = true;
+                editableGroup.CanSearchKeyChange = true;
+            }
+
+            return list;
+        }
+
         #region Price Lists
 
         private static List<PriceList> GetPriceLists(int groupIndex)
@@ -182,19 +259,19 @@ namespace APLPX.UI.WPF.Helpers
         {
             var list = new List<AnalyticResult>();
 
-            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "1645", MaxValue = "19880", Id = 1, SalesValue = "16020.43", SkuCount = 20 });
-            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "1215.26", MaxValue = "1563", Id = 2, SalesValue = "7574.79", SkuCount = 18 });
-            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "802.9", MaxValue = "1181", Id = 3, SalesValue = "34918", SkuCount = 27 });
-            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "331.67", MaxValue = "799", Id = 4, SalesValue = "67442.4", SkuCount = 42 });
-            list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "-24.95", MaxValue = "289.7", Id = 5, SalesValue = "16182.75", SkuCount = 19 });
-            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "2298", MaxValue = "2298", Id = 1, SalesValue = "6848", SkuCount = 1 });
-            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "674", MaxValue = "674", Id = 2, SalesValue = "4010.3", SkuCount = 1 });
-            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "217", MaxValue = "411", Id = 3, SalesValue = "17583", SkuCount = 3 });
-            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "102", MaxValue = "179", Id = 4, SalesValue = "35942", SkuCount = 12 });
-            list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "0", MaxValue = "98", Id = 5, SalesValue = "77734", SkuCount = 109 });
-            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "21", MaxValue = "90541", Id = 1, SalesValue = "74986.08", SkuCount = 58 });
-            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "13", MaxValue = "178", Id = 4, SalesValue = "1143.12", SkuCount = 1 });
-            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "48", MaxValue = "141", Id = 5, SalesValue = "65989.34", SkuCount = 67 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = 1645M, MaxOutlier = 19880M, Id = 1, SalesValue = "16020.43", SkuCount = 20 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = 1215.26M, MaxOutlier = 1563M, Id = 2, SalesValue = "7574.79", SkuCount = 18 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = 802.9M, MaxOutlier = 1181M, Id = 3, SalesValue = "34918", SkuCount = 27 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = 331.67M, MaxOutlier = 799M, Id = 4, SalesValue = "67442.4", SkuCount = 42 });
+            list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = -24.95M, MaxOutlier = 289.7M, Id = 5, SalesValue = "16182.75", SkuCount = 19 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 2298M, MaxOutlier = 2298M, Id = 1, SalesValue = "6848", SkuCount = 1 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 674M, MaxOutlier = 674M, Id = 2, SalesValue = "4010.3", SkuCount = 1 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 217M, MaxOutlier = 411M, Id = 3, SalesValue = "17583", SkuCount = 3 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 102M, MaxOutlier = 179M, Id = 4, SalesValue = "35942", SkuCount = 12 });
+            list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 0M, MaxOutlier = 98M, Id = 5, SalesValue = "77734", SkuCount = 109 });
+            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinOutlier = 21M, MaxOutlier = 90541M, Id = 1, SalesValue = "74986.08", SkuCount = 58 });
+            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinOutlier = 13M, MaxOutlier = 178M, Id = 4, SalesValue = "1143.12", SkuCount = 1 });
+            list.Add(new AnalyticResult { DriverName = "Days On Hand", MinOutlier = 48M, MaxOutlier = 141M, Id = 5, SalesValue = "65989.34", SkuCount = 67 });
 
             return list;
         }
@@ -205,25 +282,25 @@ namespace APLPX.UI.WPF.Helpers
             switch (name)
             {
                 case "Markup":
-                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "1645", MaxValue = "19880", Id = 1, SalesValue = "16020.43", SkuCount = 20 });
-                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "1215.26", MaxValue = "1563", Id = 2, SalesValue = "7574.79", SkuCount = 18 });
-                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "802.9", MaxValue = "1181", Id = 3, SalesValue = "34918", SkuCount = 27 });
-                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "331.67", MaxValue = "799", Id = 4, SalesValue = "67442.4", SkuCount = 42 });
-                    list.Add(new AnalyticResult { DriverName = "Markup", MinValue = "-24.95", MaxValue = "289.7", Id = 5, SalesValue = "16182.75", SkuCount = 19 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = 1645M, MaxOutlier = 19880, Id = 1, SalesValue = "16020.43", SkuCount = 20 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = 1215.26M, MaxOutlier = 1563, Id = 2, SalesValue = "7574.79", SkuCount = 18 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = 802.9M, MaxOutlier = 1181, Id = 3, SalesValue = "34918", SkuCount = 27 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = 331.67M, MaxOutlier = 799, Id = 4, SalesValue = "67442.4", SkuCount = 42 });
+                    list.Add(new AnalyticResult { DriverName = "Markup", MinOutlier = -24.95M, MaxOutlier = 289.7M, Id = 5, SalesValue = "16182.75", SkuCount = 19 });
                     break;
 
                 case "Movement":
-                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "2298", MaxValue = "2298", Id = 1, SalesValue = "6848", SkuCount = 1 });
-                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "674", MaxValue = "674", Id = 2, SalesValue = "4010.3", SkuCount = 1 });
-                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "217", MaxValue = "411", Id = 3, SalesValue = "17583", SkuCount = 3 });
-                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "102", MaxValue = "179", Id = 4, SalesValue = "35942", SkuCount = 12 });
-                    list.Add(new AnalyticResult { DriverName = "Movement", MinValue = "0", MaxValue = "98", Id = 5, SalesValue = "77734", SkuCount = 109 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 2298M, MaxOutlier = 2298M, Id = 1, SalesValue = "6848", SkuCount = 1 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 674M, MaxOutlier = 674M, Id = 2, SalesValue = "4010.3", SkuCount = 1 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 217M, MaxOutlier = 411M, Id = 3, SalesValue = "17583", SkuCount = 3 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 102M, MaxOutlier = 179M, Id = 4, SalesValue = "35942", SkuCount = 12 });
+                    list.Add(new AnalyticResult { DriverName = "Movement", MinOutlier = 0M, MaxOutlier = 98M, Id = 5, SalesValue = "77734", SkuCount = 109 });
                     break;
 
                 case "Days On Hand":
-                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "21", MaxValue = "90541", Id = 1, SalesValue = "74986.08", SkuCount = 58 });
-                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "13", MaxValue = "178", Id = 4, SalesValue = "1143.12", SkuCount = 1 });
-                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinValue = "48", MaxValue = "141", Id = 5, SalesValue = "65989.34", SkuCount = 67 });
+                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinOutlier = 21, MaxOutlier = 90541, Id = 1, SalesValue = "74986.08", SkuCount = 58 });
+                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinOutlier = 13, MaxOutlier = 178, Id = 4, SalesValue = "1143.12", SkuCount = 1 });
+                    list.Add(new AnalyticResult { DriverName = "Days On Hand", MinOutlier = 48, MaxOutlier = 141, Id = 5, SalesValue = "65989.34", SkuCount = 67 });
                     break;
 
                 default:

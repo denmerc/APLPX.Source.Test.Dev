@@ -1,10 +1,29 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace APLPX.Server.Entity
+namespace APLPX.Common.Mock.Entity
 {
+
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
+    public class PricingResults
+    {
+        [DataMember]
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public int PricingId { get; set; }
+
+        [DataMember]
+        public List<PricingEverydayResult> Results { get; set; }
+
+    }
+
+
+
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEveryday
     {
         #region Initialize...
@@ -72,33 +91,41 @@ namespace APLPX.Server.Entity
         }
         #endregion
 
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get; set; }
         [DataMember]
-        public string SearchGroupKey; //CLIENT { get; private set; }
+        public string SearchGroupKey { get;  set; }
         [DataMember]
-        public PricingIdentity Identity; //CLIENT { get; private set; }
+        public PricingIdentity Identity { get;  set; }
         [DataMember]
-        public List<FilterGroup> FilterGroups; //CLIENT { get; private set; }
+        public List<FilterGroup> FilterGroups { get;  set; }
+        [BsonElement("ValueDriver")]
         [DataMember]
-        public List<PricingEverydayValueDriver> ValueDrivers; //CLIENT { get; private set; }
+        public List<PricingEverydayValueDriver> ValueDrivers { get;  set; }
         [DataMember]
-        public PricingEverydayKeyValueDriver KeyValueDriver; //CLIENT { get; set; }
+        public PricingEverydayKeyValueDriver KeyValueDriver { get; set; }
+        [BsonElement("LinkedValueDriver")]
         [DataMember]
-        public List<PricingEverydayLinkedValueDriver> LinkedValueDrivers; //CLIENT { get; set; }
+        public List<PricingEverydayLinkedValueDriver> LinkedValueDrivers { get; set; }
+        [BsonElement("PricingMode")]
         [DataMember]
-        public List<PricingMode> PricingModes; //CLIENT { get; private set; }
+        public List<PricingMode> PricingModes { get;  set; }
+        [BsonElement("PriceListGroup")]
         [DataMember]
-        public List<PricingEverydayPriceListGroup> PriceListGroups; //CLIENT { get; private set; }
+        public List<PricingEverydayPriceListGroup> PriceListGroups { get;  set; }
         [DataMember]
-        public PricingKeyPriceListRule KeyPriceListRule; //CLIENT { get; set; }
+        public PricingKeyPriceListRule KeyPriceListRule { get; set; }
         [DataMember]
-        public List<PricingLinkedPriceListRule> LinkedPriceListRules; //CLIENT { get; set; }
+        [BsonElement("LinkedPriceListRule")]
+        public List<PricingLinkedPriceListRule> LinkedPriceListRules { get; set; }
         [DataMember]
-        public List<PricingEverydayResult> Results; //CLIENT { get; private set; }
+        public List<PricingEverydayResult> Results { get;  set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayValueDriver : ValueDriver
     {
         #region initialize...
@@ -119,12 +146,15 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public bool IsKey; //CLIENT { get; set; }
+        public bool IsKey { get; set; }
+        [BsonElement("Group")]
         [DataMember]
-        public List<PricingValueDriverGroup> Groups; //CLIENT { get; private set; }
+        public List<PricingValueDriverGroup> Groups { get;  set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayKeyValueDriver
     {
         #region initialize...
@@ -139,12 +169,15 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int ValueDriverId; //CLIENT { get; set; }
+        public int ValueDriverId { get; set; }
+        [BsonElement("Group")]
         [DataMember]
-        public List<PricingEverydayKeyValueDriverGroup> Groups; //CLIENT { get; set; }
+        public List<PricingEverydayKeyValueDriverGroup> Groups { get; set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayLinkedValueDriver
     {
         #region initialize...
@@ -159,12 +192,15 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int ValueDriverId; //CLIENT { get; set; }
+        public int ValueDriverId { get; set; }
+        [BsonElement("Group")]
         [DataMember]
-        public List<PricingEverydayLinkedValueDriverGroup> Groups; //CLIENT { get; set; }
+        public List<PricingEverydayLinkedValueDriverGroup> Groups { get; set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayKeyValueDriverGroup
     {
        #region initialize...
@@ -181,14 +217,16 @@ namespace APLPX.Server.Entity
        #endregion
 
         [DataMember]
-        public int ValueDriverGroupId; //CLIENT { get; set; }
+        public int ValueDriverGroupId { get; set; }
         [DataMember]
-        public List<PriceMarkupRule> MarkupRules; //CLIENT { get; set; }
+        public List<PriceMarkupRule> MarkupRules { get; set; }
         [DataMember]
-        public List<PriceOptimizationRule> OptimizationRules; //CLIENT { get; set; }
+        public List<PriceOptimizationRule> OptimizationRules { get; set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayLinkedValueDriverGroup
     {
         #region initialize...
@@ -203,12 +241,14 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int ValueDriverGroupId; //CLIENT { get; set; }
+        public int ValueDriverGroupId { get; set; }
         [DataMember]
-        public int PercentChange; //CLIENT { get; set; }
+        public int PercentChange { get; set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayPriceListGroup : PriceListGroup
     {
         #region initialize...
@@ -224,11 +264,14 @@ namespace APLPX.Server.Entity
         }
         #endregion
 
+        [BsonElement("PriceList")]
         [DataMember]
-        public List<PricingEverydayPriceList> PriceLists; //CLIENT { get; private set; }
+        public List<PricingEverydayPriceList> PriceLists { get;  set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayPriceList : PriceList
     {
         #region initialize...
@@ -255,10 +298,12 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public bool IsKey; //CLIENT { get; set; }
+        public bool IsKey { get; set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayResult
     {
         #region initialize...
@@ -267,7 +312,7 @@ namespace APLPX.Server.Entity
             int skuId,
             string skuName,
             string skuTitle,
-            PricingResultDriverGroup groups,
+            List<PricingResultDriverGroup> groups,
             List<PricingEverydayResultPriceList> priceLists
             ) {
                 SkuId = skuId;
@@ -279,18 +324,22 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int SkuId; //CLIENT { get; private set; }
+        public int SkuId { get;  set; }
         [DataMember]
-        public string SkuName; //CLIENT { get; private set; }
+        public string SkuName { get;  set; }
         [DataMember]
-        public string SkuTitle; //CLIENT { get; private set; }
+        public string SkuTitle { get;  set; }
+        [BsonElement("Group")]
         [DataMember]
-        public PricingResultDriverGroup Groups; //CLIENT { get; private set; }
+        public List<PricingResultDriverGroup> Groups { get;  set; }
+        [BsonElement("PriceList")]
         [DataMember]
-        public List<PricingEverydayResultPriceList> PriceLists; //CLIENT { get; private set; }
+        public List<PricingEverydayResultPriceList> PriceLists { get;  set; }
     }
 
     [DataContract]
+    [BsonNoId]
+    [BsonIgnoreExtraElements]
     public class PricingEverydayResultPriceList : PricingEverydayPriceList
     {
         #region initialize...
@@ -347,24 +396,25 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int ResultId; //CLIENT { get; private set; }
+        public int ResultId { get;  set; }
         [DataMember]
-        public decimal CurrentPrice; //CLIENT { get; private set; }
+        public decimal CurrentPrice { get;  set; }
         [DataMember]
-        public decimal NewPrice; //CLIENT { get; set; }
+        public decimal NewPrice { get; set; }
         [DataMember]
-        public int CurrentMarkupPercent; //CLIENT { get; private set; }
+        public int CurrentMarkupPercent { get;  set; }
         [DataMember]
-        public int NewMarkupPercent; //CLIENT { get; set; }
+        public int NewMarkupPercent { get; set; }
         [DataMember]
-        public decimal KeyValueChange; //CLIENT { get; private set; }
+        public decimal KeyValueChange { get;  set; }
         [DataMember]
-        public decimal InfluenceValueChange; //CLIENT { get; private set; }
+        public decimal InfluenceValueChange { get;  set; }
         [DataMember]
-        public decimal PriceChange; //CLIENT { get; private set; }
+        public decimal PriceChange { get;  set; }
+        [BsonIgnore]
         [DataMember]
-        public PricingResultEdit PriceEdit; //CLIENT { get; private set; }
+        public PricingResultEdit PriceEdit { get;  set; }
         [DataMember]
-        public PricingResultWarning PriceWarning; //CLIENT { get; private set; }
+        public PricingResultWarning PriceWarning { get;  set; }
     }
 }

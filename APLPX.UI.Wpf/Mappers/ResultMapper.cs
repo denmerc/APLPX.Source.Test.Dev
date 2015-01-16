@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Mappers
@@ -17,8 +17,6 @@ namespace APLPX.UI.WPF.Mappers
         {
             var displayEntity = new Display.AnalyticResult();
             displayEntity.Id = dto.Id;
-            displayEntity.MinValue = dto.MinValue;
-            displayEntity.MaxValue = dto.MaxValue;
             displayEntity.Value = dto.Value;
             displayEntity.MinOutlier = dto.MinOutlier;
             displayEntity.MaxOutlier = dto.MaxOutlier;
@@ -27,6 +25,7 @@ namespace APLPX.UI.WPF.Mappers
 
             displayEntity.SkuCount = dto.SkuCount;
             displayEntity.SalesValue = dto.SalesValue;
+            displayEntity.Run = dto.Run;
 
             return displayEntity;
         }
@@ -34,13 +33,13 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.AnalyticResultValueDriverGroup ToDto(this Display.AnalyticResult displayEntity)
         {
             var dto = new DTO.AnalyticResultValueDriverGroup(
-                                        displayEntity.Id,
                                         displayEntity.Value,
                                         displayEntity.MinOutlier,
                                         displayEntity.MaxOutlier,
-                                        displayEntity.Sort,
                                         displayEntity.SkuCount,
                                         displayEntity.SalesValue);
+
+            dto.Run = displayEntity.Run;
 
             return dto;
         }
@@ -62,7 +61,7 @@ namespace APLPX.UI.WPF.Mappers
                 {
                     displayEntity.Groups.Add(group.ToDisplayEntity());
                 }
-            }          
+            }
 
             return displayEntity;
         }
@@ -82,9 +81,9 @@ namespace APLPX.UI.WPF.Mappers
             }
 
             var dto = new DTO.PricingEverydayResult(
-                                            displayEntity.SkuId, 
+                                            displayEntity.SkuId,
                                             displayEntity.SkuName,
-                                            displayEntity.SkuTitle,                                              
+                                            displayEntity.SkuTitle,
                                             driverGroups,
                                             priceLists);
             return dto;

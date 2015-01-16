@@ -49,11 +49,10 @@
                   ItemsSource="{Binding Source={StaticResource cvsResults}}"
                   Visibility="Visible" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding DriverName}" Header="Driver Name" />
-                <DataGridTextColumn Binding="{Binding Id}" Header="Group" />
+                <DataGridTextColumn Binding="{Binding DriverName}" Header="Driver Name" />               
                 <DataGridTextColumn Binding="{Binding SkuCount}" Header="Sku Count" />
-                <DataGridTextColumn Binding="{Binding MinValue}" Header="Min Value" />
-                <DataGridTextColumn Binding="{Binding MaxValue}" Header="Max Value" />
+                <DataGridTextColumn Binding="{Binding MinOutlier}" Header="Min Value" />
+                <DataGridTextColumn Binding="{Binding MaxOutlier}" Header="Max Value" />
                 <DataGridTextColumn Binding="{Binding SalesValue}" Header="Sales Value" />
 
 

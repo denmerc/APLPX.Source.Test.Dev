@@ -59,13 +59,13 @@
             Height="Auto"
             Margin="0,0,0,600"
             Background="{DynamicResource SearchControlSelectedItemDetailBackgroundColor}"
-            BorderBrush="#828790"
+            BorderBrush="White"
             BorderThickness="1"
             CornerRadius="5"
                 Grid.Column="1">
 
 
-            <Grid Width="895" MaxHeight="800" Grid.Column="1" ShowGridLines="True">
+            <Grid Width="895" MaxHeight="800" Grid.Column="1" ShowGridLines="False">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -74,9 +74,17 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" BorderBrush="White" BorderThickness="1"/>
+                <Border Grid.Row="1" BorderBrush="White" BorderThickness="1"/>
+                <Border Grid.Row="2" BorderBrush="White" BorderThickness="1"/>
+                <Border Grid.Row="3" BorderBrush="White" BorderThickness="1"/>
+                <Border Grid.Row="4" BorderBrush="White" BorderThickness="1"/>
+                <Border Grid.Row="5" BorderBrush="White" BorderThickness="1"/>
+                <Border Grid.Row="6" BorderBrush="White" BorderThickness="1"/>
                 <Label Grid.Row="0"
                    HorizontalAlignment="Center"
-                   Content="Results" FontFamily="SegoeUI" FontSize="16" />
+                   Content="RESULTS" FontFamily="SegoeUI" FontWeight="Bold" FontSize="16" />
                 <Label Grid.Row="1"
                    HorizontalAlignment="Left"
                    Content="Price Range Filter: " FontFamily="SegoeUI" FontSize="13" Margin="25,0,0,0"/>
@@ -120,23 +128,20 @@
                    HorizontalAlignment="Right"
                    Content="Per Page: _ &lt; ##,### " FontFamily="SegoeUI" FontSize="13" Margin="0,0,25,0"/>
                 <Grid Grid.Row="3"
-                  Width="890">
+                  Width="895">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <Border x:Name="Label1"
-                            HorizontalAlignment="Stretch"
                             BorderBrush="White"
-                            BorderThickness="1"
-                                Margin="8,0,0,0">
+                            BorderThickness="1">
                             <TextBlock Text="Current/Existing" FontFamily="SegoeUI" FontSize="13" HorizontalAlignment="Center"/>
                         </Border>
                         <Border x:Name="Label2"
-                            HorizontalAlignment="Stretch"
                             BorderBrush="White"
                             BorderThickness="1">
                             <TextBlock Text="Optimization Results" FontFamily="SegoeUI" FontSize="13" HorizontalAlignment="Center"/>
@@ -146,7 +151,6 @@
 
                     <DataGrid Name="dg"
                           Grid.Row="1"
-                          Width="875"
                           AutoGenerateColumns="False"
                           CanUserReorderColumns="False"
                           IsSynchronizedWithCurrentItem="True"
@@ -154,13 +158,13 @@
                           LayoutUpdated="LayoutUpdated"
                           GridLinesVisibility="Horizontal"
                           HorizontalGridLinesBrush="White"
-                          ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="600">
+                          ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" 
+                          MaxHeight="650"  BorderBrush="White" BorderThickness="1">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding SkuName}"/>
+                                        <TextBlock Text="{Binding SkuName}" HorizontalAlignment="Center"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using ENT = APLPX.Client.Entity;
+using ENT = APLPX.Entity;
 
 namespace APLPX.Client.Mock.Entity
 {

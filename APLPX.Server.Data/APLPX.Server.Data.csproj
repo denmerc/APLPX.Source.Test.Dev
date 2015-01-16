@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\APLPX.Server.Entity\APLPX.Server.Entity.csproj">
-      <Project>{e2e6ae46-9b99-4e63-90b7-77174c4a2787}</Project>
-      <Name>APLPX.Server.Entity</Name>
+    <ProjectReference Include="..\APLPX.Entity\APLPX.Entity.csproj">
+      <Project>{e1b6bd21-4dc1-48c2-b8a0-1d03aacd974d}</Project>
+      <Name>APLPX.Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

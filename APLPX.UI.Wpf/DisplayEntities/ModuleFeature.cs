@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-using APLPX.Client.Entity;
+using APLPX.Entity;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 

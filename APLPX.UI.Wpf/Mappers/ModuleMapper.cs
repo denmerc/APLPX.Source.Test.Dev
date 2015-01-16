@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Mappers
@@ -40,7 +40,7 @@ namespace APLPX.UI.WPF.Mappers
             foreach (Display.ModuleFeature item in displayEntity.Features)
             {
                 featureDtos.Add(item.ToDto());
-            }            
+            }
 
             var dto = new DTO.Module(
                                 displayEntity.Name,
@@ -92,13 +92,13 @@ namespace APLPX.UI.WPF.Mappers
             foreach (var step in displayEntity.Steps)
             {
                 featureSteps.Add(step.ToDto());
-            }            
+            }
 
             var searchGroups = new List<DTO.FeatureSearchGroup>();
             foreach (var searchGroup in displayEntity.SearchGroups)
             {
                 searchGroups.Add(searchGroup.ToDto());
-            }            
+            }
 
             var result = new DTO.ModuleFeature(
                                         displayEntity.Name,
@@ -125,7 +125,7 @@ namespace APLPX.UI.WPF.Mappers
             result.Sort = dto.Sort;
             result.Name = dto.Name;
             result.Title = dto.Title;
-            
+
             if (dto.Advisors != null)
             {
                 foreach (var advisor in dto.Advisors)
@@ -188,9 +188,9 @@ namespace APLPX.UI.WPF.Mappers
                                             displayEntity.Title,
                                             displayEntity.Sort,
                                             displayEntity.TypeId,
-                                            errors,
+                                            actions,
                                             advisors,
-                                            actions);
+                                            errors);
 
             return dto;
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using APLPX.Client.Entity;
+using APLPX.Entity;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities

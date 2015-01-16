@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using APLPX.Client.Contracts;
 using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.Mappers;
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.DisplayServices
 {
@@ -32,8 +32,8 @@ namespace APLPX.UI.WPF.DisplayServices
         #region Public Methods
 
         public List<Analytic> LoadAnalytics(DTO.Session<DTO.NullT> session)
-        {            
-            DTO.Session<List<DTO.Analytic>> response = _analyticService.LoadList(session);
+        {
+            DTO.Session<List<DTO.Analytic>> response = null; ;//TODO: set to null until AnalyticService contract is updated.// _analyticService.LoadList(session);
 
             List<Analytic> displayList = new List<Analytic>();
             foreach (DTO.Analytic analytic in response.Data)
@@ -49,7 +49,7 @@ namespace APLPX.UI.WPF.DisplayServices
             DTO.Analytic payload = displayAnalytic.ToDto();
             var sessionDto = new DTO.Session<DTO.Analytic> { Data = payload };
 
-            DTO.Session<DTO.Analytic> response = _analyticService.LoadFilters(sessionDto);
+            DTO.Session<DTO.Analytic> response = null;//TODO: set to null until AnalyticService contract is updated. _analyticService.LoadFilters(sessionDto);
 
             var displayList = new List<FilterGroup>();
             foreach (DTO.FilterGroup filterGroup in response.Data.FilterGroups)
@@ -65,7 +65,7 @@ namespace APLPX.UI.WPF.DisplayServices
             DTO.Analytic payload = displayAnalytic.ToDto();
             var sessionDto = new DTO.Session<DTO.Analytic> { Data = payload };
 
-            DTO.Session<DTO.Analytic> response = _analyticService.LoadDrivers(sessionDto);
+            DTO.Session<DTO.Analytic> response = null;//TODO: set to null until AnalyticService contract is updated. _analyticService.LoadDrivers(sessionDto);
 
             var displayList = new List<AnalyticValueDriver>();
             foreach (var driver in response.Data.ValueDrivers)
@@ -81,7 +81,7 @@ namespace APLPX.UI.WPF.DisplayServices
             DTO.Analytic payload = displayAnalytic.ToDto();
             var sessionDto = new DTO.Session<DTO.Analytic> { Data = payload };
 
-            DTO.Session<DTO.Analytic> returnedSession = _analyticService.LoadDrivers(sessionDto);
+            DTO.Session<DTO.Analytic> returnedSession = null; ;//TODO: set to null until AnalyticService contract is updated. _analyticService.LoadDrivers(sessionDto);
 
             var displayList = new List<AnalyticPriceListGroup>();
             foreach (var group in returnedSession.Data.PriceListGroups)
@@ -93,6 +93,6 @@ namespace APLPX.UI.WPF.DisplayServices
         }
 
         #endregion
-  
+
     }
 }

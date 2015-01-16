@@ -5,7 +5,7 @@ using System.Linq;
 
 using APLPX.UI.WPF.DisplayEntities;
 using ReactiveUI;
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.Helpers
 {

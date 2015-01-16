@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using ENT = APLPX.Client.Entity;
-using DTO = APLPX.Client.Mock.Entity;
+using ENT = APLPX.Entity;
+using DTO = APLPX.Common.Mock.Entity;
 
 namespace APLPX.Client.Mock.Entity
 {

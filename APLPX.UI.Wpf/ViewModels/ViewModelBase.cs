@@ -5,7 +5,7 @@ using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.DisplayServices;
 using ReactiveUI;
 
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
 using System.Windows;
 
@@ -23,7 +23,7 @@ namespace APLPX.UI.WPF.ViewModels
         private Display.PricingEveryday _selectedPricingEveryday;
 
         private DTO.Session<DTO.NullT> _session;
-        private UserDisplayServices _userDisplayServices;
+        //private UserDisplayServices _userDisplayServices;
 
         #endregion
 
@@ -82,14 +82,14 @@ namespace APLPX.UI.WPF.ViewModels
             set { this.RaiseAndSetIfChanged(ref _session, value); }
         }
 
-        /// <summary>
-        /// Gets/sets the UserDisplayServices provider.
-        /// </summary>
-        public UserDisplayServices UserServices
-        {
-            get { return _userDisplayServices; }
-            set { this.RaiseAndSetIfChanged(ref _userDisplayServices, value); }
-        }
+        ///// <summary>
+        ///// Gets/sets the UserDisplayServices provider.
+        ///// </summary>
+        //public UserDisplayServices UserServices
+        //{
+        //    get { return _userDisplayServices; }
+        //    set { this.RaiseAndSetIfChanged(ref _userDisplayServices, value); }
+        //}
 
         #endregion
 

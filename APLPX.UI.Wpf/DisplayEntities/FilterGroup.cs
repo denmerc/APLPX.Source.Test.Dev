@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using APLPX.UI.WPF.Helpers;
 using System.Reactive.Subjects;
+
+using APLPX.UI.WPF.Helpers;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities

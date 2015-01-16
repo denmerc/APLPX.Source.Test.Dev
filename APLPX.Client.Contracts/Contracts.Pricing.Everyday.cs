@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using APLPX.Client.Entity;
+//using APLPX.Client.Entity;
+using APLPX.Entity;
 
 namespace APLPX.Client.Contracts
 {
@@ -8,24 +9,24 @@ namespace APLPX.Client.Contracts
     public interface IPricingEverydayService
     {
         [OperationContract]
-        Session<List<Client.Entity.PricingEveryday>> LoadList(Session<Client.Entity.NullT> session);
+        Session<List<PricingEveryday>> LoadList(Session<NullT> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> SaveIdentity(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> SaveIdentity(Session<PricingEveryday> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> LoadFilters(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> LoadFilters(Session<PricingEveryday> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> SaveFilters(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> SaveFilters(Session<PricingEveryday> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> LoadDrivers(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> LoadDrivers(Session<PricingEveryday> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> SaveDrivers(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> SaveDrivers(Session<PricingEveryday> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> LoadPriceLists(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> LoadPriceLists(Session<PricingEveryday> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> SavePriceLists(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> SavePriceLists(Session<PricingEveryday> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> LoadResults(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> LoadResults(Session<PricingEveryday> session);
         [OperationContract]
-        Session<Client.Entity.PricingEveryday> LoadPricingEveryday(Session<Client.Entity.PricingEveryday> session);
+        Session<PricingEveryday> LoadPricingEveryday(Session<PricingEveryday> session);
     }
 }

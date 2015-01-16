@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using APLPX.Client.Contracts;
-using APLPX.Client.Entity;
+using APLPX.Entity;
 
 namespace APLPX.UI.WPF.DisplayServices
 {
@@ -38,9 +38,9 @@ namespace APLPX.UI.WPF.DisplayServices
             var payload = new NullT();
             var session = new Session<NullT> { Data = payload };
 
-            Session<NullT> response = _userService.Initialize(session);
+            //Session<NullT> response = _userService.Initialize(session);
 
-            return response;
+            return null;// response;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace APLPX.UI.WPF.DisplayServices
             Session<NullT> sessionIn = new Session<NullT>();
             sessionIn.User = userDto;
 
-            response = _userService.Authenticate(sessionIn);
+            //response = _userService.Authenticate(sessionIn);
 
             return response;
         }
@@ -80,7 +80,7 @@ namespace APLPX.UI.WPF.DisplayServices
 
         public Session<NullT> SavePassword(Session<NullT> sessionDto)
         {
-            Session<NullT> response = _userService.SavePassword(sessionDto);
+            Session<NullT> response = null;// _userService.SavePassword(sessionDto);
 
             return response;
         }

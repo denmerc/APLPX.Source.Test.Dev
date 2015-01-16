@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using APLPX.Client.Entity;
+using APLPX.Entity;
 
 
 namespace APLPX.UI.WPF.Interfaces

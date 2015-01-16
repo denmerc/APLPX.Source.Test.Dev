@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using APLPX.Server.Entity;
+using APLPX.Entity;
 
 namespace APLPX.Server.Services.Contracts
 {
@@ -8,16 +8,18 @@ namespace APLPX.Server.Services.Contracts
     public interface IUserService
     {
         [OperationContract]
-        Session<Server.Entity.NullT> Initialize(Session<Server.Entity.NullT> session);
+        Session<Entity.NullT> Initialize(Session<Entity.NullT> session);
         [OperationContract]
-        Session<Server.Entity.NullT> Authenticate(Session<Server.Entity.NullT> session);
+        Session<Entity.NullT> Authenticate(Session<Entity.NullT> session);
         [OperationContract]
-        Session<List<Server.Entity.User>> LoadList(Session<Server.Entity.NullT> session);
+        Session<Entity.NullT> SavePassword(Session<Entity.NullT> session);
+        
+        //Administration service methods...
         [OperationContract]
-        Session<Server.Entity.User> LoadUser(Session<Server.Entity.User> session);
+        Session<List<Entity.User>> LoadList(Session<Entity.NullT> session);
         [OperationContract]
-        Session<Server.Entity.User> SaveUser(Session<Server.Entity.User> session);
+        Session<Entity.User> LoadUser(Session<Entity.User> session);
         [OperationContract]
-        Session<Server.Entity.NullT> SavePassword(Session<Server.Entity.NullT> session);
+        Session<Entity.User> SaveUser(Session<Entity.User> session);
     }
 }

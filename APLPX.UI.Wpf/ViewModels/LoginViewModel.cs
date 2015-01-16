@@ -1,5 +1,5 @@
 ﻿using APLPX.Client.Contracts;
-using APLPX.Client.Entity;
+using APLPX.Entity;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace APLPX.UI.WPF.ViewModels
             AnalyticService = analyticService;
 
             //var sharedKey = UserService.Initialize();
-
+            //InitializeCommand.ExecuteAsync();
 
             InitializeCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 {
@@ -45,11 +45,11 @@ namespace APLPX.UI.WPF.ViewModels
                     if(Session.SessionOk)
                     {
                         StatusMessage = "Loading modules...";
-                        Session.Modules = new List<Module>(); //TODO: Load modules from WCF
-                        Session.Analytics = new List<Client.Entity.Analytic>(); //TODO: Load Analytic Identities from WCF
-                        Session.Pricing = new List<PricingEveryday>(); //TODO: Load Pricing Identities from WCF
-
-                        //todo: pass IAnalyticService via constructor in the case that user succesfully auths
+                        var cred  = new UserCredential(UserName, Password);
+                        Session.User.Credential = cred;
+                        
+                        Session.Analytics = analyticService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
+                        //Session.Pricing = pricingService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
                         var mvm = new MainViewModel(Session, analyticService, userService, pricingService);
                         var mainWindow = new MainWindow();
                         mainWindow.DataContext = mvm;
@@ -97,19 +97,21 @@ namespace APLPX.UI.WPF.ViewModels
                 
                 //Thread.Sleep(3000); //simulate initialize delay
                 //throw new Exception();
-                var session = new Session<NullT>
-                {
-                    User = new User(
-                                            2,
-                                            "UserKey",
-                                            new UserRole(3, "Administrator", "Role description"),
-                                            new UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
-                                            new UserCredential(loginName, password, null),
-                                            new List<SQLEnumeration>()
+                //var session = new Session<NullT>
+                //{
+                //    User = new User(
+                //                            //2,
+                //                            //"UserKey",
+                //                            //new UserRole(3, "Administrator", "Role description"),
+                //                            //new UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
+                //                            new UserCredential(loginName, password, null)
+                //                            //,
+                //                            //new List<SQLEnumeration>()
 
-                                       )
-                };
-                return UserService.Authenticate(session); //TODO:Using and Dispose of proxy.
+                //                       )
+                //};
+                Session.User = new User(new UserCredential(loginName, password));
+                return UserService.Authenticate(Session); //TODO:Using and Dispose of proxy.
 
             });
         }

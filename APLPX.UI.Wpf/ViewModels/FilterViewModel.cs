@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
@@ -12,11 +11,11 @@ namespace APLPX.UI.WPF.ViewModels
     public class FilterViewModel : ViewModelBase
     {
         private ISearchableEntity _entity;
-        private List<FilterGroup> _filterGroups;
+        private List<Display.FilterGroup> _filterGroups;
 
         #region Constructor and Initialization
 
-        public FilterViewModel(ISearchableEntity entity, List<FilterGroup> filterGroups)
+        public FilterViewModel(ISearchableEntity entity, List<Display.FilterGroup> filterGroups)
         {
             if (entity == null)
             {
@@ -37,7 +36,7 @@ namespace APLPX.UI.WPF.ViewModels
             this.WhenAnyObservable(vm => vm.SelectAllFiltersCommand).Subscribe(item => SelectAllFiltersCommandExecuted(item));
         }
 
-    
+
 
         #endregion
 
@@ -55,7 +54,7 @@ namespace APLPX.UI.WPF.ViewModels
             set { this.RaiseAndSetIfChanged(ref _entity, value); }
         }
 
-        public List<FilterGroup> FilterGroups
+        public List<Display.FilterGroup> FilterGroups
         {
             get { return _filterGroups; }
             private set { this.RaiseAndSetIfChanged(ref _filterGroups, value); }
@@ -64,11 +63,11 @@ namespace APLPX.UI.WPF.ViewModels
         /// <summary>
         /// Private convenience property. Not used for data binding.
         /// </summary>
-        private FilterGroup SelectedFilterGroup
+        private Display.FilterGroup SelectedFilterGroup
         {
             get
             {
-                FilterGroup result = null;
+                Display.FilterGroup result = null;
 
                 Display.Analytic analytic = Entity as Display.Analytic;
                 if (analytic != null)
@@ -92,7 +91,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Command Handlers
 
-        private bool SelectAllFiltersCanExecute(FilterGroup filterGroup)
+        private bool SelectAllFiltersCanExecute(Display.FilterGroup filterGroup)
         {
             bool result = (filterGroup != null);
 
@@ -103,7 +102,7 @@ namespace APLPX.UI.WPF.ViewModels
         {
             bool isSelected = Convert.ToBoolean(parameter);
 
-            foreach (Filter filter in SelectedFilterGroup.Filters)
+            foreach (Display.Filter filter in SelectedFilterGroup.Filters)
             {
                 filter.IsSelected = isSelected;
             }

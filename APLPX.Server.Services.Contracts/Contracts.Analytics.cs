@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-using APLPX.Server.Entity;
+using APLPX.Entity;
 
 namespace APLPX.Server.Services.Contracts
 {
@@ -8,24 +8,26 @@ namespace APLPX.Server.Services.Contracts
     public interface IAnalyticService
     {
         [OperationContract]
-        Session<List<Server.Entity.Analytic>> LoadList(Session<Server.Entity.NullT> session);
+        Session<Entity.Analytic> Load(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> SaveIdentity(Session<Server.Entity.Analytic> session);
+        Session<List<Entity.Analytic>> LoadList(Session<Entity.NullT> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> LoadFilters(Session<Server.Entity.Analytic> session);
+        Session<Entity.Analytic> LoadIdentity(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> SaveFilters(Session<Server.Entity.Analytic> session);
+        Session<Entity.Analytic> SaveIdentity(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> LoadDriver(Session<Server.Entity.Analytic> session);
+        Session<Entity.Analytic> LoadFilters(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> LoadDrivers(Session<Server.Entity.Analytic> session);
+        Session<Entity.Analytic> SaveFilters(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> SaveDriver(Session<Server.Entity.Analytic> session);
+        Session<Entity.Analytic> LoadDrivers(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> SaveDrivers(Session<Server.Entity.Analytic> session);
+        Session<Entity.Analytic> SaveDrivers(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> LoadPriceLists(Session<Server.Entity.Analytic> session);
+        Session<Entity.Analytic> RunDrivers(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Server.Entity.Analytic> SavePriceLists(Session<Server.Entity.Analytic> session);
+        Session<Entity.Analytic> LoadPriceLists(Session<Entity.Analytic> session);
+        [OperationContract]
+        Session<Entity.Analytic> SavePriceLists(Session<Entity.Analytic> session);
     }
 }

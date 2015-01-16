@@ -19,9 +19,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                           {
                               Id = r.Id,
                               DriverName = d.Name,
-                              Value = r.Value,
-                              MinValue = r.MinValue,
-                              MaxValue = r.MaxValue,
+                              Value = r.Value,                           
                               MinOutlier = r.MinOutlier,
                               MaxOutlier = r.MaxOutlier,
                               SalesValue = r.SalesValue,

@@ -1,4 +1,4 @@
-﻿using APLPX.Client.Entity;
+﻿using APLPX.Entity;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;

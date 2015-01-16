@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Linq;
 
 using APLPX.Client.Contracts;
-using APLPX.Client.Entity;
+using APLPX.Entity;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace APLPX.Server.Entity
+namespace APLPX.Entity
 {
     public class NullT { }
 
@@ -24,17 +24,23 @@ namespace APLPX.Server.Entity
         [DataMember]
         public bool SessionOk { get; set; }
         [DataMember]
+        public int ClientCommand { get; set; }
+        [DataMember]
         public string ClientMessage { get; set; }
         [DataMember]
         public string ServerMessage { get; set; }
         [DataMember]
         public string SqlKey { get; set; }
         [DataMember]
-        public List<Server.Entity.Module> Modules { get; set; }
+        public List<Entity.Module> Modules { get; set; }
+        [DataMember]
+        public List<Analytic> Analytics { get; set; }
+        [DataMember]
+        public List<PricingEveryday> Pricing { get; set; }
 
         public Session<Tdata> Clone<Tdata>(Tdata data) where Tdata : class {
 
-            return InitCommon<Tdata>(this, data);
+            return this.InitCommon<Tdata>(this, data);
         }
 
         public static Session<Tdata> Clone<Tdata>(Session<T> session, Tdata data = null) where Tdata : class {

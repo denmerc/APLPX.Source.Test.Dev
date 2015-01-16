@@ -7,11 +7,10 @@ using System.Windows;
 
 using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.ViewModels;
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 using System.Reflection;
 using APLPX.Client.Contracts;
 using APLPX.Client;
-
 
 namespace APLPX.UI.WPF
 {
@@ -24,6 +23,7 @@ namespace APLPX.UI.WPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
+
             var eventManager = new EventAggregator();
             App.Current.Resources.Add("EventManager", eventManager);
             string[] pluginPaths = System.IO.Directory.GetFiles(System.AppDomain.CurrentDomain.BaseDirectory, "APLPX.Client.Mock.dll");
@@ -59,13 +59,13 @@ namespace APLPX.UI.WPF
                 if (response.SessionOk)
                 {
                     session.Modules = response.Modules;
-                    session.Analytics = response.Analytics;
-                    session.Pricing = response.Pricing;
-                    session.FilterGroups = response.FilterGroups;
+                    //session.Analytics = response.Analytics;
+                    //session.Pricing = response.Pricing;
+                    //session.FilterGroups = response.FilterGroups;
                     var mvm = new MainViewModel(session, analyticClient, userClient, pricingEverydayClient);
-                    var mainWindow = new MainWindow();
-                    mainWindow.DataContext = mvm;
-                    mainWindow.Show();
+                var mainWindow = new MainWindow();
+                mainWindow.DataContext = mvm;
+                mainWindow.Show();
 
                 }
                 else
@@ -104,7 +104,7 @@ namespace APLPX.UI.WPF
             //App.Current.Resources.Add("EventManager", eventManager);
 
             //if (ConfigurationManager.AppSettings["Environment"] != "DEV")
-            //{
+                //{
             //    var loginWindow = new LoginWindow();
             //    loginWindow.DataContext = new LoginViewModel(userService);
             //    loginWindow.ShowMaxRestoreButton = false;
@@ -126,10 +126,10 @@ namespace APLPX.UI.WPF
             //                           )
             //    };
 
-            //    var mvm = new MainViewModel(session, analyticService, userService);
-            //    var mainWindow = new MainWindow();
-            //    mainWindow.DataContext = mvm;
-            //    mainWindow.Show();
+                //    var mvm = new MainViewModel(session, analyticService, userService);
+                //    var mainWindow = new MainWindow();
+                //    mainWindow.DataContext = mvm;
+                //    mainWindow.Show();
 
             //    //TODO: UNCOMMENT WHEN UserService is updated to work with new entity model:
 
@@ -149,7 +149,7 @@ namespace APLPX.UI.WPF
             //    //{
             //    //    MessageBox.Show(response.ClientMessage);
             //    //}
-            //}
+                //}
                 //TODO: UNCOMMENT WHEN UserService is updated to work with new entity model:
             
 

@@ -30,12 +30,12 @@
             Height="Auto"
             Margin="0,0,0,600"
             Background="{DynamicResource SearchControlSelectedItemDetailBackgroundColor}"
-            BorderBrush="#828790"
+            BorderBrush="White"
             BorderThickness="1"
             CornerRadius="5">
 
 
-        <Grid Width="1090" MaxHeight="800" ShowGridLines="True">
+        <Grid Width="1090" MaxHeight="800" ShowGridLines="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -44,9 +44,16 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderBrush="White" BorderThickness="1"/>
+            <Border Grid.Row="1" BorderBrush="White" BorderThickness="1"/>
+            <Border Grid.Row="2" BorderBrush="White" BorderThickness="1"/>
+            <Border Grid.Row="3" BorderBrush="White" BorderThickness="1"/>
+            <Border Grid.Row="4" BorderBrush="White" BorderThickness="1"/>
+            <Border Grid.Row="5" BorderBrush="White" BorderThickness="1"/>
+            <Border Grid.Row="6" BorderBrush="White" BorderThickness="1"/>
             <Label Grid.Row="0"
                    HorizontalAlignment="Center"
-                   Content="Results" FontFamily="SegoeUI" FontSize="16" />
+                   Content="RESULTS" FontFamily="SegoeUI" FontWeight="Bold" FontSize="16" />
             <Label Grid.Row="1"
                    HorizontalAlignment="Left"
                    Content="Price Range Filter: " FontFamily="SegoeUI" FontSize="13" Margin="25,0,0,0"/>
@@ -97,16 +104,13 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
                     <Border x:Name="Label1"
-                            HorizontalAlignment="Stretch"
                             BorderBrush="White"
-                            BorderThickness="1"
-                            Margin="5.5,0,0,0">
+                            BorderThickness="1">
                         <TextBlock Text="Current/Existing" FontFamily="SegoeUI" FontSize="13" HorizontalAlignment="Center"/>
                     </Border>
                     <Border x:Name="Label2"
-                            HorizontalAlignment="Stretch"
                             BorderBrush="White"
                             BorderThickness="1">
                         <TextBlock Text="Competitive Analysis" FontFamily="SegoeUI" FontSize="13" HorizontalAlignment="Center"/>
@@ -124,12 +128,12 @@
                           GridLinesVisibility="Horizontal"
                           HorizontalGridLinesBrush="White"
                           ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
-                          MaxHeight="650" Margin="5,0,5,0">
+                          MaxHeight="650"  BorderBrush="White" BorderThickness="1">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn" Width="65" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Sku}"/>
+                                    <TextBlock Text="{Binding Sku}"  HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

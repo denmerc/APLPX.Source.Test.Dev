@@ -34,8 +34,6 @@ namespace APLPX.Client.Entity
         public short Sort { get;  set; }
         [DataMember]
         public List<ModuleFeature> Features { get;  set; }
-        [DataMember]
-        public List<UserRole> Roles;
     }
     [DataContract]
     public class ModuleFeature  //Workflow Views
@@ -79,8 +77,6 @@ namespace APLPX.Client.Entity
         public List<ModuleFeatureStep> Steps { get; set; }
         [DataMember]
         public List<FeatureSearchGroup> SearchGroups { get; set; }
-        [DataMember]
-        public List<UserRole> Roles;
     }
 
     [DataContract]
@@ -116,11 +112,11 @@ namespace APLPX.Client.Entity
         [DataMember]
         public short Sort { get;  set; }
         [DataMember]
-        public List<ModuleFeatureStepError> Errors { get; set; }
+        public List<ModuleFeatureStepAction> Actions { get; set; }
         [DataMember]
         public List<ModuleFeatureStepAdvisor> Advisors { get; set; }
         [DataMember]
-        public List<ModuleFeatureStepAction> Actions { get; set; }
+        public List<ModuleFeatureStepError> Errors { get; set; }
     }
 
     [DataContract]
@@ -170,9 +166,9 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
-        public string Message { get; private set; }
+        public string Message { get; set; }
     }
 
     [DataContract]
@@ -190,7 +186,7 @@ namespace APLPX.Client.Entity
         #endregion
 
         [DataMember]
-        public short Sort { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
         public string Message { get; set; }
     }

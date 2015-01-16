@@ -79,9 +79,17 @@
       <Project>{8888ebe0-7a11-4ad0-ab11-88dbfe009c57}</Project>
       <Name>APLPX.Client.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\APLPX.Client.Entity\APLPX.Client.Entity.csproj">
-      <Project>{b365c24a-4504-47dd-9305-48c2ae1657f3}</Project>
-      <Name>APLPX.Client.Entity</Name>
+    <ProjectReference Include="..\APLPX.Core\APLPX.Core.csproj">
+      <Project>{5216effb-bfe7-4f59-9c07-ae1b4a14139f}</Project>
+      <Name>APLPX.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APLPX.Entity\APLPX.Entity.csproj">
+      <Project>{e1b6bd21-4dc1-48c2-b8a0-1d03aacd974d}</Project>
+      <Name>APLPX.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APLPX.UI.Wpf\APLPX.UI.Wpf.csproj">
+      <Project>{632a3dca-fd92-4067-96b9-9a858c23e2d3}</Project>
+      <Name>APLPX.UI.Wpf</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

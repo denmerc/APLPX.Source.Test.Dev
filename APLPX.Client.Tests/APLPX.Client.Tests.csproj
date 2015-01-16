@@ -60,17 +60,19 @@
       <Project>{8888ebe0-7a11-4ad0-ab11-88dbfe009c57}</Project>
       <Name>APLPX.Client.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\APLPX.Client.Entity\APLPX.Client.Entity.csproj">
-      <Project>{b365c24a-4504-47dd-9305-48c2ae1657f3}</Project>
-      <Name>APLPX.Client.Entity</Name>
-    </ProjectReference>
     <ProjectReference Include="..\APLPX.Client\APLPX.Client.csproj">
       <Project>{ab16ff02-1b5b-4009-a989-0cb54c802efa}</Project>
       <Name>APLPX.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\APLPX.Entity\APLPX.Entity.csproj">
+      <Project>{e1b6bd21-4dc1-48c2-b8a0-1d03aacd974d}</Project>
+      <Name>APLPX.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

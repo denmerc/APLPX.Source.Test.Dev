@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using APLPX.Client.Entity;
+using APLPX.Entity;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 

@@ -4,12 +4,12 @@ using System.Configuration;
 using System.Linq;
 
 using APLPX.Client.Contracts;
-using APLPX.Client.Entity;
+using APLPX.Entity;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
-using DTO = APLPX.Client.Mock.Entity;
+using DTO = APLPX.Common.Mock.Entity;
 using APLPX.Client.Mock.MockEntities;
 
 namespace APLPX.Client.Mock
@@ -253,8 +253,8 @@ namespace APLPX.Client.Mock
                                                      NewMarkupPercent = pl.NewMarkupPercent,
                                                      NewPrice = pl.NewPrice,
                                                      PriceChange = pl.PriceChange,
-                                                     PriceEdit = pl.PriceEdit,
-                                                     PriceWarning = pl.PriceWarning,
+                                                     //PriceEdit = pl.PriceEdit,
+                                                     //PriceWarning = pl.PriceWarning,
                                                      ResultId = pl.ResultId,
                                                      Sort = pl.Sort,
                                                      Title = pl.Title
@@ -735,8 +735,8 @@ namespace APLPX.Client.Mock
                                                  NewMarkupPercent = pl.NewMarkupPercent,
                                                  NewPrice = pl.NewPrice,
                                                  PriceChange = pl.PriceChange,
-                                                 PriceEdit = pl.PriceEdit,
-                                                 PriceWarning = pl.PriceWarning,
+                                                 //PriceEdit = pl.PriceEdit,
+                                                 //PriceWarning = pl.PriceWarning,
                                                  ResultId = pl.ResultId,
                                                  Sort = pl.Sort,
                                                  Title = pl.Title
@@ -814,6 +814,9 @@ namespace APLPX.Client.Mock
         {
             throw new NotImplementedException();
         }
+
+
+
 
 
     }

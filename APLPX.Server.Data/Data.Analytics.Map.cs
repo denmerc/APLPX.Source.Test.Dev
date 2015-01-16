@@ -1,12 +1,206 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Collections.Generic;
-using APLPX.Server.Entity;
+using APLPX.Entity;
 
 namespace APLPX.Server.Data {
 
     class AnalyticMap
     {
+        #region Load Analytic
+        public void LoadMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
+
+            //Map the command procedure...
+            service.SqlProcedure = AnalyticMap.Names.selectCommand;
+            String command = AnalyticMap.Names.loadMetaMessage;
+
+            //Map the parameters...
+            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
+                new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, command)
+            }; service.sqlParameters.List = parameters;
+        }
+
+        public Entity.Analytic LoadMapData(System.Data.DataSet dataSet) {
+
+            //Map the entity data...
+            Entity.Analytic analytic = null;
+            Entity.AnalyticIdentity analyticIdentity = null;
+            List<Entity.AnalyticValueDriver> driverList = null;
+            List<Entity.AnalyticValueDriverMode> driverModeList = null;
+            List<Entity.ValueDriverGroup> driverGroupList = null;
+            List<Entity.AnalyticResultValueDriverGroup> driverResultList = null;
+            List<Entity.AnalyticPriceListGroup> priceGroupList = null;
+            List<Entity.FilterGroup> filterGroupList = null;
+            List<Entity.PriceList> priceLists = null;
+            List<Entity.Filter> filterLists = null;
+
+            #region Load Analytic...
+            var queryIdentity = dataSet.Tables[AnalyticMap.Names.loadAnaltyicIdentityData].AsEnumerable()
+                .Select(identity => new {
+                    Id = identity.Field<int>(AnalyticMap.Names.analyticsId),
+                    SearchId = identity.Field<int>(AnalyticMap.Names.analyticsSearchId),
+                    SearchGroup = identity.Field<string>(AnalyticMap.Names.analyticsSearchGroup),
+                    IdentityName = identity.Field<string>(AnalyticMap.Names.analyticsName),
+                    IdentityDescription = identity.Field<string>(AnalyticMap.Names.analyticsDescription),
+                    IdentityNotes = identity.Field<string>(AnalyticMap.Names.analyticsNotes),
+                    IdentityRefreshedText = identity.Field<string>(AnalyticMap.Names.refreshedText),
+                    IdentityCreatedText = identity.Field<string>(AnalyticMap.Names.createdText),
+                    IdentityEditedText = identity.Field<string>(AnalyticMap.Names.editedText),
+                    IdentityRefreshed = identity.Field<DateTime>(AnalyticMap.Names.refreshed),
+                    IdentityCreated = identity.Field<DateTime>(AnalyticMap.Names.created),
+                    IdentityEdited = identity.Field<DateTime>(AnalyticMap.Names.edited),
+                    IdentityAuthor = identity.Field<string>(AnalyticMap.Names.authorText),
+                    IdentityEditor = identity.Field<string>(AnalyticMap.Names.editorText),
+                    IdentityOwner = identity.Field<string>(AnalyticMap.Names.ownerText),
+                    IdentityShared = identity.Field<bool>(AnalyticMap.Names.shared),
+                    IdentityActive = identity.Field<bool>(AnalyticMap.Names.active)
+                }).Distinct();
+
+            foreach (var identity in queryIdentity) {
+                analyticIdentity = new AnalyticIdentity(
+                    identity.IdentityName, identity.IdentityDescription, identity.IdentityNotes, 
+                    identity.IdentityRefreshedText, identity.IdentityCreatedText, identity.IdentityEditedText, identity.IdentityRefreshed, identity.IdentityCreated, identity.IdentityEdited,
+                    identity.IdentityAuthor, identity.IdentityEditor, identity.IdentityOwner, identity.IdentityShared, identity.IdentityActive);
+                #region Load Drivers...
+                driverList = new List<AnalyticValueDriver>();
+                var queryDrivers = dataSet.Tables[AnalyticMap.Names.loadAnaltyicDriverData].AsEnumerable()
+                    .Where(drivers => drivers.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id)
+                    .Select(drivers => new {
+                        Id = drivers.Field<int>(AnalyticMap.Names.driverId),
+                        Key = drivers.Field<int>(AnalyticMap.Names.driverType),
+                        Selected = drivers.Field<bool>(AnalyticMap.Names.driverSelected),
+                        Name = drivers.Field<string>(AnalyticMap.Names.driverTypeName),
+                        Title = drivers.Field<string>(AnalyticMap.Names.driverTypeText),
+                        Sort = drivers.Field<short>(AnalyticMap.Names.driverSort),
+                    }).Distinct();
+                foreach (var driver in queryDrivers) {
+                    driverModeList = new List<AnalyticValueDriverMode>();
+                    driverResultList = new List<AnalyticResultValueDriverGroup>();
+                    driverList.Add(new Entity.AnalyticValueDriver(driver.Id, driver.Key, driver.Selected, driver.Name, driver.Title, driver.Sort, driverResultList, driverModeList));
+                    #region Load Driver modes...
+                    var queryModes = dataSet.Tables[AnalyticMap.Names.loadAnaltyicDriverData].AsEnumerable()
+                        .Where(modes =>
+                            modes.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                            modes.Field<int>(AnalyticMap.Names.driverType) == driver.Key
+                        ).Select(modes => new {
+                            Key = modes.Field<int>(AnalyticMap.Names.driverMode),
+                            Selected = modes.Field<bool>(AnalyticMap.Names.driverModeSelected),
+                            Name = modes.Field<string>(AnalyticMap.Names.driverModeName),
+                            Title = modes.Field<string>(AnalyticMap.Names.driverModeText),
+                            Sort = modes.Field<short>(AnalyticMap.Names.driverModeSort)
+                        }).Distinct();
+                    foreach (var mode in queryModes) {
+                        driverGroupList = new List<Entity.ValueDriverGroup>();
+                        driverModeList.Add(new Entity.AnalyticValueDriverMode(mode.Key, mode.Selected, mode.Name, mode.Title, mode.Sort, driverGroupList));
+                        //Mode Groups...
+                        var queryGroups = dataSet.Tables[AnalyticMap.Names.loadAnaltyicDriverData].AsEnumerable()
+                            .Where(groups => 
+                                groups.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                                groups.Field<int>(AnalyticMap.Names.driverType) == driver.Key &&
+                                groups.Field<int>(AnalyticMap.Names.driverMode) == mode.Key
+                            ).Select(groups => new {
+                               Id = groups.Field<int>(AnalyticMap.Names.driverGroupId),
+                               Value = groups.Field<short>(AnalyticMap.Names.driverGroupValue),
+                               Min = groups.Field<decimal>(AnalyticMap.Names.driverGroupLimitLower),
+                               Max = groups.Field<decimal>(AnalyticMap.Names.driverGroupLimitUpper),
+                               Sort = groups.Field<short>(AnalyticMap.Names.driverGroupSort)
+                            }).Distinct();
+                        foreach (var group in queryGroups) {
+                            driverGroupList.Add(new Entity.ValueDriverGroup(group.Id, group.Value, group.Min, group.Max, group.Sort));
+                        }
+                    }
+                    #endregion
+                    #region Load Driver results...
+                    var queryResults = dataSet.Tables[AnalyticMap.Names.loadAnaltyicResultData].AsEnumerable()
+                        .Where(results =>
+                            results.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                            results.Field<int>(AnalyticMap.Names.resultDriverType) == driver.Key
+                        ).Select(results => new {
+                            Value = results.Field<short>(AnalyticMap.Names.resultDriverGroup),
+                            Min = results.Field<decimal>(AnalyticMap.Names.resultMetricMinLimit),
+                            Max = results.Field<decimal>(AnalyticMap.Names.resultMetricMaxLimit),
+                            SkuCount = results.Field<int>(AnalyticMap.Names.resultSkuCount),
+                            Sales = results.Field<string>(AnalyticMap.Names.resultCurrentSales) 
+                        }).Distinct();
+                    foreach (var result in queryResults) {
+                        driverResultList.Add(new Entity.AnalyticResultValueDriverGroup(result.Value, result.Min, result.Max, result.SkuCount, result.Sales));
+                    }
+                    #endregion
+                }
+                #endregion
+                #region Load Price Lists...
+                priceGroupList = new List<AnalyticPriceListGroup>();
+                var queryPriceGroups = dataSet.Tables[AnalyticMap.Names.loadAnaltyicPriceListData].AsEnumerable()
+                    .Where(priceGroups => priceGroups.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id)
+                    .Select(priceGroups => new {
+                        Key = priceGroups.Field<int>(AnalyticMap.Names.priceListType),
+                        Name = priceGroups.Field<string>(AnalyticMap.Names.priceListTypeName),
+                        Title = priceGroups.Field<string>(AnalyticMap.Names.priceListTypeText),
+                        Sort = priceGroups.Field<short>(AnalyticMap.Names.priceListTypeSort)
+                    }).Distinct();
+                foreach (var priceGroup in queryPriceGroups) {
+                    priceLists = new List<PriceList>();
+                    priceGroupList.Add(new AnalyticPriceListGroup(priceGroup.Key, priceGroup.Name, priceGroup.Title, priceGroup.Sort, priceLists));
+                    var queryPriceLists = dataSet.Tables[AnalyticMap.Names.loadAnaltyicPriceListData].AsEnumerable()
+                        .Where(pl =>
+                            pl.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                            pl.Field<int>(AnalyticMap.Names.priceListType) == priceGroup.Key
+                        ).Select(pl => new {
+                            Id = pl.Field<int>(AnalyticMap.Names.priceListId),
+                            Key = pl.Field<int>(AnalyticMap.Names.priceListKey),
+                            Code = pl.Field<string>(AnalyticMap.Names.priceListCode),
+                            Name = pl.Field<string>(AnalyticMap.Names.priceListName),
+                            Title = pl.Field<string>(AnalyticMap.Names.priceListText),
+                            Sort = pl.Field<short>(AnalyticMap.Names.priceListSort),
+                            Selected = pl.Field<bool>(AnalyticMap.Names.priceListSelected)
+                        }).Distinct();
+                    foreach (var priceList in queryPriceLists) {
+                        priceLists.Add(new PriceList(priceList.Id, priceList.Key, priceList.Code, priceList.Name, priceList.Sort, priceList.Selected));
+                    }
+                }
+                #endregion
+                #region Load Filters...
+                filterGroupList = new List<FilterGroup>();
+                var queryFilterGroups = dataSet.Tables[AnalyticMap.Names.loadAnaltyicFilterData].AsEnumerable()
+                    .Where(filterGroups => filterGroups.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id)
+                    .Select(filterGroups => new {
+                        Key = filterGroups.Field<int>(AnalyticMap.Names.filterType),
+                        Sort = filterGroups.Field<short>(AnalyticMap.Names.filterTypeSort),
+                        Name = filterGroups.Field<string>(AnalyticMap.Names.filterTypeText),
+                    }).Distinct();
+                foreach (var filterGroup in queryFilterGroups) {
+                    filterLists = new List<Filter>();
+                    filterGroupList.Add(new FilterGroup(filterGroup.Sort, filterGroup.Name, filterLists));
+                    var queryFilterLists = dataSet.Tables[AnalyticMap.Names.loadAnaltyicFilterData].AsEnumerable()
+                        .Where(fl =>
+                            fl.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                            fl.Field<int>(AnalyticMap.Names.filterType) == filterGroup.Key
+                        ).Select(fl => new {
+                            Id = fl.Field<int>(AnalyticMap.Names.filterId),
+                            Key = fl.Field<int>(AnalyticMap.Names.filterKey),
+                            Code = fl.Field<string>(AnalyticMap.Names.filterCode),
+                            Name = fl.Field<string>(AnalyticMap.Names.filterName),
+                            Sort = fl.Field<short>(AnalyticMap.Names.filterSort),
+                            Selected = fl.Field<bool>(AnalyticMap.Names.filterSelected)
+                        }).Distinct();
+                    foreach (var filterList in queryFilterLists) {
+                        filterLists.Add(new Filter(filterList.Id, filterList.Key, filterList.Code, filterList.Name, filterList.Selected, filterList.Sort));
+                    }
+                }
+                #endregion
+
+                analytic = new Entity.Analytic(identity.Id, identity.SearchId, identity.SearchGroup, analyticIdentity, driverList, priceGroupList, filterGroupList);
+            }
+            #endregion
+
+            return analytic;
+        }
+        
+        #endregion
+
         #region Load Identities...
         public void LoadListMapParameters(Session<NullT> session, ref Server.Data.SqlService service) {
 
@@ -21,17 +215,18 @@ namespace APLPX.Server.Data {
 
         }
 
-        public List<Server.Entity.Analytic> LoadListMapData(System.Data.DataTable data) {
+        public List<Entity.Analytic> LoadListMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            List<Server.Entity.Analytic> list = new List<Analytic>(data.Rows.Count);
+            List<Entity.Analytic> list = new List<Analytic>(data.Rows.Count);
             //Record set...
             while (reader.Read()) {
                 list.Add(
                     new Analytic (
                         Int32.Parse(reader[AnalyticMap.Names.analyticsId].ToString()),
-                        String.Empty, //TODO: DaveJ - Add Search group key
+                        Int32.Parse(reader[AnalyticMap.Names.analyticsSearchId].ToString()),
+                        reader[AnalyticMap.Names.analyticsSearchGroup].ToString(),
                         new AnalyticIdentity(
                             reader[AnalyticMap.Names.analyticsName].ToString(),
                             reader[AnalyticMap.Names.analyticsDescription].ToString(),
@@ -54,8 +249,56 @@ namespace APLPX.Server.Data {
         }
         #endregion
 
+        #region Load Identity...
+        public void LoadIdentityMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
+
+            //Map the command...
+            service.SqlProcedure = AnalyticMap.Names.selectCommand;
+
+            //Map the parameters...
+            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
+                new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadIdentityMessage)
+            }; service.sqlParameters.List = parameters;
+
+        }
+
+        public Entity.Analytic LoadIdentityMapData(System.Data.DataTable data) {
+
+            //Map the entity data...
+            System.Data.DataTableReader reader = data.CreateDataReader();
+            Entity.Analytic analytic = null;
+            //Record set...
+            if (reader.Read()) {
+                analytic = new Analytic (
+                        Int32.Parse(reader[AnalyticMap.Names.analyticsId].ToString()),
+                        Int32.Parse(reader[AnalyticMap.Names.analyticsSearchId].ToString()),
+                        reader[AnalyticMap.Names.analyticsSearchGroup].ToString(),
+                        new AnalyticIdentity(
+                            reader[AnalyticMap.Names.analyticsName].ToString(),
+                            reader[AnalyticMap.Names.analyticsDescription].ToString(),
+                            reader[AnalyticMap.Names.analyticsNotes].ToString(),
+                            reader[AnalyticMap.Names.refreshedText].ToString(),
+                            reader[AnalyticMap.Names.createdText].ToString(),
+                            reader[AnalyticMap.Names.editedText].ToString(),
+                            DateTime.Parse(reader[AnalyticMap.Names.refreshed].ToString()),
+                            DateTime.Parse(reader[AnalyticMap.Names.created].ToString()),
+                            DateTime.Parse(reader[AnalyticMap.Names.edited].ToString()),
+                            reader[AnalyticMap.Names.authorText].ToString(),
+                            reader[AnalyticMap.Names.editorText].ToString(),
+                            reader[AnalyticMap.Names.ownerText].ToString(),
+                            Boolean.Parse(reader[AnalyticMap.Names.shared].ToString()),
+                            Boolean.Parse(reader[AnalyticMap.Names.active].ToString())
+                    ));
+            }
+
+            return analytic;
+        }
+        #endregion
+
         #region Save Identity...
-        public void SaveIdentityMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
+        public void SaveIdentityMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
@@ -73,14 +316,14 @@ namespace APLPX.Server.Data {
             }; service.sqlParameters.List= parameters;
         }
 
-        public Server.Entity.Analytic SaveIdentityMapData(System.Data.DataTable data) {
+        public Entity.Analytic SaveIdentityMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.Analytic analytic = new Analytic();
+            Entity.Analytic analytic = null;
             //Single record...
             if (reader.Read()) {
-                analytic.Id = Int32.Parse(reader[AnalyticMap.Names.id].ToString());
+                analytic = new Analytic(Int32.Parse(reader[AnalyticMap.Names.id].ToString()));
             }
 
             return analytic;
@@ -88,7 +331,7 @@ namespace APLPX.Server.Data {
         #endregion
 
         #region Load Filters...
-        public void LoadFiltersMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
+        public void LoadFiltersMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
@@ -101,7 +344,51 @@ namespace APLPX.Server.Data {
             }; service.sqlParameters.List = parameters;
 
         }
-        
+
+        public Entity.Analytic LoadFiltersMapData(System.Data.DataTable data) {
+            Entity.Analytic analytic = null;
+            List<Entity.FilterGroup> filterGroupList = null;
+            List<Entity.Filter> filterLists = null;
+
+            var queryIdentity = data.AsEnumerable()
+                .Select(identity => new {
+                    Id = identity.Field<int>(AnalyticMap.Names.analyticsId),
+                }).Distinct();
+
+            foreach (var identity in queryIdentity) {
+                filterGroupList = new List<FilterGroup>();
+                var queryFilterGroups = data.AsEnumerable()
+                    .Where(filterGroups => filterGroups.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id)
+                    .Select(filterGroups => new {
+                        Key = filterGroups.Field<int>(AnalyticMap.Names.filterType),
+                        Sort = filterGroups.Field<short>(AnalyticMap.Names.filterTypeSort),
+                        Name = filterGroups.Field<string>(AnalyticMap.Names.filterTypeText),
+                    }).Distinct();
+                foreach (var filterGroup in queryFilterGroups) {
+                    filterLists = new List<Filter>();
+                    filterGroupList.Add(new FilterGroup(filterGroup.Sort, filterGroup.Name, filterLists));
+                    var queryFilterLists = data.AsEnumerable()
+                        .Where(fl =>
+                            fl.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                            fl.Field<int>(AnalyticMap.Names.filterType) == filterGroup.Key
+                        ).Select(fl => new {
+                            Id = fl.Field<int>(AnalyticMap.Names.filterId),
+                            Key = fl.Field<int>(AnalyticMap.Names.filterKey),
+                            Code = fl.Field<string>(AnalyticMap.Names.filterCode),
+                            Name = fl.Field<string>(AnalyticMap.Names.filterName),
+                            Sort = fl.Field<short>(AnalyticMap.Names.filterSort),
+                            Selected = fl.Field<bool>(AnalyticMap.Names.filterSelected)
+                        }).Distinct();
+                    foreach (var filterList in queryFilterLists) {
+                        filterLists.Add(new Filter(filterList.Id, filterList.Key, filterList.Code, filterList.Name, filterList.Selected, filterList.Sort));
+                    }
+                }
+                analytic = new Entity.Analytic(identity.Id, filterGroupList);
+            }
+
+            return analytic;
+        }
+        /* OBSOLETE
         public List<Entity.FilterGroup> LoadFiltersMapData(System.Data.DataTable data) {
 
             //Map the entity data...
@@ -109,14 +396,14 @@ namespace APLPX.Server.Data {
             Int32 rows = data.Rows.Count;
             String filterGroupNow = String.Empty;
             String filterGroupLast = String.Empty;
-            List<Server.Entity.Filter> listFilters = new List<Entity.Filter>();
-            List<Server.Entity.FilterGroup> listFilterGroups = new List<Entity.FilterGroup>();
+            List<Entity.Filter> listFilters = new List<Entity.Filter>();
+            List<Entity.FilterGroup> listFilterGroups = new List<Entity.FilterGroup>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
             //From record set...
             while (reading) {
                 reading = reader.Read();
-                filterGroupNow = (reading) ? reader[AnalyticMap.Names.filterTypeName].ToString() : String.Empty;
+                filterGroupNow = (reading) ? reader[AnalyticMap.Names.filterTypeText].ToString() : String.Empty;
                 if (reading) {
                     listFilters.Add(
                         new Entity.Filter(
@@ -124,14 +411,14 @@ namespace APLPX.Server.Data {
                             Int32.Parse(reader[AnalyticMap.Names.filterKey].ToString()),
                             reader[AnalyticMap.Names.filterCode].ToString(),
                             reader[AnalyticMap.Names.filterName].ToString(),
-                            Boolean.Parse(reader[AnalyticMap.Names.filterIncluded].ToString()),
-                            0 //TODO: DaveJ - Add filter sort
+                            Boolean.Parse(reader[AnalyticMap.Names.filterSelected].ToString()),
+                            Int16.Parse(reader[AnalyticMap.Names.filterSort].ToString())
                         ));
                     if (filterGroupLast != filterGroupNow) {
                         listFilterGroups.Add(
                             new Entity.FilterGroup(
-                                0, //TODO: DaveJ - Add filter group sort
-                                reader[AnalyticMap.Names.filterTypeName].ToString(),
+                                Int16.Parse(reader[AnalyticMap.Names.filterTypeSort].ToString()),
+                                reader[AnalyticMap.Names.filterTypeText].ToString(),
                                 new List<Filter>()
                             ));
                     }
@@ -150,10 +437,11 @@ namespace APLPX.Server.Data {
 
             return listFilterGroups;
         }
+        */
         #endregion
 
         #region Save Filters...
-        public void SaveFiltersMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
+        public void SaveFiltersMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
@@ -161,8 +449,8 @@ namespace APLPX.Server.Data {
             //Build comma delimited key list...
             const System.Char delimiter = ',';
             System.Text.StringBuilder filterKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.FilterGroup filterGroup in session.Data.FilterGroups) { 
-                foreach (Server.Entity.Filter filter in filterGroup.Filters) {
+            foreach (Entity.FilterGroup filterGroup in session.Data.FilterGroups) { 
+                foreach (Entity.Filter filter in filterGroup.Filters) {
                     if (!filter.IsSelected) { filterKeys.Append(filter.Key.ToString() + delimiter); }
                 }
             }
@@ -177,7 +465,7 @@ namespace APLPX.Server.Data {
         #endregion
 
         #region Load Drivers...
-        public void LoadDriversMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
+        public void LoadDriversMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
@@ -188,10 +476,92 @@ namespace APLPX.Server.Data {
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadDriversMessage)
             }; service.sqlParameters.List = parameters;
-
         }
 
-        public List<Server.Entity.AnalyticValueDriver> LoadDriversMapData(System.Data.DataTable data) {
+        public Entity.Analytic LoadDriversMapData(System.Data.DataSet dataSet) {
+            Entity.Analytic analytic = null;
+            List<Entity.AnalyticValueDriver> driverList = null;
+            List<Entity.AnalyticValueDriverMode> driverModeList = null;
+            List<Entity.ValueDriverGroup> driverGroupList = null;
+            List<Entity.AnalyticResultValueDriverGroup> driverResultList = null;
+
+            var queryIdentity = dataSet.Tables[AnalyticMap.Names.loadDriversData].AsEnumerable()
+                .Select(identity => new {
+                    Id = identity.Field<int>(AnalyticMap.Names.analyticsId),
+                }).Distinct();
+
+            foreach (var identity in queryIdentity) {
+                driverList = new List<AnalyticValueDriver>();
+                var queryDrivers = dataSet.Tables[AnalyticMap.Names.loadDriversData].AsEnumerable()
+                    .Where(drivers => drivers.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id)
+                    .Select(drivers => new {
+                        Id = drivers.Field<int>(AnalyticMap.Names.driverId),
+                        Key = drivers.Field<int>(AnalyticMap.Names.driverType),
+                        Selected = drivers.Field<bool>(AnalyticMap.Names.driverSelected),
+                        Name = drivers.Field<string>(AnalyticMap.Names.driverTypeName),
+                        Title = drivers.Field<string>(AnalyticMap.Names.driverTypeText),
+                        Sort = drivers.Field<short>(AnalyticMap.Names.driverSort),
+                    }).Distinct();
+                foreach (var driver in queryDrivers) {
+                    driverModeList = new List<AnalyticValueDriverMode>();
+                    driverResultList = new List<AnalyticResultValueDriverGroup>();
+                    driverList.Add(new Entity.AnalyticValueDriver(driver.Id, driver.Key, driver.Selected, driver.Name, driver.Title, driver.Sort, driverResultList, driverModeList));
+                    #region Load Driver modes & groups...
+                    var queryModes = dataSet.Tables[AnalyticMap.Names.loadDriversData].AsEnumerable()
+                        .Where(modes =>
+                            modes.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                            modes.Field<int>(AnalyticMap.Names.driverType) == driver.Key
+                        ).Select(modes => new {
+                            Key = modes.Field<int>(AnalyticMap.Names.driverMode),
+                            Selected = modes.Field<bool>(AnalyticMap.Names.driverModeSelected),
+                            Name = modes.Field<string>(AnalyticMap.Names.driverModeName),
+                            Title = modes.Field<string>(AnalyticMap.Names.driverModeText),
+                            Sort = modes.Field<short>(AnalyticMap.Names.driverModeSort)
+                        }).Distinct();
+                    foreach (var mode in queryModes) {
+                        driverGroupList = new List<Entity.ValueDriverGroup>();
+                        driverModeList.Add(new Entity.AnalyticValueDriverMode(mode.Key, mode.Selected, mode.Name, mode.Title, mode.Sort, driverGroupList));
+                        //Mode Groups...
+                        var queryGroups = dataSet.Tables[AnalyticMap.Names.loadDriversData].AsEnumerable()
+                            .Where(groups =>
+                                groups.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                                groups.Field<int>(AnalyticMap.Names.driverType) == driver.Key &&
+                                groups.Field<int>(AnalyticMap.Names.driverMode) == mode.Key
+                            ).Select(groups => new {
+                                Id = groups.Field<int>(AnalyticMap.Names.driverGroupId),
+                                Value = groups.Field<short>(AnalyticMap.Names.driverGroupValue),
+                                Min = groups.Field<decimal>(AnalyticMap.Names.driverGroupLimitLower),
+                                Max = groups.Field<decimal>(AnalyticMap.Names.driverGroupLimitUpper),
+                                Sort = groups.Field<short>(AnalyticMap.Names.driverGroupSort)
+                            }).Distinct();
+                        foreach (var group in queryGroups) {
+                            driverGroupList.Add(new Entity.ValueDriverGroup(group.Id, group.Value, group.Min, group.Max, group.Sort));
+                        }
+                    }
+                    #endregion
+                    #region Load Driver results...
+                    var queryResults = dataSet.Tables[AnalyticMap.Names.loadDriversResultData].AsEnumerable()
+                        .Where(results =>
+                            results.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                            results.Field<int>(AnalyticMap.Names.resultDriverType) == driver.Key
+                        ).Select(results => new {
+                            Value = results.Field<short>(AnalyticMap.Names.resultDriverGroup),
+                            Min = results.Field<decimal>(AnalyticMap.Names.resultMetricMinLimit),
+                            Max = results.Field<decimal>(AnalyticMap.Names.resultMetricMaxLimit),
+                            SkuCount = results.Field<int>(AnalyticMap.Names.resultSkuCount),
+                            Sales = results.Field<string>(AnalyticMap.Names.resultCurrentSales)
+                        }).Distinct();
+                    foreach (var result in queryResults) {
+                        driverResultList.Add(new Entity.AnalyticResultValueDriverGroup(result.Value, result.Min, result.Max, result.SkuCount, result.Sales));
+                    }
+                    #endregion
+                }
+                analytic = new Entity.Analytic(identity.Id, driverList);
+            }
+            return analytic;
+        }
+        /* OBSOLETE...
+        public List<Entity.AnalyticValueDriver> LoadDriversMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
@@ -201,34 +571,34 @@ namespace APLPX.Server.Data {
             String driverLast = String.Empty;
             String modeNow = String.Empty;
             String modeLast = String.Empty;
-            List<Server.Entity.AnalyticValueDriver> listDrivers = new List<AnalyticValueDriver>();
-            List<Server.Entity.AnalyticValueDriverMode> listModes = new List<AnalyticValueDriverMode>();
-            List<Server.Entity.ValueDriverGroup> listGroups = new List<ValueDriverGroup>();
+            List<Entity.AnalyticValueDriver> listDrivers = new List<AnalyticValueDriver>();
+            List<Entity.AnalyticValueDriverMode> listModes = new List<AnalyticValueDriverMode>();
+            List<Entity.ValueDriverGroup> listGroups = new List<ValueDriverGroup>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
             //From record set...
             while (reading) {
                 reading = reader.Read();
-                driverNow = (reading) ? reader[AnalyticMap.Names.driverName].ToString() : String.Empty;
+                driverNow = (reading) ? reader[AnalyticMap.Names.driverTypeName].ToString() : String.Empty;
                 modeNow = (reading) ? reader[AnalyticMap.Names.driverModeName].ToString() : String.Empty;
 
                 if (reading) {
                     listGroups.Add(
                         new ValueDriverGroup(
-                            Int32.Parse(reader[AnalyticMap.Names.driverGroupId].ToString()),
+                            Int32.Parse(reader[AnalyticMap.Names.driverDetailId].ToString()),
                             Int16.Parse(reader[AnalyticMap.Names.driverGroupValue].ToString()),
-                            Int32.Parse(reader[AnalyticMap.Names.driverGroupMinOutlier].ToString()),
-                            Int32.Parse(reader[AnalyticMap.Names.driverGroupMaxOutlier].ToString()),
-                            0 //TODO: Add sort order to meta data
+                            Int32.Parse(reader[AnalyticMap.Names.driverGroupLimitLower].ToString()),
+                            Int32.Parse(reader[AnalyticMap.Names.driverGroupLimitUpper].ToString()),
+                            Int16.Parse(reader[AnalyticMap.Names.driverGroupSort].ToString())
                         ));
                     if (modeLast != modeNow) {
                         listModes.Add(
                             new Entity.AnalyticValueDriverMode(
-                               Int32.Parse(reader[AnalyticMap.Names.driverModeKey].ToString()),
-                               Boolean.Parse(reader[AnalyticMap.Names.driverModeIncluded].ToString()),
+                               Int32.Parse(reader[AnalyticMap.Names.driverMode].ToString()),
+                               Boolean.Parse(reader[AnalyticMap.Names.driverModeSelected].ToString()),
                                reader[AnalyticMap.Names.driverModeName].ToString(), //Name
-                               reader[AnalyticMap.Names.driverModeName].ToString(), //Tooltip
-                               0, //TODO: add sort order to meta data
+                               reader[AnalyticMap.Names.driverModeText].ToString(), //Tooltip
+                               Int16.Parse(reader[AnalyticMap.Names.driverModeSort].ToString()),
                                new List<ValueDriverGroup>()
                             ));
                     }
@@ -236,11 +606,11 @@ namespace APLPX.Server.Data {
                         listDrivers.Add(
                             new Entity.AnalyticValueDriver(
                                 Int32.Parse(reader[AnalyticMap.Names.driverId].ToString()),
-                                Int32.Parse(reader[AnalyticMap.Names.driverKey].ToString()),
-                                Boolean.Parse(reader[AnalyticMap.Names.driverIncluded].ToString()),
-                                reader[AnalyticMap.Names.driverName].ToString(), //Name
-                                reader[AnalyticMap.Names.driverName].ToString(), //Title
-                                0, //TODO: Add sort order to meta data
+                                Int32.Parse(reader[AnalyticMap.Names.driverType].ToString()),
+                                Boolean.Parse(reader[AnalyticMap.Names.driverSelected].ToString()),
+                                reader[AnalyticMap.Names.driverTypeName].ToString(), //Name
+                                reader[AnalyticMap.Names.driverTypeText].ToString(), //Tooltip
+                                Int16.Parse(reader[AnalyticMap.Names.driverSort].ToString()),
                                 new List<AnalyticResultValueDriverGroup>(),
                                 new List<AnalyticValueDriverMode>()
                             ));
@@ -267,14 +637,15 @@ namespace APLPX.Server.Data {
                 }
                 driverLast = driverNow;
                 modeLast = modeNow;
-                selected = Boolean.Parse(reader[AnalyticMap.Names.driverIncluded].ToString());
+                selected = Boolean.Parse(reader[AnalyticMap.Names.driverSelected].ToString());
             }
             return listDrivers;
         }
+        */
         #endregion
 
         #region Save Drivers...
-        public void SaveDriversMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
+        public void SaveDriversMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
@@ -283,11 +654,11 @@ namespace APLPX.Server.Data {
             const System.Char splitter = ',';
             const System.Char delimiter = ';';
             System.Text.StringBuilder driverKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.AnalyticValueDriver driver in session.Data.ValueDrivers) {
+            foreach (Entity.AnalyticValueDriver driver in session.Data.ValueDrivers) {
                 if (driver.IsSelected) {
-                    foreach (Server.Entity.AnalyticValueDriverMode mode in driver.Modes) {
+                    foreach (Entity.AnalyticValueDriverMode mode in driver.Modes) {
                         if (mode.IsSelected) {
-                            foreach (Server.Entity.ValueDriverGroup group in mode.Groups) {
+                            foreach (Entity.ValueDriverGroup group in mode.Groups) {
                                 driverKeys.Append(driver.Key.ToString() + delimiter);
                                 driverKeys.Append(mode.Key.ToString() + delimiter);
                                 driverKeys.Append(group.Value.ToString() + delimiter);
@@ -308,8 +679,11 @@ namespace APLPX.Server.Data {
         }
         #endregion
 
+        #region Run Drivers...
+        #endregion
+
         #region Load Price lists...
-        public void LoadPricelistsMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
+        public void LoadPricelistsMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
@@ -320,18 +694,64 @@ namespace APLPX.Server.Data {
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadPriceListsMessage)
             }; service.sqlParameters.List = parameters;
-
         }
 
-        public List<Server.Entity.AnalyticPriceListGroup> LoadPricelistsMapData(System.Data.DataTable data) {
+        public Entity.Analytic LoadPricelistsMapData(System.Data.DataTable data) {
+            Entity.Analytic analytic = null;
+            List<Entity.AnalyticPriceListGroup> priceGroupList = null;
+            List<Entity.PriceList> priceLists = null;
+
+            var queryIdentity = data.AsEnumerable()
+                .Select(identity => new {
+                    Id = identity.Field<int>(AnalyticMap.Names.analyticsId),
+                }).Distinct();
+
+            foreach (var identity in queryIdentity) {
+                priceGroupList = new List<AnalyticPriceListGroup>();
+                var queryPriceGroups = data.AsEnumerable()
+                    .Where(priceGroups => priceGroups.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id)
+                    .Select(priceGroups => new {
+                        Key = priceGroups.Field<int>(AnalyticMap.Names.priceListType),
+                        Name = priceGroups.Field<string>(AnalyticMap.Names.priceListTypeName),
+                        Title = priceGroups.Field<string>(AnalyticMap.Names.priceListTypeText),
+                        Sort = priceGroups.Field<short>(AnalyticMap.Names.priceListTypeSort)
+                    }).Distinct();
+                foreach (var priceGroup in queryPriceGroups) {
+                    priceLists = new List<PriceList>();
+                    priceGroupList.Add(new AnalyticPriceListGroup(priceGroup.Key, priceGroup.Name, priceGroup.Title, priceGroup.Sort, priceLists));
+                    var queryPriceLists = data.AsEnumerable()
+                        .Where(pl =>
+                            pl.Field<int>(AnalyticMap.Names.analyticsId) == identity.Id &&
+                            pl.Field<int>(AnalyticMap.Names.priceListType) == priceGroup.Key
+                        ).Select(pl => new {
+                            Id = pl.Field<int>(AnalyticMap.Names.priceListId),
+                            Key = pl.Field<int>(AnalyticMap.Names.priceListKey),
+                            Code = pl.Field<string>(AnalyticMap.Names.priceListCode),
+                            Name = pl.Field<string>(AnalyticMap.Names.priceListName),
+                            Title = pl.Field<string>(AnalyticMap.Names.priceListText),
+                            Sort = pl.Field<short>(AnalyticMap.Names.priceListSort),
+                            Selected = pl.Field<bool>(AnalyticMap.Names.priceListSelected)
+                        }).Distinct();
+                    foreach (var priceList in queryPriceLists) {
+                        priceLists.Add(new PriceList(priceList.Id, priceList.Key, priceList.Code, priceList.Name, priceList.Sort, priceList.Selected));
+                    }
+                }
+                analytic = new Entity.Analytic(identity.Id, priceGroupList);
+            }
+
+            return analytic;
+        }
+
+        /* OBSOLETE...
+        public List<Entity.AnalyticPriceListGroup> LoadPricelistsMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             Boolean reading = true;
             Int32 rows = data.Rows.Count;
             String listTypeNow = String.Empty;
             String listTypeLast = String.Empty;
-            List<Server.Entity.AnalyticPriceListGroup> priceListGroups = new List<Entity.AnalyticPriceListGroup>();
-            List<Server.Entity.PriceList> priceLists = new List<Entity.PriceList>();
+            List<Entity.AnalyticPriceListGroup> priceListGroups = new List<Entity.AnalyticPriceListGroup>();
+            List<Entity.PriceList> priceLists = new List<Entity.PriceList>();
             System.Data.DataTableReader reader = data.CreateDataReader();
 
             //From record set...
@@ -345,16 +765,16 @@ namespace APLPX.Server.Data {
                             Int32.Parse(reader[AnalyticMap.Names.priceListKey].ToString()),
                             reader[AnalyticMap.Names.priceListCode].ToString(),
                             reader[AnalyticMap.Names.priceListName].ToString(),
-                            0, //TODO: DaveJ - Add price list sort
-                            Boolean.Parse(reader[AnalyticMap.Names.priceListIncluded].ToString())
+                            Int16.Parse(reader[AnalyticMap.Names.priceListSort].ToString()),
+                            Boolean.Parse(reader[AnalyticMap.Names.priceListSelected].ToString())
                         ));
                     if (listTypeLast != listTypeNow) {
                         priceListGroups.Add(
                             new Entity.AnalyticPriceListGroup(
-                                0, //TODO: DaveJ - Add price list group key
+                                Int32.Parse(reader[AnalyticMap.Names.priceListType].ToString()),
                                 reader[AnalyticMap.Names.priceListTypeName].ToString(),
-                                String.Empty, //TODO: DaveJ - Add price list group title
-                                0, //TODO: DaveJ - Add price list group sort
+                                reader[AnalyticMap.Names.priceListTypeText].ToString(),
+                                Int16.Parse(reader[AnalyticMap.Names.priceListTypeSort].ToString()),
                                 new List<PriceList>()
                             ));
                     }
@@ -372,10 +792,11 @@ namespace APLPX.Server.Data {
             }
             return priceListGroups;
         }
+        */
         #endregion
 
         #region Save Price lists...
-        public void SavePricelistsMapParameters(Session<Server.Entity.Analytic> session, ref Server.Data.SqlService service) {
+        public void SavePricelistsMapParameters(Session<Entity.Analytic> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
@@ -383,8 +804,8 @@ namespace APLPX.Server.Data {
             //Build comma delimited key list...
             const System.Char delimiter = ',';
             System.Text.StringBuilder priceKeys = new System.Text.StringBuilder();
-            foreach (Server.Entity.AnalyticPriceListGroup group in session.Data.PriceListGroups) {
-                foreach (Server.Entity.PriceList priceList in group.PriceLists) {
+            foreach (Entity.AnalyticPriceListGroup group in session.Data.PriceListGroups) {
+                foreach (Entity.PriceList priceList in group.PriceLists) {
                     if (!priceList.IsSelected) { priceKeys.Append(priceList.Key.ToString() + delimiter); }
                 }
             }
@@ -399,15 +820,18 @@ namespace APLPX.Server.Data {
         #endregion
 
         #region Enumeration map...
-        //Database names...
-        public static class Names {
+        public static class Names
+        {
+            #region Commands...
             //Select commands...
             public const String selectCommand = "dbo.aplAnalyticsSelect";
-            public const String loadWorkflowMessage = "selectWorkflow";
-            public const String loadIdentitiesMessage = "selectIdentities";
+            public const String loadMetaMessage = "selectMeta";
             public const String loadFilterMessage = "selectFilters";
             public const String loadDriversMessage = "selectDrivers";
             public const String loadPriceListsMessage = "selectPriceLists";
+            public const String loadIdentityMessage = "selectIdentity";
+            public const String loadIdentitiesMessage = "selectIdentities";
+            public const String loadSummaryMessage = "selectIdentitySummary";
 
             //Update commands...
             public const String updateCommand = "dbo.aplAnalyticsUpdate";
@@ -420,7 +844,9 @@ namespace APLPX.Server.Data {
             public const String runProcessMarkup = "updateProcessMarkup";
             public const String runProcessMovement = "updateProcessMover";
             public const String runProcessDaysOnHand = "updateProcessDaysOnHand";
+            #endregion
 
+            #region Defaults...
             //Default parameters...
             public const String id = "id";
             public const String name = "name";
@@ -430,85 +856,102 @@ namespace APLPX.Server.Data {
             public const String pricelists = "priceListKeys";
             public const String sqlSession = "session";
             public const String sqlMessage = "message";
+            #endregion
 
-            #region Fields Identity...
+            #region Identity...
             public const String analyticsId = "analyticsId";
+            public const String analyticsSearchId = "analyticsSearchId";
+            public const String analyticsSearchGroup = "analyticsSearchGroup";
             public const String analyticsName = "analyticsName";
             public const String analyticsDescription = "analyticsDescription";
             public const String analyticsNotes = "analyticsNotes";
-            public const String refreshedText = "refreshedText";
-            public const String createdText = "createdText";
-            public const String editedText = "editedText";
-            public const String refreshed = "refreshed";
-            public const String created = "created";
-            public const String edited = "edited";
-            public const String authorText = "authorText";
-            public const String editorText = "editorText";
-            public const String ownerText = "ownerText";
-            public const String active = "active";
-            public const String shared = "shared";
+            public const String refreshedText = "analyticsRefreshedText";
+            public const String createdText = "analyticsCreatedText";
+            public const String editedText = "analyticsEditedText";
+            public const String refreshed = "analyticsRefreshed";
+            public const String created = "analyticsCreated";
+            public const String edited = "analyticsEdited";
+            public const String authorText = "analyticsAuthorText";
+            public const String editorText = "analyticsEditorText";
+            public const String ownerText = "analyticsOwnerText";
+            public const String active = "analyticsActive";
+            public const String shared = "analyticsShared";
             #endregion
 
-            #region Fields Filters...
+            #region Filters...
             public const String filterId = "filterId";
             public const String filterKey = "filterKey";
             public const String filterCode = "filterCode";
             public const String filterName = "filterText";
-            public const String filterIncluded = "included";
-            public const String filterTypeName = "filterTypeText";
+            public const String filterType = "filterType";
+            public const String filterTypeText = "filterTypeText";
+            public const String filterSelected = "filterSelected";
+            public const String filterSort = "filterSort";
+            public const String filterTypeSort = "filterTypeSort";
             #endregion
 
-            #region Fields Drivers...
+            #region Drivers...
             public const String driverId = "driverId";
-            public const String driverKey = "driverKey";
-            public const String driverName = "driverText";
-            public const String driverModeKey = "modeKey";
-            public const String driverModeName = "modeText";
-            public const String driverGroupId = "groupId";
-            public const String driverGroupValue = "groupValue";
-            public const String driverGroupMinOutlier = "minOutlier";
-            public const String driverGroupMaxOutlier = "maxOutlier";
-            public const String driverIncluded = "driverIncluded";
-            public const String driverModeIncluded = "modeIncluded";
+            public const String driverDetailId = "driverDetailId";
+            public const String driverGroupId = "driverGroupId";
+            public const String driverGroupValue = "driverGroupValue";
+            public const String driverGroupLimitLower = "driverGroupLimitLower";
+            public const String driverGroupLimitUpper = "driverGroupLimitUpper";
+            public const String driverType = "driverType";
+            public const String driverTypeName = "driverTypeName";
+            public const String driverTypeText = "driverTypeText";
+            public const String driverMode = "driverMode";
+            public const String driverModeName = "driverModeName";
+            public const String driverModeText = "driverModeText";
+            public const String driverModeSelected = "driverModeSelected";
+            public const String driverMetric = "driverMetricType";
+            public const String driverMetricName = "driverMetricTypeName";
+            public const String driverMetricText = "driverMetricTypeText";
+            public const String driverSelected = "driverSelected";
+            public const String driverSort = "driverSort";
+            public const String driverModeSort = "driverModeSort";
+            public const String driverGroupSort = "driverGroupSort";
             #endregion
 
-            #region Fields Pricelists...
-            public const String priceListId = "listId";
-            public const String priceListKey = "listKey";
-            public const String priceListCode = "listCode";
-            public const String priceListName = "listName";
-            public const String priceListText = "listText";
-            public const String priceListTypeId = "listTypeId";
-            public const String priceListTypeName = "listTypeName";
-            public const String priceListIncluded = "included";
+            #region Price Lists...
+            public const String priceListId = "priceListId";
+            public const String priceListKey = "priceListKey";
+            public const String priceListCode = "priceListCode";
+            public const String priceListName = "priceListName";
+            public const String priceListText = "priceListText";
+            public const String priceListSort = "priceListSort";
+            public const String priceListType = "priceListType";
+            public const String priceListTypeName = "priceListTypeName";
+            public const String priceListTypeText = "priceListTypeText";
+            public const String priceListTypeSort = "priceListTypeSort";
+            public const String priceListFilterKey = "priceListFilterKey";
+            public const String priceListFilterCode = "priceListFilterCode";
+            public const String priceListFilterText = "priceListFilterText";
+            public const String priceListSelected = "priceListSelected";
             #endregion
 
-            #region Fields Workflow...
-            public const String workflowKey = "workflowKey";
-            public const String workflowTitle = "workflowTitle";
-            public const String workflowStepKey = "workflowStepKey";
-            public const String workflowStepSort = "workflowStepSort";
-            public const String workflowStepName = "workflowStepName";
-            public const String workflowStepTitle = "workflowStepTitle";
-            public const String workflowMessageTitle = "workflowMessageTitle";
-            public const String workflowMessageSort = "workflowMessageSort";
-            public const String workflowStepEnablePrevious = "workflowStepEnablePrevious";
-            public const String workflowStepEnableNext = "workflowStepEnableNext";
+            #region Results...
+            public const String resultDriverType = "resultDriverType";
+			public const String resultDriverTypeName = "resultDriverTypeName";
+            public const String resultDriverGroup = "resultDriverGroupValue";
+            public const String resultMetricMinLimit = "resultMetricMinLimit";
+			public const String resultMetricMaxLimit = "resultMetricMaxLimit";
+			public const String resultSkuCount = "resultSkuCount";
+            public const String resultCurrentSales = "resultCurrentSales";
+            #endregion
+
+            #region Data set enumeration...
+            public enum LoadAnalyticDataSet { entity = 0, identity = 0, drivers = 1, pricelists = 2, filters = 3, results = 4 };
+            public const Int32 loadAnaltyicIdentityData = (Int32)LoadAnalyticDataSet.identity;
+            public const Int32 loadAnaltyicDriverData = (Int32)LoadAnalyticDataSet.drivers;
+            public const Int32 loadAnaltyicPriceListData = (Int32)LoadAnalyticDataSet.pricelists;
+            public const Int32 loadAnaltyicFilterData = (Int32)LoadAnalyticDataSet.filters;
+            public const Int32 loadAnaltyicResultData = (Int32)LoadAnalyticDataSet.results;
+            public enum LoadDrivers { drivers = 0, results = 1 };
+            public const Int32 loadDriversData = (Int32)LoadDrivers.drivers;
+            public const Int32 loadDriversResultData = (Int32)LoadDrivers.results;
             #endregion
         }
-        //Database enumerations...
-        public enum DataSets { entitydata = 0, workflow = 1 };
         #endregion
-
-        #region Message map...
-        //selectIdentities  - analyticsId,analyticsName,analyticsDescription,refreshedText,createdText,editedText,refreshed,created,edited,authorText,editorText,ownerText,active
-        //selectDrivers     - analyticsId,driverId,driverKey,driverText,modeKey,modeText,groupId,groupValue,minOutlier,maxOutlier,driverIncluded,modeIncluded
-        //selectFilters       - analyticsId,filterId,filterKey,filterCode,filterText,filterTypeId,filterTypeText,included
-        //selectPriceLists  - analyticsId,listId,listKey,listCode,listName,listText,listTypeId,listTypeName,included
-		//selectWorkFlow  -  workflowKey,workflowName,workflowTitle,workflowStepKey,workflowStepName,workflowStepTitle,workflowMessageTitle,workflowStepSort,workflowMessageSort,
-        //                              workflowStepEnablePrevious,workflowStepEnableNext
-        #endregion
-
-        //TODO - Determine result view for validation; by workflow, validation messages, validation warnings, icons
     }
 }

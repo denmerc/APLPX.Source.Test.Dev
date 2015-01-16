@@ -11,9 +11,8 @@ namespace APLPX.UI.WPF.DisplayEntities
  
         private string _salesValue;      
         private int _skuCount;
+        private bool _run;
         private string _driverName;
-        private string _minValue;
-        private string _maxValue;
 
         #endregion
 
@@ -27,17 +26,6 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Properties
 
-
-        public string MinValue
-        {
-            get { return _minValue; }
-            set { this.RaiseAndSetIfChanged(ref _minValue, value); }
-        }
-        public string MaxValue
-        {
-            get { return _maxValue; }
-            set { this.RaiseAndSetIfChanged(ref _maxValue, value); }
-        }
         //TODO: review where/how this property is used. Not in client entity model.
         public string DriverName
         {
@@ -55,6 +43,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _skuCount; }
             set { this.RaiseAndSetIfChanged(ref _skuCount, value); }
+        }
+
+        public bool Run
+        {
+            get { return _run; }
+            set { this.RaiseAndSetIfChanged(ref _run, value); }
         }
 
         #endregion

@@ -1,7 +1,8 @@
 ﻿using System.ServiceModel;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using APLPX.Client.Entity;
+//using APLPX.Client.Entity;
+using APLPX.Entity;
 using APLPX.Client.Contracts;
 
 
@@ -10,7 +11,7 @@ namespace APLPX.Client
     [Export]
     public class UserClient : ClientBase<IUserService>, IUserService
     {
-        public Session<Client.Entity.NullT> Initialize(Session<Client.Entity.NullT> session)
+        public Session<NullT> Initialize(Session<NullT> session)
         {
             return Channel.Initialize(session);
         }
@@ -26,17 +27,17 @@ namespace APLPX.Client
             return Channel.Authenticate(session);
         }
 
-        public Session<List<Client.Entity.User>> LoadList(Session<NullT> session)
+        public Session<List<User>> LoadList(Session<NullT> session)
         {
             return Channel.LoadList(session);
         }
 
-        public Session<Client.Entity.User> LoadUser(Session<User> session)
+        public Session<User> LoadUser(Session<User> session)
         {
             return Channel.LoadUser(session);
         }
 
-        public Session<Client.Entity.User> SaveUser(Session<User> session)
+        public Session<User> SaveUser(Session<User> session)
         {
             return Channel.SaveUser(session);
         }

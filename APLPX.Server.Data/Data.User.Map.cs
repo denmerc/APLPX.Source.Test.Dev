@@ -2,14 +2,14 @@
 using System.Data;
 using System.Linq;
 using System.Collections.Generic;
-using APLPX.Server.Entity;
+using APLPX.Entity;
 
 namespace APLPX.Server.Data {
 
     class UserMap {
 
         #region Initialize...
-        public void InitializeMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
+        public void InitializeMapParameters(Session<Entity.NullT> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = UserMap.Names.selectCommand;
@@ -22,11 +22,11 @@ namespace APLPX.Server.Data {
 
         }
 
-        public Server.Entity.Session<NullT> InitializeMapData(System.Data.DataTable data) {
+        public Entity.Session<NullT> InitializeMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.Session<NullT> init = new Session<NullT>();
+            Entity.Session<NullT> init = new Session<NullT>();
             //Single record...
             if (reader.Read()) {
                 init.SessionOk = false;
@@ -44,7 +44,7 @@ namespace APLPX.Server.Data {
         #endregion
 
         #region Authenticate...
-        public void AuthenticateMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
+        public void AuthenticateMapParameters(Session<Entity.NullT> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = UserMap.Names.selectCommand;
@@ -60,11 +60,11 @@ namespace APLPX.Server.Data {
 
         }
 
-        public Server.Entity.User AuthenticateMapData(System.Data.DataTable data) {
+        public Entity.User AuthenticateMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.User user = null;
+            Entity.User user = null;
             //Record set...
             if (reader.Read()) {
                 user = new User(
@@ -95,14 +95,14 @@ namespace APLPX.Server.Data {
             return user;
         }
 
-        public List<Server.Entity.Module> AuthenticateMapWorkflowModules(System.Data.DataTable moduleData, DataTable searchData) {
+        public List<Entity.Module> AuthenticateMapWorkflowModules(System.Data.DataTable moduleData, DataTable searchData) {
 
             List<Module> moduleList = null;
             List<ModuleFeature> featureList = null;
             List<ModuleFeatureStep> stepList = null;
             List<ModuleFeatureStepAction> actionList = null;
             List<ModuleFeatureStepAdvisor> advisorList = null;
-            //List<ModuleFeatureStepError> errorList = null;
+            //List<ModuleFeatureStepError> errorList = null; //TODO Dave: review and add step errors
             List<FeatureSearchGroup> searchGroupList = null;
 
             moduleList = new List<Module>();
@@ -186,16 +186,17 @@ namespace APLPX.Server.Data {
                         .Select(searchGroups => new {
                             Name = searchGroups.Field<string>(UserMap.Names.workflowFeatureSearchName),
                             ItemCount = searchGroups.Field<short>(UserMap.Names.workflowFeatureSearchItemCount),
-                            SearchKey = searchGroups.Field<string>(UserMap.Names.workflowFeatureSearchKey),
+                            SearchId = searchGroups.Field<int>(UserMap.Names.workflowFeatureSearchId),
+                            SearchGroup = searchGroups.Field<string>(UserMap.Names.workflowFeatureSearchGroup),
                             ParentName = searchGroups.Field<string>(UserMap.Names.workflowFeatureSearchParentName),
                             IsNameChanged = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchIsNameChanged),
-                            IsSearchKeyChanged = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchIsSearchKeyChanged),
+                            IsSearchKeyChanged = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchIsSearchGroupChanged),
                             CanNameChange = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchCanNameChange),
-                            CanSearchKeyChange = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchCanSearchKeyChange),
+                            CanSearchKeyChange = searchGroups.Field<bool>(UserMap.Names.workflowFeatureSearchCanSearchGroupChange),
                             Sort = searchGroups.Field<short>(UserMap.Names.workflowFeatureSearchSort)
                         }).Distinct();
                     foreach (var searchGroup in querySearchGroups) {
-                        searchGroupList.Add(new Entity.FeatureSearchGroup(searchGroup.Name, searchGroup.ItemCount, searchGroup.SearchKey, searchGroup.ParentName,
+                        searchGroupList.Add(new Entity.FeatureSearchGroup(searchGroup.Name, searchGroup.ItemCount, searchGroup.SearchId, searchGroup.SearchGroup, searchGroup.ParentName,
                             searchGroup.IsNameChanged, searchGroup.IsSearchKeyChanged, searchGroup.CanNameChange, searchGroup.CanSearchKeyChange, searchGroup.Sort));
                     }
                 }
@@ -207,58 +208,25 @@ namespace APLPX.Server.Data {
         }
         #endregion
 
-        #region Load User...
-        public void LoadUserMapParameters(Session<Server.Entity.User> session, ref Server.Data.SqlService service) {
+        #region Save Password...
+        public void SavePasswordMapParameters(Session<Entity.NullT> session, ref Server.Data.SqlService service) {
 
             //Map the command...
-            service.SqlProcedure = UserMap.Names.selectCommand;
+            service.SqlProcedure = UserMap.Names.updateCommand;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.User.Id.ToString()),
-                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
-                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadIdentityMessage)
+                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.Login),
+                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.NewPassword),
+                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.OldPassword),
+                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //logged in user session key
+                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.savePasswordMessage)
             }; service.sqlParameters.List = parameters;
-        }
-
-        public Server.Entity.User LoadUserMapData(System.Data.DataTable data) {
-
-            //Map the entity data...
-            System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.User user = null;
-            //Single record...
-            if (reader.Read()) {
-                user = new User(
-                    Int32.Parse(reader[UserMap.Names.id].ToString()),
-                    reader[UserMap.Names.sqlSession].ToString(),
-                    new UserRole(
-                        Int32.Parse(reader[UserMap.Names.roleId].ToString()),
-                        reader[UserMap.Names.roleName].ToString(),
-                        reader[UserMap.Names.roleDescription].ToString()
-                    ),
-                    new UserIdentity(
-                        reader[UserMap.Names.email].ToString(),
-                        reader[UserMap.Names.userGreeting].ToString(),
-                        reader[UserMap.Names.userName].ToString(),
-                        reader[UserMap.Names.firstName].ToString(),
-                        reader[UserMap.Names.lastName].ToString(),
-                        reader[UserMap.Names.lastLoginText].ToString(),
-                        reader[UserMap.Names.createdText].ToString(),
-                        reader[UserMap.Names.editedText].ToString(),
-                        DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
-                        DateTime.Parse(reader[UserMap.Names.created].ToString()),
-                        DateTime.Parse(reader[UserMap.Names.edited].ToString()),
-                        reader[UserMap.Names.editor].ToString(),
-                        Boolean.Parse(reader[UserMap.Names.active].ToString())
-                     ));
-            }
-            if (reader != null) reader.Dispose();
-            return user;
         }
         #endregion
 
         #region Load List...
-        public void LoadListMapParameters(Session<List<Server.Entity.User>> session, ref Server.Data.SqlService service) {
+        public void LoadListMapParameters(Session<List<Entity.User>> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             service.SqlProcedure = UserMap.Names.selectCommand;
@@ -270,11 +238,11 @@ namespace APLPX.Server.Data {
             }; service.sqlParameters.List = parameters;
         }
 
-        public List<Server.Entity.User> LoadListMapData(System.Data.DataTable data) {
+        public List<Entity.User> LoadListMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            List<Server.Entity.User> list = new List<User>(data.Rows.Count);
+            List<Entity.User> list = new List<User>(data.Rows.Count);
             //Record set...
             while (reader.Read()) {
                 list.Add(
@@ -308,8 +276,62 @@ namespace APLPX.Server.Data {
         }
        #endregion
 
+        #region Load User...
+        public void LoadUserMapParameters(Session<Entity.User> session, ref Server.Data.SqlService service) {
+
+            //Map the command...
+            service.SqlProcedure = UserMap.Names.selectCommand;
+
+            //Map the parameters...
+            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
+                new SqlServiceParameter(UserMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.User.Id.ToString()),
+                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //session key
+                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.loadIdentityMessage)
+            }; service.sqlParameters.List = parameters;
+        }
+
+        public Entity.User LoadUserMapData(System.Data.DataSet dataSet) {
+
+            //Map the entity data...
+            System.Data.DataTableReader reader = dataSet.Tables[(Int32)UserMap.DataSets.entitydata].CreateDataReader();
+            Entity.User user = null;
+            //Single record...
+            if (reader.Read()) {
+                List<Entity.SQLEnumeration> roleTypes = EnumerationMapData(dataSet.Tables[(Int32)UserMap.DataSets.enumeration]);
+                user = new User(
+                    Int32.Parse(reader[UserMap.Names.id].ToString()),
+                    reader[UserMap.Names.sqlSession].ToString(),
+                    new UserRole(
+                        Int32.Parse(reader[UserMap.Names.roleId].ToString()),
+                        reader[UserMap.Names.roleName].ToString(),
+                        reader[UserMap.Names.roleDescription].ToString()
+                    ),
+                    new UserIdentity(
+                        reader[UserMap.Names.email].ToString(),
+                        reader[UserMap.Names.userGreeting].ToString(),
+                        reader[UserMap.Names.userName].ToString(),
+                        reader[UserMap.Names.firstName].ToString(),
+                        reader[UserMap.Names.lastName].ToString(),
+                        reader[UserMap.Names.lastLoginText].ToString(),
+                        reader[UserMap.Names.createdText].ToString(),
+                        reader[UserMap.Names.editedText].ToString(),
+                        DateTime.Parse(reader[UserMap.Names.lastLogin].ToString()),
+                        DateTime.Parse(reader[UserMap.Names.created].ToString()),
+                        DateTime.Parse(reader[UserMap.Names.edited].ToString()),
+                        reader[UserMap.Names.editor].ToString(),
+                        Boolean.Parse(reader[UserMap.Names.active].ToString())
+                     ),
+                     new UserCredential(),
+                     roleTypes
+                     );
+            }
+            if (reader != null) reader.Dispose();
+            return user;
+        }
+        #endregion
+
         #region Save User...
-        public void SaveUserMapParameters(Session<Server.Entity.User> session, ref Server.Data.SqlService service) {
+        public void SaveUserMapParameters(Session<Entity.User> session, ref Server.Data.SqlService service) {
 
             //Map the command...
             Int16 insertId = 0;
@@ -331,11 +353,11 @@ namespace APLPX.Server.Data {
             }; service.sqlParameters.List = parameters;
         }
         
-        public Server.Entity.User SaveUserMapData(System.Data.DataTable data) {
+        public Entity.User SaveUserMapData(System.Data.DataTable data) {
 
             //Map the entity data...
             System.Data.DataTableReader reader = data.CreateDataReader();
-            Server.Entity.User user = null;
+            Entity.User user = null;
             //Single record...
             if (reader.Read()) {
                 user = new User(
@@ -368,27 +390,10 @@ namespace APLPX.Server.Data {
         }
         #endregion
 
-        #region Save Password...
-        public void SavePasswordMapParameters(Session<Server.Entity.NullT> session, ref Server.Data.SqlService service) {
-
-            //Map the command...
-            service.SqlProcedure = UserMap.Names.updateCommand;
-
-            //Map the parameters...
-            APLPX.Server.Data.SqlServiceParameter[] parameters = { 
-                new SqlServiceParameter(UserMap.Names.login, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.Login),
-                new SqlServiceParameter(UserMap.Names.password, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.NewPassword),
-                new SqlServiceParameter(UserMap.Names.oldPassword, SqlDbType.VarChar, 100, ParameterDirection.Input, session.User.Credential.OldPassword),
-                new SqlServiceParameter(UserMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey), //logged in user session key
-                new SqlServiceParameter(UserMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, UserMap.Names.savePasswordMessage)
-            }; service.sqlParameters.List = parameters;
-        }
-        #endregion
-
         #region Load Enumeration...
-        public List<Server.Entity.SQLEnumeration> EnumerationMapData(System.Data.DataTable data) {
+        public List<Entity.SQLEnumeration> EnumerationMapData(System.Data.DataTable data) {
             System.Data.DataTableReader reader = data.CreateDataReader();
-            List<Server.Entity.SQLEnumeration> list = new List<SQLEnumeration>(data.Rows.Count);
+            List<Entity.SQLEnumeration> list = new List<SQLEnumeration>(data.Rows.Count);
 
             while (reader.Read()) {
                 list.Add(new SQLEnumeration(
@@ -406,7 +411,7 @@ namespace APLPX.Server.Data {
         #endregion
 
         #region Entity map...
-        //Database names...
+        //Data set names...
         public class Names {
             #region Select commands...
             public const String selectCommand = "dbo.aplUserSelect";
@@ -414,9 +419,6 @@ namespace APLPX.Server.Data {
             public const String loadIdentityMessage = "selectIdentity";
             public const String loadIdentitiesMessage = "selectIdentities";
             public const String loadAuthenticatedUserMessage = "selectUser";
-            public const String loadExplorerPlanningMessage = "selectExplorerPlanning";
-            public const String loadExplorerTrackingMessage = "selectExplorerTracking";
-            public const String loadExplorerReportingMessage = "selectExplorerReporting";
             public const String authenticateSqlUserMessage = "selectSqlUser";
             public const String authenticateWinUserMessage = "selectWinUser";
             #endregion
@@ -496,13 +498,14 @@ namespace APLPX.Server.Data {
             public const String workflowFeatureLandingStepType = "landingStepType";
                         
             public const String workflowFeatureSearchType = "featureSearchType";
-            public const String workflowFeatureSearchKey = "searchKey";
+            public const String workflowFeatureSearchId = "searchId";
+            public const String workflowFeatureSearchGroup = "searchGroup";
             public const String workflowFeatureSearchName = "name";
             public const String workflowFeatureSearchParentName = "parentName";
             public const String workflowFeatureSearchCanNameChange = "canNameChange";
             public const String workflowFeatureSearchIsNameChanged = "isNameChanged";
-            public const String workflowFeatureSearchCanSearchKeyChange = "canSearchKeyChange";
-            public const String workflowFeatureSearchIsSearchKeyChanged = "isSearchKeyChanged";
+            public const String workflowFeatureSearchCanSearchGroupChange = "canSearchGroupChange";
+            public const String workflowFeatureSearchIsSearchGroupChanged = "isSearchGroupChanged";
             public const String workflowFeatureSearchItemCount = "itemCount";
             public const String workflowFeatureSearchSort = "sort";
 
@@ -531,9 +534,9 @@ namespace APLPX.Server.Data {
             public const String enumName = "name";
             public const String enumDescription = "description";
             #endregion
-
         }
-        //Database result set enumerations...
+
+        //Data set enumerations...
         public enum DataSets { entitydata=0, workflowModules=1, enumeration=1, workflowSearchGroups=2 };
         #endregion
     }

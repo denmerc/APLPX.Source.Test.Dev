@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace APLPX.Server.Entity
+namespace APLPX.Common.Mock.Entity
 {
+    [BsonIgnoreExtraElements]
     [DataContract]
     public class User
     {
@@ -24,6 +26,13 @@ namespace APLPX.Server.Entity
             UserCredential credential 
         ) {
             Id = id;
+            Credential = credential;
+        }
+        public User(
+            string key,
+            UserCredential credential
+        ) {
+            Key = key;
             Credential = credential;
         }
         public User(
@@ -75,18 +84,20 @@ namespace APLPX.Server.Entity
         }
         #endregion
 
+        [BsonId]
+        public MongoDB.Bson.ObjectId _id { get; set; }
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get; set; }
         [DataMember]
-        public string Key; //CLIENT { get; private set; }
+        public string Key { get;  set; }
         [DataMember]
-        public UserCredential Credential; //CLIENT { get; private set; }
+        public UserCredential Credential { get; set; }
         [DataMember]
-        public UserIdentity Identity; //CLIENT { get; private set; }
+        public UserIdentity Identity { get;  set; }
         [DataMember]
-        public UserRole Role; //CLIENT { get; private set; }
+        public UserRole Role { get;  set; }
         [DataMember]
-        public List<Entity.SQLEnumeration> RoleTypes; //CLIENT { get; private set; }
+        public List<Entity.SQLEnumeration> RoleTypes { get;  set; }
     }
 
     [DataContract]
@@ -137,33 +148,34 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public string Email; //CLIENT { get; set; }
+        public string Email { get; set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string FirstName; //CLIENT { get; set; }
+        public string FirstName { get; set; }
         [DataMember]
-        public string LastName; //CLIENT { get; set; }
+        public string LastName { get; set; }
         [DataMember]
-        public string Greeting; //CLIENT { get; private set; }
+        public string Greeting { get;  set; }
         [DataMember]
-        public DateTime LastLogin; //CLIENT { get; private set; }
+        public DateTime LastLogin { get;  set; }
         [DataMember]
-        public string LastLoginText; //CLIENT { get; private set; }
+        public string LastLoginText { get;  set; }
         [DataMember]
-        public DateTime Created; //CLIENT { get; private set; }
+        public DateTime Created { get;  set; }
         [DataMember]
-        public string CreatedText; //CLIENT { get; private set; }
+        public string CreatedText { get;  set; }
         [DataMember]
-        public DateTime Edited; //CLIENT { get; private set; }
+        public DateTime Edited { get;  set; }
         [DataMember]
-        public string EditedText; //CLIENT { get; private set; }
+        public string EditedText { get;  set; }
         [DataMember]
-        public string Editor; //CLIENT { get; private set; }
+        public string Editor { get;  set; }
         [DataMember]
-        public bool Active; //CLIENT { get; set; }
+        public bool Active { get; set; }
     }
 
+    [BsonNoId]
     [DataContract]
     public class UserRole
     {
@@ -186,11 +198,11 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Description; //CLIENT { get; private set; }
+        public string Description { get;  set; }
     }
 
     [DataContract]
@@ -211,16 +223,17 @@ namespace APLPX.Server.Entity
             string oldPassword,
             string newPassword
         ) {
+            Login = login;
             OldPassword = oldPassword;
             NewPassword = newPassword;
         }
         #endregion
 
         [DataMember]
-        public string Login; //CLIENT { get; set; }
+        public string Login { get; set; }
         [DataMember]
-        public string OldPassword; //CLIENT { get; set; }
+        public string OldPassword { get; set; }
         [DataMember]
-        public string NewPassword; //CLIENT { get; set; }
+        public string NewPassword { get; set; }
     }
 }

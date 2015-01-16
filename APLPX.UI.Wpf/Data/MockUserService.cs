@@ -10,7 +10,7 @@ using MongoDB.Driver.Linq;
 using System.Configuration;
 using MongoDB.Driver.Builders;
 //using Domain = APLPX.Client.Display;
-using APLPX.Client.Entity;
+using APLPX.Entity;
 using APLPX.Client.Contracts;
 
 namespace APLPX.UI.WPF.Data

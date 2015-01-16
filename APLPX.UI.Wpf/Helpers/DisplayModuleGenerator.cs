@@ -5,7 +5,7 @@ using System.Linq;
 using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.Interfaces;
 
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.Helpers
 {
@@ -45,7 +45,7 @@ namespace APLPX.UI.WPF.Helpers
 
             switch (module.TypeId)
             {
-                case APLPX.Client.Entity.ModuleType.Planning:
+                case DTO.ModuleType.Planning:
                     features.Add(new ModuleFeature { Name = "Home", TypeId = DTO.ModuleFeatureType.PlanningHome });
                     features.Add(new ModuleFeature { Name = "Analytics", TypeId = DTO.ModuleFeatureType.PlanningAnalytics, Title = "Planning Value Driver Analytics " });
                     features.Add(new ModuleFeature { Name = "Everyday Pricing", TypeId = DTO.ModuleFeatureType.PlanningEverydayPricing, Title = "Planning Everyday Price changes and updates" });
@@ -53,20 +53,20 @@ namespace APLPX.UI.WPF.Helpers
                     features.Add(new ModuleFeature { Name = "Kit Pricing", TypeId = DTO.ModuleFeatureType.PlanningKitPricing, Title = "Planning Kit Price changes and updates" });
                     break;
 
-                case APLPX.Client.Entity.ModuleType.Tracking:
+                case DTO.ModuleType.Tracking:
                     features.Add(new ModuleFeature { Name = "Home", TypeId = DTO.ModuleFeatureType.TrackingHome, Title = "Tracking home page" });
                     features.Add(new ModuleFeature { Name = "Approvals" });
                     features.Add(new ModuleFeature { Name = "Workflows" });
                     break;
 
-                case APLPX.Client.Entity.ModuleType.Reporting:
+                case DTO.ModuleType.Reporting:
                     features.Add(new ModuleFeature { Name = "Home", TypeId = DTO.ModuleFeatureType.ReportingHome, Title = "Reporting home page" });
                     features.Add(new ModuleFeature { Name = "Reporting1" });
                     features.Add(new ModuleFeature { Name = "Reporting2" });
                     features.Add(new ModuleFeature { Name = "Reporting3" });
                     break;
 
-                case APLPX.Client.Entity.ModuleType.Administration:
+                case DTO.ModuleType.Administration:
                     features.Add(new ModuleFeature { Name = "Users", TypeId = DTO.ModuleFeatureType.AdministrationUserMaintenance });
                     features.Add(new ModuleFeature { Name = "Price Lists" });
                     features.Add(new ModuleFeature { Name = "Rules" });
@@ -97,7 +97,7 @@ namespace APLPX.UI.WPF.Helpers
 
             switch (feature.TypeId)
             {
-                case APLPX.Client.Entity.ModuleFeatureType.PlanningAnalytics:
+                case DTO.ModuleFeatureType.PlanningAnalytics:
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Analytics", Title = "Search saved Analytics", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsSearchAnalytics, Sort = 1 });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Analytics with a unique name and description", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsIdentity, Sort = 2, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Analytics product filters & define a product set", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsFilters, Sort = 3, });
@@ -106,7 +106,7 @@ namespace APLPX.UI.WPF.Helpers
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "5) Results", Title = "Compare Analytics result set & view reports", TypeId = DTO.ModuleFeatureStepType.PlanningAnalyticsResults, Sort = 6, });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureType.PlanningEverydayPricing:
+                case DTO.ModuleFeatureType.PlanningEverydayPricing:
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Everyday", Title = "Search saved Pricing campaigns", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingSearchEveryday, Sort = 1, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Price routines with a unique name and description", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingIdentity, Sort = 2, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Price routine product filters & define a product set", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingFilters, Sort = 3, });
@@ -118,7 +118,7 @@ namespace APLPX.UI.WPF.Helpers
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Request Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningEverydayPricingApproval, Sort = 9, });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureType.PlanningPromotionPricing:
+                case DTO.ModuleFeatureType.PlanningPromotionPricing:
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Promotions", Title = "Search saved Pricing campaigns", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingSearchPromotions, Sort = 1, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Price routines with a unique name and description", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingIdentity, Sort = 2, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Price routine product filters & define a product set", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingFilters, Sort = 3, });
@@ -130,7 +130,7 @@ namespace APLPX.UI.WPF.Helpers
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "8) Request Approval", Title = "Submit this Price routine for approval", TypeId = DTO.ModuleFeatureStepType.PlanningPromotionPricingApproval, Sort = 9, });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureType.PlanningKitPricing:
+                case DTO.ModuleFeatureType.PlanningKitPricing:
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "Search Kits", Title = "Search saved Pricing campaigns", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingSearchKits, Sort = 1, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "1) Identity", Title = "Identify Price routines with a unique name and description", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingIdentity, Sort = 2, });
                     steps.Add(new DisplayEntities.ModuleFeatureStep { Name = "2) Filters", Title = "Configure Price routine product filters & define a product set", TypeId = DTO.ModuleFeatureStepType.PlanningKitPricingFilters, Sort = 3, });
@@ -222,64 +222,69 @@ namespace APLPX.UI.WPF.Helpers
                     result.Add(new DisplayEntities.Action { Name = "New", ParentName = "New", Title = "Workflow View Step Action, New Promotions", TypeId = DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsNew, Sort = 1, });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsIdentity:
+                case DTO.ModuleFeatureStepType.PlanningAnalyticsIdentity:
                     result.Add(new DisplayEntities.Action { Name = "Cancel", Title = "Discard all changes since the last save.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentityCancel, Sort = 2 });
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentitySave, Sort = 4 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingIdentity:
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingIdentity:
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingIdentitySave, Sort = 4 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsFilters:
+                case DTO.ModuleFeatureStepType.PlanningAnalyticsFilters:
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsFiltersSave, Sort = 1 });
                     result.Add(new DisplayEntities.Action { Name = "Run", Title = "Run calculations", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsFiltersRun, Sort = 2 });
-                    result.Add(new DisplayEntities.Action { Name = "Cancel", Title = "Discard all changes since the last save.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsFiltersCancel, Sort = 3 });
+                    result.Add(new DisplayEntities.Action { Name = "Cancel", Title = "Discard unsaved changes.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsFiltersCancel, Sort = 3 });
                     break;
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingFilters:
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingFilters:
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingFiltersSave, Sort = 4 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsPriceLists:
+                case DTO.ModuleFeatureStepType.PlanningAnalyticsPriceLists:
                     result.Add(new DisplayEntities.Action { Name = "Run", Title = "Run calculations", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsPriceListsRun, Sort = 3 });
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsPriceListsSave, Sort = 4 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsValueDrivers:
+                case DTO.ModuleFeatureStepType.PlanningAnalyticsValueDrivers:
                     result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversSave, Sort = 1 });
                     result.Add(new DisplayEntities.Action { Name = "Cancel", Title = "Discard all changes since the last save.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversCancel, Sort = 2 });
                     result.Add(new DisplayEntities.Action { Name = "Run", Title = "Calculate results.", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsResultsRun, Sort = 3 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingRounding:
-                    //result.Add(new DisplayEntities.Action { Name = "Run", Title = "Run calculations", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingRoundingSave, Sort = 1 });
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingRounding:
+                    result.Add(new DisplayEntities.Action { Name = "Run", Title = "Run calculations", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingRoundingSave, Sort = 1 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningAnalyticsResults:
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingResults:
-                    result.Add(new DisplayEntities.Action { Name = "Show Table", Title = "Show the results in a table.", Sort = 1 });
+                case DTO.ModuleFeatureStepType.PlanningAnalyticsResults:
+                    result.Add(new DisplayEntities.Action { Name = "Run", Title = "Workflow View Step Action, Run Analytics Results.", Sort = 1 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingStrategy:
-                    result.Add(new DisplayEntities.Action { Name = "Clear", Title = "Discard all changes since the last save.", Sort = 1 });
-                    //result.Add(new DisplayEntities.Action { Name = "Full Screen", Title = "Maximize this screen", Sort = 2 });
-                    result.Add(new DisplayEntities.Action { Name = "Edit", Title = "Edit this item", Sort = 3 });
-                    result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", Sort = 4 });
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingResults:
+                    result.Add(new DisplayEntities.Action { Name = "Show", ParentName = "Warnings", Title = "Show Warnings.", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingResultsWarningsShow, Sort = 1 });
+                    result.Add(new DisplayEntities.Action { Name = "Hide", ParentName = "Warnings", Title = "Hide Warnings.", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingResultsWarningsHide, Sort = 2 });
+
+                    result.Add(new DisplayEntities.Action { Name = "Apply", ParentName = "Rounding", Title = "Apply Rounding.", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingResultsRoundingApply, Sort = 3 });
+                    result.Add(new DisplayEntities.Action { Name = "Remove", ParentName = "Rounding", Title = "Remove Rounding.", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingResultsRoundingRemove, Sort = 4 });
+
+                    result.Add(new DisplayEntities.Action { Name = "Options", ParentName = "Options", Title = "Options", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingResultsOptions, Sort = 5 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingForecast:
-                    result.Add(new DisplayEntities.Action { Name = "Add Forecast", Title = "Add Forecast (title goes here)", Sort = 1 });
-                    result.Add(new DisplayEntities.Action { Name = "Delete", Title = "Delete (title goes here)", Sort = 2 });
-                    result.Add(new DisplayEntities.Action { Name = "Full Screen", Title = "Maximize this screen", Sort = 2 });
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingStrategy:
+                    result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save this item", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingStrategySave, Sort = 1 });
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureStepType.PlanningEverydayPricingApproval:
-                    result.Add(new DisplayEntities.Action { Name = "Export", Title = "Export (title goes here)", Sort = 1 });
-                    result.Add(new DisplayEntities.Action { Name = "Options", Title = "Options (title goes here)", Sort = 2 });
-                    result.Add(new DisplayEntities.Action { Name = "Submit", Title = "Submit (title goes here)", Sort = 3 });
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingForecast:
+                    result.Add(new DisplayEntities.Action { Name = "Add Forecast", Title = "Add forecast", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingForecastNew, Sort = 1 });
+                    result.Add(new DisplayEntities.Action { Name = "Save", Title = "Save forecast", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingForecastSave, Sort = 2 });
+                    result.Add(new DisplayEntities.Action { Name = "Delete", Title = "Delete forecast", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingForecastDelete, Sort = 3 });
+
+                    break;
+
+                case DTO.ModuleFeatureStepType.PlanningEverydayPricingApproval:
+                    result.Add(new DisplayEntities.Action { Name = "Submit", Title = "Submit", TypeId = DTO.ModuleFeatureStepActionType.PlanningEverydayPricingApprovalSubmit, Sort = 1 });
                     break;
 
                 default:
@@ -289,6 +294,13 @@ namespace APLPX.UI.WPF.Helpers
                     break;
             }
 
+            foreach (DisplayEntities.Action action in result)
+            {
+                if (String.IsNullOrWhiteSpace(action.ParentName))
+                {
+                    action.ParentName = action.Name;
+                }
+            }
             return result;
         }
 
@@ -321,54 +333,29 @@ namespace APLPX.UI.WPF.Helpers
 
         private static List<FeatureSearchGroup> GetSampleSearchGroups(ModuleFeature feature)
         {
-            const string myFolders = "My Folders";
-
             var searchGroups = new List<FeatureSearchGroup>();
 
             if (feature.TypeId == DTO.ModuleFeatureType.PlanningAnalytics)
             {
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Recent", SearchKey = "searchKey001", Sort = 1, ItemCount = 5 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 1", SearchKey = "searchKey101", Sort = 2, ItemCount = 2 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 2", SearchKey = "searchKey102", Sort = 3, ItemCount = 1 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User 3", SearchKey = "searchKey103", Sort = 4, ItemCount = 3 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Engine", SearchKey = "searchKey111", Sort = 5, ItemCount = 3 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Apparel", SearchKey = "searchKey112", Sort = 6, ItemCount = 7 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Nuts-Bolts", SearchKey = "searchKey113", Sort = 7, ItemCount = 5 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Interior Parts", SearchKey = "searchKey114", Sort = 8, ItemCount = 2 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Sheet Metal Parts", SearchKey = "searchKey115", Sort = 9, ItemCount = 4 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Moldings", SearchKey = "searchKey116", Sort = 10, ItemCount = 3 });
+                searchGroups = MockAnalyticGenerator.GetAnalyticSearchGroups();
             }
-
-            else if (feature.TypeId == DTO.ModuleFeatureType.PlanningEverydayPricing || feature.TypeId == DTO.ModuleFeatureType.PlanningKitPricing || feature.TypeId == DTO.ModuleFeatureType.PlanningPromotionPricing)
+            else if (feature.TypeId == DTO.ModuleFeatureType.PlanningEverydayPricing ||
+                     feature.TypeId == DTO.ModuleFeatureType.PlanningKitPricing ||
+                     feature.TypeId == DTO.ModuleFeatureType.PlanningPromotionPricing)
             {
+                string myFolders = "My Folders";
                 searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Recent", SearchKey = "searchKey001", Sort = 1, ItemCount = 2 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User A", SearchKey = "searchKey101", Sort = 2, ItemCount = 0 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "User B", SearchKey = "searchKey102", Sort = 3, ItemCount = 0 });
                 searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Restoration Parts", SearchKey = "searchKey111", Sort = 4, ItemCount = 6 });
                 searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Hi Performance & Aftermarket", SearchKey = "searchKey112", Sort = 5, ItemCount = 4 });
                 searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Apparel & Novelties", SearchKey = "searchKey113", Sort = 6, ItemCount = 8 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Manuals, Literature, DVD", SearchKey = "searchKey114", Sort = 7, ItemCount = 3 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 4", SearchKey = "searchKey115", Sort = 8, ItemCount = 2 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 5", SearchKey = "searchKey116", Sort = 9, ItemCount = 1 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Folders", Name = "Folder 6", SearchKey = "searchKey117", Sort = 10, ItemCount = 3 });
-            }
-            else
-            {
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "This Week", SearchKey = "searchKey001", Sort = 1, ItemCount = 2 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Last Week", SearchKey = "searchKey002", Sort = 2, ItemCount = 0 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Older", SearchKey = "searchKey003", Sort = 3, ItemCount = 6 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "John Doe", SearchKey = "seerchKey101", Sort = 4, ItemCount = 4 });
-                //searchGroups.Add(new FeatureSearchGroup { ParentName = "Shared", Name = "Jane Doe", SearchKey = "seerchKey102", Sort = 5, ItemCount = 4 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Scenarios", Name = "Scenario #1", SearchKey = "searchKey112", Sort = 6, ItemCount = 4 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Scenarios", Name = "Scenario #1A", SearchKey = "searchKey113", Sort = 7, ItemCount = 2 });
-            }
 
-            //Make "My Folder" items editable and movable.
-            var editableSearchGroups = searchGroups.Where(group => group.ParentName == myFolders);
-            foreach (FeatureSearchGroup searchGroup in editableSearchGroups)
-            {
-                searchGroup.CanNameChange = true;
-                searchGroup.CanSearchKeyChange = true;
+                //Make "My Folder" items editable and movable.
+                var editableSearchGroups = searchGroups.Where(group => group.ParentName == myFolders);
+                foreach (FeatureSearchGroup searchGroup in editableSearchGroups)
+                {
+                    searchGroup.CanNameChange = true;
+                    searchGroup.CanSearchKeyChange = true;
+                }
             }
 
             return searchGroups;
@@ -378,15 +365,24 @@ namespace APLPX.UI.WPF.Helpers
         {
             var searchEntities = new List<ISearchableEntity>();
 
-            foreach (FeatureSearchGroup searchGroup in feature.SearchGroups)
+            if (feature.TypeId == DTO.ModuleFeatureType.PlanningAnalytics)
             {
-                for (int id = 0; id < searchGroup.ItemCount; id++)
+                var analytics = MockAnalyticGenerator.GetSampleAnalytics();
+                var entities = analytics.Cast<ISearchableEntity>();
+                searchEntities.AddRange(entities);
+            }
+            else
+            {
+                foreach (FeatureSearchGroup searchGroup in feature.SearchGroups)
                 {
-                    ISearchableEntity entity = GetSearchEntity(feature, id);
-                    if (entity != null)
+                    for (int id = 0; id < searchGroup.ItemCount; id++)
                     {
-                        entity.SearchKey = searchGroup.SearchKey;
-                        searchEntities.Add(entity);
+                        ISearchableEntity entity = GetSearchEntity(feature, id);
+                        if (entity != null)
+                        {
+                            entity.SearchKey = searchGroup.SearchKey;
+                            searchEntities.Add(entity);
+                        }
                     }
                 }
             }
@@ -403,23 +399,23 @@ namespace APLPX.UI.WPF.Helpers
             ISearchableEntity result = null;
             switch (feature.TypeId)
             {
-                case APLPX.Client.Entity.ModuleFeatureType.PlanningAnalytics:
+                case DTO.ModuleFeatureType.PlanningAnalytics:
                     result = MockAnalyticGenerator.GetSampleAnalytic(id);
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureType.PlanningEverydayPricing:
+                case DTO.ModuleFeatureType.PlanningEverydayPricing:
                     result = MockPricingEverydayGenerator.GetSamplePricingEveryday(id);
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureType.PlanningPromotionPricing:
+                case DTO.ModuleFeatureType.PlanningPromotionPricing:
                     result = GetSamplePricingPromotion(id);
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureType.PlanningKitPricing:
+                case DTO.ModuleFeatureType.PlanningKitPricing:
                     result = GetSamplePricingKits(id);
                     break;
 
-                case APLPX.Client.Entity.ModuleFeatureType.AdministrationUserMaintenance:
+                case DTO.ModuleFeatureType.AdministrationUserMaintenance:
                     result = GetSampleUser(id);
                     break;
 

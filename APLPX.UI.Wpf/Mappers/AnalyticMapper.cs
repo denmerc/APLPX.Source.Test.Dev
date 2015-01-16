@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Mappers
@@ -15,7 +15,7 @@ namespace APLPX.UI.WPF.Mappers
         public static Display.Analytic ToDisplayEntity(this DTO.Analytic dto)
         {
             var displayEntity = new Display.Analytic();
-            displayEntity.SearchKey = dto.SearchGroupKey;
+            displayEntity.SearchKey = dto.SearchGroup;
             displayEntity.Id = dto.Id;
 
             displayEntity.Identity = dto.Identity.ToDisplayEntity();
@@ -72,7 +72,8 @@ namespace APLPX.UI.WPF.Mappers
             }                      
 
             var dto = new DTO.Analytic(
-                                    displayEntity.Id, 
+                                    displayEntity.Id,
+                                    displayEntity.SearchId,
                                     displayEntity.SearchKey,
                                     identity, 
                                     drivers, 

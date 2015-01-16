@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ENT = APLPX.Client.Entity;
-using DTO = APLPX.Client.Mock.Entity;
+using ENT = APLPX.Entity;
+using DTO = APLPX.Common.Mock.Entity;
 
 
 namespace APLPX.Client.Mock.MockEntities
@@ -16,7 +16,7 @@ namespace APLPX.Client.Mock.MockEntities
             return new ENT.Analytic
             {
                 Id = dto.Id,
-                SearchGroupKey = dto.SearchGroupKey,
+                SearchGroup = dto.SearchGroup,
                 Identity = new ENT.AnalyticIdentity
                 {
                     Active = dto.Identity.Active,
@@ -273,8 +273,8 @@ namespace APLPX.Client.Mock.MockEntities
                                                                 NewMarkupPercent = pl.NewMarkupPercent,
                                                                 NewPrice = pl.NewPrice,
                                                                 PriceChange = pl.PriceChange,
-                                                                PriceEdit = pl.PriceEdit,
-                                                                PriceWarning = pl.PriceWarning,
+                                                                //PriceEdit = pl.PriceEdit,
+                                                                //PriceWarning = pl.PriceWarning,
                                                                 ResultId = pl.ResultId,
                                                                 Sort = pl.Sort,
                                                                 Title = pl.Title

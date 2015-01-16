@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 
@@ -10,6 +11,7 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
+        private int _searchId;
         private string _searchKey;
         private short _itemCount;
         private string _name;
@@ -33,6 +35,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region Properties
+
+        public int SearchId
+        {
+            get { return _searchId; }
+            set { this.RaiseAndSetIfChanged(ref _searchId, value); }
+        }
 
         public string SearchKey
         {

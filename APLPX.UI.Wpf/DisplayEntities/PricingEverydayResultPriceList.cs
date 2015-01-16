@@ -1,6 +1,6 @@
 ﻿using System;
 using ReactiveUI;
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
@@ -11,8 +11,8 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _resultId;
         private decimal _currentPrice;
         private decimal _newPrice;
-        private decimal _currentMarkupPercent;
-        private decimal _newMarkupPercent;
+        private int _currentMarkupPercent;
+        private int _newMarkupPercent;
         private decimal _keyValueChange;
         private decimal _influenceValueChange;
         private decimal _priceChange;
@@ -51,13 +51,13 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _newPrice, value); }
         }
 
-        public decimal CurrentMarkupPercent
+        public int CurrentMarkupPercent
         {
             get { return _currentMarkupPercent; }
             set { this.RaiseAndSetIfChanged(ref _currentMarkupPercent, value); }
         }
 
-        public decimal NewMarkupPercent
+        public int NewMarkupPercent
         {
             get { return _newMarkupPercent; }
             set { this.RaiseAndSetIfChanged(ref _newMarkupPercent, value); }

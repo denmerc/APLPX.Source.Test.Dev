@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using APLPX.Server.Data;
-using APLPX.Server.Entity;
+using APLPX.Entity;
 
 namespace APLPX.Server.Data
 {
@@ -9,15 +9,15 @@ namespace APLPX.Server.Data
     public interface IPricingEverydayData
     {
         void Dispose();
-        Session<List<Server.Entity.PricingEveryday>> LoadList(Session<Server.Entity.NullT> session);
-        Session<Server.Entity.PricingEveryday> SaveIdentity(Session<Server.Entity.PricingEveryday> session);
-        Session<Server.Entity.PricingEveryday> LoadFilters(Session<Server.Entity.PricingEveryday> session);
-        Session<Server.Entity.PricingEveryday> SaveFilters(Session<Server.Entity.PricingEveryday> session);
-        Session<Server.Entity.PricingEveryday> LoadDrivers(Session<Server.Entity.PricingEveryday> session);
-        Session<Server.Entity.PricingEveryday> SaveDrivers(Session<Server.Entity.PricingEveryday> session);
-        Session<Server.Entity.PricingEveryday> LoadPriceLists(Session<Server.Entity.PricingEveryday> session);
-        Session<Server.Entity.PricingEveryday> SavePriceLists(Session<Server.Entity.PricingEveryday> session);
-        Session<Server.Entity.PricingEveryday> LoadResults(Session<Server.Entity.PricingEveryday> session);
+        Session<List<Entity.PricingEveryday>> LoadList(Session<Entity.NullT> session);
+        Session<Entity.PricingEveryday> SaveIdentity(Session<Entity.PricingEveryday> session);
+        Session<Entity.PricingEveryday> LoadFilters(Session<Entity.PricingEveryday> session);
+        Session<Entity.PricingEveryday> SaveFilters(Session<Entity.PricingEveryday> session);
+        Session<Entity.PricingEveryday> LoadDrivers(Session<Entity.PricingEveryday> session);
+        Session<Entity.PricingEveryday> SaveDrivers(Session<Entity.PricingEveryday> session);
+        Session<Entity.PricingEveryday> LoadPriceLists(Session<Entity.PricingEveryday> session);
+        Session<Entity.PricingEveryday> SavePriceLists(Session<Entity.PricingEveryday> session);
+        Session<Entity.PricingEveryday> LoadResults(Session<Entity.PricingEveryday> session);
     }
 
     public class PricingEverydayData : IPricingEverydayData
@@ -57,91 +57,91 @@ namespace APLPX.Server.Data
             if (sqlService != null) sqlService.ExecuteCloseConnection();
         }
 
-        public Session<List<Server.Entity.PricingEveryday>> LoadList(Session<Server.Entity.NullT> sessionIn) {
+        public Session<List<Entity.PricingEveryday>> LoadList(Session<Entity.NullT> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<List<Server.Entity.PricingEveryday>> sessionOut = Session<NullT>.Clone<List<PricingEveryday>>(sessionIn);
+            Session<List<Entity.PricingEveryday>> sessionOut = Session<NullT>.Clone<List<PricingEveryday>>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.PricingEveryday> SaveIdentity(Session<Server.Entity.PricingEveryday> sessionIn) {
+        public Session<Entity.PricingEveryday> SaveIdentity(Session<Entity.PricingEveryday> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
+            Session<Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.PricingEveryday> LoadFilters(Session<Server.Entity.PricingEveryday> sessionIn) {
+        public Session<Entity.PricingEveryday> LoadFilters(Session<Entity.PricingEveryday> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
+            Session<Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.PricingEveryday> SaveFilters(Session<Server.Entity.PricingEveryday> sessionIn) {
+        public Session<Entity.PricingEveryday> SaveFilters(Session<Entity.PricingEveryday> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
+            Session<Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.PricingEveryday> LoadDrivers(Session<Server.Entity.PricingEveryday> sessionIn) {
+        public Session<Entity.PricingEveryday> LoadDrivers(Session<Entity.PricingEveryday> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
+            Session<Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.PricingEveryday> SaveDrivers(Session<Server.Entity.PricingEveryday> sessionIn) {
+        public Session<Entity.PricingEveryday> SaveDrivers(Session<Entity.PricingEveryday> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
+            Session<Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.PricingEveryday> LoadPriceLists(Session<Server.Entity.PricingEveryday> sessionIn) {
+        public Session<Entity.PricingEveryday> LoadPriceLists(Session<Entity.PricingEveryday> sessionIn) {
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
+            Session<Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.PricingEveryday> SavePriceLists(Session<Server.Entity.PricingEveryday> sessionIn) {
+        public Session<Entity.PricingEveryday> SavePriceLists(Session<Entity.PricingEveryday> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
+            Session<Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
 
             return sessionOut;
         }
 
-        public Session<Server.Entity.PricingEveryday> LoadResults(Session<Server.Entity.PricingEveryday> sessionIn) {
+        public Session<Entity.PricingEveryday> LoadResults(Session<Entity.PricingEveryday> sessionIn) {
 
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
-            Session<Server.Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
+            Session<Entity.PricingEveryday> sessionOut = Session<PricingEveryday>.Clone<PricingEveryday>(sessionIn);
 
             return sessionOut;
         }

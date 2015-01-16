@@ -18,6 +18,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private FilterGroup _selectedFilterGroup;
         private AnalyticPriceListGroup _selectedPriceListGroup;
         private AnalyticValueDriver _selectedValueDriver;
+        private int _searchId;
         private string _searchKey;
         private string _parentKey;
         private bool _canNameChange;
@@ -91,6 +92,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region ISearchableEntity
+
+        public int SearchId
+        {
+            get { return _searchId; }
+            set { this.RaiseAndSetIfChanged(ref _searchId, value); }
+        }
 
         public string ParentKey
         {

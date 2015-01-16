@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace APLPX.Server.Entity
+namespace APLPX.Common.Mock.Entity
 {
     [DataContract]
     public class PricingKits
@@ -11,13 +11,13 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get; private set; }
         [DataMember]
-        public string SearchGroupKey; //CLIENT { get; private set; }
+        public string SearchGroupKey { get; private set; }
         [DataMember]
-        public PricingIdentity Identity; //CLIENT { get; private set; }
+        public PricingIdentity Identity { get; private set; }
         [DataMember]
-        public List<FilterGroup> FilterGroups; //CLIENT { get; private set; }
+        public List<FilterGroup> FilterGroups { get; private set; }
         //[DataMember]
         // Drivers
         //[DataMember]

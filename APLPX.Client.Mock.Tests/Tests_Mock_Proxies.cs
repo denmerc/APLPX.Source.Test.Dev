@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using ENTITY = APLPX.Client.Entity;
+using ENTITY = APLPX.Entity;
 using PROX = APLPX.Client.Mock;
 
 using System.Collections.Generic;
@@ -87,7 +87,7 @@ namespace APLPX.Client.Mock.Tests
         public void Load_Analytic()
         {
             var id = new ENTITY.Analytic(3);
-            var response = AnalyticClient.LoadAnalytic(new ENTITY.Session<ENTITY.Analytic>() { Data = id });
+            var response = AnalyticClient.Load(new ENTITY.Session<ENTITY.Analytic>() { Data = id }); //TODO: new with constructor id
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Data);
         }

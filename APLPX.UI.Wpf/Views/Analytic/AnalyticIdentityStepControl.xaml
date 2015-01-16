@@ -84,7 +84,7 @@
 
         <Label Grid.Row="3"
                Grid.Column="0"
-               Content="_Folder:"
+               Content="Fo_lder:"
                Style="{StaticResource IdentityLabelStyle}"
                Target="{Binding ElementName=cboFolder}" />
 

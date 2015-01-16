@@ -10,8 +10,8 @@ using MongoDB.Driver.Linq;
 using System.Configuration;
 using MongoDB.Driver.Builders;
 //using Domain = APLPX.Client.Display;
-using ENT = APLPX.Client.Entity;
-using DTO = APLPX.Client.Mock.Entity;
+using ENT = APLPX.Entity;
+using DTO = APLPX.Common.Mock.Entity;
 using APLPX.Client.Contracts;
 
 namespace APLPX.Client.Mock
@@ -182,13 +182,13 @@ namespace APLPX.Client.Mock
                                                                        select new ENT.FeatureSearchGroup
                                                                        {
                                                                            CanNameChange = sg.CanNameChange,
-                                                                           CanSearchKeyChange = sg.CanSearchKeyChange,
+                                                                           CanSearchGroupChange = sg.CanSearchGroupChange,
                                                                            IsNameChanged = sg.IsNameChanged,
-                                                                           IsSearchKeyChanged = sg.IsSearchKeyChanged,
+                                                                           IsSearchGroupChanged = sg.IsSearchGroupChanged,
                                                                            ItemCount = sg.ItemCount,
                                                                            Name = sg.Name,
                                                                            ParentName = sg.ParentName,
-                                                                           SearchKey = sg.SearchKey,
+                                                                           SearchGroup = sg.SearchGroup,
                                                                            Sort = sg.Sort
                                                                        }).ToList(),
                                                        Sort = f.Sort,
@@ -220,7 +220,7 @@ namespace APLPX.Client.Mock
                                      select new ENT.Analytic
                                      {
                                          Id = a.Id,
-                                         SearchGroupKey = a.SearchGroupKey,
+                                         SearchGroup = a.SearchGroup,
                                          Identity = new ENT.AnalyticIdentity
                                          {
                                              Active = a.Identity.Active,
@@ -500,22 +500,22 @@ namespace APLPX.Client.Mock
                                        //                    Title = vd.Title
                                        //                }).ToList()
                                    }).ToList(),
-                        FilterGroups = (from fg in FilterGroups
-                                        select new ENT.FilterGroup
-                                        {
-                                            Name = fg.Name,
-                                            Sort = fg.Sort,
-                                            Filters = (from f in fg.Filters
-                                                       select new ENT.Filter
-                                                       {
-                                                           Code = f.Code,
-                                                           Id = f.Id,
-                                                           IsSelected = f.IsSelected,
-                                                           Key = f.Key,
-                                                           Name = f.Name,
-                                                           Sort = f.Sort
-                                                       }).ToList()
-                                        }).ToList(),
+                        //FilterGroups = (from fg in FilterGroups
+                        //                select new ENT.FilterGroup
+                        //                {
+                        //                    Name = fg.Name,
+                        //                    Sort = fg.Sort,
+                        //                    Filters = (from f in fg.Filters
+                        //                               select new ENT.Filter
+                        //                               {
+                        //                                   Code = f.Code,
+                        //                                   Id = f.Id,
+                        //                                   IsSelected = f.IsSelected,
+                        //                                   Key = f.Key,
+                        //                                   Name = f.Name,
+                        //                                   Sort = f.Sort
+                        //                               }).ToList()
+                        //                }).ToList(),
                         //Mo<pdules = licensedMods.ToList(),
                         //Modules = lModsandFeats.ToList(), 
                         SessionOk = true
@@ -566,6 +566,8 @@ namespace APLPX.Client.Mock
         {
             throw new NotImplementedException();
         }
+
+
     }
 
 

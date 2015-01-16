@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Mappers
@@ -94,18 +94,9 @@ namespace APLPX.UI.WPF.Mappers
 
         public static Display.AnalyticPriceListGroup ToDisplayEntity(this DTO.AnalyticPriceListGroup dto)
         {
-            var displayEntity = new Display.AnalyticPriceListGroup();            
+            var displayEntity = new Display.AnalyticPriceListGroup();
             displayEntity.Key = dto.Key;
-
-            //TEMP: until remove TypeName property from the DTO.
-            if (!String.IsNullOrWhiteSpace(dto.Name))
-            {
-                displayEntity.Name = dto.Name;
-            }
-            else if (!String.IsNullOrWhiteSpace(dto.TypeName))
-            {
-                displayEntity.Name = dto.TypeName;
-            }
+            displayEntity.Name = dto.Name;
             displayEntity.Title = dto.Title;
             displayEntity.Sort = dto.Sort;
 

@@ -151,8 +151,14 @@
                       VerticalContentAlignment="Center"
                       Foreground="Black"
                       SelectionChanged="themePicker_SelectionChanged" />
-            <Button Content="PRICEXPERT.com" ToolTip="PRICEXPERT.com web site" Click="launch_Webpage" />
+
+            <Button Command="{Binding Path=LaunchWebPageCommand}"
+                    CommandParameter="http://www.advancedpricinglogic.com/"
+                    Content="PRICEXPERT.com"
+                    ToolTip="PRICEXPERT.com web site" />
+
             <Button Content="About" ToolTip="About PRICEXPERT" />
+
             <!--  <Button Click="LaunchRibbonDemo" Content="Ribbon Demo (.NET 4.5)" />  -->
             <Button Content="Help" ToolTip="Help documentation for PRICEXPERT" />
 
@@ -672,8 +678,7 @@
                         Background="Gray"
                         Orientation="Vertical"
                         Visibility="{Binding Path=IsStepSelectorAvailable,
-                                             Converter={StaticResource BooleanToVisibilityConverter}}"
->
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
 
                 <StackPanel.Resources>
                     <CollectionViewSource x:Key="cvsSteps" Source="{Binding Path=SelectedFeature.Steps}">
@@ -693,8 +698,7 @@
                          Grid.Column="1"
                          Margin="5"
                          ItemsSource="{Binding Source={StaticResource cvsSteps}}"
-                         SelectedItem="{Binding Path=SelectedFeature.SelectedStep}"
-                        >
+                         SelectedItem="{Binding Path=SelectedFeature.SelectedStep}">
 
                     <ListBox.Resources>
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray" />
@@ -710,19 +714,18 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock x:Name="txtValue"
                                                Grid.Column="0"
+                                               Width="150"
                                                Margin="2"
                                                FontFamily="SegoeUI"
                                                Style="{StaticResource AnalyticStepTextStyle}"
                                                Text="{Binding Path=Name}"
-                                               ToolTip="{Binding Path=Title}" 
-                                               Width="150"/>
-                                    <!-- DEMO BARRY: VISIBILITY BINDING-->
+                                               ToolTip="{Binding Path=Title}" />
                                     <Image x:Name="checkMarkImage"
                                            Grid.Column="1"
                                            HorizontalAlignment="Right"
                                            Source="/APLPX.UI.WPF;component/Resources/completedStepCheck.png"
                                            Visibility="{Binding Path=IsCompleted,
-                                             Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                                Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 </Grid>
                             </StackPanel>
                         </DataTemplate>

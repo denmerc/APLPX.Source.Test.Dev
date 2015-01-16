@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Display = APLPX.UI.WPF.DisplayEntities;
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.Mappers
 {
@@ -26,9 +26,9 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
-        public static Client.Entity.ValueDriverGroup ToDto(this Display.ValueDriverGroup displayEntity)
+        public static DTO.ValueDriverGroup ToDto(this Display.ValueDriverGroup displayEntity)
         {
-            var dto = new Client.Entity.ValueDriverGroup(
+            var dto = new DTO.ValueDriverGroup(
                                             displayEntity.Id,
                                             displayEntity.Value,
                                             displayEntity.MinOutlier,
@@ -56,13 +56,13 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
-        public static Client.Entity.PricingValueDriverGroup ToDto(this Display.PricingValueDriverGroup displayEntity)
+        public static DTO.PricingValueDriverGroup ToDto(this Display.PricingValueDriverGroup displayEntity)
         {
-            var dto = new Client.Entity.PricingValueDriverGroup(
+            var dto = new DTO.PricingValueDriverGroup(
                                             displayEntity.Id,
                                             displayEntity.Value,
-                                            displayEntity.MinOutlier,
-                                            displayEntity.MaxOutlier,
+                                            (int)displayEntity.MinOutlier,
+                                            (int)displayEntity.MaxOutlier,
                                             displayEntity.Sort,
                                             displayEntity.SkuCount,
                                             displayEntity.SalesValue);
@@ -173,7 +173,7 @@ namespace APLPX.UI.WPF.Mappers
         {
             var dto = new DTO.PricingEverydayLinkedValueDriverGroup(
                                             displayEntity.ValueDriverGroupId,
-                                            displayEntity.PercentChange);
+                                            (int)displayEntity.PercentChange);
             return dto;
         }
 

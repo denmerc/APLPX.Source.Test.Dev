@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace APLPX.Server.Entity
+namespace APLPX.Entity
 {
     [DataContract]
     public class Analytic
@@ -15,19 +15,52 @@ namespace APLPX.Server.Entity
             Id=id;
         }
         public Analytic(
-            int id,
-            string searchGroupKey
+            AnalyticIdentity identity
             ) {
-            Id = id;
-            SearchGroupKey = searchGroupKey;
+            Id = 0;
+            Identity = identity;
         }
         public Analytic(
             int id,
-            string searchGroupKey,
+            int searchId
+            ) {
+            Id = id;
+            SearchId = searchId;
+        }
+        public Analytic(
+            int id,
+            string searchGroup
+            ) {
+            Id = id;
+            SearchGroup = searchGroup;
+        }
+        public Analytic(
+            int id,
+            int searchId,
             AnalyticIdentity identity
             ) {
             Id = id;
-            SearchGroupKey = searchGroupKey;
+            SearchId = searchId;
+            Identity = identity;
+        }
+        public Analytic(
+            int id,
+            string searchGroup,
+            AnalyticIdentity identity
+            ) {
+            Id = id;
+            SearchGroup = searchGroup;
+            Identity = identity;
+        }
+        public Analytic(
+            int id,
+            int searchId,
+            string searchGroup,
+            AnalyticIdentity identity
+            ) {
+            Id = id;
+            SearchId = searchId;
+            SearchGroup = searchGroup;
             Identity = identity;
         }
         public Analytic(
@@ -60,14 +93,16 @@ namespace APLPX.Server.Entity
         }
         public Analytic(
             int id,
-            string searchGroupKey,
+            int searchId,
+            string searchGroup,
             AnalyticIdentity identity,
             List<AnalyticValueDriver> valueDrivers,
             List<AnalyticPriceListGroup> priceListGroups,
             List<FilterGroup> filterGroups
             ) {
             Id = id;
-            SearchGroupKey = searchGroupKey;
+            SearchId = searchId;
+            SearchGroup = searchGroup;
             Identity = identity;
             ValueDrivers = valueDrivers;
             PriceListGroups = priceListGroups;
@@ -76,17 +111,19 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public string SearchGroupKey; //CLIENT { get; private set; }
+        public int SearchId { get; set; }
         [DataMember]
-        public AnalyticIdentity Identity; //CLIENT { get; private set; }
+        public string SearchGroup { get;  set; }
         [DataMember]
-        public List<AnalyticValueDriver> ValueDrivers; //CLIENT { get; private set; }
+        public AnalyticIdentity Identity { get;  set; }
         [DataMember]
-        public List<AnalyticPriceListGroup> PriceListGroups; //CLIENT { get; private set; }
+        public List<AnalyticValueDriver> ValueDrivers { get;  set; }
         [DataMember]
-        public List<FilterGroup> FilterGroups; //CLIENT { get; private set; }
+        public List<AnalyticPriceListGroup> PriceListGroups { get;  set; }
+        [DataMember]
+        public List<FilterGroup> FilterGroups { get;  set; }
     }
 
     [DataContract]
@@ -141,33 +178,33 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public string Name; //CLIENT { get; set; }
+        public string Name { get; set; }
         [DataMember]
-        public string Description; //CLIENT { get; set; }
+        public string Description { get; set; }
         [DataMember]
-        public string Notes; //CLIENT { get; set; }
+        public string Notes { get; set; }
         [DataMember]
-        public DateTime Refreshed; //CLIENT { get; private set; }
+        public DateTime Refreshed { get;  set; }
         [DataMember]
-        public string RefreshedText; //CLIENT { get; private set; }
+        public string RefreshedText { get;  set; }
         [DataMember]
-        public DateTime Created; //CLIENT { get; private set; }
+        public DateTime Created { get;  set; }
         [DataMember]
-        public string CreatedText; //CLIENT { get; private set; }
+        public string CreatedText { get;  set; }
         [DataMember]
-        public DateTime Edited; //CLIENT { get; private set; }
+        public DateTime Edited { get;  set; }
         [DataMember]
-        public string EditedText; //CLIENT { get; private set; }
+        public string EditedText { get;  set; }
         [DataMember]
-        public string Author; //CLIENT { get; private set; }
+        public string Author { get;  set; }
         [DataMember]
-        public string Editor; //CLIENT { get; private set; }
+        public string Editor { get;  set; }
         [DataMember]
-        public string Owner; //CLIENT { get; private set; }
+        public string Owner { get;  set; }
         [DataMember]
-        public bool Shared; //CLIENT { get; set; }
+        public bool Shared { get; set; }
         [DataMember]
-        public bool Active; //CLIENT { get; set; }
+        public bool Active { get; set; }
     }
 
     [DataContract]
@@ -212,9 +249,9 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public List<AnalyticValueDriverMode> Modes; //CLIENT { get; private set; }
+        public List<AnalyticValueDriverMode> Modes { get;  set; }
         [DataMember]
-        public List<AnalyticResultValueDriverGroup> Results; //CLIENT { get; private set; }
+        public List<AnalyticResultValueDriverGroup> Results { get;  set; }
 
         #region Driver mode name indexer...
         public AnalyticValueDriverMode this[string index] {
@@ -257,7 +294,7 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public List<ValueDriverGroup> Groups; //CLIENT { get; private set; }
+        public List<ValueDriverGroup> Groups { get;  set; }
     }
 
     [DataContract]
@@ -266,23 +303,26 @@ namespace APLPX.Server.Entity
         #region Initialize...
         public AnalyticResultValueDriverGroup() { }
         public AnalyticResultValueDriverGroup(
-            int id,
+            //int id,
             short value,
-            int minOutlier,
-            int maxOutlier,
-            short sort,
+            decimal minOutlier,
+            decimal maxOutlier,
+            //short sort,
             int skuCount,
             string salesValue
-            ) : base(id, value, minOutlier, maxOutlier, sort) {
+            ) : base(0, value, minOutlier, maxOutlier, value) {
             SkuCount = skuCount;
             SalesValue = salesValue;
+            Run = false;
         }
         #endregion
 
         [DataMember]
-        public int SkuCount; //CLIENT { get; private set; }
+        public bool Run { get; set; }
         [DataMember]
-        public string SalesValue; //CLIENT { get; private set; }
+        public int SkuCount { get;  set; }
+        [DataMember]
+        public string SalesValue { get;  set; }
     }
 
     [DataContract]
@@ -302,7 +342,7 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public List<PriceList> PriceLists; //CLIENT { get; private set; }
+        public List<PriceList> PriceLists { get;  set; }
     }
 }
 

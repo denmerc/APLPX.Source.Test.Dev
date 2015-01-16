@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Mappers

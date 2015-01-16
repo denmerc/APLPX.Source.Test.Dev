@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace APLPX.Server.Entity
+namespace APLPX.Entity
 {
     [DataContract]
     public class FilterGroup
@@ -26,11 +26,11 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public List<Filter> Filters; //CLIENT { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
-        public short Sort; //CLIENT { get; private set; }
+        public List<Filter> Filters { get;  set; }
     }
 
     [DataContract]
@@ -65,17 +65,17 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public int Key; //CLIENT { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Code; //CLIENT { get; private set; }
+        public string Code { get;  set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public short Sort; //CLIENT { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
-        public bool IsSelected; //CLIENT { get; set; }
+        public bool IsSelected { get; set; }
     }
 
     [DataContract]
@@ -110,17 +110,17 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public int Key; //CLIENT { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Title; //CLIENT { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public short Sort; //CLIENT { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
-        public bool IsSelected; //CLIENT { get; set; }
+        public bool IsSelected { get; set; }
     }
 
     [DataContract]
@@ -151,15 +151,15 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Key; //CLIENT { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Title; //CLIENT { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public short Sort; //CLIENT { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
-        public bool IsSelected; //CLIENT { get; set; }
+        public bool IsSelected { get; set; }
     }
 
     [DataContract]
@@ -169,8 +169,8 @@ namespace APLPX.Server.Entity
         public ValueDriverGroup() { }
         public ValueDriverGroup(
             short value,
-            int minOutlier,
-            int maxOutlier
+            decimal minOutlier,
+            decimal maxOutlier
             ) {
             Id = 0;
             Value = value;
@@ -180,8 +180,8 @@ namespace APLPX.Server.Entity
         public ValueDriverGroup(
             int id,
             short value,
-            int minOutlier,
-            int maxOutlier
+            decimal minOutlier,
+            decimal maxOutlier
             ) {
             Id = id;
             Value = value;
@@ -191,8 +191,8 @@ namespace APLPX.Server.Entity
         public ValueDriverGroup(
             int id,
             short value,
-            int minOutlier,
-            int maxOutlier,
+            decimal minOutlier,
+            decimal maxOutlier,
             short sort
             ) {
             Id = id;
@@ -204,15 +204,15 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public short Value; //CLIENT { get; set; }
+        public short Value { get; set; }
         [DataMember]
-        public int MinOutlier; //CLIENT { get; set; }
+        public decimal MinOutlier { get; set; }
         [DataMember]
-        public int MaxOutlier; //CLIENT { get; set; }
+        public decimal MaxOutlier { get; set; }
         [DataMember]
-        public short Sort; //CLIENT { get; set; }
+        public short Sort { get; set; }
     }
 
     [DataContract]
@@ -234,13 +234,13 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Key; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public string Title; //CLIENT { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
-        public short Sort; //CLIENT { get; private set; }
+        public int Key { get;  set; }
     }
 
     [DataContract]
@@ -275,19 +275,19 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public int Key; //CLIENT { get; private set; }
+        public int Key { get;  set; }
         [DataMember]
-        public string Code; //CLIENT { get; private set; }
+        public string Code { get;  set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Title; //CLIENT { get; private set; }
+        public string Title { get;  set; }
         [DataMember]
-        public short Sort; //CLIENT { get; private set; }
+        public short Sort { get;  set; }
         [DataMember]
-        public bool IsSelected; //CLIENT { get; set; }
+        public bool IsSelected { get; set; }
     }
 
     [DataContract]
@@ -323,15 +323,15 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public decimal DollarRangeLower; //CLIENT { get; set; }
+        public decimal DollarRangeLower { get; set; }
         [DataMember]
-        public decimal DollarRangeUpper; //CLIENT { get; set; }
+        public decimal DollarRangeUpper { get; set; }
         [DataMember]
-        public int PercentLimitLower; //CLIENT { get; set; }
+        public int PercentLimitLower { get; set; }
         [DataMember]
-        public int PercentLimitUpper; //CLIENT { get; set; }
+        public int PercentLimitUpper { get; set; }
     }
 
     [DataContract]
@@ -363,13 +363,13 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public decimal DollarRangeLower; //CLIENT { get; set; }
+        public decimal DollarRangeLower { get; set; }
         [DataMember]
-        public decimal DollarRangeUpper; //CLIENT { get; set; }
+        public decimal DollarRangeUpper { get; set; }
         [DataMember]
-        public int PercentChange; //CLIENT { get; set; }
+        public int PercentChange { get; set; }
     }
 
     [DataContract]
@@ -405,15 +405,15 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Id; //CLIENT { get; private set; }
+        public int Id { get;  set; }
         [DataMember]
-        public int Type; //CLIENT { get; set; }
+        public int Type { get; set; }
         [DataMember]
-        public decimal DollarRangeLower; //CLIENT { get; set; }
+        public decimal DollarRangeLower { get; set; }
         [DataMember]
-        public decimal DollarRangeUpper; //CLIENT { get; set; }
+        public decimal DollarRangeUpper { get; set; }
         [DataMember]
-        public decimal ValueChange; //CLIENT { get; set; }        
+        public decimal ValueChange { get; set; }        
     }
 
     [DataContract]
@@ -435,12 +435,12 @@ namespace APLPX.Server.Entity
         #endregion
 
         [DataMember]
-        public int Value; //CLIENT { get; private set; }
+        public int Value { get;  set; }
         [DataMember]
-        public string Name; //CLIENT { get; private set; }
+        public string Name { get;  set; }
         [DataMember]
-        public string Description; //CLIENT { get; private set; }
+        public string Description { get;  set; }
         [DataMember]
-        public short Sort; //CLIENT { get; private set; }
+        public short Sort { get;  set; }
     }
 }

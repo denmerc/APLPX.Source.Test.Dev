@@ -75,6 +75,10 @@
       <Project>{5cc39bb0-2a4c-4eca-8a8a-3c845b34d504}</Project>
       <Name>APLPX.Client.Mock</Name>
     </ProjectReference>
+    <ProjectReference Include="..\APLPX.Entity\APLPX.Entity.csproj">
+      <Project>{e1b6bd21-4dc1-48c2-b8a0-1d03aacd974d}</Project>
+      <Name>APLPX.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

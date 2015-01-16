@@ -71,9 +71,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\APLPX.Server.Entity\APLPX.Server.Entity.csproj">
-      <Project>{e2e6ae46-9b99-4e63-90b7-77174c4a2787}</Project>
-      <Name>APLPX.Server.Entity</Name>
+    <ProjectReference Include="..\APLPX.Entity\APLPX.Entity.csproj">
+      <Project>{e1b6bd21-4dc1-48c2-b8a0-1d03aacd974d}</Project>
+      <Name>APLPX.Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\APLPX.Server.Services.Contracts\APLPX.Server.Services.Contracts.csproj">
       <Project>{6e5c5db5-f3ab-4f68-9c16-6af6e5e1e7bd}</Project>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using DTO = APLPX.Client.Entity;
+using DTO = APLPX.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Mappers
@@ -21,7 +21,7 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
-        public static Client.Entity.ModuleFeatureStepAdvisor ToDto(this Display.Advisor displayEntity)
+        public static DTO.ModuleFeatureStepAdvisor ToDto(this Display.Advisor displayEntity)
         {
             var dto = new DTO.ModuleFeatureStepAdvisor(
                                             displayEntity.Sort,

@@ -33,7 +33,7 @@ namespace APLPX.UI.WPF.DragDropProviders
                 ISearchableEntity sourceEntity = obj.GetData(DataFormats.StringFormat) as ISearchableEntity;
                 if (sourceEntity != null)
                 {
-                    isValid = (sourceEntity.SearchKey != targetSearchGroup.SearchKey);
+                    isValid = (sourceEntity.SearchGroupKey != targetSearchGroup.SearchGroupKey);
                 }
             }
             return isValid;

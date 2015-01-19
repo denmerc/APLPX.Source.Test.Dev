@@ -18,7 +18,7 @@ namespace APLPX.UI.WPF.Mappers
             var displayEntity = new Display.PricingEveryday();
 
             displayEntity.Id = dto.Id;
-            displayEntity.SearchKey = dto.SearchGroupKey;
+            displayEntity.SearchGroupKey = dto.SearchGroupKey;
 
             if (dto.Identity != null)
             {
@@ -159,7 +159,7 @@ namespace APLPX.UI.WPF.Mappers
 
             DTO.PricingEveryday dto = new DTO.PricingEveryday(
                                                 displayEntity.Id,
-                                                displayEntity.SearchKey,
+                                                displayEntity.SearchGroupKey,
                                                 identity,
                                                 filterGroups,
                                                 valueDrivers,

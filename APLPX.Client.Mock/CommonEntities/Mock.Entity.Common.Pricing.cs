@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using DTO = APLPX.Entity;
 
 namespace APLPX.Common.Mock.Entity
 {
@@ -144,6 +145,7 @@ namespace APLPX.Common.Mock.Entity
         [DataMember]
         public int LinkedPriceListGroupKey { get;  set; }
         [DataMember]
+        [BsonElement("sort")]
         public short Sort { get;  set; }
     }
 
@@ -186,16 +188,20 @@ namespace APLPX.Common.Mock.Entity
         [DataMember]
         public int PriceListId { get; set; }
         [DataMember]
+        [BsonElement("RangeLower")]
         public decimal DollarRangeLower { get; set; }
         [DataMember]
+        [BsonElement("RangeUpper")]
         public decimal DollarRangeUpper { get; set; }
         [DataMember]
+        [BsonElement("RoundingRule")]
         public List<PriceRoundingRule> RoundingRules { get; set; }
         [DataMember]
         public List<SQLEnumeration> RoundingTypes { get;  set; }
     }
 
     [DataContract]
+    [BsonIgnoreExtraElements]
     public class PricingLinkedPriceListRule
     {
         #region initialize...
@@ -230,8 +236,11 @@ namespace APLPX.Common.Mock.Entity
         [DataMember]
         public int PriceListId { get; set; }
         [DataMember]
+        [BsonRepresentation(MongoDB.Bson.BsonType.Int32)]
+        [BsonIgnore]
         public int PercentChange { get; set; }     
         [DataMember]
+        [BsonElement("RoundingRule")]
         public List<PriceRoundingRule> RoundingRules { get; set; }
         [DataMember]
         public List<SQLEnumeration> RoundingTypes { get;  set; }
@@ -396,7 +405,7 @@ namespace APLPX.Common.Mock.Entity
         public PricingResultEdit(
             string name,
             string title,
-            PricingResultsEditType type
+            DTO.PricingResultsEditType type
             ) {
             Name = name;
             Title = title;
@@ -409,7 +418,7 @@ namespace APLPX.Common.Mock.Entity
         [DataMember]
         public string Title { get;  set; }
         [DataMember]
-        public PricingResultsEditType Type { get;  set; }
+        public DTO.PricingResultsEditType Type { get;  set; }
     }
 
     [DataContract]
@@ -420,7 +429,7 @@ namespace APLPX.Common.Mock.Entity
         public PricingResultWarning(
             string name,
             string title,
-            PricingResultsWarningType type
+            DTO.PricingResultsWarningType type
             ) {
             Name = name;
             Title = title;
@@ -433,7 +442,7 @@ namespace APLPX.Common.Mock.Entity
         [DataMember]
         public string Title { get;  set; }
         [DataMember]
-        public PricingResultsWarningType Type { get;  set; }
+        public DTO.PricingResultsWarningType Type { get;  set; }
     }
 
     [DataContract]

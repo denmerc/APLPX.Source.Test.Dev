@@ -35,7 +35,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             _analytic = analytic;
             _feature = feature;
 
-            var searchKeyChanged = _analytic.WhenAnyValue(item => item.SearchKey);
+            var searchKeyChanged = _analytic.WhenAnyValue(item => item.SearchGroupKey);
             _searchKeyChangedSubscription = searchKeyChanged.Subscribe(key => OnSearchKeyChanged(key));
         }
 

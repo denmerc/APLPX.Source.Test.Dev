@@ -61,40 +61,40 @@ namespace APLPX.UI.WPF.Helpers
         {
             var list = new List<DisplayEntities.Analytic>();
 
-            Analytic entity = new Analytic { Id = 1, SearchKey = "FoldersAnalytics76" };
+            Analytic entity = new Analytic { Id = 1, SearchGroupKey = "FoldersAnalytics76" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - All Filters - Movement Only", Description = "Admin - Everyday - All Filters - Movement Only" };
             list.Add(entity);
 
-            entity = new Analytic { Id = 2, SearchKey = "FoldersAnalytics76" };
+            entity = new Analytic { Id = 2, SearchGroupKey = "FoldersAnalytics76" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - Movement & Markup", Description = "Admin - Everyday - Movement &Markup" };
             list.Add(entity);
 
-            entity = new Analytic { Id = 3, SearchKey = "FoldersAnalytics76" };
+            entity = new Analytic { Id = 3, SearchGroupKey = "FoldersAnalytics76" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - Movement & Days On Hand", Description = "Admin - Everyday - Movement &Days On Hand" };
             list.Add(entity);
 
-            entity = new Analytic { Id = 6, SearchKey = "FoldersAnalytics75" };
+            entity = new Analytic { Id = 6, SearchGroupKey = "FoldersAnalytics75" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - Movement with Manual Groups", Description = "Admin - Everyday - Movement with Manual Groups" };
             list.Add(entity);
 
-            entity = new Analytic { Id = 8, SearchKey = "FoldersAnalytics74" };
+            entity = new Analytic { Id = 8, SearchGroupKey = "FoldersAnalytics74" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Movement, Markup, & DOH w/Manual Groups", Description = "Admin - Movement, Markup, & DOH with Manual Groups" };
             list.Add(entity);
 
-            entity = new Analytic { Id = 9, SearchKey = "FoldersAnalytics73" };
+            entity = new Analytic { Id = 9, SearchGroupKey = "FoldersAnalytics73" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Movement, MarkUp, & DOH w/Custom - 1 prod", Description = "All value drivers with Custom groups - with only 1 intersection " };
             list.Add(entity);
 
             //Note: the following entities, which already tagged to a user folder, are also tagged to the Recent folder.
-            entity = new Analytic { Id = 1, SearchKey = "RecentAnalytics" };
+            entity = new Analytic { Id = 1, SearchGroupKey = "RecentAnalytics" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Everyday - All Filters - Movement Only", Description = "Admin - Everyday - All Filters - Movement Only" };
             list.Add(entity);
 
-            entity = new Analytic { Id = 8, SearchKey = "RecentAnalytics" };
+            entity = new Analytic { Id = 8, SearchGroupKey = "RecentAnalytics" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Movement, Markup, & DOH w/Manual Groups", Description = "Admin - Movement, Markup, & DOH with Manual Groups" };
             list.Add(entity);
 
-            entity = new Analytic { Id = 9, SearchKey = "RecentAnalytics" };
+            entity = new Analytic { Id = 9, SearchGroupKey = "RecentAnalytics" };
             entity.Identity = new AnalyticIdentity { Name = "Admin - Movement, MarkUp, & DOH w/Custom - 1 prod", Description = "All value drivers with Custom groups - with only 1 intersection " };
             list.Add(entity);
 
@@ -116,13 +116,13 @@ namespace APLPX.UI.WPF.Helpers
 
             var list = new List<FeatureSearchGroup>();
 
-            list.Add(new FeatureSearchGroup { SearchKey = "RecentAnalytics", Name = "Recent Analytics", ItemCount = 3, ParentName = "Recent Analytics", Sort = 1 });
-            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics73", Name = "Engine", ItemCount = 1, ParentName = myFolders, Sort = 10 });
-            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics74", Name = "Apparel", ItemCount = 1, ParentName = myFolders, Sort = 20 });
-            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics75", Name = "Nuts-Bolts", ItemCount = 1, ParentName = myFolders, Sort = 30 });
-            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics76", Name = "Interior Parts", ItemCount = 3, ParentName = myFolders, Sort = 40 });
-            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics77", Name = "Sheet Metal Parts", ItemCount = 0, ParentName = myFolders, Sort = 50 });
-            list.Add(new FeatureSearchGroup { SearchKey = "FoldersAnalytics78", Name = "Moldings", ItemCount = 0, ParentName = myFolders, Sort = 60 });
+            list.Add(new FeatureSearchGroup { SearchGroupKey = "RecentAnalytics", Name = "Recent Analytics", ItemCount = 3, ParentName = "Recent Analytics", Sort = 1 });
+            list.Add(new FeatureSearchGroup { SearchGroupKey = "FoldersAnalytics73", Name = "Engine", ItemCount = 1, ParentName = myFolders, Sort = 10 });
+            list.Add(new FeatureSearchGroup { SearchGroupKey = "FoldersAnalytics74", Name = "Apparel", ItemCount = 1, ParentName = myFolders, Sort = 20 });
+            list.Add(new FeatureSearchGroup { SearchGroupKey = "FoldersAnalytics75", Name = "Nuts-Bolts", ItemCount = 1, ParentName = myFolders, Sort = 30 });
+            list.Add(new FeatureSearchGroup { SearchGroupKey = "FoldersAnalytics76", Name = "Interior Parts", ItemCount = 3, ParentName = myFolders, Sort = 40 });
+            list.Add(new FeatureSearchGroup { SearchGroupKey = "FoldersAnalytics77", Name = "Sheet Metal Parts", ItemCount = 0, ParentName = myFolders, Sort = 50 });
+            list.Add(new FeatureSearchGroup { SearchGroupKey = "FoldersAnalytics78", Name = "Moldings", ItemCount = 0, ParentName = myFolders, Sort = 60 });
 
             var editableGroups = list.Where(item => item.ParentName.Equals(myFolders));
             foreach (FeatureSearchGroup editableGroup in editableGroups)

@@ -402,8 +402,10 @@ namespace APLPX.Common.Mock.Entity
         [DataMember]
         public decimal NewPrice { get; set; }
         [DataMember]
+        [BsonIgnore]
         public int CurrentMarkupPercent { get;  set; }
         [DataMember]
+        [BsonIgnore]
         public int NewMarkupPercent { get; set; }
         [DataMember]
         public decimal KeyValueChange { get;  set; }
@@ -414,6 +416,7 @@ namespace APLPX.Common.Mock.Entity
         [BsonIgnore]
         [DataMember]
         public PricingResultEdit PriceEdit { get;  set; }
+        [BsonIgnore]
         [DataMember]
         public PricingResultWarning PriceWarning { get;  set; }
     }

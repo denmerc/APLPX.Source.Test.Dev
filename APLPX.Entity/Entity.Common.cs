@@ -26,11 +26,11 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public List<Filter> Filters { get;  set; }
+        public List<Filter> Filters { get; private set; }
     }
 
     [DataContract]
@@ -65,15 +65,15 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
-        public int Key { get;  set; }
+        public int Key { get; private set; }
         [DataMember]
-        public string Code { get;  set; }
+        public string Code { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
         public bool IsSelected { get; set; }
     }
@@ -110,15 +110,15 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
-        public int Key { get;  set; }
+        public int Key { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
         public bool IsSelected { get; set; }
     }
@@ -151,13 +151,13 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Key { get;  set; }
+        public int Key { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
         public bool IsSelected { get; set; }
     }
@@ -204,7 +204,7 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
         public short Value { get; set; }
         [DataMember]
@@ -234,13 +234,13 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public int Key { get;  set; }
+        public int Key { get; private set; }
     }
 
     [DataContract]
@@ -275,17 +275,17 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
-        public int Key { get;  set; }
+        public int Key { get; private set; }
         [DataMember]
-        public string Code { get;  set; }
+        public string Code { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
         public bool IsSelected { get; set; }
     }
@@ -323,7 +323,7 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
         public decimal DollarRangeLower { get; set; }
         [DataMember]
@@ -363,7 +363,7 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
         public decimal DollarRangeLower { get; set; }
         [DataMember]
@@ -405,7 +405,7 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
         public int Type { get; set; }
         [DataMember]
@@ -435,12 +435,12 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Value { get;  set; }
+        public int Value { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Description { get;  set; }
+        public string Description { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
     }
 }

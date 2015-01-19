@@ -25,7 +25,7 @@ namespace APLPX.UI.WPF.Helpers
         {
             PricingEveryday copy = new PricingEveryday();
             copy.Id = 0;
-            copy.SearchKey = source.SearchKey;
+            copy.SearchGroupKey = source.SearchGroupKey;
 
             copy.Identity.AnalyticsId = 0;
 

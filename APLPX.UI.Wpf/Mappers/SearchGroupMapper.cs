@@ -15,8 +15,8 @@ namespace APLPX.UI.WPF.Mappers
         {
             var displayEntity = new Display.FeatureSearchGroup();
 
-            displayEntity.SearchId = dto.SearchId;
-            displayEntity.SearchKey = dto.SearchGroup;
+            displayEntity.SearchGroupId = dto.SearchGroupId;
+            displayEntity.SearchGroupKey = dto.SearchGroupKey;
             displayEntity.ItemCount = (short)dto.ItemCount;
             displayEntity.Name = dto.Name;
             displayEntity.ParentName = dto.ParentName;
@@ -34,8 +34,8 @@ namespace APLPX.UI.WPF.Mappers
             var dto = new DTO.FeatureSearchGroup(
                                     displayEntity.Name, 
                                     displayEntity.ItemCount,
-                                    displayEntity.SearchId,
-                                    displayEntity.SearchKey,
+                                    displayEntity.SearchGroupId,
+                                    displayEntity.SearchGroupKey,
                                     displayEntity.ParentName,
                                     displayEntity.IsNameChanged,
                                     displayEntity.IsSearchKeyChanged,

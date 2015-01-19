@@ -17,7 +17,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                           from r in d.Results
                           select new Display.AnalyticResult
                           {
-                              Id = r.Id,
+                              Id = d.Key,
                               DriverName = d.Name,
                               Value = r.Value,                           
                               MinOutlier = r.MinOutlier,

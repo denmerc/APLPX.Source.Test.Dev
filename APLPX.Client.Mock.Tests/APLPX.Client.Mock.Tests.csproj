@@ -59,8 +59,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Tests_Mock_Proxies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests_Mock_Proxies.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\APLPX.Client.Contracts\APLPX.Client.Contracts.csproj">

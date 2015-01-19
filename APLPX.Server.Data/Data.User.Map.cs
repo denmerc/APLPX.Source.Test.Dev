@@ -497,11 +497,11 @@ namespace APLPX.Server.Data {
             public const String workflowFeatureActionStepType = "actionStepType";
             public const String workflowFeatureLandingStepType = "landingStepType";
                         
-            public const String workflowFeatureSearchType = "featureSearchType";
-            public const String workflowFeatureSearchId = "searchId";
-            public const String workflowFeatureSearchGroup = "searchGroup";
-            public const String workflowFeatureSearchName = "name";
-            public const String workflowFeatureSearchParentName = "parentName";
+            public const String workflowFeatureSearchType = "searchFeatureType";
+            public const String workflowFeatureSearchId = "searchGroupId";
+            public const String workflowFeatureSearchGroup = "searchGroupKey";
+            public const String workflowFeatureSearchName = "searchGroupName";
+            public const String workflowFeatureSearchParentName = "searchGroupParentName";
             public const String workflowFeatureSearchCanNameChange = "canNameChange";
             public const String workflowFeatureSearchIsNameChanged = "isNameChanged";
             public const String workflowFeatureSearchCanSearchGroupChange = "canSearchGroupChange";
@@ -528,7 +528,7 @@ namespace APLPX.Server.Data {
             public const String workflowStepEnableNext = "workflowStepEnableNext";
             #endregion
 
-            #region Fields Enumeration...
+            #region Fields Enumerations...
             public const String enumSort = "sort";
             public const String enumValue = "value";
             public const String enumName = "name";

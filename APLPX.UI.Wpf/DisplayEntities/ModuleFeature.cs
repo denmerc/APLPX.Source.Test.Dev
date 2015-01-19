@@ -255,7 +255,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
                 if (SelectedSearchGroup != null)
                 {
-                    matchingEntities = SearchableEntities.Where(item => item.SearchKey == SelectedSearchGroup.SearchKey);
+                    matchingEntities = SearchableEntities.Where(item => item.SearchGroupKey == SelectedSearchGroup.SearchGroupKey);
                 }
 
                 return new List<ISearchableEntity>(matchingEntities);
@@ -382,7 +382,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             foreach (FeatureSearchGroup searchGroup in SearchGroups)
             {
-                var matchingEntities = SearchableEntities.Where(item => item.SearchKey == searchGroup.SearchKey);
+                var matchingEntities = SearchableEntities.Where(item => item.SearchGroupKey == searchGroup.SearchGroupKey);
                 foreach (ISearchableEntity entity in matchingEntities)
                 {
                     entity.ParentKey = searchGroup.ParentName;                    
@@ -397,7 +397,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             foreach (FeatureSearchGroup searchGroup in SearchGroups)
             {
-                var matchingEntities = SearchableEntities.Where(item => item.SearchKey == searchGroup.SearchKey);
+                var matchingEntities = SearchableEntities.Where(item => item.SearchGroupKey == searchGroup.SearchGroupKey);
                 searchGroup.ItemCount = Convert.ToInt16(matchingEntities.Count());
             }
             this.RaisePropertyChanged("SearchGroupDisplayList");

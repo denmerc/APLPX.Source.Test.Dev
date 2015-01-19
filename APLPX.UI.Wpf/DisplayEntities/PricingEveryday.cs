@@ -8,7 +8,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class PricingEveryday : DisplayEntityBase, ISearchableEntity
+    public class PricingEveryday : DisplayEntityBase, ISearchableEntity, IFilterContainer
     {
         #region Private Fields
 
@@ -35,6 +35,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private PricingMode _selectedMode;
         private PricingEverydayValueDriver _selectedValueDriver;
 
+        private int _searchGroupId;
         private string _searchGroupKey;
         private string _parentKey;
         private bool _canNameChange;
@@ -74,7 +75,13 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _id, value); }
         }
 
-        public string SearchKey
+        public int SearchGroupId
+        {
+            get { return _searchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroupId, value); }
+        }
+
+        public string SearchGroupKey
         {
             get { return _searchGroupKey; }
             set { this.RaiseAndSetIfChanged(ref _searchGroupKey, value); }

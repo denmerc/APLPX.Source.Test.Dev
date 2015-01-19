@@ -73,29 +73,29 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get; set; }
+        public int Id { get; private set; }
         [DataMember]
-        public string SearchGroupKey { get;  set; }
+        public string SearchGroupKey { get; private set; }
         [DataMember]
-        public PricingIdentity Identity { get;  set; }
+        public PricingIdentity Identity { get; private set; }
         [DataMember]
-        public List<FilterGroup> FilterGroups { get;  set; }
+        public List<FilterGroup> FilterGroups { get; private set; }
         [DataMember]
-        public List<PricingEverydayValueDriver> ValueDrivers { get;  set; }
+        public List<PricingEverydayValueDriver> ValueDrivers { get; private set; }
         [DataMember]
         public PricingEverydayKeyValueDriver KeyValueDriver { get; set; }
         [DataMember]
         public List<PricingEverydayLinkedValueDriver> LinkedValueDrivers { get; set; }
         [DataMember]
-        public List<PricingMode> PricingModes { get;  set; }
+        public List<PricingMode> PricingModes { get; private set; }
         [DataMember]
-        public List<PricingEverydayPriceListGroup> PriceListGroups { get;  set; }
+        public List<PricingEverydayPriceListGroup> PriceListGroups { get; private set; }
         [DataMember]
         public PricingKeyPriceListRule KeyPriceListRule { get; set; }
         [DataMember]
         public List<PricingLinkedPriceListRule> LinkedPriceListRules { get; set; }
         [DataMember]
-        public List<PricingEverydayResult> Results { get;  set; }
+        public List<PricingEverydayResult> Results { get; private set; }
     }
 
     [DataContract]
@@ -121,7 +121,7 @@ namespace APLPX.Entity
         [DataMember]
         public bool IsKey { get; set; }
         [DataMember]
-        public List<PricingValueDriverGroup> Groups { get;  set; }
+        public List<PricingValueDriverGroup> Groups { get; private set; }
     }
 
     [DataContract]
@@ -225,7 +225,7 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public List<PricingEverydayPriceList> PriceLists { get;  set; }
+        public List<PricingEverydayPriceList> PriceLists { get; private set; }
     }
 
     [DataContract]
@@ -279,15 +279,15 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int SkuId { get;  set; }
+        public int SkuId { get; private set; }
         [DataMember]
-        public string SkuName { get;  set; }
+        public string SkuName { get; private set; }
         [DataMember]
-        public string SkuTitle { get;  set; }
+        public string SkuTitle { get; private set; }
         [DataMember]
-        public List<PricingResultDriverGroup> Groups { get;  set; }
+        public List<PricingResultDriverGroup> Groups { get; private set; }
         [DataMember]
-        public List<PricingEverydayResultPriceList> PriceLists { get;  set; }
+        public List<PricingEverydayResultPriceList> PriceLists { get; private set; }
     }
 
     [DataContract]
@@ -347,24 +347,24 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int ResultId { get;  set; }
+        public int ResultId { get; private set; }
         [DataMember]
-        public decimal CurrentPrice { get;  set; }
+        public decimal CurrentPrice { get; private set; }
         [DataMember]
         public decimal NewPrice { get; set; }
         [DataMember]
-        public int CurrentMarkupPercent { get;  set; }
+        public int CurrentMarkupPercent { get; private set; }
         [DataMember]
         public int NewMarkupPercent { get; set; }
         [DataMember]
-        public decimal KeyValueChange { get;  set; }
+        public decimal KeyValueChange { get; private set; }
         [DataMember]
-        public decimal InfluenceValueChange { get;  set; }
+        public decimal InfluenceValueChange { get; private set; }
         [DataMember]
-        public decimal PriceChange { get;  set; }
+        public decimal PriceChange { get; private set; }
         [DataMember]
-        public PricingResultEdit PriceEdit { get;  set; }
+        public PricingResultEdit PriceEdit { get; private set; }
         [DataMember]
-        public PricingResultWarning PriceWarning { get;  set; }
+        public PricingResultWarning PriceWarning { get; private set; }
     }
 }

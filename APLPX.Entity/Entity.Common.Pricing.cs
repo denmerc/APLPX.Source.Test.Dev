@@ -68,27 +68,27 @@ namespace APLPX.Entity
         [DataMember]
         public string Notes { get; set; }
         [DataMember]
-        public DateTime Refreshed { get;  set; }
+        public DateTime Refreshed { get; private set; }
         [DataMember]
-        public string RefreshedText { get;  set; }
+        public string RefreshedText { get; private set; }
         [DataMember]
-        public DateTime Created { get;  set; }
+        public DateTime Created { get; private set; }
         [DataMember]
-        public string CreatedText { get;  set; }
+        public string CreatedText { get; private set; }
         [DataMember]
-        public DateTime Edited { get;  set; }
+        public DateTime Edited { get; private set; }
         [DataMember]
-        public string EditedText { get;  set; }
+        public string EditedText { get; private set; }
         [DataMember]
-        public string Author { get;  set; }
+        public string Author { get; private set; }
         [DataMember]
-        public string Editor { get;  set; }
+        public string Editor { get; private set; }
         [DataMember]
-        public string Owner { get;  set; }
+        public string Owner { get; private set; }
         [DataMember]
         public bool Shared { get; set; }
         [DataMember]
-        public bool Active { get;  set; }
+        public bool Active { get; private set; }
     }
 
     [DataContract]
@@ -127,23 +127,23 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Key { get;  set; }
+        public int Key { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
         public bool IsSelected { get; set; }
         [DataMember]
-        public bool HasKeyPriceListRule { get;  set; }
+        public bool HasKeyPriceListRule { get; private set; }
         [DataMember]
-        public bool HasLinkedPriceListRule { get;  set; }
+        public bool HasLinkedPriceListRule { get; private set; }
         [DataMember]
-        public int KeyPriceListGroupKey { get;  set; }
+        public int KeyPriceListGroupKey { get; private set; }
         [DataMember]
-        public int LinkedPriceListGroupKey { get;  set; }
+        public int LinkedPriceListGroupKey { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
     }
 
     [DataContract]
@@ -191,7 +191,7 @@ namespace APLPX.Entity
         [DataMember]
         public List<PriceRoundingRule> RoundingRules { get; set; }
         [DataMember]
-        public List<SQLEnumeration> RoundingTypes { get;  set; }
+        public List<SQLEnumeration> RoundingTypes { get; private set; }
     }
 
     [DataContract]
@@ -233,7 +233,7 @@ namespace APLPX.Entity
         [DataMember]
         public List<PriceRoundingRule> RoundingRules { get; set; }
         [DataMember]
-        public List<SQLEnumeration> RoundingTypes { get;  set; }
+        public List<SQLEnumeration> RoundingTypes { get; private set; }
     }
 
     [DataContract]
@@ -257,15 +257,15 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Description { get;  set; }
+        public string Description { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public List<PriceMarkupRule> Rules{ get;  set; }
+        public List<PriceMarkupRule> Rules{ get; private set; }
     }
 
     [DataContract]
@@ -289,15 +289,15 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Description { get;  set; }
+        public string Description { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public List<PriceOptimizationRule> Rules { get;  set; }
+        public List<PriceOptimizationRule> Rules { get; private set; }
     }
 
     [DataContract]
@@ -321,15 +321,15 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Description { get;  set; }
+        public string Description { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public List<PriceRoundingRule> Rules { get;  set; }
+        public List<PriceRoundingRule> Rules { get; private set; }
     }
 
     [DataContract]
@@ -352,9 +352,9 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int SkuCount { get;  set; }
+        public int SkuCount { get; private set; }
         [DataMember]
-        public string SalesValue { get;  set; }
+        public string SalesValue { get; private set; }
     }
 
     [DataContract]
@@ -376,13 +376,13 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Key { get;  set; }
+        public int Key { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
     }
 
     [DataContract]
@@ -402,11 +402,11 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public PricingResultsEditType Type { get;  set; }
+        public PricingResultsEditType Type { get; private set; }
     }
 
     [DataContract]
@@ -426,11 +426,11 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public PricingResultsWarningType Type { get;  set; }
+        public PricingResultsWarningType Type { get; private set; }
     }
 
     [DataContract]
@@ -459,14 +459,14 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public string Actual { get;  set; }
+        public string Actual { get; private set; }
         [DataMember]
-        public int SkuCount { get;  set; }
+        public int SkuCount { get; private set; }
         [DataMember]
-        public string SalesValue { get;  set; }
+        public string SalesValue { get; private set; }
     }
 }

@@ -15,7 +15,8 @@ namespace APLPX.UI.WPF.Mappers
         public static Display.Analytic ToDisplayEntity(this DTO.Analytic dto)
         {
             var displayEntity = new Display.Analytic();
-            displayEntity.SearchKey = dto.SearchGroup;
+            displayEntity.SearchGroupKey = dto.SearchGroupKey;
+            displayEntity.SearchGroupId = dto.SearchGroupId;
             displayEntity.Id = dto.Id;
 
             displayEntity.Identity = dto.Identity.ToDisplayEntity();
@@ -73,8 +74,8 @@ namespace APLPX.UI.WPF.Mappers
 
             var dto = new DTO.Analytic(
                                     displayEntity.Id,
-                                    displayEntity.SearchId,
-                                    displayEntity.SearchKey,
+                                    displayEntity.SearchGroupId,
+                                    displayEntity.SearchGroupKey,
                                     identity, 
                                     drivers, 
                                     priceListGroups, 

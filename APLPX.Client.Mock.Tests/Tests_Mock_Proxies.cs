@@ -3,7 +3,8 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using ENTITY = APLPX.Entity;
-using PROX = APLPX.Client.Mock;
+using MOXE = APLPX.Common.Mock.Entity;
+using MOXP = APLPX.Client.Mock.Proxies;
 
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,9 +16,9 @@ namespace APLPX.Client.Mock.Tests
     [TestClass]
     public class MockTests
     {
-        private PROX.MockAnalyticClient AnalyticClient = new PROX.MockAnalyticClient();
-        private PROX.MockUserClient UserClient = new PROX.MockUserClient();
-        private PROX.MockPricingEverydayClient PricingClient = new PROX.MockPricingEverydayClient();
+        private MOXP.MockAnalyticClient AnalyticClient = new MOXP.MockAnalyticClient();
+        private MOXP.MockUserClient UserClient = new MOXP.MockUserClient();
+        private MOXP.MockPricingEverydayClient PricingClient = new MOXP.MockPricingEverydayClient();
         //private User User;
         //private Session<NullT> InitSession;
         //private Session<NullT> AuthSession;
@@ -150,7 +151,8 @@ namespace APLPX.Client.Mock.Tests
         [TestMethod]
         public void Load_Pricing_By_Id()
         {
-            var p = PricingClient.LoadPricingEveryday(new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+            var p = PricingClient.LoadPricingEveryday(new ENTITY.Session<ENTITY.PricingEveryday> { 
+                                    Data = new ENTITY.PricingEveryday(1, new ENTITY.PricingIdentity())});
             Assert.IsNotNull(p);
         }
 
@@ -167,7 +169,7 @@ namespace APLPX.Client.Mock.Tests
             var client = new MongoDB.Driver.MongoClient(connectionString);
             var server = client.GetServer();
             var database = server.GetDatabase(databaseName);
-            var pricing = database.GetCollection<PROX.Entity.PricingEveryday>("PricingAll_NoFilters");
+            var pricing = database.GetCollection<MOXE.PricingEveryday>("PricingAll_NoFilters");
             var cursor = pricing.FindAll();
             cursor.SetFields(MongoDB.Driver.Builders.Fields.Include("Identity", "Id"));
             var items = cursor.ToList();
@@ -189,7 +191,7 @@ namespace APLPX.Client.Mock.Tests
         public void Load_Pricing_Filters()
         {
             var p = PricingClient.LoadFilters(
-                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday(1,new ENTITY.PricingIdentity()) });
             Assert.IsNotNull(p);
         }
 
@@ -198,7 +200,7 @@ namespace APLPX.Client.Mock.Tests
         public void Load_Pricing_Results()
         {
             var p = PricingClient.LoadResults(
-                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday(1, new ENTITY.PricingIdentity()) });
             Assert.IsNotNull(p.Data);
         }
 
@@ -206,7 +208,7 @@ namespace APLPX.Client.Mock.Tests
         public void Load_Pricing_Drivers()
         {
             var p = PricingClient.LoadDrivers(
-                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday(1, new ENTITY.PricingIdentity()) });
             Assert.IsNotNull(p);
         }
 
@@ -215,7 +217,7 @@ namespace APLPX.Client.Mock.Tests
         public void Load_Pricing_PriceLists()
         {
             var p = PricingClient.LoadPriceLists(
-                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday { Id = 1 } });
+                new ENTITY.Session<ENTITY.PricingEveryday> { Data = new ENTITY.PricingEveryday(1, new ENTITY.PricingIdentity()) });
             Assert.IsNotNull(p);
         }
 
@@ -326,5 +328,7 @@ namespace APLPX.Client.Mock.Tests
         //    //Assert
         //    Assert.IsNotNull(response);
         //}
+ 
+ 
     }
 }

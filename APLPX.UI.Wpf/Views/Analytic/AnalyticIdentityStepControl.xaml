@@ -45,7 +45,8 @@
                Grid.Column="0"
                Content="_Analytic Name:"
                Style="{StaticResource IdentityLabelStyle}"
-               Target="{Binding ElementName=txtName}" />
+               Target="{Binding ElementName=txtName}"
+               ToolTip="{Binding Path=Analytic.Id}" />
 
         <TextBox x:Name="txtName"
                  Grid.Row="0"
@@ -98,7 +99,7 @@
                   DisplayMemberPath="Name"
                   ItemsSource="{Binding Path=AssignableFolders}"
                   SelectedValue="{Binding Path=Analytic.SearchKey}"
-                  SelectedValuePath="SearchKey"
+                  SelectedValuePath="SearchGroupKey"
                   Style="{StaticResource MetroComboBox}">
             <ComboBox.Resources>
                 <!--

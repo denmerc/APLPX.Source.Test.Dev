@@ -12,6 +12,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private int _id;
+        private int _searchGroupId;
         private string _sqlKey;
         private UserIdentity _identity;
         private UserRole _role;
@@ -46,6 +47,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _id; }
             set { this.RaiseAndSetIfChanged(ref _id, value); }
+        }
+
+        public int SearchGroupId
+        {
+            get { return _searchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroupId, value); }
         }
 
         public string SqlKey
@@ -106,7 +113,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _parentKey, value); }
         }
 
-        public string SearchKey
+        public string SearchGroupKey
         {
             get { return _searchKey; }
             set { this.RaiseAndSetIfChanged(ref _searchKey, value); }

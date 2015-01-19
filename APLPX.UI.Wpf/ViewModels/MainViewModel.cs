@@ -96,7 +96,7 @@ namespace APLPX.UI.WPF.ViewModels
             CurrentUser = session.User.ToDisplayEntity();
 
             //TODO: COMMENT THIS OUT WHEN UserService is updated to work with new entity model:
-            Modules = DisplayModuleGenerator.CreateSampleModules();
+            //Modules = DisplayModuleGenerator.CreateSampleModules();
 
             //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
             Modules = session.Modules.ToDisplayEntities();
@@ -617,7 +617,10 @@ namespace APLPX.UI.WPF.ViewModels
 
                             
                             ////TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
-                            var displayAnalytics = base.Session.Analytics.ToDisplayEntities();
+
+
+
+                            var displayAnalytics = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = Session.SqlKey }).Data.ToDisplayEntities();
                             var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
                             SelectedFeature.SearchableEntities = iSearchables;
 
@@ -641,7 +644,7 @@ namespace APLPX.UI.WPF.ViewModels
                     case DTO.ModuleFeatureType.PlanningKitPricing:
                         //if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         //{
-                        //    var pricing = base.Session.Pricing.ToDisplayEntities();
+                            //var pricing = _pricingEverydayService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = Session.SqlKey }).Data;
                         //    SelectedFeature.SearchableEntities = pricing.Cast<ISearchableEntity>().ToList();
                         //    _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
                         //}
@@ -722,10 +725,10 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Filters
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsFilters:
-                    result = new FilterViewModel(SelectedAnalytic, SelectedAnalytic.FilterGroups);
+                    result = new FilterViewModel(SelectedAnalytic);
                     break;
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingFilters:
-                    result = new FilterViewModel(SelectedPricingEveryday, SelectedPricingEveryday.FilterGroups);
+                    result = new FilterViewModel(SelectedPricingEveryday);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingFilters:
@@ -942,9 +945,9 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void OnSearchGroupReassigned(SearchGroupsUpdatedEvent data)
         {
-            if (data.SourceEntity.SearchKey != data.DestinationSearchGroup.SearchKey)
+            if (data.SourceEntity.SearchGroupKey != data.DestinationSearchGroup.SearchGroupKey)
             {
-                data.SourceEntity.SearchKey = data.DestinationSearchGroup.SearchKey;
+                data.SourceEntity.SearchGroupKey = data.DestinationSearchGroup.SearchGroupKey;
                 data.SourceEntity.ParentFolderName = data.DestinationSearchGroup.Name;
                 SelectedFeature.RecalculateSearchItemCounts();
 

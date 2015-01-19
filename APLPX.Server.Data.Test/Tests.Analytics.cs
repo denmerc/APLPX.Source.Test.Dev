@@ -16,6 +16,8 @@ namespace APLPX.Tests.Server.Data {
         private AnalyticData _AnalyticData;
         private System.Diagnostics.TraceListener listener;
         private String dateStamp = System.DateTime.Now.ToLongDateString();
+        private String timeStamp = System.DateTime.Now.ToLongTimeString();
+        private String uniqueStamp = String.Format(" {0}, {1}", System.DateTime.Now.ToLongDateString(), DateTime.Now.ToLongTimeString());
         #endregion
         #region Constants...
         private const String traceFile = @"\APLPX.Tests.Server.Data.log";
@@ -454,5 +456,57 @@ namespace APLPX.Tests.Server.Data {
             this.listener.WriteLine("End - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             Assert.IsTrue(responseLoad.SessionOk);
         }
+
+        //Analytic routine save identity with validation...
+        [TestMethod, TestCategory("Analytics update")]
+        public void TEST24_GivenUserSaveAnalyticIdentity_WhenAnalyticSessionValid_ThenSuccessStatusRecdAndValidIdentitySaved() {
+            Boolean sessionLoaded = false;
+            var existingAnalytic = new Analytic(7); //analyst owns 4,5,7
+            Session<APLPX.Entity.Analytic> responseLoad = _AnalyticData.LoadIdentity(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic });
+
+            this.listener.WriteLine("Begin Identity load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+            try {
+                this.listener.WriteLine(String.Format("Session valid: {0}", (responseLoad.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine(String.Format("Client message: {0}", responseLoad.ClientMessage)); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine(String.Format("Server message: {0}", responseLoad.ServerMessage)); this.listener.WriteLine(lineBreak);
+
+                Assert.IsNotNull(responseLoad.Data.Identity);
+                this.listener.WriteLine(String.Format("Load: {0}", responseLoad.Data.Identity.Description)); this.listener.WriteLine(lineBreak);
+
+                sessionLoaded = responseLoad.SessionOk;
+                Assert.IsTrue(responseLoad.SessionOk);
+            }
+            catch (System.Exception ex) {
+                this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
+            }
+
+            if (sessionLoaded) {
+                var newAnalytic = new APLPX.Entity.Analytic(existingAnalytic.Id, responseLoad.Data.Identity);
+                newAnalytic.Identity.Description = String.Format("{0}, Test: {1}", newAnalytic.Identity.Name, this.uniqueStamp);
+                Session<APLPX.Entity.Analytic> responseSave = _AnalyticData.SaveIdentity(new Session<Analytic> { SqlKey = SQLKEYANALYST, Data = newAnalytic });
+
+                this.listener.WriteLine("Begin Identity save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+                try {                 
+                    this.listener.WriteLine(String.Format("Session valid: {0}", (responseSave.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
+                    this.listener.WriteLine(String.Format("Client message: {0}", responseSave.ClientMessage)); this.listener.WriteLine(lineBreak);
+                    this.listener.WriteLine(String.Format("Server message: {0}", responseSave.ServerMessage)); this.listener.WriteLine(lineBreak);
+
+                    Assert.IsNotNull(responseSave.Data.Identity);
+                    this.listener.WriteLine(String.Format("Saved: {0}", responseSave.Data.Identity.Description)); this.listener.WriteLine(lineBreak);
+
+                    Assert.IsTrue(responseSave.SessionOk);
+                    Assert.AreEqual(responseSave.ClientMessage, String.Empty);
+                    Assert.AreEqual(responseSave.ServerMessage, String.Empty);
+                }
+                catch (System.Exception ex) {
+                    this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
+                    this.listener.WriteLine("End - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+                }
+                Assert.IsTrue(responseSave.SessionOk);
+            }
+            this.listener.WriteLine("End - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+            Assert.IsTrue(responseLoad.SessionOk);
+        }
+    
     }
 }

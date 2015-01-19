@@ -293,7 +293,7 @@ namespace APLPX.Common.Mock.Entity
             Name = name;
             ItemCount = itemCount;
             SearchId = searchId;
-            SearchGroup = searchGroup;
+            SearchGroupKey = searchGroup;
             ParentName = parentName;
             IsNameChanged = isNameChanged;
             IsSearchGroupChanged = isSearchGroupChanged;
@@ -306,7 +306,7 @@ namespace APLPX.Common.Mock.Entity
         [DataMember]
         public int SearchId { get;  set; }
         [DataMember]
-        public string SearchGroup { get;  set; }
+        public string SearchGroupKey { get;  set; }
         [DataMember]
         public string Name { get; set; }
         [DataMember]

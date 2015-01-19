@@ -22,45 +22,45 @@ namespace APLPX.Entity
         }
         public Analytic(
             int id,
-            int searchId
+            int searchGroupId
             ) {
             Id = id;
-            SearchId = searchId;
+            SearchGroupId = searchGroupId;
         }
         public Analytic(
             int id,
-            string searchGroup
+            string searchGroupKey
             ) {
             Id = id;
-            SearchGroup = searchGroup;
+            SearchGroupKey = searchGroupKey;
         }
         public Analytic(
             int id,
-            int searchId,
+            int searchGroupId,
             AnalyticIdentity identity
             ) {
             Id = id;
-            SearchId = searchId;
+            SearchGroupId = searchGroupId;
             Identity = identity;
         }
         public Analytic(
             int id,
-            string searchGroup,
+            string searchGroupKey,
             AnalyticIdentity identity
             ) {
             Id = id;
-            SearchGroup = searchGroup;
+            SearchGroupKey = searchGroupKey;
             Identity = identity;
         }
         public Analytic(
             int id,
-            int searchId,
-            string searchGroup,
+            int searchGroupId,
+            string searchGroupKey,
             AnalyticIdentity identity
             ) {
             Id = id;
-            SearchId = searchId;
-            SearchGroup = searchGroup;
+            SearchGroupId = searchGroupId;
+            SearchGroupKey = searchGroupKey;
             Identity = identity;
         }
         public Analytic(
@@ -93,16 +93,16 @@ namespace APLPX.Entity
         }
         public Analytic(
             int id,
-            int searchId,
-            string searchGroup,
+            int searchGroupId,
+            string searchGroupKey,
             AnalyticIdentity identity,
             List<AnalyticValueDriver> valueDrivers,
             List<AnalyticPriceListGroup> priceListGroups,
             List<FilterGroup> filterGroups
             ) {
             Id = id;
-            SearchId = searchId;
-            SearchGroup = searchGroup;
+            SearchGroupId = searchGroupId;
+            SearchGroupKey = searchGroupKey;
             Identity = identity;
             ValueDrivers = valueDrivers;
             PriceListGroups = priceListGroups;
@@ -111,19 +111,19 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int Id { get;  set; }
+        public int Id { get; private set; }
         [DataMember]
-        public int SearchId { get; set; }
+        public int SearchGroupId { get; set; }
         [DataMember]
-        public string SearchGroup { get;  set; }
+        public string SearchGroupKey { get; private set; }
         [DataMember]
-        public AnalyticIdentity Identity { get;  set; }
+        public AnalyticIdentity Identity { get; private set; }
         [DataMember]
-        public List<AnalyticValueDriver> ValueDrivers { get;  set; }
+        public List<AnalyticValueDriver> ValueDrivers { get; private set; }
         [DataMember]
-        public List<AnalyticPriceListGroup> PriceListGroups { get;  set; }
+        public List<AnalyticPriceListGroup> PriceListGroups { get; private set; }
         [DataMember]
-        public List<FilterGroup> FilterGroups { get;  set; }
+        public List<FilterGroup> FilterGroups { get; private set; }
     }
 
     [DataContract]
@@ -184,23 +184,23 @@ namespace APLPX.Entity
         [DataMember]
         public string Notes { get; set; }
         [DataMember]
-        public DateTime Refreshed { get;  set; }
+        public DateTime Refreshed { get; private set; }
         [DataMember]
-        public string RefreshedText { get;  set; }
+        public string RefreshedText { get; private set; }
         [DataMember]
-        public DateTime Created { get;  set; }
+        public DateTime Created { get; private set; }
         [DataMember]
-        public string CreatedText { get;  set; }
+        public string CreatedText { get; private set; }
         [DataMember]
-        public DateTime Edited { get;  set; }
+        public DateTime Edited { get; private set; }
         [DataMember]
-        public string EditedText { get;  set; }
+        public string EditedText { get; private set; }
         [DataMember]
-        public string Author { get;  set; }
+        public string Author { get; private set; }
         [DataMember]
-        public string Editor { get;  set; }
+        public string Editor { get; private set; }
         [DataMember]
-        public string Owner { get;  set; }
+        public string Owner { get; private set; }
         [DataMember]
         public bool Shared { get; set; }
         [DataMember]
@@ -249,9 +249,9 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public List<AnalyticValueDriverMode> Modes { get;  set; }
+        public List<AnalyticValueDriverMode> Modes { get; private set; }
         [DataMember]
-        public List<AnalyticResultValueDriverGroup> Results { get;  set; }
+        public List<AnalyticResultValueDriverGroup> Results { get; private set; }
 
         #region Driver mode name indexer...
         public AnalyticValueDriverMode this[string index] {
@@ -294,7 +294,7 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public List<ValueDriverGroup> Groups { get;  set; }
+        public List<ValueDriverGroup> Groups { get; private set; }
     }
 
     [DataContract]
@@ -320,9 +320,9 @@ namespace APLPX.Entity
         [DataMember]
         public bool Run { get; set; }
         [DataMember]
-        public int SkuCount { get;  set; }
+        public int SkuCount { get; private set; }
         [DataMember]
-        public string SalesValue { get;  set; }
+        public string SalesValue { get; private set; }
     }
 
     [DataContract]
@@ -342,7 +342,7 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public List<PriceList> PriceLists { get;  set; }
+        public List<PriceList> PriceLists { get; private set; }
     }
 }
 

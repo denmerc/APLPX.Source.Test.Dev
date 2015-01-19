@@ -58,32 +58,22 @@
     <Compile Include="CommonEntities\Mock.Entity.Session.cs" />
     <Compile Include="CommonEntities\Mock.Entity.User.cs" />
     <Compile Include="CommonEntities\SessionList.cs" />
+    <Compile Include="Mappers\AnalyticMapper.cs" />
+    <Compile Include="Mappers\DriverGroupMapper.cs" />
+    <Compile Include="Mappers\FilterMapper.cs" />
+    <Compile Include="Mappers\IdentityMapper.cs" />
+    <Compile Include="Mappers\ModeMapper.cs" />
+    <Compile Include="Mappers\ModuleMapper.cs" />
+    <Compile Include="Mappers\PriceListMapper.cs" />
+    <Compile Include="Mappers\PriceRulesMapper.cs" />
+    <Compile Include="Mappers\PricingMapper.cs" />
+    <Compile Include="Mappers\ResultMapper.cs" />
+    <Compile Include="Mappers\SearchGroupMapper.cs" />
+    <Compile Include="Mappers\SQLEnumerationMapper.cs" />
+    <Compile Include="Mappers\UserMapper.cs" />
+    <Compile Include="Mappers\ValueDriverMapper.cs" />
     <Compile Include="MockAnalyticClient.cs" />
     <Compile Include="MockEntities\Mapper.cs" />
-    <Compile Include="MockEntities\Mock.Entity.Analytics.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MockEntities\Mock.Entity.Common.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MockEntities\Mock.Entity.Common.Navigation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MockEntities\Mock.Entity.Common.Pricing.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MockEntities\Mock.Entity.Pricing.Everyday.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MockEntities\Mock.Entity.Session.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MockEntities\Mock.Entity.User.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MockEntities\SessionList.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MockPricingEverydayClient.cs" />
     <Compile Include="MockUserClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

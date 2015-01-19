@@ -5,18 +5,20 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class PricingPromotion : DisplayEntityBase, ISearchableEntity
+    public class PricingPromotion : DisplayEntityBase, ISearchableEntity, IFilterContainer
     {
         #region Private Fields
 
         private int _id;
         private PricingIdentity _identity;
         private List<FilterGroup> _filterGroups;
+        private int _searchGroupId;
         private string _searchGroupKey;
         private string _parentKey;
         private bool _canNameChange;
         private bool _canSearchKeyChange;
         private string _parentFolderName;
+        private FilterGroup _selectedFilterGroup;
 
         #endregion
 
@@ -37,7 +39,13 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _id, value); }
         }
 
-        public string SearchKey
+        public int SearchGroupId
+        {
+            get { return _searchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroupId, value); }
+        }
+
+        public string SearchGroupKey
         {
             get { return _searchGroupKey; }
             set { this.RaiseAndSetIfChanged(ref _searchGroupKey, value); }
@@ -88,6 +96,12 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _parentFolderName, value); }
         }
 
+        public FilterGroup SelectedFilterGroup
+        {
+            get { return _selectedFilterGroup; }
+            set { this.RaiseAndSetIfChanged(ref _selectedFilterGroup, value); }
+        }
+
         #endregion
 
         public override string ToString()
@@ -102,5 +116,6 @@ namespace APLPX.UI.WPF.DisplayEntities
 
             return result;
         }
+
     }
 }

@@ -344,10 +344,10 @@ namespace APLPX.UI.WPF.Helpers
                      feature.TypeId == DTO.ModuleFeatureType.PlanningPromotionPricing)
             {
                 string myFolders = "My Folders";
-                searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Recent", SearchKey = "searchKey001", Sort = 1, ItemCount = 2 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Restoration Parts", SearchKey = "searchKey111", Sort = 4, ItemCount = 6 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Hi Performance & Aftermarket", SearchKey = "searchKey112", Sort = 5, ItemCount = 4 });
-                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Apparel & Novelties", SearchKey = "searchKey113", Sort = 6, ItemCount = 8 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = "Recent", Name = "Recent", SearchGroupKey = "searchKey001", Sort = 1, ItemCount = 2 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Restoration Parts", SearchGroupKey = "searchKey111", Sort = 4, ItemCount = 6 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Hi Performance & Aftermarket", SearchGroupKey = "searchKey112", Sort = 5, ItemCount = 4 });
+                searchGroups.Add(new FeatureSearchGroup { ParentName = myFolders, Name = "Apparel & Novelties", SearchGroupKey = "searchKey113", Sort = 6, ItemCount = 8 });
 
                 //Make "My Folder" items editable and movable.
                 var editableSearchGroups = searchGroups.Where(group => group.ParentName == myFolders);
@@ -380,7 +380,7 @@ namespace APLPX.UI.WPF.Helpers
                         ISearchableEntity entity = GetSearchEntity(feature, id);
                         if (entity != null)
                         {
-                            entity.SearchKey = searchGroup.SearchKey;
+                            entity.SearchGroupKey = searchGroup.SearchGroupKey;
                             searchEntities.Add(entity);
                         }
                     }

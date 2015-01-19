@@ -14,6 +14,16 @@ namespace APLPX.UI.WPF.Interfaces
         int Id { get; set; }
 
         /// <summary>
+        /// Gets/sets the search ID of the this item.
+        /// </summary>
+        int SearchGroupId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the search key of this item.
+        /// </summary>
+        string SearchGroupKey { get; set; }
+
+        /// <summary>
         /// Gets/sets the parent key of this item.
         /// </summary>
         string ParentKey { get; set; }
@@ -22,11 +32,6 @@ namespace APLPX.UI.WPF.Interfaces
         /// Gets/sets the name of this item's parent folder.
         /// </summary>
         string ParentFolderName { get; set; }
-
-        /// <summary>
-        /// Gets/sets the search key of this item.
-        /// </summary>
-        string SearchKey { get; set; }
 
         /// <summary>
         /// Gets the type name of the concrete entity.

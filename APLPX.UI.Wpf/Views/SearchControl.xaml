@@ -14,25 +14,77 @@
 
 
     <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
-        <!--
-            <Grid.Background>
-            <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg"
-            Stretch="UniformToFill"/>
-            </Grid.Background>
-        -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <views:SearchGroupSelector x:Name="ucSearchGroupSelector" Grid.Column="0" />
+        <views:SearchGroupSelector x:Name="ucSearchGroupSelector"
+                                   Grid.Row="0"
+                                   Grid.RowSpan="1"
+                                   Grid.Column="0" />
+
+        <!--  For diagnostics only  -->
+        <DataGrid x:Name="dgSearchableEntityDiagnostics"
+                  Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Margin="15,0,0,0"
+                  AutoGenerateColumns="False"
+                  Visibility="Collapsed"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding Path=SelectedFeature.SearchableEntities}"
+                  SelectionMode="Single">
+
+            <DataGrid.Resources>
+                <Style x:Key="CenteredElementStyle" TargetType="{x:Type TextBlock}">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="60"
+                                    Binding="{Binding Path=Id}"
+                                    ElementStyle="{StaticResource CenteredElementStyle}"
+                                    Header="Entity Id" />
+
+                <DataGridTextColumn Binding="{Binding Path=Identity.Name}" Header="Entity Name" />
+
+                <DataGridTextColumn Binding="{Binding Path=ParentFolderName}" Header="Folder" />
+
+                <DataGridTextColumn Binding="{Binding Path=SearchGroupKey}" Header="Search Group Key" Width="75" />
+
+                <DataGridTextColumn Width="60"
+                                    Binding="{Binding Path=SearchId}"
+                                    ElementStyle="{StaticResource CenteredElementStyle}"
+                                    Header="Search Id" />
+
+                <DataGridCheckBoxColumn Width="75"
+                                        Binding="{Binding Path=CanSearchKeyChange}"
+                                        Header="Folder Editable" />
+
+                <DataGridCheckBoxColumn Width="75"
+                                        Binding="{Binding Path=CanNameChange}"
+                                        Header="Name Editable" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--  End: For diagnostics only  -->
 
         <StackPanel x:Name="DetailStackPanel"
+                    Grid.Row="0"
                     Grid.Column="1"
                     Margin="15,0,0,0"
                     HorizontalAlignment="Left"
                     Visibility="{Binding IsDetailDisplayed,
                                          Converter={StaticResource BooleanToVisibilityConverter}}">
+
             <Label Width="500"
                    Margin="5,30,0,15"
                    Style="{StaticResource SearchControlTitleLabelStyle}">
@@ -53,12 +105,12 @@
                       DataContext="{Binding Path=SelectedFeature.SelectedEntity}">
                     <Grid.Resources>
                         <Style BasedOn="{StaticResource SearchControlSelectedItemDetailStyle}" TargetType="{x:Type TextBlock}">
-                            <Setter Property="Margin" Value="3,5"/>
+                            <Setter Property="Margin" Value="3,5" />
                         </Style>
                     </Grid.Resources>
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"  />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -81,6 +133,7 @@
 
                     <TextBlock Grid.Row="0"
                                Grid.Column="0"
+                               ToolTip="{Binding Path=Id}"
                                Text="Name:" />
                     <TextBlock Grid.Row="0"
                                Grid.Column="1"

@@ -12,7 +12,7 @@
         <ResourceDictionary>
             <CollectionViewSource x:Key="cvsResults" Source="{Binding Results}">
                 <CollectionViewSource.GroupDescriptions>
-                    <PropertyGroupDescription PropertyName="Id" />
+                    <PropertyGroupDescription PropertyName="DriverName" />
                 </CollectionViewSource.GroupDescriptions>
                 <CollectionViewSource.SortDescriptions>
                     <scm:SortDescription PropertyName="Id" />
@@ -49,7 +49,7 @@
                   ItemsSource="{Binding Source={StaticResource cvsResults}}"
                   Visibility="Visible" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding DriverName}" Header="Driver Name" />               
+                <DataGridTextColumn Binding="{Binding DriverName}" Visibility="Hidden" Header="Driver Name" />             
                 <DataGridTextColumn Binding="{Binding SkuCount}" Header="Sku Count" />
                 <DataGridTextColumn Binding="{Binding MinOutlier}" Header="Min Value" />
                 <DataGridTextColumn Binding="{Binding MaxOutlier}" Header="Max Value" />
@@ -73,7 +73,7 @@
                                             <Expander.Header>
                                                 <Grid>
 
-                                                    <TextBlock Text="{Binding Name, StringFormat={}Group {0}}" />
+                                                    <TextBlock Text="{Binding Name, StringFormat={}{0}}" />
                                                 </Grid>
                                             </Expander.Header>
                                             <ItemsPresenter />

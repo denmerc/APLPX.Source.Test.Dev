@@ -31,7 +31,7 @@ namespace APLPX.UI.WPF.Helpers
         {
             var copy = new Analytic();
 
-            copy.SearchKey = source.SearchKey;
+            copy.SearchGroupKey = source.SearchGroupKey;
 
             DateTime createdDate = DateTime.Now;
             copy.Identity.Created = createdDate;
@@ -206,7 +206,7 @@ namespace APLPX.UI.WPF.Helpers
 
             foreach (Analytic item in list)
             {
-                sb.AppendFormat("{0}|{1}|{2}|{3}\n", item.Id, item.SearchKey, item.Identity.Name, item.Identity.Owner);
+                sb.AppendFormat("{0}|{1}|{2}|{3}\n", item.Id, item.SearchGroupKey, item.Identity.Name, item.Identity.Owner);
             }
 
             string result = sb.ToString();
@@ -223,7 +223,7 @@ namespace APLPX.UI.WPF.Helpers
             {
                 foreach (FeatureSearchGroup searchGroup in grouping)
                 {
-                    var matchingEntities = feature.SearchableEntities.Where(item => item.SearchKey == searchGroup.SearchKey);
+                    var matchingEntities = feature.SearchableEntities.Where(item => item.SearchGroupKey == searchGroup.SearchGroupKey);
                     foreach (ISearchableEntity entity in matchingEntities)
                     {
                         Analytic analytic = entity as Analytic;
@@ -231,7 +231,7 @@ namespace APLPX.UI.WPF.Helpers
                                             grouping.Key, 
                                             searchGroup.Name, 
                                             searchGroup.ItemCount, 
-                                            searchGroup.SearchKey, 
+                                            searchGroup.SearchGroupKey, 
                                             entity.Id, 
                                             analytic.Identity.Name, 
                                             analytic.Identity.Owner };

@@ -11,8 +11,8 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
-        private int _searchId;
-        private string _searchKey;
+        private int _searchGroupId;
+        private string _searchGroupKey;
         private short _itemCount;
         private string _name;
         private string _parentName;
@@ -36,16 +36,16 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Properties
 
-        public int SearchId
+        public int SearchGroupId
         {
-            get { return _searchId; }
-            set { this.RaiseAndSetIfChanged(ref _searchId, value); }
+            get { return _searchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroupId, value); }
         }
 
-        public string SearchKey
+        public string SearchGroupKey
         {
-            get { return _searchKey; }
-            set { this.RaiseAndSetIfChanged(ref _searchKey, value); }
+            get { return _searchGroupKey; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroupKey, value); }
         }
 
         public short ItemCount
@@ -126,7 +126,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             object[] values = { GetType().Name, 
                                 ParentName, 
                                 Name, 
-                                SearchKey, 
+                                SearchGroupKey, 
                                 ItemCount, 
                                 IsSubGroup, 
                                 HasSubGroups, 

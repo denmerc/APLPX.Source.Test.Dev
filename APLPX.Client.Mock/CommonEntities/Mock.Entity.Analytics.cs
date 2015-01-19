@@ -39,7 +39,7 @@ namespace APLPX.Common.Mock.Entity
             string searchGroup
             ) {
             Id = id;
-            SearchGroup = searchGroup;
+            SearchGroupKey = searchGroup;
         }
         public Analytic(
             int id,
@@ -56,7 +56,7 @@ namespace APLPX.Common.Mock.Entity
             AnalyticIdentity identity
             ) {
             Id = id;
-            SearchGroup = searchGroup;
+            SearchGroupKey = searchGroup;
             Identity = identity;
         }
         public Analytic(
@@ -67,7 +67,7 @@ namespace APLPX.Common.Mock.Entity
             ) {
             Id = id;
             SearchId = searchId;
-            SearchGroup = searchGroup;
+            SearchGroupKey = searchGroup;
             Identity = identity;
         }
         public Analytic(
@@ -109,7 +109,7 @@ namespace APLPX.Common.Mock.Entity
             ) {
             Id = id;
             SearchId = searchId;
-            SearchGroup = searchGroup;
+            SearchGroupKey = searchGroup;
             Identity = identity;
             ValueDrivers = valueDrivers;
             PriceListGroups = priceListGroups;
@@ -124,7 +124,7 @@ namespace APLPX.Common.Mock.Entity
         public int SearchId { get; set; }
         [DataMember]
         [BsonElement("SearchGroupKey")]
-        public string SearchGroup { get;  set; }
+        public string SearchGroupKey { get; set; }
         [DataMember]
         public AnalyticIdentity Identity { get;  set; }
         [DataMember]

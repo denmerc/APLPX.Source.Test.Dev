@@ -6,13 +6,14 @@ using System.Linq;
 using APLPX.Client.Contracts;
 using ENT = APLPX.Entity;
 using DTO = APLPX.Common.Mock.Entity;
+using APLPX.Client.Mock.Mappers;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
 
 
-namespace APLPX.Client.Mock
+namespace APLPX.Client.Mock.Proxies
 {
     public class MockAnalyticClient : IAnalyticService
     {
@@ -120,66 +121,69 @@ namespace APLPX.Client.Mock
         public ENT.Session<List<ENT.Module>> LoadModules(ENT.Session<ENT.NullT> session)
         {
             var modules = Modules.AsQueryable().ToList();
+            
             return new ENT.Session<List<ENT.Module>>
             {
-                Data = (from mod in modules
-                        select new ENT.Module
-                        {
-                            Name = mod.Name,
-                            Sort = mod.Sort,
-                            Title = mod.Title,
-                            Type = mod.Type,
-                            Features = (from f in mod.Features
-                                        select new ENT.ModuleFeature
-                                        {
-                                            ActionStepType = f.ActionStepType,
-                                            LandingStepType = f.LandingStepType,
-                                            Name = f.Name,
-                                            //Roles = (from r in f.Roles
-                                            //         select new ENT.UserRole
-                                            //         {
-                                            //             Description = r.Description,
-                                            //             Id = r.Id,
-                                            //             Name = r.Name
-                                            //         }).ToList(),
-                                            SearchGroups = (from sg in f.SearchGroups
-                                                            select new ENT.FeatureSearchGroup
-                                                            {
-                                                                CanNameChange = sg.CanNameChange,
-                                                                CanSearchGroupChange = sg.CanSearchGroupChange,
-                                                                IsNameChanged = sg.IsNameChanged,
-                                                                IsSearchGroupChanged = sg.IsSearchGroupChanged,
-                                                                ItemCount = sg.ItemCount,
-                                                                Name = sg.Name,
-                                                                ParentName = sg.ParentName,
-                                                                SearchGroup = sg.SearchGroup,
-                                                                Sort = sg.Sort
-                                                            }).ToList(),
-                                            Sort = f.Sort,
-                                            Steps = (from st in f.Steps
-                                                     select new ENT.ModuleFeatureStep
-                                                     {
-                                                         Actions = (from a in st.Actions
-                                                                    select new ENT.ModuleFeatureStepAction
-                                                                    {
-                                                                        Name = a.Name,
-                                                                        ParentName = a.ParentName,
-                                                                        Sort = a.Sort,
-                                                                        Title = a.Title,
-                                                                        Type = a.Type
-                                                                    }).ToList(),
-                                                         Name = st.Name,
-                                                         Sort = st.Sort,
-                                                         Title = st.Title,
-                                                         Type = st.Type
-                                                     }).ToList(),
-                                            Title = f.Title,
-                                            Type = f.Type
-                                        }).ToList()
-                                        //,
+                Data = modules.ToDTOs()
 
-                            //Roles = (from r in mod.Roles select new ENT.UserRole { Name = r.Name }).ToList()
-                        }).ToList()
+                     //Data = (from mod in modules
+                     //   select new ENT.Module
+                     //   {
+                     //       Name = mod.Name,
+                     //       Sort = mod.Sort,
+                     //       Title = mod.Title,
+                     //       Type = mod.Type,
+                     //       Features = (from f in mod.Features
+                     //                   select new ENT.ModuleFeature
+                     //                   {
+                     //                       ActionStepType = f.ActionStepType,
+                     //                       LandingStepType = f.LandingStepType,
+                     //                       Name = f.Name,
+                     //                       //Roles = (from r in f.Roles
+                     //                       //         select new ENT.UserRole
+                     //                       //         {
+                     //                       //             Description = r.Description,
+                     //                       //             Id = r.Id,
+                     //                       //             Name = r.Name
+                     //                       //         }).ToList(),
+                     //                       SearchGroups = (from sg in f.SearchGroups
+                     //                                       select new ENT.FeatureSearchGroup
+                     //                                       {
+                     //                                           CanNameChange = sg.CanNameChange,
+                     //                                           CanSearchGroupChange = sg.CanSearchGroupChange,
+                     //                                           IsNameChanged = sg.IsNameChanged,
+                     //                                           IsSearchGroupChanged = sg.IsSearchGroupChanged,
+                     //                                           ItemCount = sg.ItemCount,
+                     //                                           Name = sg.Name,
+                     //                                           ParentName = sg.ParentName,
+                     //                                           SearchGroupKey = sg.SearchGroupKey,
+                     //                                           Sort = sg.Sort
+                     //                                       }).ToList(),
+                     //                       Sort = f.Sort,
+                     //                       Steps = (from st in f.Steps
+                     //                                select new ENT.ModuleFeatureStep
+                     //                                {
+                     //                                    Actions = (from a in st.Actions
+                     //                                               select new ENT.ModuleFeatureStepAction
+                     //                                               {
+                     //                                                   Name = a.Name,
+                     //                                                   ParentName = a.ParentName,
+                     //                                                   Sort = a.Sort,
+                     //                                                   Title = a.Title,
+                     //                                                   Type = a.Type
+                     //                                               }).ToList(),
+                     //                                    Name = st.Name,
+                     //                                    Sort = st.Sort,
+                     //                                    Title = st.Title,
+                     //                                    Type = st.Type
+                     //                                }).ToList(),
+                     //                       Title = f.Title,
+                     //                       Type = f.Type
+                     //                   }).ToList()
+                     //                   //,
+
+                     //       //Roles = (from r in mod.Roles select new ENT.UserRole { Name = r.Name }).ToList()
+                     //   }).ToList()
             };
         }
 
@@ -198,435 +202,96 @@ namespace APLPX.Client.Mock
 
             return new ENT.Session<List<ENT.Analytic>>
             {
+                Data = analytics.ToDtos()
                 
-                Data = (from dto in analytics
-                        select new ENT.Analytic
-                        {
-                            Id = dto.Id,
-                            SearchGroup = dto.SearchGroup,
-                            Identity = new ENT.AnalyticIdentity
-                            {
-                                Active = dto.Identity.Active,
-                                Author = dto.Identity.Author,
-                                Created = dto.Identity.Created,
-                                CreatedText = dto.Identity.CreatedText,
-                                Description = dto.Identity.Description,
-                                Edited = dto.Identity.Edited,
-                                EditedText = dto.Identity.EditedText,
-                                Editor = dto.Identity.Editor,
-                                Name = dto.Identity.Name,
-                                Notes = dto.Identity.Notes,
-                                Owner = dto.Identity.Owner,
-                                Refreshed = dto.Identity.Refreshed,
-                                RefreshedText = dto.Identity.RefreshedText,
-                                Shared = dto.Identity.Shared,
+                //Data = (from dto in analytics
+                //        select new ENT.Analytic
+                //        {
+                //            Id = dto.Id,
+                //            SearchGroupKey = dto.SearchGroupKey,
+                //            Identity = new ENT.AnalyticIdentity
+                //            {
+                //                Active = dto.Identity.Active,
+                //                Author = dto.Identity.Author,
+                //                Created = dto.Identity.Created,
+                //                CreatedText = dto.Identity.CreatedText,
+                //                Description = dto.Identity.Description,
+                //                Edited = dto.Identity.Edited,
+                //                EditedText = dto.Identity.EditedText,
+                //                Editor = dto.Identity.Editor,
+                //                Name = dto.Identity.Name,
+                //                Notes = dto.Identity.Notes,
+                //                Owner = dto.Identity.Owner,
+                //                Refreshed = dto.Identity.Refreshed,
+                //                RefreshedText = dto.Identity.RefreshedText,
+                //                Shared = dto.Identity.Shared,
 
-                            },
-                            FilterGroups = (from fg in dto.FilterGroups
-                                            select new ENT.FilterGroup
-                                            {
-                                                Name = fg.Name,
-                                                Sort = fg.Sort,
-                                                Filters = (from f in fg.Filters
-                                                           select new ENT.Filter
-                                                           {
-                                                               Code = f.Code,
-                                                               Id = f.Id,
-                                                               IsSelected = f.IsSelected,
-                                                               Key = f.Key,
-                                                               Name = f.Name,
-                                                               Sort = f.Sort
-                                                           }).ToList()
-                                            }).ToList(),
-                            PriceListGroups = (from pg in dto.PriceListGroups
-                                               select new ENT.AnalyticPriceListGroup
-                                               {
-                                                   Key = pg.Key,
-                                                   Name = pg.Name,
-                                                   Sort = pg.Sort,
-                                                   Title = pg.Title
-                                               }).ToList(),
-                            ValueDrivers = (from vd in dto.ValueDrivers
-                                            select new ENT.AnalyticValueDriver
-                                            {
-                                                Id = vd.Id,
-                                                IsSelected = vd.IsSelected,
-                                                Key = vd.Key,
-                                                Name = vd.Name,
-                                                Sort = vd.Sort,
-                                                Title = vd.Title,
-                                                Modes = (from d in vd.Modes
-                                                         select new ENT.AnalyticValueDriverMode
-                                                         {
-                                                             Name = d.Name,
-                                                             Title = d.Title,
-                                                             Sort = d.Sort,
-                                                             Key = d.Key,
-                                                             IsSelected = d.IsSelected,
-                                                             Groups = (from g in d.Groups
-                                                                       select new ENT.ValueDriverGroup
-                                                                       {
-                                                                           Id = g.Id,
-                                                                           MaxOutlier = g.MaxOutlier,
-                                                                           MinOutlier = g.MinOutlier,
-                                                                           Sort = g.Sort,
-                                                                           Value = g.Value
-                                                                       }).ToList()
-                                                         }).ToList()
+                //            },
+                //            FilterGroups = (from fg in dto.FilterGroups
+                //                            select new ENT.FilterGroup
+                //                            {
+                //                                Name = fg.Name,
+                //                                Sort = fg.Sort,
+                //                                Filters = (from f in fg.Filters
+                //                                           select new ENT.Filter
+                //                                           {
+                //                                               Code = f.Code,
+                //                                               Id = f.Id,
+                //                                               IsSelected = f.IsSelected,
+                //                                               Key = f.Key,
+                //                                               Name = f.Name,
+                //                                               Sort = f.Sort
+                //                                           }).ToList()
+                //                            }).ToList(),
+                //            PriceListGroups = (from pg in dto.PriceListGroups
+                //                               select new ENT.AnalyticPriceListGroup
+                //                               {
+                //                                   Key = pg.Key,
+                //                                   Name = pg.Name,
+                //                                   Sort = pg.Sort,
+                //                                   Title = pg.Title
+                //                               }).ToList(),
+                //            ValueDrivers = (from vd in dto.ValueDrivers
+                //                            select new ENT.AnalyticValueDriver
+                //                            {
+                //                                Id = vd.Id,
+                //                                IsSelected = vd.IsSelected,
+                //                                Key = vd.Key,
+                //                                Name = vd.Name,
+                //                                Sort = vd.Sort,
+                //                                Title = vd.Title,
+                //                                Modes = (from d in vd.Modes
+                //                                         select new ENT.AnalyticValueDriverMode
+                //                                         {
+                //                                             Name = d.Name,
+                //                                             Title = d.Title,
+                //                                             Sort = d.Sort,
+                //                                             Key = d.Key,
+                //                                             IsSelected = d.IsSelected,
+                //                                             Groups = (from g in d.Groups
+                //                                                       select new ENT.ValueDriverGroup
+                //                                                       {
+                //                                                           Id = g.Id,
+                //                                                           MaxOutlier = g.MaxOutlier,
+                //                                                           MinOutlier = g.MinOutlier,
+                //                                                           Sort = g.Sort,
+                //                                                           Value = g.Value
+                //                                                       }).ToList()
+                //                                         }).ToList()
 
-                                            }).ToList()
+                //                            }).ToList()
 
-                        }
+                //        }
                         
                         
-                        ).ToList()
+                //        ).ToList()
             };
         }
 
 
-        public ENT.Session<ENT.Analytic> LoadAnalytic(ENT.Session<ENT.Analytic> session)
-        {
+        
 
-            var a = session.Data as ENT.Analytic;
-            var newA = AnalyticAll_NoFilters.AsQueryable()
-                .Where(x => x.Id == a.Id).SingleOrDefault();
-            if (newA.SearchGroup == null) { newA.SearchGroup = string.Empty; }
-            return new ENT.Session<ENT.Analytic>
-            {
-                Data = new ENT.Analytic
-                {
-                    Id = newA.Id,
-                    SearchGroup = newA.SearchGroup,
-                    Identity = new ENT.AnalyticIdentity {
-                                    Active = newA.Identity.Active,
-                                    Author = newA.Identity.Author,
-                                    Created = newA.Identity.Created,
-                                    CreatedText = newA.Identity.CreatedText,
-                                    Description = newA.Identity.Description,
-                                    Edited = newA.Identity.Edited,
-                                    EditedText = newA.Identity.EditedText,
-                                    Editor = newA.Identity.Editor,
-                                    Name = newA.Identity.Name,
-                                    Notes = newA.Identity.Notes,
-                                    Owner = newA.Identity.Owner,
-                                    Refreshed = newA.Identity.Refreshed,
-                                    RefreshedText = newA.Identity.RefreshedText,
-                                    Shared = newA.Identity.Shared,
-                                    
-                                },
-                    FilterGroups = (from fg in newA.FilterGroups
-                                    select new ENT.FilterGroup
-                                    {
-                                        Name = fg.Name,
-                                        Sort = fg.Sort,
-                                        Filters = (from f in fg.Filters
-                                                   select new ENT.Filter
-                                                   {
-                                                       Code = f.Code,
-                                                       Id = f.Id,
-                                                       IsSelected = f.IsSelected,
-                                                       Key = f.Key,
-                                                       Name = f.Name,
-                                                       Sort = f.Sort
-                                                   }).ToList()
-                                    }).ToList(),
-                    PriceListGroups = (from pg in newA.PriceListGroups
-                                       select new ENT.AnalyticPriceListGroup
-                                       {
-                                           Key = pg.Key,
-                                           Name = pg.Name,
-                                           Sort = pg.Sort,
-                                           Title = pg.Title,
-                                           PriceLists = (from pl in pg.PriceLists
-                                                         select new ENT.PriceList
-                                                         {
-                                                             Code = pl.Code,
-                                                             Id = pl.Id,
-                                                             IsSelected = pl.IsSelected,
-                                                             Key = pl.Key,
-                                                             Name = pl.Name,
-                                                             Title = pl.Title,
-                                                             Sort = pl.Sort
-                                                         }).ToList(),
-                                       }).ToList(),
-                    ValueDrivers = (from vd in newA.ValueDrivers
-                                    select new ENT.AnalyticValueDriver { 
-                                        Id = vd.Id,
-                                        IsSelected = vd.IsSelected,
-                                        Key = vd.Key,
-                                        Name = vd.Name,
-                                        Sort = vd.Sort,
-                                        Title = vd.Title,
-                                        Modes = ( from d in vd.Modes
-                                                  select new ENT.AnalyticValueDriverMode
-                                                  {
-                                                      Name = d.Name,
-                                                      Title = d.Title,
-                                                      Sort = d.Sort,
-                                                      Key = d.Key,
-                                                      IsSelected = d.IsSelected,
-                                                      Groups = ( from g in d.Groups
-                                                                 select new ENT.ValueDriverGroup
-                                                                 {
-                                                                     Id = g.Id,
-                                                                     MaxOutlier = g.MaxOutlier,
-                                                                     MinOutlier = g.MinOutlier,
-                                                                     Sort = g.Sort,
-                                                                     Value = g.Value
-                                                                 }).ToList()
-                                                  }).ToList(),
-                                                             Results = (from r in vd.Results
-                                                                        select new ENT.AnalyticResultValueDriverGroup 
-                                                                        { 
-                                                                            Id = r.Id,
-                                                                            MaxOutlier = r.MaxOutlier,
-                                                                            //MaxValue = r.MaxValue,
-                                                                            MinOutlier = r.MinOutlier,
-                                                                            //MinValue = r.MinValue,
-                                                                            SalesValue = r.SalesValue,
-                                                                            SkuCount = r.SkuCount,
-                                                                            Sort = r.Sort,
-                                                                            Value = r.Value
-                                                                        }).ToList()
-
-
-                                                  
-                                    }).ToList()
-                    
-                }
-            };
-
-        }
-
-        //public ENT.Session<ENT.PricingEveryday> LoadPricingEveryday(ENT.Session<ENT.PricingEveryday> session)
-        //{
-
-        //    var pe = session.Data as ENT.PricingEveryday;
-        //    var newPE = PricingEveryday.AsQueryable()
-        //        .Where(x => x.Id == pe.Id).SingleOrDefault();
-
-
-        //    return new ENT.Session<ENT.PricingEveryday>
-        //    {
-        //        Data = new ENT.PricingEveryday
-        //                  {
-        //                      FilterGroups = (from fg in newPE.FilterGroups
-        //                                      select new ENT.FilterGroup
-        //                                      {
-        //                                          Name = fg.Name,
-        //                                          Sort = fg.Sort,
-        //                                          Filters = (from f in fg.Filters
-        //                                                     select new ENT.Filter
-        //                                                     {
-        //                                                         Code = f.Code,
-        //                                                         Id = f.Id,
-        //                                                         IsSelected = f.IsSelected,
-        //                                                         Key = f.Key,
-        //                                                         Name = f.Name,
-        //                                                         Sort = f.Sort
-        //                                                     }).ToList()
-        //                                      }).ToList(),
-        //                      Id = newPE.Id,
-        //                      Identity = new ENT.PricingIdentity
-        //                      {
-        //                          Active = newPE.Identity.Active,
-        //                          Author = newPE.Identity.Author,
-        //                          Created = newPE.Identity.Created,
-        //                          CreatedText = newPE.Identity.CreatedText,
-        //                          Description = newPE.Identity.Description,
-        //                          Edited = newPE.Identity.Edited,
-        //                          EditedText = newPE.Identity.EditedText,
-        //                          Editor = newPE.Identity.Editor,
-        //                          Name = newPE.Identity.Name,
-        //                          Notes = newPE.Identity.Notes,
-        //                          Owner = newPE.Identity.Owner,
-        //                          Refreshed = newPE.Identity.Refreshed,
-        //                          RefreshedText = newPE.Identity.RefreshedText,
-        //                          Shared = newPE.Identity.Shared,
-        //                      },
-        //                      KeyPriceListRule = new ENT.PricingKeyPriceListRule
-        //                      {
-        //                          DollarRangeLower = newPE.KeyPriceListRule.DollarRangeLower,
-        //                          DollarRangeUpper = newPE.KeyPriceListRule.DollarRangeUpper,
-        //                          PriceListId = newPE.KeyPriceListRule.PriceListId,
-        //                          RoundingRules = (from ru in newPE.KeyPriceListRule.RoundingRules
-        //                                           select new ENT.PriceRoundingRule
-        //                                           {
-        //                                               DollarRangeLower = ru.DollarRangeLower,
-        //                                               DollarRangeUpper = ru.DollarRangeUpper,
-        //                                               Id = ru.Id,
-        //                                               Type = ru.Type,
-        //                                               ValueChange = ru.ValueChange
-        //                                           }).ToList(),
-        //                          RoundingTypes = (from rt in newPE.KeyPriceListRule.RoundingTypes
-        //                                           select new ENT.SQLEnumeration
-        //                                           {
-        //                                               Description = rt.Description,
-        //                                               Name = rt.Name,
-        //                                               Sort = rt.Sort,
-        //                                               Value = rt.Value
-        //                                           }).ToList()
-
-        //                      },
-        //                      KeyValueDriver = new ENT.PricingEverydayKeyValueDriver
-        //                      {
-        //                          Groups = (from g in newPE.KeyValueDriver.Groups
-        //                                    select new ENT.PricingEverydayKeyValueDriverGroup
-        //                                    {
-        //                                        MarkupRules = (from r in g.MarkupRules
-        //                                                       select new ENT.PriceMarkupRule
-        //                                                       {
-        //                                                           DollarRangeLower = r.DollarRangeLower,
-        //                                                           DollarRangeUpper = r.DollarRangeUpper,
-        //                                                           Id = r.Id,
-        //                                                           PercentLimitLower = r.PercentLimitLower,
-        //                                                           PercentLimitUpper = r.PercentLimitUpper
-        //                                                       }).ToList(),
-        //                                        OptimizationRules = (from o in g.OptimizationRules
-        //                                                             select new ENT.PriceOptimizationRule
-        //                                                             {
-        //                                                                 DollarRangeLower = o.DollarRangeLower,
-        //                                                                 DollarRangeUpper = o.DollarRangeUpper,
-        //                                                                 Id = o.Id,
-        //                                                                 PercentChange = o.PercentChange
-        //                                                             }).ToList(),
-        //                                        ValueDriverGroupId = g.ValueDriverGroupId
-        //                                    }).ToList(),
-        //                          ValueDriverId = newPE.KeyValueDriver.ValueDriverId
-
-
-        //                      },
-        //                      LinkedPriceListRules = (from lpr in newPE.LinkedPriceListRules
-        //                                              select new ENT.PricingLinkedPriceListRule
-        //                                              {
-        //                                                  PercentChange = lpr.PercentChange,
-        //                                                  PriceListId = lpr.PriceListId,
-        //                                                  RoundingRules = (from rr in lpr.RoundingRules
-        //                                                                   select new ENT.PriceRoundingRule
-        //                                                                   {
-        //                                                                       DollarRangeLower = rr.DollarRangeLower,
-        //                                                                       DollarRangeUpper = rr.DollarRangeUpper,
-        //                                                                       Id = rr.Id,
-        //                                                                       Type = rr.Type,
-        //                                                                       ValueChange = rr.ValueChange
-        //                                                                   }).ToList()
-        //                                              }).ToList(),
-        //                      LinkedValueDrivers = (from lvd in newPE.LinkedValueDrivers
-        //                                            select new ENT.PricingEverydayLinkedValueDriver
-        //                                            {
-        //                                                Groups = (from g in lvd.Groups
-        //                                                          select new ENT.PricingEverydayLinkedValueDriverGroup
-        //                                                          {
-        //                                                              PercentChange = g.PercentChange,
-        //                                                              ValueDriverGroupId = g.ValueDriverGroupId
-        //                                                          }).ToList()
-        //                                            }).ToList(),
-        //                      PriceListGroups = (from plg in newPE.PriceListGroups
-        //                                         select new ENT.PricingEverydayPriceListGroup
-        //                                         {
-        //                                             Key = plg.Key,
-        //                                             Name = plg.Name,
-        //                                             PriceLists = ( from pl in plg.PriceLists
-        //                                                            select new ENT.PricingEverydayPriceList
-        //                                                            {
-        //                                                                Code = pl.Code,
-        //                                                                Id = pl.Id,
-        //                                                                IsKey = pl.IsKey,
-        //                                                                IsSelected = pl.IsSelected,
-        //                                                                Key = pl.Key,
-        //                                                                Name = pl.Name,
-        //                                                                Sort = pl.Sort,
-        //                                                                Title = pl.Title
-        //                                                            }).ToList(),
-        //                                            Sort = plg.Sort,
-        //                                            Title = plg .Title
-        //                                         }).ToList(),
-        //                      PricingModes = (from pm in newPE.PricingModes
-        //                                      select new ENT.PricingMode
-        //                                      {
-        //                                          HasKeyPriceListRule = pm.HasKeyPriceListRule,
-        //                                          HasLinkedPriceListRule = pm.HasLinkedPriceListRule,
-        //                                          IsSelected = pm.IsSelected,
-        //                                          Key = pm.Key,
-        //                                          KeyPriceListGroupKey = pm.KeyPriceListGroupKey,
-        //                                          LinkedPriceListGroupKey = pm.LinkedPriceListGroupKey,
-        //                                          Name = pm.Name,
-        //                                          Sort = pm.Sort,
-        //                                          Title = pm.Title
-        //                                      }).ToList(),
-        //                      Results = (from r in newPE.Results
-        //                                 select new ENT.PricingEverydayResult
-        //                                 {
-        //                                     Groups = (from g in r.Groups
-        //                                               select new ENT.PricingResultDriverGroup 
-        //                                               { 
-        //                                                   Actual = g.Actual,
-        //                                                   Id = g.Id,
-        //                                                   MaxOutlier = g.MaxOutlier,
-        //                                                   MinOutlier = g.MinOutlier, 
-        //                                                   Name = g.Name,
-        //                                                   SalesValue = g.SalesValue,
-        //                                                   SkuCount = g.SkuCount,
-        //                                                   Sort = g.Sort,
-        //                                                   Title = g.Title,
-        //                                                   Value = g.Value
-        //                                               }).ToList(),
-        //                                     PriceLists = ( from pl in r.PriceLists 
-        //                                                        select new ENT.PricingEverydayResultPriceList 
-        //                                                        {
-        //                                                            Code = pl.Code,
-        //                                                            CurrentMarkupPercent = pl.CurrentMarkupPercent,
-        //                                                            CurrentPrice = pl.CurrentPrice,
-        //                                                            Id = pl.Id,
-        //                                                            IsKey = pl.IsKey,
-        //                                                            IsSelected = pl.IsSelected,
-        //                                                            InfluenceValueChange = pl.InfluenceValueChange,
-        //                                                            Key = pl.Key,
-        //                                                            KeyValueChange = pl.KeyValueChange,
-        //                                                            Name = pl.Name,
-        //                                                            NewMarkupPercent = pl.NewMarkupPercent,
-        //                                                            NewPrice = pl.NewPrice,
-        //                                                            PriceChange = pl.PriceChange,
-        //                                                            PriceEdit = pl.PriceEdit,
-        //                                                            PriceWarning = pl.PriceWarning,
-        //                                                            ResultId = pl.ResultId,
-        //                                                            Sort = pl.Sort,
-        //                                                            Title = pl.Title
-                                                                    
-        //                                                        }).ToList(),
-        //                                     SkuId = r.SkuId, SkuName = r.SkuName, SkuTitle = r.SkuTitle
-        //                                 }).ToList(),
-        //                     SearchGroupKey = newPE.SearchGroupKey,
-        //                     ValueDrivers = ( from vd in newPE.ValueDrivers 
-        //                                          select new ENT.PricingEverydayValueDriver 
-        //                                          {
-        //                                              Groups = ( from g in vd.Groups
-        //                                                             select new ENT.PricingValueDriverGroup 
-        //                                                             {
-        //                                                                 Id = g.Id,
-        //                                                                 MaxOutlier = g.MaxOutlier,
-        //                                                                 MinOutlier = g.MinOutlier,
-        //                                                                 SalesValue = g.SalesValue,
-        //                                                                 SkuCount = g.SkuCount,
-        //                                                                 Sort = g.Sort,
-        //                                                                 Value = g.Value
-        //                                                             }).ToList(),
-
-        //                                             Id = vd.Id,
-        //                                             IsKey = vd.IsKey,
-        //                                             IsSelected = vd.IsSelected,
-        //                                             Key = vd.Key,
-        //                                             Name = vd.Name,
-        //                                             Sort = vd.Sort,
-        //                                             Title = vd.Title
-        //                                          }).ToList(),
-                             
-
-        //                  }
-                          
-        //    };
-
-        //}
+        
 
         
 
@@ -640,26 +305,30 @@ namespace APLPX.Client.Mock
             //a.FilterGroups = filterGroups;
             return new ENT.Session<ENT.Analytic>
             {
-                Data = new ENT.Analytic
-                {
-                    Id = a.Id,
-                    FilterGroups = (from fg in filterGroups
-                                    select new ENT.FilterGroup
-                                    {
-                                        Name = fg.Name,
-                                        Sort = fg.Sort,
-                                        Filters = (from f in fg.Filters
-                                                   select new ENT.Filter
-                                                   {
-                                                       Code = f.Code,
-                                                       Id = f.Id,
-                                                       IsSelected = f.IsSelected,
-                                                       Key = f.Key,
-                                                       Name = f.Name,
-                                                       Sort = f.Sort
-                                                   }).ToList()
-                                    }).ToList()
-                }
+
+                Data = new ENT.Analytic(a.Id, filterGroups.ToDtos())
+                    
+
+                //Data = new ENT.Analytic
+                //{
+                //    Id = a.Id,
+                //    FilterGroups = (from fg in filterGroups
+                //                    select new ENT.FilterGroup
+                //                    {
+                //                        Name = fg.Name,
+                //                        Sort = fg.Sort,
+                //                        Filters = (from f in fg.Filters
+                //                                   select new ENT.Filter
+                //                                   {
+                //                                       Code = f.Code,
+                //                                       Id = f.Id,
+                //                                       IsSelected = f.IsSelected,
+                //                                       Key = f.Key,
+                //                                       Name = f.Name,
+                //                                       Sort = f.Sort
+                //                                   }).ToList()
+                //                    }).ToList()
+                //}
             };
 
         }
@@ -671,35 +340,38 @@ namespace APLPX.Client.Mock
             var drivers = AnalyticAll_NoFilters.AsQueryable().Where(x => x.Id == a.Id).SingleOrDefault().ValueDrivers.ToList();
             return new ENT.Session<ENT.Analytic>()
             {
-                Data = new ENT.Analytic(a.Id, (from vd in drivers
-                                               select new ENT.AnalyticValueDriver
-                                               {
-                                                   Id = vd.Id,
-                                                   IsSelected = vd.IsSelected,
-                                                   Key = vd.Key,
-                                                   Name = vd.Name,
-                                                   Sort = vd.Sort,
-                                                   Title = vd.Title,
-                                                   Modes = (from d in vd.Modes
-                                                            select new ENT.AnalyticValueDriverMode
-                                                            {
-                                                                Name = d.Name,
-                                                                Title = d.Title,
-                                                                Sort = d.Sort,
-                                                                Key = d.Key,
-                                                                IsSelected = d.IsSelected,
-                                                                Groups = (from g in d.Groups
-                                                                          select new ENT.ValueDriverGroup
-                                                                          {
-                                                                              Id = g.Id,
-                                                                              MaxOutlier = g.MaxOutlier,
-                                                                              MinOutlier = g.MinOutlier,
-                                                                              Sort = g.Sort,
-                                                                              Value = g.Value
-                                                                          }).ToList()
-                                                            }).ToList()
 
-                                               }).ToList())
+
+                Data = new ENT.Analytic(a.Id, drivers.ToDtos())
+                //Data = new ENT.Analytic(a.Id, (from vd in drivers
+                //                               select new ENT.AnalyticValueDriver
+                //                               {
+                //                                   Id = vd.Id,
+                //                                   IsSelected = vd.IsSelected,
+                //                                   Key = vd.Key,
+                //                                   Name = vd.Name,
+                //                                   Sort = vd.Sort,
+                //                                   Title = vd.Title,
+                //                                   Modes = (from d in vd.Modes
+                //                                            select new ENT.AnalyticValueDriverMode
+                //                                            {
+                //                                                Name = d.Name,
+                //                                                Title = d.Title,
+                //                                                Sort = d.Sort,
+                //                                                Key = d.Key,
+                //                                                IsSelected = d.IsSelected,
+                //                                                Groups = (from g in d.Groups
+                //                                                          select new ENT.ValueDriverGroup
+                //                                                          {
+                //                                                              Id = g.Id,
+                //                                                              MaxOutlier = g.MaxOutlier,
+                //                                                              MinOutlier = g.MinOutlier,
+                //                                                              Sort = g.Sort,
+                //                                                              Value = g.Value
+                //                                                          }).ToList()
+                //                                            }).ToList()
+
+                //                               }).ToList())
             };
         }
 
@@ -709,14 +381,17 @@ namespace APLPX.Client.Mock
             var plists = AnalyticAll_NoFilters.AsQueryable().Where(x => x.Id == a.Id).SingleOrDefault().PriceListGroups.ToList();
             return new ENT.Session<ENT.Analytic>()
             {
-                Data = new ENT.Analytic(a.Id, (from pg in plists
-                                               select new ENT.AnalyticPriceListGroup
-                                               {
-                                                   Key = pg.Key,
-                                                   Name = pg.Name,
-                                                   Sort = pg.Sort,
-                                                   Title = pg.Title
-                                               }).ToList())
+                Data = new ENT.Analytic(a.Id, plists.ToDtos())
+                    
+
+                //Data = new ENT.Analytic(a.Id, (from pg in plists
+                //                               select new ENT.AnalyticPriceListGroup
+                //                               {
+                //                                   Key = pg.Key,
+                //                                   Name = pg.Name,
+                //                                   Sort = pg.Sort,
+                //                                   Title = pg.Title
+                //                               }).ToList())
             };
         }
 
@@ -862,112 +537,114 @@ namespace APLPX.Client.Mock
             var a = session.Data as ENT.Analytic;
             var newA = AnalyticAll_NoFilters.AsQueryable()
                 .Where(x => x.Id == a.Id).SingleOrDefault();
-            if (newA.SearchGroup == null) { newA.SearchGroup = string.Empty; }
+            if (newA.SearchGroupKey == null) { newA.SearchGroupKey = string.Empty; }
             return new ENT.Session<ENT.Analytic>
             {
-                Data = new ENT.Analytic
-                {
-                    Id = newA.Id,
-                    SearchGroup = newA.SearchGroup,
-                    Identity = new ENT.AnalyticIdentity
-                    {
-                        Active = newA.Identity.Active,
-                        Author = newA.Identity.Author,
-                        Created = newA.Identity.Created,
-                        CreatedText = newA.Identity.CreatedText,
-                        Description = newA.Identity.Description,
-                        Edited = newA.Identity.Edited,
-                        EditedText = newA.Identity.EditedText,
-                        Editor = newA.Identity.Editor,
-                        Name = newA.Identity.Name,
-                        Notes = newA.Identity.Notes,
-                        Owner = newA.Identity.Owner,
-                        Refreshed = newA.Identity.Refreshed,
-                        RefreshedText = newA.Identity.RefreshedText,
-                        Shared = newA.Identity.Shared,
 
-                    },
-                    FilterGroups = (from fg in newA.FilterGroups
-                                    select new ENT.FilterGroup
-                                    {
-                                        Name = fg.Name,
-                                        Sort = fg.Sort,
-                                        Filters = (from f in fg.Filters
-                                                   select new ENT.Filter
-                                                   {
-                                                       Code = f.Code,
-                                                       Id = f.Id,
-                                                       IsSelected = f.IsSelected,
-                                                       Key = f.Key,
-                                                       Name = f.Name,
-                                                       Sort = f.Sort
-                                                   }).ToList()
-                                    }).ToList(),
-                    PriceListGroups = (from pg in newA.PriceListGroups
-                                       select new ENT.AnalyticPriceListGroup
-                                       {
-                                           Key = pg.Key,
-                                           Name = pg.Name,
-                                           Sort = pg.Sort,
-                                           Title = pg.Title,
-                                           PriceLists = (from pl in pg.PriceLists
-                                                         select new ENT.PriceList
-                                                         {
-                                                             Code = pl.Code,
-                                                             Id = pl.Id,
-                                                             IsSelected = pl.IsSelected,
-                                                             Key = pl.Key,
-                                                             Name = pl.Name,
-                                                             Title = pl.Title,
-                                                             Sort = pl.Sort
-                                                         }).ToList(),
-                                       }).ToList(),
-                    ValueDrivers = (from vd in newA.ValueDrivers
-                                    select new ENT.AnalyticValueDriver
-                                    {
-                                        Id = vd.Id,
-                                        IsSelected = vd.IsSelected,
-                                        Key = vd.Key,
-                                        Name = vd.Name,
-                                        Sort = vd.Sort,
-                                        Title = vd.Title,
-                                        Modes = (from d in vd.Modes
-                                                 select new ENT.AnalyticValueDriverMode
-                                                 {
-                                                     Name = d.Name,
-                                                     Title = d.Title,
-                                                     Sort = d.Sort,
-                                                     Key = d.Key,
-                                                     IsSelected = d.IsSelected,
-                                                     Groups = (from g in d.Groups
-                                                               select new ENT.ValueDriverGroup
-                                                               {
-                                                                   Id = g.Id,
-                                                                   MaxOutlier = g.MaxOutlier,
-                                                                   MinOutlier = g.MinOutlier,
-                                                                   Sort = g.Sort,
-                                                                   Value = g.Value
-                                                               }).ToList()
-                                                 }).ToList(),
-                                        Results = (from r in vd.Results
-                                                   select new ENT.AnalyticResultValueDriverGroup
-                                                   {
-                                                       Id = r.Id,
-                                                       MaxOutlier = r.MaxOutlier,
-                                                       //MaxValue = r.MaxValue,
-                                                       MinOutlier = r.MinOutlier,
-                                                       //MinValue = r.MinValue,
-                                                       SalesValue = r.SalesValue,
-                                                       SkuCount = r.SkuCount,
-                                                       Sort = r.Sort,
-                                                       Value = r.Value
-                                                   }).ToList()
+                Data = newA.ToDto()
+                //Data = new ENT.Analytic
+                //{
+                //    Id = newA.Id,
+                //    SearchGroupKey = newA.SearchGroupKey,
+                //    Identity = new ENT.AnalyticIdentity
+                //    {
+                //        Active = newA.Identity.Active,
+                //        Author = newA.Identity.Author,
+                //        Created = newA.Identity.Created,
+                //        CreatedText = newA.Identity.CreatedText,
+                //        Description = newA.Identity.Description,
+                //        Edited = newA.Identity.Edited,
+                //        EditedText = newA.Identity.EditedText,
+                //        Editor = newA.Identity.Editor,
+                //        Name = newA.Identity.Name,
+                //        Notes = newA.Identity.Notes,
+                //        Owner = newA.Identity.Owner,
+                //        Refreshed = newA.Identity.Refreshed,
+                //        RefreshedText = newA.Identity.RefreshedText,
+                //        Shared = newA.Identity.Shared,
+
+                //    },
+                //    FilterGroups = (from fg in newA.FilterGroups
+                //                    select new ENT.FilterGroup
+                //                    {
+                //                        Name = fg.Name,
+                //                        Sort = fg.Sort,
+                //                        Filters = (from f in fg.Filters
+                //                                   select new ENT.Filter
+                //                                   {
+                //                                       Code = f.Code,
+                //                                       Id = f.Id,
+                //                                       IsSelected = f.IsSelected,
+                //                                       Key = f.Key,
+                //                                       Name = f.Name,
+                //                                       Sort = f.Sort
+                //                                   }).ToList()
+                //                    }).ToList(),
+                //    PriceListGroups = (from pg in newA.PriceListGroups
+                //                       select new ENT.AnalyticPriceListGroup
+                //                       {
+                //                           Key = pg.Key,
+                //                           Name = pg.Name,
+                //                           Sort = pg.Sort,
+                //                           Title = pg.Title,
+                //                           PriceLists = (from pl in pg.PriceLists
+                //                                         select new ENT.PriceList
+                //                                         {
+                //                                             Code = pl.Code,
+                //                                             Id = pl.Id,
+                //                                             IsSelected = pl.IsSelected,
+                //                                             Key = pl.Key,
+                //                                             Name = pl.Name,
+                //                                             Title = pl.Title,
+                //                                             Sort = pl.Sort
+                //                                         }).ToList(),
+                //                       }).ToList(),
+                //    ValueDrivers = (from vd in newA.ValueDrivers
+                //                    select new ENT.AnalyticValueDriver
+                //                    {
+                //                        Id = vd.Id,
+                //                        IsSelected = vd.IsSelected,
+                //                        Key = vd.Key,
+                //                        Name = vd.Name,
+                //                        Sort = vd.Sort,
+                //                        Title = vd.Title,
+                //                        Modes = (from d in vd.Modes
+                //                                 select new ENT.AnalyticValueDriverMode
+                //                                 {
+                //                                     Name = d.Name,
+                //                                     Title = d.Title,
+                //                                     Sort = d.Sort,
+                //                                     Key = d.Key,
+                //                                     IsSelected = d.IsSelected,
+                //                                     Groups = (from g in d.Groups
+                //                                               select new ENT.ValueDriverGroup
+                //                                               {
+                //                                                   Id = g.Id,
+                //                                                   MaxOutlier = g.MaxOutlier,
+                //                                                   MinOutlier = g.MinOutlier,
+                //                                                   Sort = g.Sort,
+                //                                                   Value = g.Value
+                //                                               }).ToList()
+                //                                 }).ToList(),
+                //                        Results = (from r in vd.Results
+                //                                   select new ENT.AnalyticResultValueDriverGroup
+                //                                   {
+                //                                       Id = r.Id,
+                //                                       MaxOutlier = r.MaxOutlier,
+                //                                       //MaxValue = r.MaxValue,
+                //                                       MinOutlier = r.MinOutlier,
+                //                                       //MinValue = r.MinValue,
+                //                                       SalesValue = r.SalesValue,
+                //                                       SkuCount = r.SkuCount,
+                //                                       Sort = r.Sort,
+                //                                       Value = r.Value
+                //                                   }).ToList()
 
 
 
-                                    }).ToList()
+                //                    }).ToList()
 
-                }
+                //}
             };
         }
 

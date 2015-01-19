@@ -6,7 +6,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class Analytic : DisplayEntityBase, ISearchableEntity
+    public class Analytic : DisplayEntityBase, ISearchableEntity, IFilterContainer
     {
         #region Private Fields
 
@@ -18,7 +18,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private FilterGroup _selectedFilterGroup;
         private AnalyticPriceListGroup _selectedPriceListGroup;
         private AnalyticValueDriver _selectedValueDriver;
-        private int _searchId;
+        private int _searchGroupId;
         private string _searchKey;
         private string _parentKey;
         private bool _canNameChange;
@@ -93,10 +93,10 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region ISearchableEntity
 
-        public int SearchId
+        public int SearchGroupId
         {
-            get { return _searchId; }
-            set { this.RaiseAndSetIfChanged(ref _searchId, value); }
+            get { return _searchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroupId, value); }
         }
 
         public string ParentKey
@@ -105,7 +105,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _parentKey, value); }
         }
 
-        public string SearchKey
+        public string SearchGroupKey
         {
             get { return _searchKey; }
             set { this.RaiseAndSetIfChanged(ref _searchKey, value); }

@@ -33,10 +33,6 @@ namespace APLPX.Entity
         public string SqlKey { get; set; }
         [DataMember]
         public List<Entity.Module> Modules { get; set; }
-        [DataMember]
-        public List<Analytic> Analytics { get; set; }
-        [DataMember]
-        public List<PricingEveryday> Pricing { get; set; }
 
         public Session<Tdata> Clone<Tdata>(Tdata data) where Tdata : class {
 

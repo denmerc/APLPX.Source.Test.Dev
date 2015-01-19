@@ -41,8 +41,8 @@ namespace APLPX.Server.Data {
             var queryIdentity = dataSet.Tables[AnalyticMap.Names.loadAnaltyicIdentityData].AsEnumerable()
                 .Select(identity => new {
                     Id = identity.Field<int>(AnalyticMap.Names.analyticsId),
-                    SearchId = identity.Field<int>(AnalyticMap.Names.analyticsSearchId),
-                    SearchGroup = identity.Field<string>(AnalyticMap.Names.analyticsSearchGroup),
+                    SearchId = identity.Field<int>(AnalyticMap.Names.analyticsSearchGroupId),
+                    SearchGroup = identity.Field<string>(AnalyticMap.Names.analyticsSearchGroupKey),
                     IdentityName = identity.Field<string>(AnalyticMap.Names.analyticsName),
                     IdentityDescription = identity.Field<string>(AnalyticMap.Names.analyticsDescription),
                     IdentityNotes = identity.Field<string>(AnalyticMap.Names.analyticsNotes),
@@ -55,8 +55,8 @@ namespace APLPX.Server.Data {
                     IdentityAuthor = identity.Field<string>(AnalyticMap.Names.authorText),
                     IdentityEditor = identity.Field<string>(AnalyticMap.Names.editorText),
                     IdentityOwner = identity.Field<string>(AnalyticMap.Names.ownerText),
-                    IdentityShared = identity.Field<bool>(AnalyticMap.Names.shared),
-                    IdentityActive = identity.Field<bool>(AnalyticMap.Names.active)
+                    IdentityShared = identity.Field<bool>(AnalyticMap.Names.analyticsShared),
+                    IdentityActive = identity.Field<bool>(AnalyticMap.Names.analyticsActive)
                 }).Distinct();
 
             foreach (var identity in queryIdentity) {
@@ -225,8 +225,8 @@ namespace APLPX.Server.Data {
                 list.Add(
                     new Analytic (
                         Int32.Parse(reader[AnalyticMap.Names.analyticsId].ToString()),
-                        Int32.Parse(reader[AnalyticMap.Names.analyticsSearchId].ToString()),
-                        reader[AnalyticMap.Names.analyticsSearchGroup].ToString(),
+                        Int32.Parse(reader[AnalyticMap.Names.analyticsSearchGroupId].ToString()),
+                        reader[AnalyticMap.Names.analyticsSearchGroupKey].ToString(),
                         new AnalyticIdentity(
                             reader[AnalyticMap.Names.analyticsName].ToString(),
                             reader[AnalyticMap.Names.analyticsDescription].ToString(),
@@ -240,8 +240,8 @@ namespace APLPX.Server.Data {
                             reader[AnalyticMap.Names.authorText].ToString(),
                             reader[AnalyticMap.Names.editorText].ToString(),
                             reader[AnalyticMap.Names.ownerText].ToString(),
-                            Boolean.Parse(reader[AnalyticMap.Names.shared].ToString()),
-                            Boolean.Parse(reader[AnalyticMap.Names.active].ToString())
+                            Boolean.Parse(reader[AnalyticMap.Names.analyticsShared].ToString()),
+                            Boolean.Parse(reader[AnalyticMap.Names.analyticsActive].ToString())
                     )));
             }
 
@@ -273,8 +273,8 @@ namespace APLPX.Server.Data {
             if (reader.Read()) {
                 analytic = new Analytic (
                         Int32.Parse(reader[AnalyticMap.Names.analyticsId].ToString()),
-                        Int32.Parse(reader[AnalyticMap.Names.analyticsSearchId].ToString()),
-                        reader[AnalyticMap.Names.analyticsSearchGroup].ToString(),
+                        Int32.Parse(reader[AnalyticMap.Names.analyticsSearchGroupId].ToString()),
+                        reader[AnalyticMap.Names.analyticsSearchGroupKey].ToString(),
                         new AnalyticIdentity(
                             reader[AnalyticMap.Names.analyticsName].ToString(),
                             reader[AnalyticMap.Names.analyticsDescription].ToString(),
@@ -288,8 +288,8 @@ namespace APLPX.Server.Data {
                             reader[AnalyticMap.Names.authorText].ToString(),
                             reader[AnalyticMap.Names.editorText].ToString(),
                             reader[AnalyticMap.Names.ownerText].ToString(),
-                            Boolean.Parse(reader[AnalyticMap.Names.shared].ToString()),
-                            Boolean.Parse(reader[AnalyticMap.Names.active].ToString())
+                            Boolean.Parse(reader[AnalyticMap.Names.analyticsShared].ToString()),
+                            Boolean.Parse(reader[AnalyticMap.Names.analyticsActive].ToString())
                     ));
             }
 
@@ -306,28 +306,30 @@ namespace APLPX.Server.Data {
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.active, SqlDbType.Bit, 0, ParameterDirection.Input, session.Data.Identity.Active.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.shared, SqlDbType.Bit, 0, ParameterDirection.Input, session.Data.Identity.Shared.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.searchId, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.SearchGroupId.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.name, SqlDbType.VarChar, 105, ParameterDirection.Input, session.Data.Identity.Name),
                 new SqlServiceParameter(AnalyticMap.Names.description, SqlDbType.VarChar, 255, ParameterDirection.Input, session.Data.Identity.Description),
-                //TODO: Add notes to meta data
-                //TODO: Add folder to meta data
-                //TODO: Add shared to meta data
+                new SqlServiceParameter(AnalyticMap.Names.notes, SqlDbType.VarChar, 2000, ParameterDirection.Input, session.Data.Identity.Notes),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.saveIdentityMessage)
             }; service.sqlParameters.List= parameters;
         }
 
-        public Entity.Analytic SaveIdentityMapData(System.Data.DataTable data) {
+        //OBSOLETE...
+        //public Entity.Analytic SaveIdentityMapData(System.Data.DataTable data) {
 
-            //Map the entity data...
-            System.Data.DataTableReader reader = data.CreateDataReader();
-            Entity.Analytic analytic = null;
-            //Single record...
-            if (reader.Read()) {
-                analytic = new Analytic(Int32.Parse(reader[AnalyticMap.Names.id].ToString()));
-            }
+        //    //Map the entity data...
+        //    System.Data.DataTableReader reader = data.CreateDataReader();
+        //    Entity.Analytic analytic = null;
+        //    //Single record...
+        //    if (reader.Read()) {
+        //        analytic = new Analytic(Int32.Parse(reader[AnalyticMap.Names.id].ToString()));
+        //    }
 
-            return analytic;
-        }
+        //    return analytic;
+        //}
         #endregion
 
         #region Load Filters...
@@ -825,13 +827,12 @@ namespace APLPX.Server.Data {
             #region Commands...
             //Select commands...
             public const String selectCommand = "dbo.aplAnalyticsSelect";
-            public const String loadMetaMessage = "selectMeta";
+            public const String loadMetaMessage = "selectAnalytic";
             public const String loadFilterMessage = "selectFilters";
             public const String loadDriversMessage = "selectDrivers";
             public const String loadPriceListsMessage = "selectPriceLists";
             public const String loadIdentityMessage = "selectIdentity";
             public const String loadIdentitiesMessage = "selectIdentities";
-            public const String loadSummaryMessage = "selectIdentitySummary";
 
             //Update commands...
             public const String updateCommand = "dbo.aplAnalyticsUpdate";
@@ -846,11 +847,14 @@ namespace APLPX.Server.Data {
             public const String runProcessDaysOnHand = "updateProcessDaysOnHand";
             #endregion
 
-            #region Defaults...
-            //Default parameters...
+            #region Defaults Parameters...
             public const String id = "id";
+            public const String active = "active";
+            public const String shared = "shared";
+            public const String notes = "notes";
             public const String name = "name";
             public const String description = "description";
+            public const String searchId = "searchId";
             public const String filters = "filterKeys";
             public const String drivers = "driverKeys";
             public const String pricelists = "priceListKeys";
@@ -858,13 +862,15 @@ namespace APLPX.Server.Data {
             public const String sqlMessage = "message";
             #endregion
 
-            #region Identity...
+            #region Identity data...
             public const String analyticsId = "analyticsId";
-            public const String analyticsSearchId = "analyticsSearchId";
-            public const String analyticsSearchGroup = "analyticsSearchGroup";
+            public const String analyticsSearchGroupId = "analyticsSearchGroupId";
+            public const String analyticsSearchGroupKey = "analyticsSearchGroupKey";
             public const String analyticsName = "analyticsName";
             public const String analyticsDescription = "analyticsDescription";
             public const String analyticsNotes = "analyticsNotes";
+            public const String analyticsActive = "analyticsActive";
+            public const String analyticsShared = "analyticsShared";
             public const String refreshedText = "analyticsRefreshedText";
             public const String createdText = "analyticsCreatedText";
             public const String editedText = "analyticsEditedText";
@@ -874,11 +880,9 @@ namespace APLPX.Server.Data {
             public const String authorText = "analyticsAuthorText";
             public const String editorText = "analyticsEditorText";
             public const String ownerText = "analyticsOwnerText";
-            public const String active = "analyticsActive";
-            public const String shared = "analyticsShared";
             #endregion
 
-            #region Filters...
+            #region Filters data...
             public const String filterId = "filterId";
             public const String filterKey = "filterKey";
             public const String filterCode = "filterCode";
@@ -890,7 +894,7 @@ namespace APLPX.Server.Data {
             public const String filterTypeSort = "filterTypeSort";
             #endregion
 
-            #region Drivers...
+            #region Driver, mode, group data...
             public const String driverId = "driverId";
             public const String driverDetailId = "driverDetailId";
             public const String driverGroupId = "driverGroupId";
@@ -913,7 +917,7 @@ namespace APLPX.Server.Data {
             public const String driverGroupSort = "driverGroupSort";
             #endregion
 
-            #region Price Lists...
+            #region Price Lists data...
             public const String priceListId = "priceListId";
             public const String priceListKey = "priceListKey";
             public const String priceListCode = "priceListCode";
@@ -930,7 +934,7 @@ namespace APLPX.Server.Data {
             public const String priceListSelected = "priceListSelected";
             #endregion
 
-            #region Results...
+            #region Results data...
             public const String resultDriverType = "resultDriverType";
 			public const String resultDriverTypeName = "resultDriverTypeName";
             public const String resultDriverGroup = "resultDriverGroupValue";

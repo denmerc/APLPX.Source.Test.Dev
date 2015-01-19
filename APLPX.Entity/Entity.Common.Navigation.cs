@@ -36,15 +36,15 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public ModuleType Type { get;  set; }
+        public ModuleType Type { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public List<ModuleFeature> Features { get;  set; }
+        public List<ModuleFeature> Features { get; private set; }
     }
 
     [DataContract]
@@ -89,21 +89,21 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public ModuleFeatureType Type { get;  set; }
+        public ModuleFeatureType Type { get; private set; }
         [DataMember]
-        public ModuleFeatureStepType LandingStepType { get;  set; }
+        public ModuleFeatureStepType LandingStepType { get; private set; }
         [DataMember]
-        public ModuleFeatureStepType ActionStepType { get;  set; }
+        public ModuleFeatureStepType ActionStepType { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStep> Steps { get;  set; }
+        public List<ModuleFeatureStep> Steps { get; private set; }
         [DataMember]
-        public List<FeatureSearchGroup> SearchGroups { get;  set; }
+        public List<FeatureSearchGroup> SearchGroups { get; private set; }
     }
 
     [DataContract]
@@ -170,19 +170,19 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public ModuleFeatureStepType Type { get;  set; }
+        public ModuleFeatureStepType Type { get; private set; }
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStepAction> Actions { get;  set; }
+        public List<ModuleFeatureStepAction> Actions { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStepAdvisor> Advisors { get;  set; }
+        public List<ModuleFeatureStepAdvisor> Advisors { get; private set; }
         [DataMember]
-        public List<ModuleFeatureStepError> Errors { get;  set; }
+        public List<ModuleFeatureStepError> Errors { get; private set; }
     }
 
     [DataContract]
@@ -206,15 +206,15 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public string Name { get;  set; }
+        public string Name { get; private set; }
         [DataMember]
-        public string ParentName { get;  set; }
+        public string ParentName { get; private set; }
         [DataMember]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public ModuleFeatureStepActionType Type { get;  set; }
+        public ModuleFeatureStepActionType Type { get; private set; }
     }
 
     [DataContract]
@@ -232,9 +232,9 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
-        public string Message { get;  set; }
+        public string Message { get; private set; }
     }
 
     [DataContract]
@@ -252,7 +252,7 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
         [DataMember]
         public string Message { get; set; }
     }
@@ -265,8 +265,8 @@ namespace APLPX.Entity
         public FeatureSearchGroup(
             string name,
             short itemCount,
-            int searchId,
-            string searchGroup,
+            int searchGroupId,
+            string searchGroupKey,
             string parentName,
             bool isNameChanged,
             bool isSearchGroupChanged,
@@ -276,8 +276,8 @@ namespace APLPX.Entity
             ) {
             Name = name;
             ItemCount = itemCount;
-            SearchId = searchId;
-            SearchGroup = searchGroup;
+            SearchGroupId = searchGroupId;
+            SearchGroupKey = searchGroupKey;
             ParentName = parentName;
             IsNameChanged = isNameChanged;
             IsSearchGroupChanged = isSearchGroupChanged;
@@ -288,24 +288,24 @@ namespace APLPX.Entity
         #endregion
 
         [DataMember]
-        public int SearchId { get;  set; }
+        public int SearchGroupId { get; private set; }
         [DataMember]
-        public string SearchGroup { get;  set; }
+        public string SearchGroupKey { get; private set; }
         [DataMember]
         public string Name { get; set; }
         [DataMember]
         public short ItemCount { get; set; }
         [DataMember]
-        public string ParentName { get;  set; }
+        public string ParentName { get; private set; }
         [DataMember]
         public bool IsNameChanged { get; set; }
         [DataMember]
         public bool IsSearchGroupChanged { get; set; }
         [DataMember]
-        public bool CanNameChange { get;  set; }
+        public bool CanNameChange { get; private set; }
         [DataMember]
-        public bool CanSearchGroupChange { get;  set; }
+        public bool CanSearchGroupChange { get; private set; }
         [DataMember]
-        public short Sort { get;  set; }
+        public short Sort { get; private set; }
     }
 }

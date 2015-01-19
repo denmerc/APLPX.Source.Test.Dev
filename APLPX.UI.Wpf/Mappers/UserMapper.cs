@@ -21,9 +21,12 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.SqlKey = dto.Key;
             displayEntity.Identity = dto.Identity.ToDisplayEntity();
             displayEntity.Role = dto.Role.ToDisplayEntity();
-            displayEntity.Login = dto.Credential.Login;
-            displayEntity.OldPassword = dto.Credential.OldPassword;
-            displayEntity.NewPassword = dto.Credential.NewPassword;
+            if (dto.Credential != null)
+            {
+                displayEntity.Login = dto.Credential.Login;
+                displayEntity.OldPassword = dto.Credential.OldPassword;
+                displayEntity.NewPassword = dto.Credential.NewPassword;
+            }
 
             return displayEntity;
         }

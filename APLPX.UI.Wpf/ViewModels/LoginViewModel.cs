@@ -46,9 +46,8 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         StatusMessage = "Loading modules...";
                         var cred  = new UserCredential(UserName, Password);
-                        Session.User.Credential = cred;
-                        
-                        Session.Analytics = analyticService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
+                        //Session.User.Credential = cred;
+                        //Session.Analytics = analyticService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
                         //Session.Pricing = pricingService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
                         var mvm = new MainViewModel(Session, analyticService, userService, pricingService);
                         var mainWindow = new MainWindow();

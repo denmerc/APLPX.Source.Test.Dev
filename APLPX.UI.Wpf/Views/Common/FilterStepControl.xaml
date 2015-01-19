@@ -50,7 +50,7 @@
         <ListBox x:Name="FilterGroupsListBox"
                  Grid.Row="1"
                  Grid.Column="0"
-                 ItemsSource="{Binding Path=FilterGroups}"
+                 ItemsSource="{Binding Path=Entity.FilterGroups}"
                  SelectedIndex="0"
                  SelectedItem="{Binding Path=Entity.SelectedFilterGroup}">
 

@@ -216,6 +216,7 @@
     <Compile Include="Interfaces\IAnalyticRepository.cs" />
     <Compile Include="Interfaces\IDragSource.cs" />
     <Compile Include="Interfaces\IDropTarget.cs" />
+    <Compile Include="Interfaces\IFilterContainer.cs" />
     <Compile Include="Interfaces\ISearchableEntity.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>

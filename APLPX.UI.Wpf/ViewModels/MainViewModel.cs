@@ -40,6 +40,7 @@ namespace APLPX.UI.WPF.ViewModels
         private EventAggregator _eventManager;
         private Dictionary<DTO.ModuleFeatureType, ModuleFeature> _featureCache;
         private ReactiveCommand<Object> _logoutCommand;
+        
 
         #endregion
 
@@ -181,8 +182,9 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     var payload = SelectedAnalytic.ToPayload();
                     payload.Identity = SelectedAnalytic.Identity;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto() };
+                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto() , SqlKey= Session.SqlKey};
                     var status = _analyticService.SaveIdentity(session);
+                    SelectedAnalytic.Identity = _analyticService.Load(session).Data.Identity.ToDisplayEntity();
                 }));
 
             SaveFiltersCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -190,9 +192,9 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     var payload = SelectedAnalytic.ToPayload();
                     payload.FilterGroups = SelectedAnalytic.FilterGroups;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto() };
+                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
                     var status = _analyticService.SaveFilters(session);
-
+                    SelectedAnalytic.FilterGroups = _analyticService.LoadFilters(session).Data.FilterGroups.ToDisplayEntities();
                 }));
 
             SavePriceListsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -476,21 +478,23 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void HandleSelectedAction(DisplayEntities.Action action)
         {
+            Session.ClientCommand = (int) action.TypeId;
             switch (action.TypeId)
             {
                 //Create a new current entity.
-                case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew:
-                    //Create a new (blank) entity. TODO: refactor.
-                    _originalEntity = SelectedAnalytic;
-                    var newAnalytic = new DisplayEntities.Analytic();
-                    newAnalytic.Identity.Name = "Analytic name (new)";
-                    newAnalytic.Identity.Description = "Description (new)";
-                    newAnalytic.IsDirty = true;
 
-                    SelectedAnalytic = newAnalytic;
-                    SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
-                    SelectedFeature.DisableRemainingSteps();
-                    break;
+                //case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew:
+                //    //Create a new (blank) entity. TODO: refactor.
+                //    _originalEntity = SelectedAnalytic;
+                //    var newAnalytic = new DisplayEntities.Analytic();
+                //    newAnalytic.Identity.Name = "Analytic name (new)";
+                //    newAnalytic.Identity.Description = "Description (new)";
+                //    newAnalytic.IsDirty = true;
+
+                //    SelectedAnalytic = newAnalytic;
+                //    SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
+                //    SelectedFeature.DisableRemainingSteps();
+                //    break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayNew:
                     _originalEntity = SelectedPricingEveryday;
@@ -527,7 +531,9 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 //Copy current entity.
+                //case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit:
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsCopy:
+                case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew:
                     //Create a copy of the existing entity and load edit screen.                   
                     SelectedAnalytic = SelectedAnalytic.Copy();
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;

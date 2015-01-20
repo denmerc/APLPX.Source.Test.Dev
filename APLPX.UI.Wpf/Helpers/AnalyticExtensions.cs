@@ -19,8 +19,8 @@ namespace APLPX.UI.WPF.Helpers
         /// <returns>The analytic with only the payload-relevant properties populated.</returns>
         public static Analytic ToPayload(this Analytic source)
         {
-            var payload = new Analytic { Id = source.Id };
-
+            var payload = new Analytic { Id = source.Id , SearchGroupId = source.SearchGroupId};
+            
             return payload;
         }
 

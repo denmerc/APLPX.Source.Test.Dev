@@ -15,7 +15,7 @@ namespace APLPX.UI.WPF.Helpers
         /// <returns>The PricingEveryday object. with only the payload-relevant properties populated.</returns>
         public static PricingEveryday ToPayload(this PricingEveryday source)
         {
-            var payload = new PricingEveryday { Id = source.Id };
+            var payload = new PricingEveryday { Id = source.Id , SearchGroupId = source.SearchGroupId};
 
             return payload;
         }

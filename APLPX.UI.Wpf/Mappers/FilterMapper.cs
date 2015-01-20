@@ -63,6 +63,20 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
+
+        public static List<Display.FilterGroup> ToDisplayEntities(this List<DTO.FilterGroup> dtoList)
+        {
+            var displayList = new List<Display.FilterGroup>();
+
+            foreach (DTO.FilterGroup dto in dtoList)
+            {
+                displayList.Add(dto.ToDisplayEntity());
+            }
+
+            return displayList;
+        }
+
+
         public static DTO.FilterGroup ToDto(this Display.FilterGroup displayEntity)
         {
             var filters = new List<DTO.Filter>();

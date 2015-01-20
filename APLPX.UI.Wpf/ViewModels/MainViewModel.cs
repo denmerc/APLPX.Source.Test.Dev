@@ -159,9 +159,7 @@ namespace APLPX.UI.WPF.ViewModels
                 await Task.Run(() =>
                 {
                     var id = new DTO.Analytic(SelectedEntity.Id);
-                    var a = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = id , SqlKey = base.Session.SqlKey });
-                    
-                    
+                    var a = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = id , SqlKey = base.Session.SqlKey, ClientCommand = Session.ClientCommand });
                     //a.Data.FilterGroups = Session.FilterGroups;
                     SelectedAnalytic = a.Data.ToDisplayEntity();
                 }));
@@ -535,7 +533,9 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsCopy:
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew:
                     //Create a copy of the existing entity and load edit screen.                   
-                    SelectedAnalytic = SelectedAnalytic.Copy();
+                    //SelectedAnalytic = SelectedAnalytic.Copy();
+
+                    ExecuteAsyncCommand(LoadAnalyticCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Retrieving analytic...", "Analytic was successfully retrieved.");
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                     SelectedFeature.DisableRemainingSteps();
                     break;

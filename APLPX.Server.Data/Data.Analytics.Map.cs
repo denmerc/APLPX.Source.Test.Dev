@@ -13,13 +13,13 @@ namespace APLPX.Server.Data {
 
             //Map the command procedure...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
-            String command = AnalyticMap.Names.loadMetaMessage;
+            String commandMessage = AnalyticMap.Names.loadMetaMessage;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, command)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
         }
 
@@ -206,11 +206,12 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
+            String commandMessage = AnalyticMap.Names.loadIdentitiesMessage;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadIdentitiesMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
 
         }
@@ -254,12 +255,13 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
+            String commandMessage = AnalyticMap.Names.loadIdentityMessage;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadIdentityMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
 
         }
@@ -302,6 +304,7 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
+            String commandMessage = AnalyticMap.Names.saveIdentityMessage;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
@@ -313,7 +316,7 @@ namespace APLPX.Server.Data {
                 new SqlServiceParameter(AnalyticMap.Names.description, SqlDbType.VarChar, 255, ParameterDirection.Input, session.Data.Identity.Description),
                 new SqlServiceParameter(AnalyticMap.Names.notes, SqlDbType.VarChar, 2000, ParameterDirection.Input, session.Data.Identity.Notes),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.saveIdentityMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List= parameters;
         }
 
@@ -337,12 +340,13 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
+            String commandMessage = AnalyticMap.Names.loadFilterMessage;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadFilterMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
 
         }
@@ -390,56 +394,6 @@ namespace APLPX.Server.Data {
 
             return analytic;
         }
-        /* OBSOLETE
-        public List<Entity.FilterGroup> LoadFiltersMapData(System.Data.DataTable data) {
-
-            //Map the entity data...
-            Boolean reading = true;
-            Int32 rows = data.Rows.Count;
-            String filterGroupNow = String.Empty;
-            String filterGroupLast = String.Empty;
-            List<Entity.Filter> listFilters = new List<Entity.Filter>();
-            List<Entity.FilterGroup> listFilterGroups = new List<Entity.FilterGroup>();
-            System.Data.DataTableReader reader = data.CreateDataReader();
-
-            //From record set...
-            while (reading) {
-                reading = reader.Read();
-                filterGroupNow = (reading) ? reader[AnalyticMap.Names.filterTypeText].ToString() : String.Empty;
-                if (reading) {
-                    listFilters.Add(
-                        new Entity.Filter(
-                            Int32.Parse(reader[AnalyticMap.Names.filterId].ToString()),
-                            Int32.Parse(reader[AnalyticMap.Names.filterKey].ToString()),
-                            reader[AnalyticMap.Names.filterCode].ToString(),
-                            reader[AnalyticMap.Names.filterName].ToString(),
-                            Boolean.Parse(reader[AnalyticMap.Names.filterSelected].ToString()),
-                            Int16.Parse(reader[AnalyticMap.Names.filterSort].ToString())
-                        ));
-                    if (filterGroupLast != filterGroupNow) {
-                        listFilterGroups.Add(
-                            new Entity.FilterGroup(
-                                Int16.Parse(reader[AnalyticMap.Names.filterTypeSort].ToString()),
-                                reader[AnalyticMap.Names.filterTypeText].ToString(),
-                                new List<Filter>()
-                            ));
-                    }
-                }
-                if (!(filterGroupLast.Equals(String.Empty) || filterGroupLast == filterGroupNow) ) {
-                    if (filterGroupNow.Equals(String.Empty)) {
-                        listFilterGroups[listFilterGroups.Count - 1].Filters = listFilters.GetRange(0, listFilters.Count);
-                    }
-                    else {
-                        listFilterGroups[listFilterGroups.Count - 2].Filters = listFilters.GetRange(0, listFilters.Count - 1);
-                        listFilters.RemoveRange(0, listFilters.Count - 1);
-                    }
-                }
-                filterGroupLast = filterGroupNow;
-            }
-
-            return listFilterGroups;
-        }
-        */
         #endregion
 
         #region Save Filters...
@@ -447,6 +401,7 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
+            String commandMessage = AnalyticMap.Names.saveFiltersMessage;
 
             //Build comma delimited key list...
             const System.Char delimiter = ',';
@@ -461,7 +416,7 @@ namespace APLPX.Server.Data {
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.filters, SqlDbType.VarChar, 4000, ParameterDirection.Input, filterKeys.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.saveFiltersMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
         }
         #endregion
@@ -471,12 +426,13 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
+            String commandMessage = AnalyticMap.Names.loadDriversMessage;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadDriversMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
         }
 
@@ -651,6 +607,7 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
+            String commandMessage = AnalyticMap.Names.saveDriversMessage;
 
             //Build comma delimited key list - type;mode;group;min;max, ...
             const System.Char splitter = ',';
@@ -676,7 +633,7 @@ namespace APLPX.Server.Data {
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.drivers, SqlDbType.VarChar, 4000, ParameterDirection.Input, driverKeys.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.saveDriversMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
         }
         #endregion
@@ -689,12 +646,13 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.selectCommand;
+            String commandMessage = AnalyticMap.Names.loadPriceListsMessage;
 
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.loadPriceListsMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
         }
 
@@ -802,13 +760,14 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
+            String commandMessage = AnalyticMap.Names.savePriceListsMessage;
 
-            //Build comma delimited key list...
+            //Build delimited key list...
             const System.Char delimiter = ',';
             System.Text.StringBuilder priceKeys = new System.Text.StringBuilder();
             foreach (Entity.AnalyticPriceListGroup group in session.Data.PriceListGroups) {
                 foreach (Entity.PriceList priceList in group.PriceLists) {
-                    if (!priceList.IsSelected) { priceKeys.Append(priceList.Key.ToString() + delimiter); }
+                    if (priceList.IsSelected) { priceKeys.Append(priceList.Key.ToString() + delimiter); }
                 }
             }
             //Map the parameters...
@@ -816,7 +775,7 @@ namespace APLPX.Server.Data {
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.pricelists, SqlDbType.VarChar, 4000, ParameterDirection.Input, priceKeys.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
-                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, AnalyticMap.Names.savePriceListsMessage)
+                new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
         }
         #endregion

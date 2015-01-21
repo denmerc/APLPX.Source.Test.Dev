@@ -180,7 +180,7 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     var payload = SelectedAnalytic.ToPayload();
                     payload.Identity = SelectedAnalytic.Identity;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto() , SqlKey= Session.SqlKey};
+                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
                     var status = _analyticService.SaveIdentity(session);
                     SelectedAnalytic.Identity = _analyticService.Load(session).Data.Identity.ToDisplayEntity();
                 }));
@@ -200,9 +200,12 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     var payload = SelectedAnalytic.ToPayload();
                     payload.PriceListGroups = SelectedAnalytic.PriceListGroups;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto() };
+                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
                     var status = _analyticService.SavePriceLists(session);
 
+                    var response = _analyticService.LoadPriceLists(session);
+                    var pl = response.Data.PriceListGroups.ToDisplayEntities();
+                    SelectedAnalytic.PriceListGroups = pl;
                 }));
 
             SaveValueDriversCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -210,8 +213,10 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     var payload = SelectedAnalytic.ToPayload();
                     payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto() };
+                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
                     var status = _analyticService.SaveDrivers(session);
+
+
 
                 }));
         }
@@ -396,6 +401,34 @@ namespace APLPX.UI.WPF.ViewModels
             }
         }
 
+        public bool IsActionSelectorAvailable
+        {
+            get
+            {
+                bool result = IsEntitySelected;
+                if (!result)
+                {
+                    switch (SelectedStep.TypeId)
+                    {
+                        case APLPX.Entity.ModuleFeatureStepType.PlanningAnalyticsSearchAnalytics:
+                        case APLPX.Entity.ModuleFeatureStepType.PlanningEverydayPricingSearchEveryday:
+                        case APLPX.Entity.ModuleFeatureStepType.PlanningPromotionPricingSearchPromotions:
+                        case APLPX.Entity.ModuleFeatureStepType.PlanningKitPricingSearchKits:
+                        case APLPX.Entity.ModuleFeatureStepType.AdministrationUserMaintenanceSearchUsers:
+                            //TODO: implement related CanExecute before enabling this code.
+                            //Actions need to be visible, but only Create New should be enabled; Edit and Copy need to be disabled.
+                            //result = true;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                return result;
+            }
+        }
+
         /// <summary>
         /// Gets/sets the current status text.
         /// </summary>
@@ -476,7 +509,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void HandleSelectedAction(DisplayEntities.Action action)
         {
-            Session.ClientCommand = (int) action.TypeId;
+            Session.ClientCommand = (int)action.TypeId;
             switch (action.TypeId)
             {
                 //Create a new current entity.
@@ -926,6 +959,7 @@ namespace APLPX.UI.WPF.ViewModels
             }
 
             this.RaisePropertyChanged("IsStepSelectorAvailable");
+            this.RaisePropertyChanged("IsActionSelectorAvailable");
         }
 
         /// <summary>
@@ -947,14 +981,17 @@ namespace APLPX.UI.WPF.ViewModels
 
             this.RaisePropertyChanged("IsEntitySelected");
             this.RaisePropertyChanged("SelectedEntity");
+            this.RaisePropertyChanged("IsActionSelectorAvailable");
         }
 
         private void OnSearchGroupReassigned(SearchGroupsUpdatedEvent data)
         {
             if (data.SourceEntity.SearchGroupKey != data.DestinationSearchGroup.SearchGroupKey)
             {
+                data.SourceEntity.SearchGroup = data.DestinationSearchGroup;
                 data.SourceEntity.SearchGroupKey = data.DestinationSearchGroup.SearchGroupKey;
-                data.SourceEntity.ParentFolderName = data.DestinationSearchGroup.Name;
+                data.SourceEntity.SearchGroupId = data.DestinationSearchGroup.SearchGroupId;
+
                 SelectedFeature.RecalculateSearchItemCounts();
 
                 //Re-select the reassigned entity within its new search group.

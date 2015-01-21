@@ -17,7 +17,6 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         #region Private Fields
 
         private Display.Analytic _analytic;
-        private Display.ModuleFeature _feature;
         private IDisposable _searchKeyChangedSubscription;
         private bool _isDisposed;
 
@@ -31,9 +30,13 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             {
                 throw new ArgumentNullException("analytic");
             }
+            if (feature == null)
+            {
+                throw new ArgumentNullException("feature");
+            }
 
             _analytic = analytic;
-            _feature = feature;
+            base.SelectedFeature = feature;
 
             var searchKeyChanged = _analytic.WhenAnyValue(item => item.SearchGroupKey);
             _searchKeyChangedSubscription = searchKeyChanged.Subscribe(key => OnSearchKeyChanged(key));
@@ -51,7 +54,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         {
             get
             {
-                var searchGroups = _feature.SearchGroups.Where(sg => sg.CanSearchKeyChange);
+                var searchGroups = SelectedFeature.SearchGroups.Where(sg => sg.CanSearchKeyChange);
                 var result = searchGroups.ToList();
 
                 return result;
@@ -60,9 +63,9 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         private void OnSearchKeyChanged(string searchKey)
         {
-            if (_feature != null)
+            if (SelectedFeature != null)
             {
-                _feature.AssignSearchProperties();
+                SelectedFeature.AssignSearchProperties();
             }
         }
 
@@ -78,9 +81,12 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         {
             if (!_isDisposed)
             {
-                if (_searchKeyChangedSubscription != null)
+                if (isDisposing)
                 {
-                    _searchKeyChangedSubscription.Dispose();
+                    if (_searchKeyChangedSubscription != null)
+                    {
+                        _searchKeyChangedSubscription.Dispose();
+                    }
                 }
                 _isDisposed = true;
             }

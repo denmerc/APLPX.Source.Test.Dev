@@ -9,19 +9,18 @@ namespace APLPX.UI.WPF.DisplayEntities
     {
         #region Private Fields
 
-        private int _id;
-        private int _searchGroupId;
+        private int _id;        
         private PricingIdentity _identity;
         private List<FilterGroup> _filterGroups;
+        private FeatureSearchGroup _searchGroup;
+        private int _searchGroupId;
         private string _searchGroupKey;
-        private string _parentKey;
+        private int _owningSearchGroupId;        
         private bool _canNameChange;
         private bool _canSearchKeyChange;
-        private string _parentFolderName;
         private FilterGroup _selectedFilterGroup;
 
         #endregion
-
 
         #region Constructors
 
@@ -67,12 +66,18 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
-        #region ISearchableEntity
+        #region ISearchableEntity        
 
-        public string ParentKey
+        public FeatureSearchGroup SearchGroup
         {
-            get { return _parentKey; }
-            set { this.RaiseAndSetIfChanged(ref _parentKey, value); }
+            get { return _searchGroup; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroup, value); }
+        }
+
+        public int OwningSearchGroupId
+        {
+            get { return _owningSearchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _owningSearchGroupId, value); }
         }
 
         public string EntityTypeName
@@ -90,13 +95,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _canSearchKeyChange; }
             set { _canSearchKeyChange = value; }
-        }
-
-        public string ParentFolderName
-        {
-            get { return _parentFolderName; }
-            set { this.RaiseAndSetIfChanged(ref _parentFolderName, value); }
-        }
+        }  
 
         public FilterGroup SelectedFilterGroup
         {

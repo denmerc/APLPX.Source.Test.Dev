@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 
 using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.DisplayServices;
 using ReactiveUI;
-
-using DTO = APLPX.Entity;
 using Display = APLPX.UI.WPF.DisplayEntities;
-using System.Windows;
+using DTO = APLPX.Entity;
 
 
 namespace APLPX.UI.WPF.ViewModels
@@ -24,6 +23,19 @@ namespace APLPX.UI.WPF.ViewModels
 
         private DTO.Session<DTO.NullT> _session;
         //private UserDisplayServices _userDisplayServices;
+        private bool _isDebugMode;
+        private bool _areDiagnosticsVisible;
+
+        #endregion
+
+        #region Constructors
+
+        public ViewModelBase()
+        {
+#if DEBUG
+            IsDebugMode = true;
+#endif
+        }
 
         #endregion
 
@@ -90,6 +102,26 @@ namespace APLPX.UI.WPF.ViewModels
         //    get { return _userDisplayServices; }
         //    set { this.RaiseAndSetIfChanged(ref _userDisplayServices, value); }
         //}
+
+        /// <summary>
+        /// Gets a value indicating whether to the application is in debug mode.
+        /// Views can use this value to enable the display of debug/diagnostic information.        
+        /// </summary>
+        public bool IsDebugMode
+        {
+            get { return _isDebugMode; }
+            set { this.RaiseAndSetIfChanged(ref _isDebugMode, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets a  indicating whether to display diagnostic/debug information for the bound view.
+        /// This property should be settable from the view only if IsDebugMode is true.
+        /// </summary>
+        public bool AreDiagnosticsVisible
+        {
+            get { return _areDiagnosticsVisible; }
+            set { this.RaiseAndSetIfChanged(ref _areDiagnosticsVisible, value); }
+        }
 
         #endregion
 

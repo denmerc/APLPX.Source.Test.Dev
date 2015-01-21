@@ -1,4 +1,5 @@
 ﻿using System;
+using APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Interfaces
 {
@@ -8,6 +9,8 @@ namespace APLPX.UI.WPF.Interfaces
     /// </summary>
     public interface ISearchableEntity
     {
+        FeatureSearchGroup SearchGroup { get; set; }
+
         /// <summary>
         /// Gets/sets the unique ID of the fully populated entity containing this search item.
         /// </summary>
@@ -19,19 +22,17 @@ namespace APLPX.UI.WPF.Interfaces
         int SearchGroupId { get; set; }
 
         /// <summary>
+        /// Gets/sets the Id of the unique Search Group to which this entity belongs.
+        /// Explanation: Although an entity can "appear" in several search groups, such as Recent or Shared,
+        /// these are auxiliary groupings for display only. 
+        /// The entity is actually assigned to only a single ("owning") Search Group.
+        /// </summary>
+        int OwningSearchGroupId { get; set; }
+
+        /// <summary>
         /// Gets/sets the search key of this item.
         /// </summary>
         string SearchGroupKey { get; set; }
-
-        /// <summary>
-        /// Gets/sets the parent key of this item.
-        /// </summary>
-        string ParentKey { get; set; }
-
-        /// <summary>
-        /// Gets/sets the name of this item's parent folder.
-        /// </summary>
-        string ParentFolderName { get; set; }
 
         /// <summary>
         /// Gets the type name of the concrete entity.

@@ -626,7 +626,7 @@
                   Grid.Column="3"
                   MinWidth="200"
                   Background="Gray"
-                  Visibility="{Binding Path=IsEntitySelected,
+                  Visibility="{Binding Path=IsActionSelectorAvailable,
                                        Converter={StaticResource BooleanToVisibilityConverter}}">
 
                 <Grid.RowDefinitions>

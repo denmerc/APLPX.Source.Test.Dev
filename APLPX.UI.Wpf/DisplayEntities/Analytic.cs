@@ -18,12 +18,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         private FilterGroup _selectedFilterGroup;
         private AnalyticPriceListGroup _selectedPriceListGroup;
         private AnalyticValueDriver _selectedValueDriver;
+        private FeatureSearchGroup _searchGroup;
         private int _searchGroupId;
+        private int _owningSearchGroupId;
         private string _searchKey;
-        private string _parentKey;
         private bool _canNameChange;
         private bool _canSearchKeyChange;
-        private string _parentFolderName;
 
         #endregion
 
@@ -93,18 +93,30 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region ISearchableEntity
 
+        public FeatureSearchGroup SearchGroup
+        {
+            get { return _searchGroup; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroup, value); }
+        }
+
         public int SearchGroupId
         {
             get { return _searchGroupId; }
             set { this.RaiseAndSetIfChanged(ref _searchGroupId, value); }
         }
 
-        public string ParentKey
+        /// <summary>
+        /// Gets/sets the Id of the unique Search Group to which this entity belongs.
+        /// Explanation: Although an entity can appear in several search groups, such as Recent or Shared,
+        /// these are auxiliary groupings for display only. 
+        /// The entity is actually associated with only the Owning Seach Group.
+        /// </summary>
+        public int OwningSearchGroupId
         {
-            get { return _parentKey; }
-            set { this.RaiseAndSetIfChanged(ref _parentKey, value); }
+            get { return _owningSearchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _owningSearchGroupId, value); }
         }
-
+        
         public string SearchGroupKey
         {
             get { return _searchKey; }
@@ -126,12 +138,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _canSearchKeyChange; }
             set { _canSearchKeyChange = value; }
-        }
-
-        public string ParentFolderName
-        {
-            get { return _parentFolderName; }
-            set { this.RaiseAndSetIfChanged(ref _parentFolderName, value); }
         }
 
         #endregion

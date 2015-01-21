@@ -52,29 +52,58 @@ namespace APLPX.Tests.Server.Data {
         //Analytic routine unique identity added to database...
         [TestMethod, TestCategory("Analytics update")]
         public void TEST11_GivenUserInputsAnalyticIdentity_WhenValidAnalyticIdentityAdded_ThenSuccessStatusRecdAndNoValidationMessageRecd() {
-            String uniqueName = DateTime.Now.ToString("MMdyyyyhhmmss");
+            int newId = 0;
+            int oldId = 4; //analyst owns 4,5,7,10
+            Boolean sessionLoaded = false;
             Boolean analyticsActive = true;
             Boolean analyticsShared = false;
-            String analyticName = "Add Analytics from Tests.Server.Data" + uniqueName;
-            String analyticDescription = "New analytic description, use this to test unique Analytics routine names " + dateStamp;
-            String analyticNotes = String.Format("New analytic notes, {0}, {1}", System.Reflection.MethodInfo.GetCurrentMethod().Name, dateStamp);
-            Analytic newAnalytic = new Analytic(new AnalyticIdentity(analyticName, analyticDescription, analyticNotes, analyticsShared, analyticsActive));
-            Session<Analytic> response = _AnalyticData.SaveIdentity(new Session<Analytic> { SqlKey = SQLKEYAPLADMIN, Data = newAnalytic });
+            String uniqueName = DateTime.Now.ToString("MMdyyyyhhmmss");
+            String analyticName = "Add Analytics from Tests.Server.Data - " + uniqueName;
+            String analyticDescription = "New analytic description, use this to test adding unique Analytics routine names - " + this.uniqueStamp;
+            String analyticNotes = String.Format("New analytic notes, {0}, {1}", System.Reflection.MethodInfo.GetCurrentMethod().Name, this.uniqueStamp);
 
-            this.listener.WriteLine("Begin - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+            Analytic existingAnalytic = new Analytic(oldId);
+            Session<APLPX.Entity.Analytic> responseLoad = _AnalyticData.LoadIdentity(new Session<Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic });
+
             try {
-                this.listener.WriteLine(String.Format("Session valid: {0}", (response.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
-                this.listener.WriteLine(String.Format("Client message: {0}", response.ClientMessage)); this.listener.WriteLine(lineBreak);
-                this.listener.WriteLine(String.Format("Server message: {0}", response.ServerMessage)); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine("Begin Identity load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine(String.Format("Session valid: {0}", (responseLoad.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine(String.Format("Client message: {0}", responseLoad.ClientMessage)); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine(String.Format("Server message: {0}", responseLoad.ServerMessage)); this.listener.WriteLine(lineBreak);
 
-                Assert.IsTrue(response.SessionOk);
-                Assert.AreEqual(response.ServerMessage, String.Empty);
+                Assert.IsNotNull(responseLoad.Data);
+                this.listener.WriteLine(String.Format("Load: {0}, {1}", responseLoad.Data.Id, responseLoad.Data.SearchGroupKey)); this.listener.WriteLine(lineBreak);
+
+                Assert.IsTrue(responseLoad.SessionOk);
+                sessionLoaded = responseLoad.SessionOk;
+                this.listener.WriteLine("End Indentity load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             }
             catch (System.Exception ex) {
                 this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
             }
+
+            if (sessionLoaded) {
+                int searchGroupId = responseLoad.Data.SearchGroupId;
+                Analytic newAnalytic = new Analytic(newId, searchGroupId, new AnalyticIdentity(analyticName, analyticDescription, analyticNotes, analyticsShared, analyticsActive));
+                Session<Analytic> responseSave = _AnalyticData.SaveIdentity(new Session<Analytic> { SqlKey = SQLKEYANALYST, Data = newAnalytic });
+
+                try {
+                    this.listener.WriteLine("Begin Add Analytic - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+                    this.listener.WriteLine(String.Format("Session valid: {0}", (responseSave.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
+                    this.listener.WriteLine(String.Format("Client message: {0}", responseSave.ClientMessage)); this.listener.WriteLine(lineBreak);
+                    this.listener.WriteLine(String.Format("Server message: {0}", responseSave.ServerMessage)); this.listener.WriteLine(lineBreak);
+
+                    Assert.IsTrue(responseSave.SessionOk);
+                    Assert.IsNotNull(responseSave.Data.Identity);
+                    this.listener.WriteLine(String.Format("New Analytic: {0}", responseSave.Data.Identity.Name)); this.listener.WriteLine(lineBreak);
+                    this.listener.WriteLine("End Add Analytic - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+                }
+                catch (System.Exception ex) {
+                    this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
+                }
+            }
+
             this.listener.WriteLine("End - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
-            Assert.IsTrue(response.SessionOk);
         }
 
         //Analytic routine identity duplicate name fails validation...
@@ -245,7 +274,7 @@ namespace APLPX.Tests.Server.Data {
         //Analytic routine filters select list...
         [TestMethod, TestCategory("Analytics select")]
         public void TEST18_GivenUserRequestsAnalyticFilterList_WhenSessionValid_ThenSuccessStatusRecdAndAnalyticsFilterListRecd() {
-            var existingAnalytic = new Analytic(1);
+            var existingAnalytic = new Analytic(29); //analyst 4,5,7,10,28,29
             Session<Analytic> response = _AnalyticData.LoadFilters(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic });
 
             this.listener.WriteLine("Begin - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
@@ -319,16 +348,17 @@ namespace APLPX.Tests.Server.Data {
         [TestMethod, TestCategory("Analytics update")]
         public void TEST21_GivenUserSelectsAnalyticFilterValues_WhenAnalyticSessionValid_ThenSuccessStatusRecdAndValidFiltersSaved() {
             Boolean sessionLoaded = false;
-            var existingAnalytic = new Analytic(1);
+            var existingAnalytic = new Analytic(29); //analyst 4,5,7,10,28,29
             Session<APLPX.Entity.Analytic> responseLoad = _AnalyticData.LoadFilters(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic });
 
-            this.listener.WriteLine("Begin filter load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             try {
+                this.listener.WriteLine("Begin filter load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Session valid: {0}", (responseLoad.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Client message: {0}", responseLoad.ClientMessage)); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Server message: {0}", responseLoad.ServerMessage)); this.listener.WriteLine(lineBreak);
                 sessionLoaded = responseLoad.SessionOk;
                 Assert.IsTrue(responseLoad.SessionOk);
+                this.listener.WriteLine("End filter load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             }
             catch (System.Exception ex) {
                 this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
@@ -344,8 +374,8 @@ namespace APLPX.Tests.Server.Data {
                 var newAnalytic = new APLPX.Entity.Analytic(existingAnalytic.Id, responseLoad.Data.FilterGroups);
                 Session<APLPX.Entity.Analytic> responseSave = _AnalyticData.SaveFilters(new Session<Analytic> { SqlKey = SQLKEYANALYST, Data = newAnalytic });
 
-                this.listener.WriteLine("Begin filter save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 try {
+                    this.listener.WriteLine("Begin filter save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Session valid: {0}", (responseSave.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Client message: {0}", responseSave.ClientMessage)); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Server message: {0}", responseSave.ServerMessage)); this.listener.WriteLine(lineBreak);
@@ -353,6 +383,7 @@ namespace APLPX.Tests.Server.Data {
                     Assert.IsTrue(responseSave.SessionOk);
                     Assert.AreEqual(responseSave.ClientMessage, String.Empty);
                     Assert.AreEqual(responseSave.ServerMessage, String.Empty);
+                    this.listener.WriteLine("End filter save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 }
                 catch (System.Exception ex) {
                     this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
@@ -366,29 +397,45 @@ namespace APLPX.Tests.Server.Data {
 
         //Analytic routine save drivers with validation...
         [TestMethod, TestCategory("Analytics update")]
-        public void TEST22_GivenUserInputsAnalyticTypeValues_WhenAnalyticSessionValid_ThenSuccessStatusRecdAndValidTypesSaved() {
+        public void TEST22_GivenUserInputsAnalyticDriverValues_WhenAnalyticSessionValid_ThenSuccessStatusRecdAndValidDriversSaved() {
             Boolean sessionLoaded = false;
-            var existingAnalytic = new Analytic(1);
-            Session<APLPX.Entity.Analytic> responseLoad = _AnalyticData.LoadFilters(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic });
+            var existingAnalytic = new Analytic(5);
+            Session<APLPX.Entity.Analytic> responseLoad = _AnalyticData.LoadDrivers(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic });
 
-            this.listener.WriteLine("Begin driver load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             try {
+                this.listener.WriteLine("Begin drivers load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Session valid: {0}", (responseLoad.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Client message: {0}", responseLoad.ClientMessage)); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Server message: {0}", responseLoad.ServerMessage)); this.listener.WriteLine(lineBreak);
                 sessionLoaded = responseLoad.SessionOk;
                 Assert.IsTrue(responseLoad.SessionOk);
+                this.listener.WriteLine("End drivers load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             }
             catch (System.Exception ex) {
                 this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
             }
 
             if (sessionLoaded) {
+                foreach (APLPX.Entity.AnalyticValueDriver driver in responseLoad.Data.ValueDrivers) {
+                    if (driver.IsSelected) {
+                        foreach (APLPX.Entity.AnalyticValueDriverMode mode in driver.Modes) {
+                            if (mode.IsSelected) {
+                                foreach (APLPX.Entity.ValueDriverGroup group in mode.Groups) {
+                                    if (group.Value == 1) {
+                                        group.MinOutlier = (group.MinOutlier == 0) ? 100 : 0;
+                                        group.MaxOutlier = (group.MaxOutlier > 2000) ? 2000 : 3500;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 var newAnalytic = new APLPX.Entity.Analytic(existingAnalytic.Id, responseLoad.Data.ValueDrivers);
                 Session<APLPX.Entity.Analytic> responseSave = _AnalyticData.SaveDrivers(new Session<Analytic> { SqlKey = SQLKEYANALYST, Data = newAnalytic });
 
-                this.listener.WriteLine("Begin driver save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine("Begin drivers save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 try {
+                    this.listener.WriteLine("Begin driver save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Session valid: {0}", (responseSave.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Client message: {0}", responseSave.ClientMessage)); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Server message: {0}", responseSave.ServerMessage)); this.listener.WriteLine(lineBreak);
@@ -396,6 +443,7 @@ namespace APLPX.Tests.Server.Data {
                     Assert.IsTrue(responseSave.SessionOk);
                     Assert.AreEqual(responseSave.ClientMessage, String.Empty);
                     Assert.AreEqual(responseSave.ServerMessage, String.Empty);
+                    this.listener.WriteLine("End drivers save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 }
                 catch (System.Exception ex) {
                     this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
@@ -411,16 +459,17 @@ namespace APLPX.Tests.Server.Data {
         [TestMethod, TestCategory("Analytics update")]
         public void TEST23_GivenUserSelectsAnalyticPriceListValues_WhenAnalyticSessionValid_ThenSuccessStatusRecdAndValidPriceListsSaved() {
             Boolean sessionLoaded = false;
-            var existingAnalytic = new Analytic(1);
-            Session<APLPX.Entity.Analytic> responseLoad = _AnalyticData.LoadFilters(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic });
+            var existingAnalytic = new Analytic(5); //analyst 4,5,7,10,28,29
+            Session<APLPX.Entity.Analytic> responseLoad = _AnalyticData.LoadPriceLists(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic });
 
-            this.listener.WriteLine("Begin price list load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             try {
+                this.listener.WriteLine("Begin price list load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Session valid: {0}", (responseLoad.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Client message: {0}", responseLoad.ClientMessage)); this.listener.WriteLine(lineBreak);
                 this.listener.WriteLine(String.Format("Server message: {0}", responseLoad.ServerMessage)); this.listener.WriteLine(lineBreak);
                 sessionLoaded = responseLoad.SessionOk;
                 Assert.IsTrue(responseLoad.SessionOk);
+                this.listener.WriteLine("End price list load - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             }
             catch (System.Exception ex) {
                 this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
@@ -429,13 +478,13 @@ namespace APLPX.Tests.Server.Data {
             if (sessionLoaded) {
                 foreach (APLPX.Entity.AnalyticPriceListGroup priceListGroup in responseLoad.Data.PriceListGroups) {
                     foreach (APLPX.Entity.PriceList list in priceListGroup.PriceLists)
-                        if (list.Key >= 510 && list.Key <= 520) { list.IsSelected = (list.IsSelected) ? false : true; }
+                        if (list.Key >= 2 && list.Key <= 4) { list.IsSelected = (list.IsSelected) ? false : true; }
                 }
                 var newAnalytic = new APLPX.Entity.Analytic(existingAnalytic.Id, responseLoad.Data.PriceListGroups);
                 Session<APLPX.Entity.Analytic> responseSave = _AnalyticData.SavePriceLists(new Session<Analytic> { SqlKey = SQLKEYANALYST, Data = newAnalytic });
 
-                this.listener.WriteLine("Begin price list save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 try {
+                    this.listener.WriteLine("Begin price list save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Session valid: {0}", (responseSave.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Client message: {0}", responseSave.ClientMessage)); this.listener.WriteLine(lineBreak);
                     this.listener.WriteLine(String.Format("Server message: {0}", responseSave.ServerMessage)); this.listener.WriteLine(lineBreak);
@@ -446,6 +495,7 @@ namespace APLPX.Tests.Server.Data {
                     Assert.IsTrue(responseSave.SessionOk);
                     Assert.AreEqual(responseSave.ClientMessage, String.Empty);
                     Assert.AreEqual(responseSave.ServerMessage, String.Empty);
+                    this.listener.WriteLine("End price list save - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
                 }
                 catch (System.Exception ex) {
                     this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);

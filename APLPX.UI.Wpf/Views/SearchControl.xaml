@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:vc="clr-namespace:APLPX.UI.WPF.Views.Common"
              xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
              xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
              x:Name="UserControl"
@@ -20,6 +21,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -29,53 +31,14 @@
                                    Grid.Column="0" />
 
         <!--  For diagnostics only  -->
-        <DataGrid x:Name="dgSearchableEntityDiagnostics"
-                  Grid.Row="1"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="2"
-                  Margin="15,0,0,0"
-                  AutoGenerateColumns="False"
-                  Visibility="Collapsed"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
-                  IsReadOnly="True"
-                  ItemsSource="{Binding Path=SelectedFeature.SearchableEntities}"
-                  SelectionMode="Single">
+        <vc:SearchDiagnosticsControl x:Name="ucSearchDiagnostics"
+                                     Grid.Row="1"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="2"
+                                     Visibility="{Binding Path=AreDiagnosticsVisible,
+                                                          Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-            <DataGrid.Resources>
-                <Style x:Key="CenteredElementStyle" TargetType="{x:Type TextBlock}">
-                    <Setter Property="HorizontalAlignment" Value="Center" />
-                </Style>
-            </DataGrid.Resources>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="60"
-                                    Binding="{Binding Path=Id}"
-                                    ElementStyle="{StaticResource CenteredElementStyle}"
-                                    Header="Entity Id" />
-
-                <DataGridTextColumn Binding="{Binding Path=Identity.Name}" Header="Entity Name" />
-
-                <DataGridTextColumn Binding="{Binding Path=ParentFolderName}" Header="Folder" />
-
-                <DataGridTextColumn Binding="{Binding Path=SearchGroupKey}" Header="Search Group Key" Width="75" />
-
-                <DataGridTextColumn Width="60"
-                                    Binding="{Binding Path=SearchId}"
-                                    ElementStyle="{StaticResource CenteredElementStyle}"
-                                    Header="Search Id" />
-
-                <DataGridCheckBoxColumn Width="75"
-                                        Binding="{Binding Path=CanSearchKeyChange}"
-                                        Header="Folder Editable" />
-
-                <DataGridCheckBoxColumn Width="75"
-                                        Binding="{Binding Path=CanNameChange}"
-                                        Header="Name Editable" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <!--  End: For diagnostics only  -->
 
         <StackPanel x:Name="DetailStackPanel"
                     Grid.Row="0"
@@ -133,8 +96,8 @@
 
                     <TextBlock Grid.Row="0"
                                Grid.Column="0"
-                               ToolTip="{Binding Path=Id}"
-                               Text="Name:" />
+                               Text="Name:"
+                               ToolTip="{Binding Path=Id}" />
                     <TextBlock Grid.Row="0"
                                Grid.Column="1"
                                Text="{Binding Path=Identity.Name}" />
@@ -213,5 +176,15 @@
                 </Grid>
             </Border>
         </StackPanel>
+
+        <CheckBox x:Name="chkDiagnostics"
+                  Grid.Row="2"
+                  Grid.Column="1"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Bottom"
+                  IsChecked="{Binding Path=AreDiagnosticsVisible}"
+                  ToolTip="Show/Hide diagnostic information"
+                  Visibility="{Binding Path=IsDebugMode,
+                                       Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

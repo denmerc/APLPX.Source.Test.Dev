@@ -35,12 +35,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         private PricingMode _selectedMode;
         private PricingEverydayValueDriver _selectedValueDriver;
 
-        private int _searchGroupId;
+        private FeatureSearchGroup _searchGroup;
+        private int _searchGroupId;        
+        private int _owningSearchGroupId;
         private string _searchGroupKey;
-        private string _parentKey;
         private bool _canNameChange;
         private bool _canSearchKeyChange;
-        private string _parentFolderName;
 
         private IDisposable _valueDriverChangeListener;
         private List<PricingEverydayValueDriverWrapper> _valueDriversCache;
@@ -661,11 +661,17 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region ISearchableEntity
 
-        public string ParentKey
+        public FeatureSearchGroup SearchGroup
         {
-            get { return _parentKey; }
-            set { this.RaiseAndSetIfChanged(ref _parentKey, value); }
+            get { return _searchGroup; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroup, value); }
         }
+
+        public int OwningSearchGroupId
+        {
+            get { return _owningSearchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _owningSearchGroupId, value); }
+        } 
 
         public string EntityTypeName
         {
@@ -682,12 +688,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _canSearchKeyChange; }
             set { _canSearchKeyChange = value; }
-        }
-
-        public string ParentFolderName
-        {
-            get { return _parentFolderName; }
-            set { this.RaiseAndSetIfChanged(ref _parentFolderName, value); }
         }
 
         #endregion

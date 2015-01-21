@@ -5,6 +5,7 @@
              xmlns:converters="clr-namespace:APLPX.UI.WPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vc="clr-namespace:APLPX.UI.WPF.Views.Common"
              mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -98,9 +99,9 @@
                   Background="{StaticResource WhiteBrush}"
                   DisplayMemberPath="Name"
                   ItemsSource="{Binding Path=AssignableFolders}"
-                  SelectedValue="{Binding Path=Analytic.SearchKey}"
-                  SelectedValuePath="SearchGroupKey"
-                  Style="{StaticResource MetroComboBox}">
+                  SelectedValue="{Binding Path=Analytic.SearchGroupId}"                  
+                  SelectedValuePath="SearchGroupId"
+                  >           
             <ComboBox.Resources>
                 <!--
                     Fix for display issue with dropdown arrow.
@@ -235,6 +236,22 @@
                    Grid.Column="1"
                    Style="{StaticResource IdentityTextBlockStyle}"
                    Text="{Binding Path=Analytic.Identity.Owner}" />
+
+        <CheckBox x:Name="chkDiagnostics"
+                  Grid.Row="12"
+                  Grid.Column="2"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Bottom"
+                  IsChecked="{Binding Path=AreDiagnosticsVisible}"
+                  ToolTip="Show/Hide diagnostic information"
+                  Visibility="{Binding Path=IsDebugMode,
+                                       Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <vc:SearchDiagnosticsControl Grid.Row="13"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="3"
+                                     Visibility="{Binding Path=AreDiagnosticsVisible,
+                                                          Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 
 </UserControl>

@@ -12,7 +12,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         #region Private Fields
 
         private int _id;
-        private int _searchGroupId;
+        
         private string _sqlKey;
         private UserIdentity _identity;
         private UserRole _role;
@@ -21,12 +21,13 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _oldPassword;
         private string _newPassword;
         private List<SQLEnumeration> _roleTypes;
-        private string _searchKey;
-        private string _parentKey;
+        private FeatureSearchGroup _searchGroup;
+        private int _searchGroupId;
+        private int _owningSearchGroupId;
+        private string _searchKey;        
         private bool _canNameChange;
-        private bool _canSearchKeyChange;
-        private string _parentFolderName;
-
+        private bool _canSearchKeyChange;        
+        
         #endregion
 
         #region Constructors
@@ -106,11 +107,17 @@ namespace APLPX.UI.WPF.DisplayEntities
         #endregion
 
         #region ISearchableEntity
-   
-        public string ParentKey
+
+        public FeatureSearchGroup SearchGroup
         {
-            get { return _parentKey; }
-            set { this.RaiseAndSetIfChanged(ref _parentKey, value); }
+            get { return _searchGroup; }
+            set { this.RaiseAndSetIfChanged(ref _searchGroup, value); }
+        }
+
+        public int OwningSearchGroupId
+        {
+            get { return _owningSearchGroupId; }
+            set { this.RaiseAndSetIfChanged(ref _owningSearchGroupId, value); }
         }
 
         public string SearchGroupKey
@@ -134,13 +141,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _canSearchKeyChange; }
             set { _canSearchKeyChange = value; }
-        }
-
-        public string ParentFolderName
-        {
-            get { return _parentFolderName; }
-            set { this.RaiseAndSetIfChanged(ref _parentFolderName, value); }
-        }
+        }  
 
         #endregion
     }

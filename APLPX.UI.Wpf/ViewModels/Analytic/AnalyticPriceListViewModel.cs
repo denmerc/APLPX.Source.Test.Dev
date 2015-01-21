@@ -21,7 +21,10 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
             Entity = entity;
             PriceListGroups = entity.PriceListGroups;
-
+            if(PriceListGroups.Count > 0)
+            {
+                Entity.SelectedPriceListGroup = PriceListGroups[0];
+            }
             InitializeCommands();
         }
 
@@ -42,7 +45,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         public Display.Analytic Entity
         {
             get { return _entity; }
-            private set { _entity = value; }
+            private set { this.RaiseAndSetIfChanged(ref _entity, value); }
         }
 
         public List<Display.AnalyticPriceListGroup> PriceListGroups

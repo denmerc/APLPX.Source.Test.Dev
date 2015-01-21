@@ -108,6 +108,19 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
+        public static List<Display.AnalyticPriceListGroup> ToDisplayEntities(this List<DTO.AnalyticPriceListGroup> dtoList)
+        {
+            var displayList = new List<Display.AnalyticPriceListGroup>();
+
+            foreach (DTO.AnalyticPriceListGroup dto in dtoList)
+            {
+                displayList.Add(dto.ToDisplayEntity());
+            }
+
+            return displayList;
+        }
+
+
         public static DTO.AnalyticPriceListGroup ToDto(this Display.AnalyticPriceListGroup displayEntity)
         {
             List<DTO.PriceList> priceLists = new List<DTO.PriceList>();

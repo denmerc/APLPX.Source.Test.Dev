@@ -281,6 +281,9 @@ namespace APLPX.UI.WPF.DisplayEntities
                     case ModuleFeatureType.PlanningKitPricing:
                         result = "Price Routine";
                         break;
+                    case ModuleFeatureType.AdministrationUserMaintenance:
+                        result = "User";
+                        break;
                     default:
                         result = TypeId.ToString();
                         break;
@@ -385,10 +388,29 @@ namespace APLPX.UI.WPF.DisplayEntities
                 var matchingEntities = SearchableEntities.Where(item => item.SearchGroupKey == searchGroup.SearchGroupKey);
                 foreach (ISearchableEntity entity in matchingEntities)
                 {
-                    entity.ParentKey = searchGroup.ParentName;                    
+                    entity.SearchGroup = searchGroup;
                     entity.CanNameChange = searchGroup.CanNameChange;
                     entity.CanSearchKeyChange = searchGroup.CanSearchKeyChange;
-                    entity.ParentFolderName = searchGroup.Name;
+                    entity.SearchGroupId = searchGroup.SearchGroupId;
+
+                    AssignOwningSearchGroupId(entity);
+                }
+            }
+        }
+
+        private void AssignOwningSearchGroupId(ISearchableEntity entity)
+        {
+            if (entity.SearchGroupId > 0)
+            {
+                entity.OwningSearchGroupId = entity.SearchGroupId;
+            }
+            else
+            {
+                //Find the corresponding entity that is assigned to its owning search group.
+                ISearchableEntity owningItem = SearchableEntities.FirstOrDefault(item => item.Id == entity.Id && item.SearchGroupId > 0);
+                if (owningItem != null)
+                {
+                    entity.OwningSearchGroupId = owningItem.SearchGroupId;
                 }
             }
         }

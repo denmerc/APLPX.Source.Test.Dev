@@ -280,6 +280,9 @@
     <Compile Include="Views\Common\RoundingRuleControl.xaml.cs">
       <DependentUpon>RoundingRuleControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\SearchDiagnosticsControl.xaml.cs">
+      <DependentUpon>SearchDiagnosticsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -360,6 +363,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Common\RoundingRuleControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Common\SearchDiagnosticsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

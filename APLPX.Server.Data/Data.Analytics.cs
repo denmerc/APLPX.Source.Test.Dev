@@ -182,13 +182,13 @@ namespace APLPX.Server.Data {
 
             try {
                 sqlMapper.SaveIdentityMapParameters(sessionIn, ref sqlService);
-                if (sqlService.ExecuteNonQuery()) {
-                    if (sqlService.SqlStatusOk) {
-                        sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
-                        sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
-                        if (sqlRequest == sqlResponse) {
-                            sessionOut = this.LoadIdentity(sessionIn);
-                        }
+                System.Data.DataTable dataTable = sqlService.ExecuteReader();
+                if (sqlService.SqlStatusOk) {
+                    sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
+                    sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
+                    if (sqlRequest == sqlResponse) {
+                        sessionOut.Data = sqlMapper.LoadIdentityMapData(dataTable);
+                        sessionOut.SessionOk = true;
                     }
                 }
             }

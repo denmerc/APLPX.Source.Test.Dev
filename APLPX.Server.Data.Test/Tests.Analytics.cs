@@ -557,6 +557,30 @@ namespace APLPX.Tests.Server.Data {
             this.listener.WriteLine("End - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
             Assert.IsTrue(responseLoad.SessionOk);
         }
-    
+
+        //Analytic routine select meta data...
+        [TestMethod, TestCategory("Analytics select")]
+        public void TEST25_GivenUserRequestsNewAnalyticMetaData_WhenSessionValid_ThenSuccessStatusRecdAndAnalyticsMetaDataRecd() {
+            var existingAnalytic = new Analytic(0);
+            const int actionType = (Int32)Entity.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew;
+            Session<Analytic> response = _AnalyticData.Load(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic, ClientCommand = actionType });
+
+            this.listener.WriteLine("Begin - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak);
+            try {
+                this.listener.WriteLine(String.Format("Session valid: {0}", (response.SessionOk) ? "True" : "False")); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine(String.Format("Client message: {0}", response.ClientMessage)); this.listener.WriteLine(lineBreak);
+                this.listener.WriteLine(String.Format("Server message: {0}", response.ServerMessage)); this.listener.WriteLine(lineBreak);
+
+                Assert.IsTrue(response.SessionOk);
+                Assert.AreEqual(response.ClientMessage, String.Empty);
+                Assert.AreEqual(response.ServerMessage, String.Empty);
+            }
+            catch (System.Exception ex) {
+                this.listener.WriteLine(String.Format("Exception: {0}", ex.Message)); this.listener.WriteLine(lineBreak);
+            }
+            this.listener.WriteLine("End - " + System.Reflection.MethodInfo.GetCurrentMethod().Name); this.listener.WriteLine(lineBreak); this.listener.WriteLine(lineBreak);
+            Assert.IsTrue(response.SessionOk);
+        }
+
     }
 }

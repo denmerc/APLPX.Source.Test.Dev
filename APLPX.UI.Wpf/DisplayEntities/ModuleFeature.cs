@@ -32,6 +32,8 @@ namespace APLPX.UI.WPF.DisplayEntities
         private FeatureSearchGroup _selectedSearchGroup;
         private ISearchableEntity _selectedEntity;
 
+        private FeatureSearchGroup _previousSelectedSearchGroup;
+
         #endregion
 
         #region Constructors
@@ -213,7 +215,9 @@ namespace APLPX.UI.WPF.DisplayEntities
             set
             {
                 if (_selectedSearchGroup != value)
-                {
+                {                    
+                    PreviousSelectedSearchGroup = _selectedSearchGroup;
+
                     _selectedSearchGroup = value;
                     this.RaisePropertyChanged("SelectedSearchGroup");
                     if (_selectedSearchGroup != null)
@@ -223,6 +227,16 @@ namespace APLPX.UI.WPF.DisplayEntities
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets/sets the previous selected SearchGroup within this feature.
+        /// Useful for restoring the SelectedSearchGroup when the previously bound view is unloaded.
+        /// </summary>
+        public FeatureSearchGroup PreviousSelectedSearchGroup
+        {
+            get { return _previousSelectedSearchGroup; }
+            set { this.RaiseAndSetIfChanged(ref _previousSelectedSearchGroup, value); }
         }
 
         /// <summary>

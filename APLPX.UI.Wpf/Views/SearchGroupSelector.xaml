@@ -94,7 +94,21 @@
                         <StackPanel x:Name="listItemPanel"
                                     Grid.Row="0"
                                     Orientation="Horizontal"
+                                    Tag="{Binding ElementName=lstSearchGroups,
+                                                  Path=DataContext}"
                                     ToolTip="{Binding Path=Name}">
+                            <StackPanel.ContextMenu>
+                                <ContextMenu x:Name="ctxEntity" Visibility="Collapsed">
+                                    <MenuItem Command="{Binding Path=PlacementTarget.Tag.CreateNewEntityCommand,
+                                                                RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                              CommandParameter="{Binding}"
+                                              Header="{Binding Path=PlacementTarget.Tag.NewEntityCaption,
+                                                               RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                              Style="{x:Null}"
+                                              ToolTip="Create a new item in this folder" />
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
+
                             <Label x:Name="lblValue"
                                    Margin="4,2"
                                    Foreground="{DynamicResource SearchControlListBoxTitleTextColor}">
@@ -181,6 +195,13 @@
                             <Setter TargetName="lblValue" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="btnValue" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="rowSpacer" Property="Height" Value="0" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSubGroup}" Value="True" />
+                                <Condition Binding="{Binding Path=CanSearchKeyChange}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="ctxEntity" Property="Visibility" Value="Visible" />
                         </MultiDataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>

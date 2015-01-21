@@ -83,8 +83,7 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
-                  ItemsSource="{Binding ElementName=lstPriceListGroups,
-                                        Path=SelectedItem.PriceLists}">
+                  ItemsSource="{Binding Path=Entity.SelectedPriceListGroup.PriceLists}">
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,

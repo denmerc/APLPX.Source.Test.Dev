@@ -44,6 +44,19 @@ namespace APLPX.UI.WPF.Mappers
             return displayEntity;
         }
 
+        public static List<Display.AnalyticValueDriver> ToDisplayEntities(this List<DTO.AnalyticValueDriver> dtos)
+        {
+            var displayList = new List<Display.AnalyticValueDriver>();
+
+            foreach (DTO.AnalyticValueDriver moduleDTO in dtos)
+            {
+                displayList.Add(moduleDTO.ToDisplayEntity());
+            }
+
+            return displayList;
+        }
+
+
         public static DTO.AnalyticValueDriver ToDto(this Display.AnalyticValueDriver displayEntity)
         {
             var modes = new List<DTO.AnalyticValueDriverMode>();
@@ -154,6 +167,18 @@ namespace APLPX.UI.WPF.Mappers
             }
 
             return displayEntity;
+        }
+
+        public static List<Display.PricingEverydayLinkedValueDriver> ToDisplayEntities(this List<DTO.PricingEverydayLinkedValueDriver> dtos)
+        {
+            var displayList = new List<Display.PricingEverydayLinkedValueDriver>();
+
+            foreach (DTO.PricingEverydayLinkedValueDriver moduleDTO in dtos)
+            {
+                displayList.Add(moduleDTO.ToDisplayEntity());
+            }
+
+            return displayList;
         }
 
         public static DTO.PricingEverydayLinkedValueDriver ToDto(this Display.PricingEverydayLinkedValueDriver displayEntity)

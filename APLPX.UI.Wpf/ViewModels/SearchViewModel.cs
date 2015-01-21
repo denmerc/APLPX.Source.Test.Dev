@@ -1,5 +1,6 @@
 ﻿using System;
 using APLPX.UI.WPF.DisplayEntities;
+using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 
@@ -14,8 +15,17 @@ namespace APLPX.UI.WPF.ViewModels
 
         public SearchViewModel(ModuleFeature feature)
         {
+            if (feature == null)
+            {
+                throw new ArgumentNullException("feature");
+            }
+
             SelectedFeature = feature;
+
             InitializeEventHandlers();
+
+            CreateNewEntityCommand = ReactiveCommand.Create();
+            this.WhenAnyObservable(vm => vm.CreateNewEntityCommand).Subscribe(val => CreateNewEntityExecuted(val));
         }
 
         private void InitializeEventHandlers()
@@ -30,6 +40,13 @@ namespace APLPX.UI.WPF.ViewModels
         #endregion
 
         #region Properties
+
+
+        public ReactiveCommand<object> CreateNewEntityCommand
+        {
+            get;
+            private set;
+        }
 
         public bool IsSearchFilterSelected
         {
@@ -64,6 +81,15 @@ namespace APLPX.UI.WPF.ViewModels
             }
         }
 
+        public string NewEntityCaption
+        {
+            get
+            {
+                string result = String.Format("New {0}...", SelectedFeature.Classification);
+                return result;
+            }
+        }
+
         #endregion
 
         #region Event Handlers
@@ -76,6 +102,16 @@ namespace APLPX.UI.WPF.ViewModels
         private void OnSelectedSearchGroupChanged(FeatureSearchGroup searchGroup)
         {
             this.RaisePropertyChanged("IsSearchFilterSelected");
+        }
+
+        private void CreateNewEntityExecuted(object parameter)
+        {
+            var parentGroup = parameter as FeatureSearchGroup;
+            if (parentGroup != null)
+            {
+                EventAggregator notifier = ((EventAggregator)App.Current.Resources["EventManager"]);
+                notifier.Publish(parentGroup);
+            }
         }
 
         #endregion

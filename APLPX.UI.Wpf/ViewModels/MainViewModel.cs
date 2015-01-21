@@ -40,7 +40,7 @@ namespace APLPX.UI.WPF.ViewModels
         private EventAggregator _eventManager;
         private Dictionary<DTO.ModuleFeatureType, ModuleFeature> _featureCache;
         private ReactiveCommand<Object> _logoutCommand;
-        
+
 
         #endregion
 
@@ -101,7 +101,7 @@ namespace APLPX.UI.WPF.ViewModels
 
             //TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
             Modules = session.Modules.ToDisplayEntities();
-            if (Modules == null || Modules.Count <= 0) 
+            if (Modules == null || Modules.Count <= 0)
             {
                 //App.Current.Windows[0].Close();
                 ShowMessageBox("No licensed modules.", MessageBoxImage.Information);
@@ -121,6 +121,8 @@ namespace APLPX.UI.WPF.ViewModels
         {
             _eventManager = ((EventAggregator)App.Current.Resources["EventManager"]);
             _eventManager.GetEvent<SearchGroupsUpdatedEvent>().Subscribe(data => OnSearchGroupReassigned(data));
+
+            _eventManager.GetEvent<FeatureSearchGroup>().Subscribe(data => OnCreateNewEntityRequested(data));
 
             var selectedModuleChanged = this.WhenAnyValue(vm => vm.SelectedModule);
             selectedModuleChanged.Subscribe(module => OnSelectedModuleChanged(module));
@@ -158,10 +160,23 @@ namespace APLPX.UI.WPF.ViewModels
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
                 {
-                    var id = new DTO.Analytic(SelectedEntity.Id);
-                    var a = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = id , SqlKey = base.Session.SqlKey, ClientCommand = Session.ClientCommand });
+                    int entityId = 0;
+                    if (SelectedFeature.SelectedSearchGroup == null)
+                    {
+                        SelectedFeature.SelectedSearchGroup = SelectedFeature.PreviousSelectedSearchGroup;
+                    }
+                    int searchGroupId = SelectedFeature.SelectedSearchGroup.SearchGroupId;
+                    if (SelectedEntity != null)
+                    {
+                        entityId = SelectedEntity.Id;
+                        searchGroupId = SelectedEntity.OwningSearchGroupId;
+                    }
+                    var payload = new DTO.Analytic(entityId);
+                    payload.SearchGroupId = searchGroupId;
+                    var a = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = payload, SqlKey = base.Session.SqlKey, ClientCommand = Session.ClientCommand });
                     //a.Data.FilterGroups = Session.FilterGroups;
                     SelectedAnalytic = a.Data.ToDisplayEntity();
+                    SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                 }));
 
             LoadPricingEverydayCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -215,9 +230,7 @@ namespace APLPX.UI.WPF.ViewModels
                     payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
                     var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
                     var status = _analyticService.SaveDrivers(session);
-
-
-
+                    SelectedAnalytic.ValueDrivers = _analyticService.LoadDrivers(session).Data.ValueDrivers.ToDisplayEntities();
                 }));
         }
 
@@ -565,11 +578,7 @@ namespace APLPX.UI.WPF.ViewModels
                 //case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit:
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsCopy:
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew:
-                    //Create a copy of the existing entity and load edit screen.                   
-                    //SelectedAnalytic = SelectedAnalytic.Copy();
-
                     ExecuteAsyncCommand(LoadAnalyticCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Retrieving analytic...", "Analytic was successfully retrieved.");
-                    SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                     SelectedFeature.DisableRemainingSteps();
                     break;
 
@@ -654,7 +663,7 @@ namespace APLPX.UI.WPF.ViewModels
                         if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
 
-                            
+
                             ////TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
 
 
@@ -667,7 +676,7 @@ namespace APLPX.UI.WPF.ViewModels
                             //var displayAnalytics = analyticDtos.ToDisplayEntities();
 
                             _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
-                            
+
 
                         }
                         else if (SelectedFeatureViewModel != null)
@@ -683,7 +692,7 @@ namespace APLPX.UI.WPF.ViewModels
                     case DTO.ModuleFeatureType.PlanningKitPricing:
                         //if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         //{
-                            //var pricing = _pricingEverydayService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = Session.SqlKey }).Data;
+                        //var pricing = _pricingEverydayService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = Session.SqlKey }).Data;
                         //    SelectedFeature.SearchableEntities = pricing.Cast<ISearchableEntity>().ToList();
                         //    _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
                         //}
@@ -998,6 +1007,16 @@ namespace APLPX.UI.WPF.ViewModels
                 SelectedFeature.SelectedSearchGroup = data.DestinationSearchGroup;
                 SelectedFeature.SelectedEntity = data.SourceEntity;
             }
+        }
+
+
+        private void OnCreateNewEntityRequested(FeatureSearchGroup data)
+        {
+            int searchGroupId = data.SearchGroupId;
+
+            //TODO: make the service call aware of the search group ID.
+            DisplayEntities.Action action = new DisplayEntities.Action { TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew };
+            HandleSelectedAction(action);
         }
 
         private object LaunchWebPageExecuted(object parameter)

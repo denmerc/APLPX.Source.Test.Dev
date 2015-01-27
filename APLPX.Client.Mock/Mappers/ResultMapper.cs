@@ -27,7 +27,6 @@ namespace APLPX.Client.Mock.Mappers
 
             displayEntity.SkuCount = dto.SkuCount;
             displayEntity.SalesValue = dto.SalesValue;
-            //displayEntity.Run = dto.Run;
 
             return displayEntity;
         }
@@ -41,7 +40,6 @@ namespace APLPX.Client.Mock.Mappers
                                         displayEntity.SkuCount,
                                         displayEntity.SalesValue);
 
-            //dto.Run = displayEntity.Run;
 
             return dto;
         }

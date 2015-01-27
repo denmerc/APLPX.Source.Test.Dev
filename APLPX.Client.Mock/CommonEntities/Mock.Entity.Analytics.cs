@@ -257,7 +257,8 @@ namespace APLPX.Common.Mock.Entity
             Modes = modes;
         }
         #endregion
-
+        [DataMember]
+        public bool RunResults { get; set; }
         [DataMember]
         public List<AnalyticValueDriverMode> Modes { get;  set; }
         [DataMember]
@@ -325,12 +326,9 @@ namespace APLPX.Common.Mock.Entity
             ) : base(0, value, minOutlier, maxOutlier, value) {
             SkuCount = skuCount;
             SalesValue = salesValue;
-            Run = false;
         }
         #endregion
 
-        [DataMember]
-        public bool Run { get; set; }
         [DataMember]
         public int SkuCount { get;  set; }
         [DataMember]

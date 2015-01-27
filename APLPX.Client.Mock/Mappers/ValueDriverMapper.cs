@@ -25,7 +25,7 @@ namespace APLPX.Client.Mock.Mappers
             displayEntity.Title = dto.Title;
             displayEntity.Sort = dto.Sort;
             displayEntity.IsSelected = dto.IsSelected;
-
+            displayEntity.RunResults = dto.RunResults;
             if (dto.Modes != null)
             {
                 foreach (DTO.AnalyticValueDriverMode mode in dto.Modes)

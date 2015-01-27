@@ -32,7 +32,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />            
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -99,9 +99,8 @@
                   Background="{StaticResource WhiteBrush}"
                   DisplayMemberPath="Name"
                   ItemsSource="{Binding Path=AssignableFolders}"
-                  SelectedValue="{Binding Path=Analytic.SearchGroupId}"                  
-                  SelectedValuePath="SearchGroupId"
-                  >           
+                  SelectedValue="{Binding Path=Analytic.SearchGroupId}"
+                  SelectedValuePath="SearchGroupId">
             <ComboBox.Resources>
                 <!--
                     Fix for display issue with dropdown arrow.
@@ -252,6 +251,16 @@
                                      Grid.ColumnSpan="3"
                                      Visibility="{Binding Path=AreDiagnosticsVisible,
                                                           Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="2"
+                   Foreground="Yellow"
+                   Style="{StaticResource IdentityTextBlockStyle}"
+                   Text="{Binding Path=Analytic.Id,
+                                  StringFormat=Id: {0}}"
+                   Visibility="{Binding Path=AreDiagnosticsVisible,
+                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+
     </Grid>
 
 </UserControl>

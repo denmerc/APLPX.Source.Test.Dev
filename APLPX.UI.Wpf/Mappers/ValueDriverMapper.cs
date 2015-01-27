@@ -24,6 +24,7 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Title = dto.Title;
             displayEntity.Sort = dto.Sort;
             displayEntity.IsSelected = dto.IsSelected;
+            displayEntity.RunResults = dto.RunResults;
 
             if (dto.Modes != null)
             {
@@ -60,7 +61,11 @@ namespace APLPX.UI.WPF.Mappers
         public static DTO.AnalyticValueDriver ToDto(this Display.AnalyticValueDriver displayEntity)
         {
             var modes = new List<DTO.AnalyticValueDriverMode>();
-            displayEntity.Modes.ForEach(mode => modes.Add(mode.ToDto()));
+
+            foreach (Display.AnalyticValueDriverMode mode in displayEntity.Modes)
+            {
+                modes.Add(mode.ToDto());
+            }           
 
             var results = new List<DTO.AnalyticResultValueDriverGroup>();
             foreach (Display.AnalyticResult result in displayEntity.Results)
@@ -77,6 +82,8 @@ namespace APLPX.UI.WPF.Mappers
                                         displayEntity.Sort,
                                         results,
                                         modes);
+
+            dto.RunResults = displayEntity.RunResults;
 
             return dto;
         }

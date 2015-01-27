@@ -25,7 +25,6 @@ namespace APLPX.UI.WPF.Mappers
 
             displayEntity.SkuCount = dto.SkuCount;
             displayEntity.SalesValue = dto.SalesValue;
-            displayEntity.Run = dto.Run;
 
             return displayEntity;
         }
@@ -37,12 +36,22 @@ namespace APLPX.UI.WPF.Mappers
                                         displayEntity.MinOutlier,
                                         displayEntity.MaxOutlier,
                                         displayEntity.SkuCount,
-                                        displayEntity.SalesValue);
-
-            dto.Run = displayEntity.Run;
-
+                                        displayEntity.SalesValue);        
             return dto;
         }
+
+        public static List<Display.AnalyticResult> ToDisplayEntities(this List<DTO.AnalyticResultValueDriverGroup> dtoList)
+        {
+            var displayList = new List<Display.AnalyticResult>();
+
+            foreach (DTO.AnalyticResultValueDriverGroup dto in dtoList)
+            {
+                displayList.Add(dto.ToDisplayEntity());
+            }
+
+            return displayList;
+        }
+
 
         #endregion
 
@@ -65,6 +74,8 @@ namespace APLPX.UI.WPF.Mappers
 
             return displayEntity;
         }
+
+
 
         public static DTO.PricingEverydayResult ToDto(this Display.PricingEverydayResult displayEntity)
         {

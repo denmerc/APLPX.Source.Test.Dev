@@ -27,7 +27,7 @@ namespace APLPX.UI.WPF.Mappers
             {
                 foreach (DTO.ValueDriverGroup group in dto.Groups)
                 {
-                    displayEntity.Groups.Add(group.ToDisplayEntity());
+                    displayEntity.Groups.Add(group.ToAnalyticDisplayEntity());
                 }
             }
 

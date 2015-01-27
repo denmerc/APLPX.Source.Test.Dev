@@ -18,6 +18,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private bool _sqlAuthorization;
         private bool _winAuthorization;
         private bool _sessionOk;
+        private int _clientCommand;
         private string _clientMessage;
         private string _serverMessage;
         private List<Module> _modules;
@@ -76,6 +77,12 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _sessionOk; }
             set { this.RaiseAndSetIfChanged(ref _sessionOk, value); }
+        }
+
+        public int ClientCommand
+        {
+            get { return _clientCommand; }
+            set { this.RaiseAndSetIfChanged(ref _clientCommand, value); }
         }
 
         public string ClientMessage

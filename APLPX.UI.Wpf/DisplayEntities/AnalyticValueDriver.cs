@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
     public class AnalyticValueDriver : ValueDriver
     {
-
         #region Private Fields
 
-        private List<AnalyticValueDriverMode> _modes;
+        private ReactiveList<AnalyticValueDriverMode> _modes;
         private AnalyticValueDriverMode _selectedMode;
         private List<AnalyticResult> _results;
+        private bool _runResults;
+        private bool _areResultsCurrent;
+
+        private IDisposable _modeChangedListener;
 
         #endregion
 
@@ -20,15 +25,18 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         public AnalyticValueDriver()
         {
-            Modes = new List<AnalyticValueDriverMode>();
+            Modes = new ReactiveList<AnalyticValueDriverMode>();
             Results = new List<AnalyticResult>();
+
+            Modes.ChangeTrackingEnabled = true;
+            _modeChangedListener = Modes.ItemChanged.Subscribe(mode => OnModeChanged(mode));
         }
 
         #endregion
 
         #region Properties
 
-        public List<AnalyticValueDriverMode> Modes
+        public ReactiveList<AnalyticValueDriverMode> Modes
         {
             get { return _modes; }
             set { this.RaiseAndSetIfChanged(ref _modes, value); }
@@ -53,13 +61,76 @@ namespace APLPX.UI.WPF.DisplayEntities
             }
         }
 
+        /// <summary>
+        /// Gets/sets the calculated results associated with this value driver.
+        /// </summary>
         public List<AnalyticResult> Results
         {
             get { return _results; }
             set { this.RaiseAndSetIfChanged(ref _results, value); }
         }
 
+        /// <summary>
+        /// Gets/sets a value indicating whether to "run" this value driver, i.e., calculate its results.
+        /// </summary>
+        public bool RunResults
+        {
+            get { return _runResults; }
+            set { this.RaiseAndSetIfChanged(ref _runResults, value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the results assigned to this driver's groups are valid.
+        /// </summary>
+        public bool AreResultsCurrent
+        {
+            get { return _areResultsCurrent; }
+            set { this.RaiseAndSetIfChanged(ref _areResultsCurrent, value); }
+        }
+
         #endregion
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Assigns each Result of this driver to its corresponding Driver Group
+        /// Applies only to the selected mode (e.g., Auto or User).
+        /// </summary>        
+        public void AssignResultsToDriverGroups()
+        {
+            AnalyticValueDriverMode selectedMode = Modes.Where(item => item.IsSelected).FirstOrDefault();
+            if (selectedMode != null)
+            {
+                foreach (AnalyticValueDriverGroup driverGroup in selectedMode.Groups)
+                {
+                    //Assignment is based on matching the Value property of the Result and Driver Group.
+                    driverGroup.Results = Results.SingleOrDefault(result => result.Value == driverGroup.Value);
+                }
+                AreResultsCurrent = true;
+            }
+        }
+
+        /// <summary>
+        /// Detects property changes to any Mode contained within this value driver.
+        /// </summary>  
+        private void OnModeChanged(IReactivePropertyChangedEventArgs<AnalyticValueDriverMode> args)
+        {
+            var mode = args.Sender as AnalyticValueDriverMode;
+            if (mode != null)
+            {
+                //A change to any of the following properties invalidates the driver's results.
+                if (args.PropertyName == "MinOutlier" ||
+                    args.PropertyName == "MaxOutlier" ||
+                    args.PropertyName == "IsSelected" ||
+                    args.PropertyName == "GroupCount")
+                {
+                    //Update dependent properties.
+                    AreResultsCurrent = false;
+                }
+
+                this.RaisePropertyChanged(args.PropertyName);
+            }
+        }
 
         private void UpdateModeSelectionStatus()
         {
@@ -68,5 +139,8 @@ namespace APLPX.UI.WPF.DisplayEntities
                 mode.IsSelected = (mode == SelectedMode);
             }
         }
+
+        #endregion
+
     }
 }

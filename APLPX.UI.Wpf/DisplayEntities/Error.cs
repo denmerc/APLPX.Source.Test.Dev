@@ -38,5 +38,15 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        #region Overrides
+
+        public override string ToString()
+        {
+            string result = String.Format("{0}:Message={1}", GetType().Name, Message);
+
+            return result;
+        }
+
+        #endregion
     }
 }

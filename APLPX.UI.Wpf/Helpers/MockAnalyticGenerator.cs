@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ReactiveUI;
 
 using APLPX.UI.WPF.DisplayEntities;
 
@@ -49,7 +50,7 @@ namespace APLPX.UI.WPF.Helpers
 
             result.FilterGroups = MockFilterGenerator.GetFilterGroupsComplete();
             result.PriceListGroups = GetAnalyticPriceListGroups();
-            result.ValueDrivers = GetAnalyticDrivers();
+            result.ValueDrivers = new ReactiveList<AnalyticValueDriver>(GetAnalyticDrivers());
 
             //Default for display purposes.
             result.SelectedFilterGroup = result.FilterGroups.FirstOrDefault();
@@ -105,6 +106,11 @@ namespace APLPX.UI.WPF.Helpers
                 analytic.Identity.Editor = "APL Administrator";
                 analytic.Identity.Author = "APL Administrator";
                 analytic.Identity.Notes = "Optional notes...";
+
+                analytic.FilterGroups = MockFilterGenerator.GetFilterGroupsComplete();
+                analytic.PriceListGroups = GetAnalyticPriceListGroups();
+                analytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(GetAnalyticDrivers());
+
             }
 
             return list;
@@ -170,7 +176,7 @@ namespace APLPX.UI.WPF.Helpers
                 string name = grouoNames[groupIndex];
                 AnalyticPriceListGroup group = new AnalyticPriceListGroup { Name = name, Sort = (short)groupIndex, Title = name + " title" };
                 List<PriceList> priceLists = GetPriceLists(groupIndex);
-                group.PriceLists = new ReactiveUI.ReactiveList<PriceList>(priceLists);
+                group.PriceLists = new ReactiveList<PriceList>(priceLists);
 
                 result.Add(group);
             }
@@ -188,14 +194,12 @@ namespace APLPX.UI.WPF.Helpers
 
             string[] driverNames = { "Markup", "Movement", "Days On Hand" };
 
-
-
             AnalyticValueDriver driver;
             for (int driverIndex = 0; driverIndex < driverNames.Length; driverIndex++)
             {
                 var analyticResults = GetAnalyticResults(driverNames[driverIndex]);
 
-                ValueDriverGroup group;
+                AnalyticValueDriverGroup group;
                 driver = new AnalyticValueDriver { Id = driverIndex + 21, Name = driverNames[driverIndex], Sort = (short)driverIndex, Results = analyticResults };
                 //Auto generated
                 var mode = new AnalyticValueDriverMode
@@ -209,7 +213,7 @@ namespace APLPX.UI.WPF.Helpers
                 for (int groupIndex = 1; groupIndex <= 3; groupIndex++)
                 {
                     minOutlier += 1;
-                    group = new ValueDriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1, Sort = (short)groupIndex };
+                    group = new AnalyticValueDriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1, Sort = (short)groupIndex };
                     mode.Groups.Add(group);
                 }
                 driver.Modes.Add(mode);
@@ -226,7 +230,7 @@ namespace APLPX.UI.WPF.Helpers
                 for (int groupIndex = 1; groupIndex <= 5; groupIndex++)
                 {
                     minOutlier += 1;
-                    group = new ValueDriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1, Sort = (short)groupIndex };
+                    group = new AnalyticValueDriverGroup { Id = groupIndex, Value = (short)groupIndex, MinOutlier = minOutlier, MaxOutlier = minOutlier + 1, Sort = (short)groupIndex };
                     mode.Groups.Add(group);
                 }
                 driver.Modes.Add(mode);

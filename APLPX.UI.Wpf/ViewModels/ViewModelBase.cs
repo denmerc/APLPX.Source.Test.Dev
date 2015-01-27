@@ -22,6 +22,7 @@ namespace APLPX.UI.WPF.ViewModels
         private Display.PricingEveryday _selectedPricingEveryday;
 
         private DTO.Session<DTO.NullT> _session;
+        private Display.Session<DTO.NullT> _sessionDiagnostics;
         //private UserDisplayServices _userDisplayServices;
         private bool _isDebugMode;
         private bool _areDiagnosticsVisible;
@@ -32,6 +33,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         public ViewModelBase()
         {
+            SessionDiagnostics = new Display.Session<DTO.NullT>();
 #if DEBUG
             IsDebugMode = true;
 #endif
@@ -92,6 +94,16 @@ namespace APLPX.UI.WPF.ViewModels
         {
             get { return _session; }
             set { this.RaiseAndSetIfChanged(ref _session, value); }
+        }
+
+        /// <summary>
+        /// Gets/sets a Session containing diagnostic information for display.
+        /// </summary>
+        public Display.Session<DTO.NullT> SessionDiagnostics
+        {
+            get { return _sessionDiagnostics; }
+            set { this.RaiseAndSetIfChanged(ref _sessionDiagnostics, value); }
+
         }
 
         ///// <summary>

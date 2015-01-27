@@ -11,7 +11,6 @@ namespace APLPX.UI.WPF.DisplayEntities
  
         private string _salesValue;      
         private int _skuCount;
-        private bool _run;
         private string _driverName;
 
         #endregion
@@ -43,12 +42,6 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _skuCount; }
             set { this.RaiseAndSetIfChanged(ref _skuCount, value); }
-        }
-
-        public bool Run
-        {
-            get { return _run; }
-            set { this.RaiseAndSetIfChanged(ref _run, value); }
         }
 
         #endregion

@@ -561,7 +561,7 @@ namespace APLPX.Tests.Server.Data {
         //Analytic routine select meta data...
         [TestMethod, TestCategory("Analytics select")]
         public void TEST25_GivenUserRequestsNewAnalyticMetaData_WhenSessionValid_ThenSuccessStatusRecdAndAnalyticsMetaDataRecd() {
-            var existingAnalytic = new Analytic(0);
+            var existingAnalytic = new Analytic(4); //this analytic id will be ignored because the action is new...
             const int actionType = (Int32)Entity.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew;
             Session<Analytic> response = _AnalyticData.Load(new Session<APLPX.Entity.Analytic> { SqlKey = SQLKEYANALYST, Data = existingAnalytic, ClientCommand = actionType });
 

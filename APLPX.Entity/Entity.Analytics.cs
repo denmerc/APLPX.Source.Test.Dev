@@ -224,6 +224,7 @@ namespace APLPX.Entity
             List<AnalyticValueDriverMode> modes
             ) : base(id, key, isSelected) {
             Modes = modes;
+            RunResults = false;
         }
         public AnalyticValueDriver(
             int id,
@@ -232,6 +233,7 @@ namespace APLPX.Entity
             List<AnalyticResultValueDriverGroup> results
             ) : base(id, key, isSelected) {
             Results = results;
+            RunResults = false;
         }
         public AnalyticValueDriver(
             int id,
@@ -245,9 +247,12 @@ namespace APLPX.Entity
            ) : base(id, key, isSelected, name, title, sort) {
             Results = results;
             Modes = modes;
+            RunResults = false;
         }
         #endregion
 
+        [DataMember]
+        public bool RunResults { get; set; }
         [DataMember]
         public List<AnalyticValueDriverMode> Modes { get; private set; }
         [DataMember]
@@ -313,12 +318,9 @@ namespace APLPX.Entity
             ) : base(0, value, minOutlier, maxOutlier, value) {
             SkuCount = skuCount;
             SalesValue = salesValue;
-            Run = false;
         }
         #endregion
 
-        [DataMember]
-        public bool Run { get; set; }
         [DataMember]
         public int SkuCount { get; private set; }
         [DataMember]

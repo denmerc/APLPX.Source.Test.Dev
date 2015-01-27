@@ -39,8 +39,7 @@ namespace APLPX.UI.WPF.ViewModels
         private ISearchableEntity _originalEntity;
         private EventAggregator _eventManager;
         private Dictionary<DTO.ModuleFeatureType, ModuleFeature> _featureCache;
-        private ReactiveCommand<Object> _logoutCommand;
-
+        
 
         #endregion
 
@@ -136,6 +135,15 @@ namespace APLPX.UI.WPF.ViewModels
 
             var selectedEntityChanged = this.WhenAnyValue(vm => vm.SelectedFeature.SelectedEntity);
             selectedEntityChanged.Subscribe(entity => OnSelectedEntityChanged(entity));
+
+            //var canSave = this.WhenAny(x => x.SelectedAnalytic.FilterGroups.SelectMany(f => f.Filters).Count(),
+            //    (c) => c.Value < 1)
+            //    .Subscribe(x =>
+            //    {
+
+            //    });
+
+
         }
 
         private void InitializeCommands()
@@ -160,12 +168,9 @@ namespace APLPX.UI.WPF.ViewModels
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
                 {
-                    int entityId = 0;
-                    if (SelectedFeature.SelectedSearchGroup == null)
-                    {
-                        SelectedFeature.SelectedSearchGroup = SelectedFeature.PreviousSelectedSearchGroup;
-                    }
+                    SelectedFeature.RestoreSelectedSearchGroup();
                     int searchGroupId = SelectedFeature.SelectedSearchGroup.SearchGroupId;
+                    int entityId = 0;
                     if (SelectedEntity != null)
                     {
                         entityId = SelectedEntity.Id;
@@ -207,7 +212,7 @@ namespace APLPX.UI.WPF.ViewModels
                     payload.FilterGroups = SelectedAnalytic.FilterGroups;
                     var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
                     var status = _analyticService.SaveFilters(session);
-                    SelectedAnalytic.FilterGroups = _analyticService.LoadFilters(session).Data.FilterGroups.ToDisplayEntities();
+                    //SelectedAnalytic.FilterGroups = _analyticService.LoadFilters(session).Data.FilterGroups.ToDisplayEntities();
                 }));
 
             SavePriceListsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -221,16 +226,59 @@ namespace APLPX.UI.WPF.ViewModels
                     var response = _analyticService.LoadPriceLists(session);
                     var pl = response.Data.PriceListGroups.ToDisplayEntities();
                     SelectedAnalytic.PriceListGroups = pl;
+
                 }));
 
             SaveValueDriversCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
                 {
+                    //Note: This process saves all value drivers but recalculates only the driver with RunResults set to true.                    
+                    var driverToRun = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
+                    var driverKey = driverToRun.Key;
+
                     var payload = SelectedAnalytic.ToPayload();
                     payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
                     var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
                     var status = _analyticService.SaveDrivers(session);
-                    SelectedAnalytic.ValueDrivers = _analyticService.LoadDrivers(session).Data.ValueDrivers.ToDisplayEntities();
+                    var drivers = _analyticService.LoadDrivers(session).Data.ValueDrivers.ToDisplayEntities();
+                    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
+
+                    //Restore the selected value driver (the one that the service just recalculated) and mark its results current.
+                    SelectedAnalytic.SelectedValueDriver = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.Key == driverKey);
+                    if (SelectedAnalytic.SelectedValueDriver != null)
+                    {
+                        SelectedAnalytic.SelectedValueDriver.AreResultsCurrent = true;
+                    }
+                }));
+
+            RunValueDriversCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+                await Task.Run(() =>
+                {
+                    var payload = SelectedAnalytic.ToPayload();
+
+                    payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
+
+                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
+                    var status = _analyticService.SaveDrivers(session);
+                    var drivers = _analyticService.LoadDrivers(session).Data.ValueDrivers.ToDisplayEntities();
+                    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
+                }));
+
+            RunResultsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+                await Task.Run(() =>
+                {
+                    var payload = SelectedAnalytic.ToPayload();
+
+                    foreach (var driver in payload.ValueDrivers)
+                    {
+                        driver.RunResults = true;
+                    }
+                    payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
+
+                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey };
+                    var status = _analyticService.SaveDrivers(session);
+                    var drivers = _analyticService.LoadDrivers(session).Data.ValueDrivers.ToDisplayEntities();
+                    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
                 }));
         }
 
@@ -238,11 +286,14 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Properties
 
-        public ReactiveCommand<object> LogoutCommand
-        {
-            get { return _logoutCommand; }
-            private set { this.RaiseAndSetIfChanged(ref _logoutCommand, value); }
-        }
+        public ReactiveCommand<Unit> RunResultsCommand { get; private set; }
+
+
+
+        public ReactiveCommand<Unit> RunValueDriversCommand { get; private set; }
+
+
+        public ReactiveCommand<object> LogoutCommand { get; private set; }
 
         /// <summary>
         /// Gets the list of all modules for the current user.
@@ -419,7 +470,7 @@ namespace APLPX.UI.WPF.ViewModels
             get
             {
                 bool result = IsEntitySelected;
-                if (!result)
+                if (!result && SelectedStep != null)
                 {
                     switch (SelectedStep.TypeId)
                     {
@@ -625,17 +676,14 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversSave:
                     ExecuteAsyncCommand(SaveValueDriversCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Value Drivers saving...", "Value Drivers saved.");
                     break;
+
+                case DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversRun:
+                    //TODO: call service method here.
+                    ExecuteAsyncCommand(RunValueDriversCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Value Drivers saving...", "Value Drivers saved.");
+                    SelectedAnalytic.SelectedValueDriver.AreResultsCurrent = true;
+                    break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsResultsRun:
-                    if (SelectedAnalytic != null && SelectedAnalytic.SelectedValueDriver != null)
-                    {
-                        //TODO: for testing only. In production, will call server method.
-                        AnalyticValueDriverMode mode = SelectedAnalytic.SelectedValueDriver.SelectedMode;
-                        if (mode != null && mode.Groups.Count > 0)
-                        {
-                            mode.MockAutoCalculateDriverGroups();
-                            mode.AreResultsAvailable = true;
-                        }
-                    }
+                    ExecuteAsyncCommand(RunResultsCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Processing results...", "Results successfully processed.");
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingPriceListsSave:
                 case DTO.ModuleFeatureStepActionType.PlanningPromotionPricingPriceListsSave:
@@ -658,26 +706,16 @@ namespace APLPX.UI.WPF.ViewModels
                     case DTO.ModuleFeatureType.PlanningHome:
                         SelectedFeature.SelectedStep = SelectedFeature.DefaultLandingStep; SelectedFeatureViewModel = new HomeViewModel();
                         break;
-                    case DTO.ModuleFeatureType.PlanningAnalytics:
 
+                    case DTO.ModuleFeatureType.PlanningAnalytics:
                         if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
-
-
-                            ////TODO: UNCOMMENT THIS WHEN UserService is updated to work with new entity model:
-
-
-
-                            var displayAnalytics = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = Session.SqlKey }).Data.ToDisplayEntities();
+                            var returnedSession = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = Session.SqlKey });
+                            List<DTO.Analytic> analyticDtos = returnedSession.Data;
+                            var displayAnalytics = analyticDtos.ToDisplayEntities();
                             var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
                             SelectedFeature.SearchableEntities = iSearchables;
-
-                            //var analyticDtos = _analyticService.LoadList(new DTO.Session<DTO.NullT>()).Data;
-                            //var displayAnalytics = analyticDtos.ToDisplayEntities();
-
                             _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
-
-
                         }
                         else if (SelectedFeatureViewModel != null)
                         {
@@ -756,6 +794,9 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         _searchViewModel.SelectedFeature = SelectedFeature;
                     }
+
+                    SelectedFeature.RestoreSelectedSearchGroup();
+
                     result = _searchViewModel;
                     break;
 
@@ -893,10 +934,12 @@ namespace APLPX.UI.WPF.ViewModels
             IsActionInProgress = true;
             SelectedFeatureViewModel = new WaitViewModel(IsActionInProgress, workingMessage);
             CurrentStatusText = workingMessage;
-
+            if(callbackAction != null)
+            {
             //Execute the async command with the specifed callback delegate.
             CancellationToken token = new CancellationToken(false);
             command.ExecuteAsync().Subscribe(callbackAction, ex => HandleException(ex), () => OnCommandCompleted(completedMessge), token);
+        }
         }
 
         private void OnCommandCompleted(string completedMessge = null)

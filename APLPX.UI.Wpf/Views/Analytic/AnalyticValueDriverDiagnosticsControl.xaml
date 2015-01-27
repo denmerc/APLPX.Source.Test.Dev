@@ -1,0 +1,186 @@
+﻿<UserControl x:Class="APLPX.UI.WPF.Views.Analytic.AnalyticValueDriverDiagnosticsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:APLPX.UI.WPF.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+
+        <CollectionViewSource x:Key="cvsDriverModeRows" Source="{Binding Path=Entity.ValueDriverModeRows}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Driver.Name" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
+        <CollectionViewSource x:Key="cvsDriverResultRows" Source="{Binding Path=Entity.ValueDriverResultRows}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Driver.Name" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
+        <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+
+        <Style x:Key="ValueDriverGroupStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <HeaderedContentControl x:Name="headerControl" Margin="0,0,0,15">
+                            <HeaderedContentControl.Header>
+                                <Border BorderBrush="Blue" BorderThickness="0,0,0,0">
+                                    <Grid x:Name="groupHeaderGrid"
+                                          Margin="0,1,0,5"
+                                          Background="DimGray">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0"
+                                                    Margin="0"
+                                                    VerticalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Grid.Row="0"
+                                                       Margin="5"
+                                                       FontSize="16"
+                                                       Text="{Binding Path=Items[0].Driver.Name,
+                                                                      StringFormat=Value Driver: {0}}" />
+                                            <TextBlock Margin="15,5"
+                                                       FontSize="16"
+                                                       Text="{Binding Path=Items[0].Driver.Key,
+                                                                      StringFormat=Key: {0}}" />
+
+                                            <TextBlock Margin="5"
+                                                       FontSize="16"
+                                                       Text="{Binding Path=Items[0].Driver.AreResultsCurrent,
+                                                                      StringFormat=Results Current? {0}}" />
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="1"
+                                                    Margin="10,0,0,0"
+                                                    Orientation="Horizontal">
+
+                                            <TextBlock Margin="5,2" Text="IsSelected:" />
+                                            <CheckBox Margin="5,2"
+                                                      IsChecked="{Binding Path=Items[0].Driver.IsSelected,
+                                                                          Mode=OneWay}"
+                                                      IsEnabled="False" />
+
+                                            <TextBlock Margin="5,2" Text="RunResults:" />
+                                            <CheckBox Margin="5,2"
+                                                      IsChecked="{Binding Path=Items[0].Driver.RunResults,
+                                                                          Mode=OneWay}"
+                                                      IsEnabled="False" />
+
+                                            <TextBlock Margin="10,2,2,2" Text="Selected Mode:" />
+                                            <TextBlock Margin="0,2" Text="{Binding Path=Items[0].Driver.SelectedMode.Name, FallbackValue=(null)}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </HeaderedContentControl.Header>
+                            <ItemsPresenter Margin="10,0,0,0" />
+                        </HeaderedContentControl>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid x:Name="layoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock x:Name="txtTitleModes"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="Driver Modes" />
+
+        <StackPanel Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+            <TextBlock x:Name="txtSelectedName"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="{Binding Path=Entity.SelectedValueDriver.Name,
+                                      StringFormat=Selected Value Driver: {0}}" />
+            <TextBlock x:Name="txtSelectedKey"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="{Binding Path=Entity.SelectedValueDriver.Key,
+                                      StringFormat=(Key: {0})}" />
+        </StackPanel>
+
+        <DataGrid x:Name="dgDriverModes"
+                  Grid.Row="2"
+                  Grid.Column="0"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding Source={StaticResource cvsDriverModeRows}}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Mode.Name}" Header="Mode" />
+                <DataGridTextColumn Binding="{Binding Path=Mode.Key}" Header="Key" />
+                <DataGridCheckBoxColumn Binding="{Binding Path=Mode.IsSelected}" Header="IsSelected" />
+                <DataGridTextColumn Binding="{Binding Path=DriverGroup.Value}" Header="Group" />
+                <DataGridTextColumn Binding="{Binding Path=DriverGroup.MinOutlier}" Header="MinOutlier" />
+                <DataGridTextColumn Binding="{Binding Path=DriverGroup.MaxOutlier}" Header="MaxOutlier" />
+                <DataGridTextColumn Binding="{Binding Path=DriverGroup.Sort}" Header="Group Sort" />
+            </DataGrid.Columns>
+            <DataGrid.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource ValueDriverGroupStyle}" />
+            </DataGrid.GroupStyle>
+        </DataGrid>
+
+        <GridSplitter Grid.Row="2"
+                      Grid.RowSpan="1"
+                      Grid.Column="1"
+                      Width="5"
+                      Margin="3,0"
+                      HorizontalAlignment="Stretch"
+                      Background="DodgerBlue" />
+
+        <TextBlock x:Name="txtTitleResults"
+                   Grid.Row="1"
+                   Grid.Column="2"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="Driver Results" />
+
+        <DataGrid x:Name="dgDriverResults"
+                  Grid.Row="2"
+                  Grid.Column="2"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding Source={StaticResource cvsDriverResultRows}}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Driver.Name}" Header="Driver" />
+                <DataGridTextColumn Binding="{Binding Path=Result.Value}" Header="Group" />
+                <DataGridTextColumn Binding="{Binding Path=Result.MinOutlier}" Header="MinOutlier" />
+                <DataGridTextColumn Binding="{Binding Path=Result.MaxOutlier}" Header="MaxOutlier" />
+                <DataGridTextColumn Binding="{Binding Path=Result.SkuCount}" Header="SkuCount" />
+                <DataGridTextColumn Binding="{Binding Path=Result.SalesValue}" Header="SalesValue" />
+            </DataGrid.Columns>
+            <DataGrid.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource ValueDriverGroupStyle}" />
+            </DataGrid.GroupStyle>
+        </DataGrid>
+    </Grid>
+</UserControl>

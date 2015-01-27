@@ -99,7 +99,7 @@ namespace APLPX.UI.WPF.Helpers
             copy.Sort = source.Sort;
             copy.IsSelected = source.IsSelected;
 
-            foreach (ValueDriverGroup driverGroup in source.Groups)
+            foreach (var driverGroup in source.Groups)
             {
                 var driverGroupCopy = driverGroup.Copy();
                 source.Groups.Add(driverGroupCopy);
@@ -108,9 +108,9 @@ namespace APLPX.UI.WPF.Helpers
             return copy;
         }
 
-        public static ValueDriverGroup Copy(this ValueDriverGroup source)
+        public static AnalyticValueDriverGroup Copy(this AnalyticValueDriverGroup source)
         {
-            var copy = new ValueDriverGroup();
+            var copy = new AnalyticValueDriverGroup();
 
             copy.Id = source.Id;
             copy.Value = source.Value;
@@ -198,7 +198,7 @@ namespace APLPX.UI.WPF.Helpers
 
             return copy;
         }
-
+ 
         public static string Dump(this IEnumerable<Analytic> list)
         {
             StringBuilder sb = new StringBuilder();

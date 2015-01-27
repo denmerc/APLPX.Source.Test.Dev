@@ -5,6 +5,7 @@
              xmlns:converters="clr-namespace:APLPX.UI.WPF.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:helpers="clr-namespace:APLPX.UI.WPF.Helpers"
+             xmlns:local="clr-namespace:APLPX.UI.WPF.Views.Analytic"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d">
@@ -42,11 +43,10 @@
     </UserControl.Resources>
 
     <UserControl.Triggers>
-        <EventTrigger RoutedEvent="UserControl.Loaded" >
-            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}"/>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}" />
         </EventTrigger>
     </UserControl.Triggers>
-
 
     <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
@@ -54,13 +54,15 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height=".9*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0"
@@ -100,8 +102,8 @@
             </ListBox.ItemTemplate>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <Setter Property="Margin" Value="0,2"/>
-                    <Style.Resources>                     
+                    <Setter Property="Margin" Value="0,2" />
+                    <Style.Resources>
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
                     </Style.Resources>
@@ -111,42 +113,12 @@
                             <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                         </Trigger>
                         <DataTrigger Binding="{Binding Path=IsDisplayOnly}" Value="True">
-                            <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="IsEnabled" Value="False" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
-
-        <!--
-            <ListBox x:Name="DriverModesListBox0"
-            Grid.Row="1"
-            Grid.Column="1"
-            ItemsSource="{Binding ElementName=DriversListBox,
-            Path=SelectedItem.Modes}"
-            SelectedItem="{Binding Path=Entity.SelectedValueDriver.SelectedMode}"
-            Visibility="{Binding Path=IsValueDriverSelected,
-            Converter={StaticResource BooleanToVisibilityConverter}}">
-            
-            <ListBox.ItemTemplate>
-            <DataTemplate>
-            <StackPanel Orientation="Horizontal">
-            <RadioButton IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" />
-            <Label Content="{Binding Path=Name}"
-            FontSize="16"
-            Foreground="{StaticResource Foreground}" />
-            <TextBlock x:Name="txtKey"
-            Margin="5"
-            VerticalAlignment="Center"
-            FontStyle="Italic"
-            Foreground="Red"
-            Text="{Binding Path=Key}" />
-            </StackPanel>
-            </DataTemplate>
-            </ListBox.ItemTemplate>
-            </ListBox>
-        -->
-
 
         <Grid x:Name="DriveGroupConfigurationGrid"
               Grid.Row="1"
@@ -163,6 +135,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <ListBox x:Name="DriverModesListBox"
@@ -208,6 +181,15 @@
                                         Maximum="15"
                                         Minimum="1"
                                         Value="{Binding Path=Entity.SelectedValueDriver.SelectedMode.GroupCount}" />
+
+                <TextBlock Margin="5"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           Foreground="LightBlue"
+                           Text="(Results are not current)"
+                           ToolTip="This value driver must be recalculated due to changes made."
+                           Visibility="{Binding Path=Entity.SelectedValueDriver.AreResultsCurrent,
+                                                Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
             </StackPanel>
         </Grid>
 
@@ -215,6 +197,7 @@
                   Grid.Row="1"
                   Grid.Column="3"
                   Margin="15,5,0,0"
+                  HorizontalAlignment="Left"
                   VerticalAlignment="Top"
                   Background="DarkGray"
                   Command="{Binding ElementName=LayoutRoot,
@@ -238,7 +221,7 @@
                   Grid.Column="2"
                   VerticalAlignment="Top"
                   AutoGenerateColumns="False"
-                  BeginningEdit="DriverGroupsDataGrid_BeginningEdit"
+                  BeginningEdit="DriverGroupsDataGrid_BeginningEdit"                 
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   CanUserSortColumns="False"
@@ -278,20 +261,50 @@
                                     ElementStyle="{StaticResource GroupMaxElementStyle}"
                                     Header="Upper Limit" />
 
+                <!--  Results columns:  -->
                 <DataGridTextColumn x:Name="colSkuCount"
-                                    Binding="{Binding Path=SkuCount}"
+                                    Binding="{Binding Path=Results.SkuCount}"
                                     Header="Sku Count"
-                                    Visibility="{Binding Path=DataContext.Entity.SelectedValueDriver.SelectedMode.AreResultsAvailable,
-                                                         Source={x:Reference dataContextSource},
-                                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    IsReadOnly="True" />
+                <!--
+                    Visibility="{Binding Path=DataContext.Entity.SelectedValueDriver.SelectedMode.AreResultsAvailable,
+                    Source={x:Reference dataContextSource},
+                    Converter={StaticResource BooleanToVisibilityConverter}}"
+                -->
 
                 <DataGridTextColumn x:Name="colSalesValue"
-                                    Binding="{Binding Path=SalesValue}"
+                                    Binding="{Binding Path=Results.SalesValue}"
                                     Header="Sales Value"
-                                    Visibility="{Binding Path=DataContext.Entity.SelectedValueDriver.SelectedMode.AreResultsAvailable,
-                                                         Source={x:Reference dataContextSource},
-                                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
+
+        <GridSplitter Grid.Row="3"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="4"
+                      Height="5"
+                      HorizontalAlignment="Stretch"
+                      Background="DodgerBlue"
+                      Margin="0,10,0,5"
+                      Visibility="{Binding Path=AreDiagnosticsVisible,
+                                           Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <local:AnalyticValueDriverDiagnosticsControl x:Name="ucDiagnostics"
+                                                     Grid.Row="4"
+                                                     Grid.Column="0"
+                                                     Grid.ColumnSpan="4"
+                                                     Margin="5,10,0,0"
+                                                     HorizontalAlignment="Left"
+                                                     VerticalAlignment="Top"
+                                                     Visibility="{Binding Path=AreDiagnosticsVisible,
+                                                                          Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <CheckBox Grid.Row="5"
+                  Grid.Column="2"
+                  IsChecked="{Binding Path=AreDiagnosticsVisible}"
+                  ToolTip="Show/Hide diagnostic information"
+                  Visibility="{Binding Path=IsDebugMode,
+                                       Converter={StaticResource BooleanToVisibilityConverter}}" />
+
     </Grid>
 </UserControl>

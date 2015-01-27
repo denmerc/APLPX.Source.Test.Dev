@@ -39,6 +39,19 @@ namespace APLPX.UI.WPF.Mappers
 
         #endregion
 
+        public static Display.AnalyticValueDriverGroup ToAnalyticDisplayEntity(this DTO.ValueDriverGroup dto)
+        {
+            var displayEntity = new Display.AnalyticValueDriverGroup();
+
+            displayEntity.Id = dto.Id;
+            displayEntity.Value = dto.Value;
+            displayEntity.MinOutlier = dto.MinOutlier;
+            displayEntity.MaxOutlier = dto.MaxOutlier;
+            displayEntity.Sort = dto.Sort;
+
+            return displayEntity;
+        }
+
         #region PricingValueDriverGroup subclass
 
         public static Display.PricingValueDriverGroup ToDisplayEntity(this DTO.PricingValueDriverGroup dto)

@@ -18,6 +18,7 @@ namespace APLPX.Server.Data {
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.action, SqlDbType.Int, 0, ParameterDirection.Input, session.ClientCommand.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
@@ -610,6 +611,7 @@ namespace APLPX.Server.Data {
             String commandMessage = AnalyticMap.Names.saveDriversMessage;
 
             //Build comma delimited key list - type;mode;group;min;max, ...
+            const Int16 baseOne = 1;
             const System.Char splitter = ',';
             const System.Char delimiter = ';';
             System.Text.StringBuilder driverKeys = new System.Text.StringBuilder();
@@ -618,6 +620,7 @@ namespace APLPX.Server.Data {
                     foreach (Entity.AnalyticValueDriverMode mode in driver.Modes) {
                         if (mode.IsSelected) {
                             foreach (Entity.ValueDriverGroup group in mode.Groups) {
+                                driverKeys.Append((driver.RunResults.CompareTo(true) + baseOne).ToString() + delimiter); //Compare bool true=0, false=-1
                                 driverKeys.Append(driver.Key.ToString() + delimiter);
                                 driverKeys.Append(mode.Key.ToString() + delimiter);
                                 driverKeys.Append(group.Value.ToString() + delimiter);
@@ -631,6 +634,7 @@ namespace APLPX.Server.Data {
             //Map the parameters...
             APLPX.Server.Data.SqlServiceParameter[] parameters = { 
                 new SqlServiceParameter(AnalyticMap.Names.id, SqlDbType.Int, 0, ParameterDirection.Input, session.Data.Id.ToString()),
+                new SqlServiceParameter(AnalyticMap.Names.action, SqlDbType.Int, 0, ParameterDirection.Input, session.ClientCommand.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.drivers, SqlDbType.VarChar, 4000, ParameterDirection.Input, driverKeys.ToString()),
                 new SqlServiceParameter(AnalyticMap.Names.sqlSession, SqlDbType.VarChar, 50, ParameterDirection.Input, session.SqlKey),
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
@@ -808,6 +812,7 @@ namespace APLPX.Server.Data {
 
             #region Defaults Parameters...
             public const String id = "id";
+            public const String action = "action";
             public const String active = "active";
             public const String shared = "shared";
             public const String notes = "notes";

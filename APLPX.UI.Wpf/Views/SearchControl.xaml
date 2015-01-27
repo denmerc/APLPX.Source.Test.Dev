@@ -173,6 +173,14 @@
                                Grid.Column="1"
                                Text="{Binding Path=Identity.Owner}" />
 
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="2"                               
+                               Text="{Binding Path=Id,StringFormat=Id: {0}}"
+                               Foreground="Yellow"
+                               HorizontalAlignment="Right"
+                               Visibility="{Binding Path=DataContext.AreDiagnosticsVisible,
+                                                    ElementName=LayoutRoot,
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </Border>
         </StackPanel>

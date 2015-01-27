@@ -567,6 +567,11 @@
                         Visibility="{Binding Path=IsModuleSelected,
                                              Converter={StaticResource BooleanToVisibilityConverter}}">
 
+                <TextBlock x:Name="txtUser"
+                           Style="{StaticResource MainWindowHeaderTextStyle}"
+                           Text="{Binding Path=Session.User.Identity.Name,
+                                          StringFormat=User: {0}}" />
+
                 <TextBlock x:Name="txtSelectedModule"
                            Style="{StaticResource MainWindowHeaderTextStyle}"
                            Text="{Binding Path=SelectedModule.Name,

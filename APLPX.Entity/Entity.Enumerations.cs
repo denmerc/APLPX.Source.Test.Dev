@@ -12,15 +12,15 @@ namespace APLPX.Entity
         #endregion
 
         [EnumMember]
-        Startup = 121,
+        Startup = 122,
         [EnumMember]
-        Planning = 122,
+        Planning = 123,
         [EnumMember]
-        Tracking = 123,
+        Tracking = 124,
         [EnumMember]
-        Reporting = 124,
+        Reporting = 125,
         [EnumMember]
-        Administration = 125
+        Administration = 126
     }
 
     [DataContract]
@@ -32,29 +32,25 @@ namespace APLPX.Entity
         #endregion
 
         [EnumMember]
-        StartupLogin = 126,
-
+        StartupLogin = 127,
         [EnumMember]
-        PlanningHome = 127,
+        PlanningHome = 128,
         [EnumMember]
-        PlanningAnalytics = 131,
+        PlanningAnalytics = 132,
         [EnumMember]
-        PlanningEverydayPricing = 135,
+        PlanningEverydayPricing = 136,
         [EnumMember]
-        PlanningPromotionPricing = 139,
+        PlanningPromotionPricing = 140,
         [EnumMember]
-        PlanningKitPricing = 141,
-
+        PlanningKitPricing = 142,
         [EnumMember]
-        TrackingHome = 128,
-
+        TrackingHome = 129,
         [EnumMember]
-        ReportingHome = 129,
-
+        ReportingHome = 130,
         [EnumMember]
-        AdministrationHome = 130,
+        AdministrationHome = 131,
         [EnumMember]
-        AdministrationUserMaintenance = 134
+        AdministrationUserMaintenance = 135
     }
 
     [DataContract]
@@ -66,13 +62,13 @@ namespace APLPX.Entity
         #endregion
 
         [EnumMember]
-        PlanningSearchFoldersAnalytics = 65, // Step Folders Analytics
+        PlanningSearchFoldersAnalytics = 65, // Search Analytics
         [EnumMember]
-        PlanningSearchFoldersEveryday = 66, // Step Folders Everyday
+        PlanningSearchFoldersEveryday = 66, // Search Everyday
         [EnumMember]
-        PlanningSearchFoldersKits = 68, // Step Folders Kits
+        PlanningSearchFoldersKits = 68, // Search Kits
         [EnumMember]
-        PlanningSearchFoldersPromotion = 67 // Step Folders Promotion
+        PlanningSearchFoldersPromotion = 67 // Search Promotion    
     }
 
     [DataContract]
@@ -84,100 +80,93 @@ namespace APLPX.Entity
         #endregion
 
         [EnumMember]
-        StartupLoginInitialization = 143, // Step Initialization
+        StartupLoginInitialization = 144, // Step Initialization
         [EnumMember]
-        StartupLoginAuthentication = 153, // Step 1) Authentication
+        StartupLoginAuthentication = 154, // Step 1) Authentication
         [EnumMember]
-        StartupLoginChangepassword = 159, // Step 2) Change password
-        
+        StartupLoginChangepassword = 160, // Step 2) Change password
         [EnumMember]
-        PlanningHomeDashboard = 144, // Step Dashboard
+        PlanningHomeDashboard = 145, // Step Dashboard
         [EnumMember]
-        PlanningAnalyticsSearchAnalytics = 148, // Step Search Analytics
+        PlanningAnalyticsSearchAnalytics = 149, // Step Search Analytics
         [EnumMember]
-        PlanningAnalyticsIdentity = 154, // Step 1) Identity
+        PlanningAnalyticsIdentity = 155, // Step 1) Identity
         [EnumMember]
-        PlanningAnalyticsFilters = 160, // Step 2) Filters
+        PlanningAnalyticsFilters = 161, // Step 2) Filters
         [EnumMember]
-        PlanningAnalyticsPriceLists = 165, // Step 3) Price Lists
+        PlanningAnalyticsPriceLists = 166, // Step 3) Price Lists
         [EnumMember]
-        PlanningAnalyticsValueDrivers = 170, // Step 4) Value Drivers
+        PlanningAnalyticsValueDrivers = 171, // Step 4) Value Drivers
         [EnumMember]
-        PlanningAnalyticsResults = 174, // Step 5) Results
-        
+        PlanningAnalyticsResults = 175, // Step 5) Results
         [EnumMember]
-        PlanningEverydayPricingSearchEveryday = 150, // Step Search Everyday
+        PlanningEverydayPricingSearchEveryday = 151, // Step Search Everyday
         [EnumMember]
-        PlanningEverydayPricingIdentity = 156, // Step 1) Identity
+        PlanningEverydayPricingIdentity = 157, // Step 1) Identity
         [EnumMember]
-        PlanningEverydayPricingFilters = 162, // Step 2) Filters
+        PlanningEverydayPricingFilters = 163, // Step 2) Filters
         [EnumMember]
-        PlanningEverydayPricingPriceLists = 167, // Step 3) Price Lists
+        PlanningEverydayPricingPriceLists = 168, // Step 3) Price Lists
         [EnumMember]
-        PlanningEverydayPricingRounding = 171, // Step 4) Rounding
+        PlanningEverydayPricingRounding = 172, // Step 4) Rounding
         [EnumMember]
-        PlanningEverydayPricingStrategy = 175, // Step 5) Strategy
+        PlanningEverydayPricingStrategy = 176, // Step 5) Strategy
         [EnumMember]
-        PlanningEverydayPricingResults = 178, // Step 6) Results
+        PlanningEverydayPricingResults = 179, // Step 6) Results
         [EnumMember]
-        PlanningEverydayPricingForecast = 181, // Step 7) Forecast
+        PlanningEverydayPricingForecast = 182, // Step 7) Forecast
         [EnumMember]
-        PlanningEverydayPricingApproval = 184, // Step 8) Approval
-        
+        PlanningEverydayPricingApproval = 185, // Step 8) Approval
         [EnumMember]
-        PlanningPromotionPricingSearchPromotions = 151, // Step Search Promotions
+        PlanningPromotionPricingSearchPromotions = 152, // Step Search Promotions
         [EnumMember]
-        PlanningPromotionPricingIdentity = 157, // Step 1) Identity
+        PlanningPromotionPricingIdentity = 158, // Step 1) Identity
         [EnumMember]
-        PlanningPromotionPricingFilters = 163, // Step 2) Filters
+        PlanningPromotionPricingFilters = 164, // Step 2) Filters
         [EnumMember]
-        PlanningPromotionPricingPriceLists = 168, // Step 3) Price Lists
+        PlanningPromotionPricingPriceLists = 169, // Step 3) Price Lists
         [EnumMember]
-        PlanningPromotionPricingRounding = 172, // Step 4) Rounding
+        PlanningPromotionPricingRounding = 173, // Step 4) Rounding
         [EnumMember]
-        PlanningPromotionPricingStrategy = 176, // Step 5) Strategy
+        PlanningPromotionPricingStrategy = 177, // Step 5) Strategy
         [EnumMember]
-        PlanningPromotionPricingResults = 179, // Step 6) Results
+        PlanningPromotionPricingResults = 180, // Step 6) Results
         [EnumMember]
-        PlanningPromotionPricingForecast = 182, // Step 7) Forecast
+        PlanningPromotionPricingForecast = 183, // Step 7) Forecast
         [EnumMember]
-        PlanningPromotionPricingApproval = 185, // Step 8) Approval
-        
+        PlanningPromotionPricingApproval = 186, // Step 8) Approval
         [EnumMember]
-        PlanningKitPricingSearchKits = 152, // Step Search Kits
+        PlanningKitPricingSearchKits = 153, // Step Search Kits
         [EnumMember]
-        PlanningKitPricingIdentity = 158, // Step 1) Identity
+        PlanningKitPricingIdentity = 159, // Step 1) Identity
         [EnumMember]
-        PlanningKitPricingFilters = 164, // Step 2) Filters
+        PlanningKitPricingFilters = 165, // Step 2) Filters
         [EnumMember]
-        PlanningKitPricingPriceLists = 169, // Step 3) Price Lists
+        PlanningKitPricingPriceLists = 170, // Step 3) Price Lists
         [EnumMember]
-        PlanningKitPricingRounding = 173, // Step 4) Rounding
+        PlanningKitPricingRounding = 174, // Step 4) Rounding
         [EnumMember]
-        PlanningKitPricingStrategy = 177, // Step 5) Strategy
+        PlanningKitPricingStrategy = 178, // Step 5) Strategy
         [EnumMember]
-        PlanningKitPricingResults = 180, // Step 6) Results
+        PlanningKitPricingResults = 181, // Step 6) Results
         [EnumMember]
-        PlanningKitPricingForecast = 183, // Step 7) Forecast
+        PlanningKitPricingForecast = 184, // Step 7) Forecast
         [EnumMember]
-        PlanningKitPricingApproval = 186, // Step 8) Approval
-        
+        PlanningKitPricingApproval = 187, // Step 8) Approval
         [EnumMember]
-        TrackingHomeDashboard = 145, // Step Dashboard
-        
+        TrackingHomeDashboard = 146, // Step Dashboard
         [EnumMember]
-        ReportingHomeDashboard = 146, // Step Dashboard
-        
+        ReportingHomeDashboard = 147, // Step Dashboard
         [EnumMember]
-        AdministrationHomeDashboard = 147, // Step Dashboard
+        AdministrationHomeDashboard = 148, // Step Dashboard
         [EnumMember]
-        AdministrationUserMaintenanceSearchUsers = 149, // Step Search Users
+        AdministrationUserMaintenanceSearchUsers = 150, // Step Search Users
         [EnumMember]
-        AdministrationUserMaintenanceUserSecurity = 155, // Step 1) User Security
+        AdministrationUserMaintenanceUserSecurity = 156, // Step 1) User Security
         [EnumMember]
-        AdministrationUserMaintenanceUserIdentity = 161, // Step 2) User Identity
+        AdministrationUserMaintenanceUserIdentity = 162, // Step 2) User Identity
         [EnumMember]
-        AdministrationUserMaintenanceUserRole = 166 // Step 3) User Role
+        AdministrationUserMaintenanceUserRole = 167 // Step 3) User Role    
     }
 
     [DataContract]
@@ -189,150 +178,149 @@ namespace APLPX.Entity
         #endregion
 
         [EnumMember]
-        PlanningAnalyticsSearchAnalyticsNew = 187, // Workflow View Step Action, New Analytics
+        PlanningAnalyticsSearchAnalyticsNew = 188, // Workflow View Step Action, New Analytics
         [EnumMember]
-        PlanningAnalyticsSearchAnalyticsEdit = 226, // Workflow View Step Action, Edit Analytics
+        PlanningAnalyticsSearchAnalyticsEdit = 227, // Workflow View Step Action, Edit Analytics
         [EnumMember]
-        PlanningAnalyticsSearchAnalyticsCopy = 246, // Workflow View Step Action, Copy Analytics
+        PlanningAnalyticsSearchAnalyticsCopy = 247, // Workflow View Step Action, Copy Analytics
         [EnumMember]
-        PlanningAnalyticsIdentitySave = 191, // Workflow View Step Action, Save Analytics Identity
+        PlanningAnalyticsIdentitySave = 192, // Workflow View Step Action, Save Analytics Identity
         [EnumMember]
-        PlanningAnalyticsIdentityCancel = 230, // Workflow View Step Action, Cancel Analytics Identity
+        PlanningAnalyticsIdentityCancel = 231, // Workflow View Step Action, Cancel Analytics Identity
         [EnumMember]
-        PlanningAnalyticsFiltersSave = 195, // Workflow View Step Action, Save Analytics Filters
+        PlanningAnalyticsFiltersSave = 196, // Workflow View Step Action, Save Analytics Filters
         [EnumMember]
-        PlanningAnalyticsFiltersRun = 231, // Workflow View Step Action, Run Analytics Results with Filter update
+        PlanningAnalyticsFiltersRun = 232, // Workflow View Step Action, Run Analytics Results with Filter update
         [EnumMember]
-        PlanningAnalyticsFiltersCancel = 250, // Workflow View Step Action, Cancel Analytics Filters
+        PlanningAnalyticsFiltersCancel = 251, // Workflow View Step Action, Cancel Analytics Filters
         [EnumMember]
-        PlanningAnalyticsPriceListsSave = 199, // Workflow View Step Action, Save Analytics Price Lists
+        PlanningAnalyticsPriceListsSave = 200, // Workflow View Step Action, Save Analytics Price Lists
         [EnumMember]
-        PlanningAnalyticsPriceListsRun = 232, // Workflow View Step Action, Run Analytics Results with Price Lists update
+        PlanningAnalyticsPriceListsRun = 233, // Workflow View Step Action, Run Analytics Results with Price Lists update
         [EnumMember]
-        PlanningAnalyticsPriceListsCancel = 251, // Workflow View Step Action, Cancel Analytics Price Lists
+        PlanningAnalyticsPriceListsCancel = 252, // Workflow View Step Action, Cancel Analytics Price Lists
         [EnumMember]
-        PlanningAnalyticsValueDriversSave = 203, // Workflow View Step Action, Save Analytics Value Drivers
+        PlanningAnalyticsValueDriversSave = 204, // Workflow View Step Action, Save Analytics Value Drivers
         [EnumMember]
-        PlanningAnalyticsValueDriversCancel = 233, // Workflow View Step Action, Cancel Analytics Value Drivers
+        PlanningAnalyticsValueDriversRun = 234, // Workflow View Step Action, Run Analytics Value Drivers
         [EnumMember]
-        PlanningAnalyticsResultsRun = 207, // Workflow View Step Action, Run Analytics Results
-        
+        PlanningAnalyticsValueDriversCancel = 253, // Workflow View Step Action, Cancel Analytics Value Drivers
         [EnumMember]
-        PlanningEverydayPricingSearchEverydayNew = 188, // Workflow View Step Action, New Everyday
+        PlanningAnalyticsResultsRun = 208, // Workflow View Step Action, Run Analytics Results
         [EnumMember]
-        PlanningEverydayPricingSearchEverydayEdit = 227, // Workflow View Step Action, Edit Everyday
+        PlanningEverydayPricingSearchEverydayNew = 189, // Workflow View Step Action, New Everyday
         [EnumMember]
-        PlanningEverydayPricingSearchEverydayCopy = 247, // Workflow View Step Action, Copy Everyday
+        PlanningEverydayPricingSearchEverydayEdit = 228, // Workflow View Step Action, Edit Everyday
         [EnumMember]
-        PlanningEverydayPricingIdentitySave = 192, // Workflow View Step Action, Save Everyday Pricing Identity
+        PlanningEverydayPricingSearchEverydayCopy = 248, // Workflow View Step Action, Copy Everyday
         [EnumMember]
-        PlanningEverydayPricingFiltersSave = 196, // Workflow View Step Action, Save Everyday Pricing Filters
+        PlanningEverydayPricingIdentitySave = 193, // Workflow View Step Action, Save Everyday Pricing Identity
         [EnumMember]
-        PlanningEverydayPricingPriceListsSave = 200, // Workflow View Step Action, Save Everyday Pricing Price Lists
+        PlanningEverydayPricingFiltersSave = 197, // Workflow View Step Action, Save Everyday Pricing Filters
         [EnumMember]
-        PlanningEverydayPricingRoundingSave = 204, // Workflow View Step Action, Save Everyday Pricing Rounding
+        PlanningEverydayPricingPriceListsSave = 201, // Workflow View Step Action, Save Everyday Pricing Price Lists
         [EnumMember]
-        PlanningEverydayPricingStrategySave = 208, // Workflow View Step Action, Save Everyday Pricing Strategy
+        PlanningEverydayPricingRoundingSave = 205, // Workflow View Step Action, Save Everyday Pricing Rounding
         [EnumMember]
-        PlanningEverydayPricingResultsWarnings = 211, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningEverydayPricingStrategySave = 209, // Workflow View Step Action, Save Everyday Pricing Strategy
         [EnumMember]
-        PlanningEverydayPricingResultsWarningsHide = 240, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningEverydayPricingResultsWarnings = 212, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningEverydayPricingResultsWarningsShow = 220, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningEverydayPricingResultsWarningsHide = 241, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningEverydayPricingResultsRounding = 234, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningEverydayPricingResultsWarningsShow = 221, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningEverydayPricingResultsRoundingApply = 223, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningEverydayPricingResultsRounding = 235, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningEverydayPricingResultsRoundingRemove = 243, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningEverydayPricingResultsRoundingApply = 224, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningEverydayPricingResultsOptions = 252, // Workflow View Step Action, Options Everyday Pricing Results
+        PlanningEverydayPricingResultsRoundingRemove = 244, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningEverydayPricingForecastNew = 214, // Workflow View Step Action, New Everyday Pricing Forecast
+        PlanningEverydayPricingResultsOptions = 254, // Workflow View Step Action, Options Everyday Pricing Results
         [EnumMember]
-        PlanningEverydayPricingForecastSave = 237, // Workflow View Step Action, Save Everyday Pricing Forecast
+        PlanningEverydayPricingForecastNew = 215, // Workflow View Step Action, New Everyday Pricing Forecast
         [EnumMember]
-        PlanningEverydayPricingForecastDelete = 255, // Workflow View Step Action, Delete Everyday Pricing Forecast
+        PlanningEverydayPricingForecastSave = 238, // Workflow View Step Action, Save Everyday Pricing Forecast
         [EnumMember]
-        PlanningEverydayPricingApprovalSubmit = 217, // Workflow View Step Action, Submit Everyday Pricing Approval
-        
+        PlanningEverydayPricingForecastDelete = 257, // Workflow View Step Action, Delete Everyday Pricing Forecast
         [EnumMember]
-        PlanningPromotionPricingSearchPromotionsNew = 189, // Workflow View Step Action, New Promotions
+        PlanningEverydayPricingApprovalSubmit = 218, // Workflow View Step Action, Submit Everyday Pricing Approval
         [EnumMember]
-        PlanningPromotionPricingSearchPromotionsEdit = 228, // Workflow View Step Action, Edit Promotions
+        PlanningPromotionPricingSearchPromotionsNew = 190, // Workflow View Step Action, New Promotions
         [EnumMember]
-        PlanningPromotionPricingSearchPromotionsCopy = 248, // Workflow View Step Action, Copy Promotions
+        PlanningPromotionPricingSearchPromotionsEdit = 229, // Workflow View Step Action, Edit Promotions
         [EnumMember]
-        PlanningPromotionPricingIdentitySave = 193, // Workflow View Step Action, Save Promotion Pricing Identity
+        PlanningPromotionPricingSearchPromotionsCopy = 249, // Workflow View Step Action, Copy Promotions
         [EnumMember]
-        PlanningPromotionPricingFiltersSave = 197, // Workflow View Step Action, Save Promotion Pricing Filters
+        PlanningPromotionPricingIdentitySave = 194, // Workflow View Step Action, Save Promotion Pricing Identity
         [EnumMember]
-        PlanningPromotionPricingPriceListsSave = 201, // Workflow View Step Action, Save Promotion Pricing Price Lists
+        PlanningPromotionPricingFiltersSave = 198, // Workflow View Step Action, Save Promotion Pricing Filters
         [EnumMember]
-        PlanningPromotionPricingRoundingSave = 205, // Workflow View Step Action, Save Promotion Pricing Rounding
+        PlanningPromotionPricingPriceListsSave = 202, // Workflow View Step Action, Save Promotion Pricing Price Lists
         [EnumMember]
-        PlanningPromotionPricingStrategySave = 209, // Workflow View Step Action, Save Promotion Pricing Strategy
+        PlanningPromotionPricingRoundingSave = 206, // Workflow View Step Action, Save Promotion Pricing Rounding
         [EnumMember]
-        PlanningPromotionPricingResultsWarnings = 212, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningPromotionPricingStrategySave = 210, // Workflow View Step Action, Save Promotion Pricing Strategy
         [EnumMember]
-        PlanningPromotionPricingResultsWarningsHide = 241, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningPromotionPricingResultsWarnings = 213, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningPromotionPricingResultsWarningsShow = 221, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningPromotionPricingResultsWarningsHide = 242, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningPromotionPricingResultsRounding = 235, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningPromotionPricingResultsWarningsShow = 222, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningPromotionPricingResultsRoundingApply = 224, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningPromotionPricingResultsRounding = 236, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningPromotionPricingResultsRoundingRemove = 244, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningPromotionPricingResultsRoundingApply = 225, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningPromotionPricingResultsOptions = 253, // Workflow View Step Action, Options Promotion Pricing Results
+        PlanningPromotionPricingResultsRoundingRemove = 245, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningPromotionPricingForecastNew = 215, // Workflow View Step Action, New Promotion Pricing Forecast
+        PlanningPromotionPricingResultsOptions = 255, // Workflow View Step Action, Options Promotion Pricing Results
         [EnumMember]
-        PlanningPromotionPricingForecastSave = 238, // Workflow View Step Action, Save Promotion Pricing Forecast
+        PlanningPromotionPricingForecastNew = 216, // Workflow View Step Action, New Promotion Pricing Forecast
         [EnumMember]
-        PlanningPromotionPricingForecastDelete = 256, // Workflow View Step Action, Delete Promotion Pricing Forecast
+        PlanningPromotionPricingForecastSave = 239, // Workflow View Step Action, Save Promotion Pricing Forecast
         [EnumMember]
-        PlanningPromotionPricingApprovalSubmit = 218, // Workflow View Step Action, Submit Promotion Pricing Approval
-        
+        PlanningPromotionPricingForecastDelete = 258, // Workflow View Step Action, Delete Promotion Pricing Forecast
         [EnumMember]
-        PlanningKitPricingSearchKitsNew = 190, // Workflow View Step Action, New Kits
+        PlanningPromotionPricingApprovalSubmit = 219, // Workflow View Step Action, Submit Promotion Pricing Approval
         [EnumMember]
-        PlanningKitPricingSearchKitsEdit = 229, // Workflow View Step Action, Edit Kits
+        PlanningKitPricingSearchKitsNew = 191, // Workflow View Step Action, New Kits
         [EnumMember]
-        PlanningKitPricingSearchKitsCopy = 249, // Workflow View Step Action, Copy Kits
+        PlanningKitPricingSearchKitsEdit = 230, // Workflow View Step Action, Edit Kits
         [EnumMember]
-        PlanningKitPricingIdentitySave = 194, // Workflow View Step Action, Save Kit Pricing Identity
+        PlanningKitPricingSearchKitsCopy = 250, // Workflow View Step Action, Copy Kits
         [EnumMember]
-        PlanningKitPricingFiltersSave = 198, // Workflow View Step Action, Save Kit Pricing Filters
+        PlanningKitPricingIdentitySave = 195, // Workflow View Step Action, Save Kit Pricing Identity
         [EnumMember]
-        PlanningKitPricingPriceListsSave = 202, // Workflow View Step Action, Save Kit Pricing Price Lists
+        PlanningKitPricingFiltersSave = 199, // Workflow View Step Action, Save Kit Pricing Filters
         [EnumMember]
-        PlanningKitPricingRoundingSave = 206, // Workflow View Step Action, Save Kit Pricing Rounding
+        PlanningKitPricingPriceListsSave = 203, // Workflow View Step Action, Save Kit Pricing Price Lists
         [EnumMember]
-        PlanningKitPricingStrategySave = 210, // Workflow View Step Action, Save Kit Pricing Strategy
+        PlanningKitPricingRoundingSave = 207, // Workflow View Step Action, Save Kit Pricing Rounding
         [EnumMember]
-        PlanningKitPricingResultsWarnings = 213, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningKitPricingStrategySave = 211, // Workflow View Step Action, Save Kit Pricing Strategy
         [EnumMember]
-        PlanningKitPricingResultsWarningsHide = 242, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningKitPricingResultsWarnings = 214, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningKitPricingResultsWarningsShow = 222, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningKitPricingResultsWarningsHide = 243, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningKitPricingResultsRounding = 236, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningKitPricingResultsWarningsShow = 223, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningKitPricingResultsRoundingApply = 225, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningKitPricingResultsRounding = 237, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningKitPricingResultsRoundingRemove = 245, // Workflow View Step Action, Warnings Everyday Pricing Results
+        PlanningKitPricingResultsRoundingApply = 226, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningKitPricingResultsOptions = 254, // Workflow View Step Action, Options Kit Pricing Results
+        PlanningKitPricingResultsRoundingRemove = 246, // Workflow View Step Action, Warnings Everyday Pricing Results
         [EnumMember]
-        PlanningKitPricingForecastNew = 216, // Workflow View Step Action, New Kit Pricing Forecast
+        PlanningKitPricingResultsOptions = 256, // Workflow View Step Action, Options Kit Pricing Results
         [EnumMember]
-        PlanningKitPricingForecastSave = 239, // Workflow View Step Action, Save Kit Pricing Forecast
+        PlanningKitPricingForecastNew = 217, // Workflow View Step Action, New Kit Pricing Forecast
         [EnumMember]
-        PlanningKitPricingForecastDelete = 257, // Workflow View Step Action, Delete Kit Pricing Forecast
+        PlanningKitPricingForecastSave = 240, // Workflow View Step Action, Save Kit Pricing Forecast
         [EnumMember]
-        PlanningKitPricingApprovalSubmit = 219, // Workflow View Step Action, Submit Kit Pricing Approval
+        PlanningKitPricingForecastDelete = 259, // Workflow View Step Action, Delete Kit Pricing Forecast
+        [EnumMember]
+        PlanningKitPricingApprovalSubmit = 220 // Workflow View Step Action, Submit Kit Pricing Approval    
     }
 
     [DataContract]
@@ -424,7 +412,7 @@ namespace APLPX.Entity
         [EnumMember]
         AplUserRolePricingApprover = 88, // Application (create price routine, edit own, view own, delete own, approve assigned, schedule none)
         [EnumMember]
-        AplUserRolePricingReviewer = 89, // Application (create none, edit none, view all, delete none, approve none, schedule none)
+        AplUserRolePricingReviewer = 89 // Application (create none, edit none, view all, delete none, approve none, schedule none)
     }
 }
 

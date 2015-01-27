@@ -215,7 +215,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set
             {
                 if (_selectedSearchGroup != value)
-                {                    
+                {
                     PreviousSelectedSearchGroup = _selectedSearchGroup;
 
                     _selectedSearchGroup = value;
@@ -438,6 +438,20 @@ namespace APLPX.UI.WPF.DisplayEntities
             }
             this.RaisePropertyChanged("SearchGroupDisplayList");
         }
+
+        /// <summary>
+        /// Restores the previously selected search group. 
+        /// Explanation: SelectedSearchGroup can be set to null if a view bound to it is unloaded.
+        /// The feature stores the previously selected search group so it can be restored.
+        /// </summary>       
+        public void RestoreSelectedSearchGroup()
+        {
+            if (SelectedSearchGroup == null && PreviousSelectedSearchGroup != null)
+            {
+                SelectedSearchGroup = PreviousSelectedSearchGroup;
+            }
+        }
+
 
         #region Overrides
 

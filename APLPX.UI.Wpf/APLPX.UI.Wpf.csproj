@@ -138,6 +138,7 @@
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\ValueConverters.cs" />
     <Compile Include="DisplayEntities\Action.cs" />
+    <Compile Include="DisplayEntities\AnalyticValueDriverGroup.cs" />
     <Compile Include="DisplayEntities\PriceListGroup.cs" />
     <Compile Include="DisplayEntities\PricingEveryday.cs" />
     <Compile Include="DisplayEntities\PricingEverydayKeyValueDriver.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="DisplayEntities\PricingResultWarning.cs" />
     <Compile Include="DisplayEntities\PricingRoundingTemplate.cs" />
     <Compile Include="DisplayEntities\PricingValueDriverGroup.cs" />
+    <Compile Include="DisplayEntities\Session.cs" />
     <Compile Include="DisplayEntities\ValueDriverMode.cs" />
     <Compile Include="DisplayEntities\PriceRoundingRule.cs" />
     <Compile Include="DisplayEntities\PriceMarkupRule.cs" />
@@ -228,6 +230,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mappers\PriceRulesMapper.cs" />
+    <Compile Include="Mappers\SessionMapper.cs" />
     <Compile Include="Mappers\ValueDriverMapper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -243,6 +246,8 @@
     <Compile Include="Mappers\ErrorMapper.cs" />
     <Compile Include="Mappers\IdentityMapper.cs" />
     <Compile Include="Themes\ThemeManager.cs" />
+    <Compile Include="Validation\AnalyticValidations.cs" />
+    <Compile Include="Validation\CommonValidations.cs" />
     <Compile Include="ViewModels\Admin\AdminUsersViewModel.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticDriverViewModel.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticIdentityViewModel.cs" />
@@ -277,11 +282,17 @@
     <Compile Include="Views\Analytic\AnalyticPriceListsControl.xaml.cs">
       <DependentUpon>AnalyticPriceListsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Analytic\AnalyticValueDriverDiagnosticsControl.xaml.cs">
+      <DependentUpon>AnalyticValueDriverDiagnosticsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Common\RoundingRuleControl.xaml.cs">
       <DependentUpon>RoundingRuleControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Common\SearchDiagnosticsControl.xaml.cs">
       <DependentUpon>SearchDiagnosticsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SessionDiagnosticsControl.xaml.cs">
+      <DependentUpon>SessionDiagnosticsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
@@ -331,6 +342,9 @@
     <Compile Include="Views\SearchGroupSelector.xaml.cs">
       <DependentUpon>SearchGroupSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ValidationResultsControl.xaml.cs">
+      <DependentUpon>ValidationResultsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WaitView.xaml.cs">
       <DependentUpon>WaitView.xaml</DependentUpon>
     </Compile>
@@ -358,6 +372,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Analytic\AnalyticValueDriverDiagnosticsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Analytic\AnalyticValueDriversStepControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -367,6 +385,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Common\SearchDiagnosticsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SessionDiagnosticsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -483,6 +505,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SearchGroupSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ValidationResultsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

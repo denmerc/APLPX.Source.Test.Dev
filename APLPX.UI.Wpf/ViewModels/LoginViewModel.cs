@@ -38,27 +38,35 @@ namespace APLPX.UI.WPF.ViewModels
                 );
             LoginCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 {
-                    StatusMessage = "Authenticating...";
-
-                    Session = await Authenticate(UserName, Password);
-
-                    if(Session.SessionOk)
+                    try
                     {
-                        StatusMessage = "Loading modules...";
-                        var cred  = new UserCredential(UserName, Password);
-                        //Session.User.Credential = cred;
-                        //Session.Analytics = analyticService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
-                        //Session.Pricing = pricingService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
-                        var mvm = new MainViewModel(Session, analyticService, userService, pricingService);
-                        var mainWindow = new MainWindow();
-                        mainWindow.DataContext = mvm;
-                        App.Current.Windows[0].Close();
-                        mainWindow.Show();
+
+                        StatusMessage = "Authenticating...";
+
+                        Session = await Authenticate(UserName, Password);
+
+                        if(Session.SessionOk)
+                        {
+                            StatusMessage = "Loading modules...";
+                            var cred  = new UserCredential(UserName, Password);
+                            //Session.User.Credential = cred;
+                            //Session.Analytics = analyticService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
+                            //Session.Pricing = pricingService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
+                            var mvm = new MainViewModel(Session, analyticService, userService, pricingService);
+                            var mainWindow = new MainWindow();
+                            mainWindow.DataContext = mvm;
+                            App.Current.Windows[0].Close();
+                            mainWindow.Show();
                         
-                    } 
-                    else //failed
+                        } 
+                        else //failed
+                        {
+                            ClearWhenLoginFails();
+                        }
+                    }
+                    catch (Exception)
                     {
-                        StatusMessage = "Failed to authenticate. Please try again.";
+                        ClearWhenLoginFails();
                     }
                 }
             );
@@ -68,7 +76,8 @@ namespace APLPX.UI.WPF.ViewModels
         public IPricingEverydayService PricingService { get; set; }
         public IAnalyticService AnalyticService { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }
+        private string _password;
+        public string Password { get { return _password;}   set { this.RaiseAndSetIfChanged(ref _password, value); } }
         private string _statusMessage;
         public string StatusMessage { get { return _statusMessage; } set { this.RaiseAndSetIfChanged(ref _statusMessage, value); } }
         public ReactiveCommand<Unit> LoginCommand { get; set; }
@@ -113,6 +122,12 @@ namespace APLPX.UI.WPF.ViewModels
                 return UserService.Authenticate(Session); //TODO:Using and Dispose of proxy.
 
             });
+        }
+
+        private void ClearWhenLoginFails()
+        {
+            Password = string.Empty;
+            StatusMessage = "Failed to authenticate. Please try again.";
         }
 
         

@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class FilterGroup : DisplayEntityBase
+    public class FilterGroup : DisplayEntityBase, IDisposable
     {
 
         #region Private Fields
@@ -17,9 +17,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _name;
         private short _sort;
         private ReactiveList<Filter> _filters;
-
-        private ISubject<Filter> _filterChangeSubject;
+ 
         private IDisposable _itemChangedSubscription;
+        private bool _isDisposed;
 
         #endregion
 
@@ -29,9 +29,8 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             Filters = new ReactiveList<Filter>();
 
-            //Initialize change notification related items.
-            _filterChangeSubject = new Subject<Filter>();
-            FilterChanges = _filterChangeSubject.AsObservable();
+            Filters.ChangeTrackingEnabled = true;
+            _itemChangedSubscription = Filters.ItemChanged.Subscribe(f => OnFilterChanged(f));  
         }
 
         #endregion
@@ -89,7 +88,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             {
                 bool? result = _filters.AreAllItemsIncluded(filter => filter.IsSelected);
 
-                return result;  
+                return result;
             }
         }
 
@@ -104,16 +103,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
                 return result;
             }
-        }
-
-        /// <summary>
-        /// Exposes an IObservable sequence of Filters within this group whose IsSelected property has changed.        
-        /// </summary>
-        public IObservable<Filter> FilterChanges
-        {
-            private set;
-            get;
-        }
+        } 
 
         #endregion
 
@@ -126,13 +116,40 @@ namespace APLPX.UI.WPF.DisplayEntities
 
             if (filter != null)
             {
-                _filterChangeSubject.OnNext(filter);
-
-                //Update dependent property.
+                //Update dependent properties.
                 OnPropertyChanged("AreAllFiltersSelected");
                 OnPropertyChanged("SelectedCount");
             }
         }
 
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_itemChangedSubscription != null)
+                    {
+                        _itemChangedSubscription.Dispose();
+                        _itemChangedSubscription = null;
+                    }
+                    if (Filters!= null)
+                    {
+                        Filters.ChangeTrackingEnabled = false;
+                    }
+                }
+                _isDisposed = true;
+            }
+        }
+
+        #endregion
     }
 }

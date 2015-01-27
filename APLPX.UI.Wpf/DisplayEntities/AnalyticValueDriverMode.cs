@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class AnalyticValueDriverMode : ValueDriverMode
+    public class AnalyticValueDriverMode : ValueDriverMode, IDisposable
     {
         #region Private Fields
 
@@ -13,6 +13,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private bool _areResultsAvailable;
 
         private IDisposable _drivergroupChangedListener;
+        private bool _isDisposed;
 
         #endregion
 
@@ -79,7 +80,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set
             {
                 if (_groups != value)
-                {         
+                {
                     _groups = value;
                     this.RaisePropertyChanged("Groups");
                     RecalculateEditableGroups();
@@ -210,5 +211,34 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_drivergroupChangedListener != null)
+                    {
+                        _drivergroupChangedListener.Dispose();
+                        _drivergroupChangedListener = null;
+                    }
+                    if (Groups != null)
+                    {
+                        Groups.ChangeTrackingEnabled = false;
+                    }
+                }
+                _isDisposed = true;
+            }
+        }
+
+        #endregion
     }
 }

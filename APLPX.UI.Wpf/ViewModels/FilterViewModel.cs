@@ -24,6 +24,11 @@ namespace APLPX.UI.WPF.ViewModels
             }
 
             Entity = entity;
+         
+            if (entity.SelectedFilterGroup == null && entity.FilterGroups.Count > 0)
+            {
+                entity.SelectedFilterGroup = entity.FilterGroups[0];
+            }
 
             InitializeCommands();
         }
@@ -51,7 +56,7 @@ namespace APLPX.UI.WPF.ViewModels
             get { return _entity; }
             private set { this.RaiseAndSetIfChanged(ref _entity, value); }
         }
-  
+
         #endregion
 
         #region Command Handlers

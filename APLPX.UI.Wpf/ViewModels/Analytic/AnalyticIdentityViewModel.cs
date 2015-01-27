@@ -86,6 +86,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                     if (_searchKeyChangedSubscription != null)
                     {
                         _searchKeyChangedSubscription.Dispose();
+                        _searchKeyChangedSubscription = null;
                     }
                 }
                 _isDisposed = true;

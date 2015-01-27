@@ -8,7 +8,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class Analytic : DisplayEntityBase, ISearchableEntity, IFilterContainer
+    public class Analytic : DisplayEntityBase, ISearchableEntity, IFilterContainer, IDisposable
     {
         #region Private Fields
 
@@ -27,7 +27,10 @@ namespace APLPX.UI.WPF.DisplayEntities
         private bool _canNameChange;
         private bool _canSearchKeyChange;
 
+        private Dictionary<int, bool> _listAreDriverResultsCurrent;
+
         private IDisposable _valueDriverChangedListener;
+        private bool _isDisposed;
 
         #endregion
 
@@ -40,6 +43,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             ValueDrivers = new ReactiveList<AnalyticValueDriver>();
             PriceListGroups = new List<AnalyticPriceListGroup>();
 
+            _listAreDriverResultsCurrent = new Dictionary<int, bool>();
             ValueDrivers.ChangeTrackingEnabled = true;
             _valueDriverChangedListener = ValueDrivers.ItemChanged.Subscribe(v => OnDriverChanged(v));
         }
@@ -230,6 +234,29 @@ namespace APLPX.UI.WPF.DisplayEntities
         }
 
         /// <summary>
+        /// Restores the value of each ValueDriver's AreResultsCurrent property from this analytic's internal cache.
+        /// </summary>
+        public void RestoreStateAreDriverResultsCurrent()
+        {
+            foreach (AnalyticValueDriver driver in ValueDrivers)
+            {
+                driver.AreResultsCurrent = _listAreDriverResultsCurrent[driver.Key];
+            }
+        }
+
+        /// <summary>
+        /// Saves the current value of each ValueDriver's AreResultsCurrent property.
+        /// </summary>
+        public void SaveStateAreDriverResultsCurrent()
+        {
+            _listAreDriverResultsCurrent.Clear();
+            foreach (AnalyticValueDriver driver in ValueDrivers)
+            {
+                _listAreDriverResultsCurrent.Add(driver.Key, driver.AreResultsCurrent);
+            }
+        }
+
+        /// <summary>
         /// Detects property changes to any Value Driver within this Analytic.
         /// </summary> 
         private void OnDriverChanged(IReactivePropertyChangedEventArgs<AnalyticValueDriver> args)
@@ -289,5 +316,35 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_valueDriverChangedListener != null)
+                    {
+                        _valueDriverChangedListener.Dispose();
+                        _valueDriverChangedListener = null;
+                    }
+                    if (ValueDrivers != null)
+                    {
+                        ValueDrivers.ChangeTrackingEnabled = false;
+                    }
+                }
+                _isDisposed = true;
+            }
+        }
+
+        #endregion
     }
 }

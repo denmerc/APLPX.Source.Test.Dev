@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class AnalyticValueDriver : ValueDriver
+    public class AnalyticValueDriver : ValueDriver, IDisposable
     {
         #region Private Fields
 
@@ -18,6 +18,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private bool _areResultsCurrent;
 
         private IDisposable _modeChangedListener;
+        private bool _isDisposed;
 
         #endregion
 
@@ -106,7 +107,6 @@ namespace APLPX.UI.WPF.DisplayEntities
                     //Assignment is based on matching the Value property of the Result and Driver Group.
                     driverGroup.Results = Results.SingleOrDefault(result => result.Value == driverGroup.Value);
                 }
-                AreResultsCurrent = true;
             }
         }
 
@@ -142,5 +142,34 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_modeChangedListener != null)
+                    {
+                        _modeChangedListener.Dispose();
+                        _modeChangedListener = null;
+                    }
+                    if (Modes != null)
+                    {
+                        Modes.ChangeTrackingEnabled = false;
+                    }
+                }
+                _isDisposed = true;
+            }
+        }
+
+        #endregion
     }
 }

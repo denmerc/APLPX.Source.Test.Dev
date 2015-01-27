@@ -11,6 +11,7 @@ using DTO = APLPX.Entity;
 using System.Reflection;
 using APLPX.Client.Contracts;
 using APLPX.Client;
+using NLog;
 
 namespace APLPX.UI.WPF
 {
@@ -87,10 +88,12 @@ namespace APLPX.UI.WPF
                     loginWindow.ShowMinButton = false;
                     loginWindow.ShowDialog();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     App.Current.Windows[0].Close();
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Error, ex);
                     MessageBox.Show("Application startup failure");
+
                 }
 
 

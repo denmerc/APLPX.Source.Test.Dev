@@ -7,9 +7,16 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     /// <summary>
     /// View model for analytic driver-related views.
     /// </summary>
-    public class AnalyticDriverViewModel : ViewModelBase
+    public class AnalyticDriverViewModel : ViewModelBase, IDisposable
     {
+        #region Private Fields
+
         private DisplayEntities.Analytic _entity;
+        private IDisposable _modeChangedSubscription;
+        private IDisposable _driverChangedSubscription;
+        private bool _isDisposed;
+
+        #endregion
 
         #region Constructor and Initialization
 
@@ -26,10 +33,6 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             {
                 entity.EnsureModeIsSelected(entity.SelectedValueDriver);
             }
-            foreach (AnalyticValueDriver driver in entity.ValueDrivers)
-            {
-                driver.AssignResultsToDriverGroups();
-            }
 
             InitializeCommands();
             InitializeEventHandlers();
@@ -45,10 +48,10 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         private void InitializeEventHandlers()
         {
             var selectedValueDriverChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver);
-            selectedValueDriverChanged.Subscribe(driver => OnSelectedValueDriverChanged(driver));
+            _driverChangedSubscription = selectedValueDriverChanged.Subscribe(driver => OnSelectedValueDriverChanged(driver));
 
             var selectedValueDriverModeChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver.SelectedMode);
-            selectedValueDriverModeChanged.Subscribe(mode => OnSelectedValueDriverModeChanged(mode));
+            _modeChangedSubscription = selectedValueDriverModeChanged.Subscribe(mode => OnSelectedValueDriverModeChanged(mode));
         }
 
         #endregion
@@ -116,7 +119,6 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                     //TODO: for testing only. In production, will call server method.
                     mode.MockAutoCalculateDriverGroups();
                     mode.AreResultsAvailable = true;
-                    Entity.SelectedValueDriver.AreResultsCurrent = true;
                 }
             }
             return parameter;
@@ -139,6 +141,37 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         {
             this.RaisePropertyChanged("IsValueDriverModeSelected");
             return null;
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_modeChangedSubscription != null)
+                    {
+                        _modeChangedSubscription.Dispose();
+                        _modeChangedSubscription = null;
+                    }
+                    if (_driverChangedSubscription != null)
+                    {
+                        _driverChangedSubscription.Dispose();
+                        _driverChangedSubscription = null;
+                    }
+                }
+                _isDisposed = true;
+            }
         }
 
         #endregion

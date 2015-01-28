@@ -146,12 +146,6 @@ namespace APLPX.UI.WPF.ViewModels
             LogoutCommand = ReactiveCommand.Create();
             LogoutCommand.Subscribe(x =>
             {
-                //var loginWindow = new LoginWindow();
-                //loginWindow.DataContext = new LoginViewModel(_userService);
-                //loginWindow.ShowMaxRestoreButton = false;
-                //loginWindow.ShowMinButton = false;
-                //loginWindow.Show();
-                //App.Current.Windows[0].Close();
 
                 var loginWindow = new LoginWindow();
                 var vm = new LoginViewModel(_userService);
@@ -163,14 +157,10 @@ namespace APLPX.UI.WPF.ViewModels
                 if (loginWindow.ShowDialog() == true)
                 {
                     //TODO: reload Session??? 
-                    //TODO: fire this at timeout interval
+                    //TODO: trigger this at inactive timeout interval
                     var mvm = new MainViewModel(vm.Session, _analyticService, _userService, _pricingEverydayService);
                     App.Current.MainWindow.DataContext = mvm;
-                    
-                    
                 }
-
-
             });
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -647,6 +637,7 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit:
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic - {0} [{1}] :  being Edited.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                     ExecuteAsyncCommand(LoadAnalyticCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Retrieving analytic...", "Analytic was successfully retrieved.");
                     break;
@@ -690,7 +681,7 @@ namespace APLPX.UI.WPF.ViewModels
                 //Save the current entity.
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentitySave:
                     //TODO: call analytic save method on service.
-                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic - {0} being saved.", SelectedAnalytic.Id)); 
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic Identity - {0} [{1}] :  being saved.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
 
                     ExecuteAsyncCommand(SaveAnalyticIdentityCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Identity saving...", "Identity saved.");
                     SelectedAnalytic.IsDirty = false;
@@ -707,22 +698,32 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepActionType.PlanningKitPricingIdentitySave:
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsFiltersSave:
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic Filters - {0} [{1}] :  being saved.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
+
                     ExecuteAsyncCommand(SaveFiltersCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Filters saving...", "Filters saved.");
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsPriceListsSave:
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic Pricelists - {0} [{1}] :  being saved.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
+
                     ExecuteAsyncCommand(SavePriceListsCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Price Lists saving...", "Price Lists saved.");
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversSave:
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic ValueDrivers - {0} [{1}] :  being saved.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
+
                     ExecuteAsyncCommand(SaveValueDriversCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Value Drivers saving...", "Value Drivers saved.");
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversRun:
                     //TODO: call service method here.
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic Driver Results - {0} [{1}] :  being run.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
+
                     ExecuteAsyncCommand(RunValueDriversCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Value Drivers saving...", "Value Drivers saved.");
                    
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsResultsRun:
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic Results - {0} [{1}] :  being run.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
+
                     ExecuteAsyncCommand(RunResultsCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Processing results...", "Results successfully processed.");
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingPriceListsSave:

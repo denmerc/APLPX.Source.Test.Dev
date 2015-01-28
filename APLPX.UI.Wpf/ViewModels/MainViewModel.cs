@@ -67,7 +67,6 @@ namespace APLPX.UI.WPF.ViewModels
             : this()
         {
 
-           
             if (session == null)
             {
                 throw new ArgumentNullException("session", "session cannot be null.");

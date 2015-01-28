@@ -102,24 +102,9 @@ namespace APLPX.UI.WPF.ViewModels
             {
                 
                 //Thread.Sleep(3000); //simulate initialize delay
-                //throw new Exception();
-                //var session = new Session<NullT>
-                //{
-                //    User = new User(
-                //                            //2,
-                //                            //"UserKey",
-                //                            //new UserRole(3, "Administrator", "Role description"),
-                //                            //new UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
-                //                            new UserCredential(loginName, password, null)
-                //                            //,
-                //                            //new List<SQLEnumeration>()
+                Session.User = new User(new UserCredential(loginName, password));
+                var response = UserService.Authenticate(Session); //TODO:Using and Dispose of proxy.
 
-                //                       )
-                //};
-
-                    Session.User = new User(new UserCredential(loginName, password));
-                    var response = UserService.Authenticate(Session); //TODO:Using and Dispose of proxy.
-                
                 return response;
             });
         }

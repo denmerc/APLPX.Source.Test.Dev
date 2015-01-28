@@ -13,6 +13,7 @@ using APLPX.Client.Contracts;
 using APLPX.Client;
 using NLog;
 
+
 namespace APLPX.UI.WPF
 {
     /// <summary>
@@ -25,12 +26,42 @@ namespace APLPX.UI.WPF
         protected override void OnStartup(StartupEventArgs e)
         {
 
-            var eventManager = new EventAggregator();
-            App.Current.Resources.Add("EventManager", eventManager);
+            var eventManager = new EventAggregator(); App.Current.Resources.Add("EventManager", eventManager);
+
             string[] pluginPaths = System.IO.Directory.GetFiles(System.AppDomain.CurrentDomain.BaseDirectory, "APLPX.Client.Mock.dll");
-            if(pluginPaths.Count() > 0)
+            if(pluginPaths.Count() <= 0) // normal startup
             {
-                
+
+                try
+                {
+                    IUserService userClient = new UserClient();
+                    IAnalyticService analyticClient = new AnalyticClient();
+                    IPricingEverydayService pricingClient = new PricingEverydayClient();
+
+                    var loginWindow = new LoginWindow();
+                    var vm = new LoginViewModel(userClient);
+                    loginWindow.DataContext = vm;
+                    loginWindow.ShowMaxRestoreButton = false;
+                    loginWindow.ShowMinButton = false;
+                    var mainWindow = new MainWindow();
+
+                    if (loginWindow.ShowDialog() == true)
+                    {
+                        var mvm = new MainViewModel(vm.Session, analyticClient, userClient, pricingClient);
+                        mainWindow.DataContext = mvm;
+                        mainWindow.Show();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Error, "Unhandled Application Exception", ex);
+                    App.Current.Shutdown();
+                }
+
+            }
+            else // mock
+            {
+
                 var plugins = ( from file in pluginPaths
                                     let asm = Assembly.LoadFile(file)
                                     from type in asm.GetExportedTypes()
@@ -66,36 +97,6 @@ namespace APLPX.UI.WPF
                     mainWindow.DataContext = mvm;
                     mainWindow.Show();
                 }
-
-
-
-
-            }
-            else
-            {
-                try
-                {
-                    var loginWindow = new LoginWindow();
-                    var vm = new LoginViewModel(new UserClient(), new AnalyticClient(), new PricingEverydayClient());
-                    loginWindow.DataContext = vm;
-                    loginWindow.ShowMaxRestoreButton = false;
-                    loginWindow.ShowMinButton = false;
-                    var mainWindow = new MainWindow();
-                    
-                    if (loginWindow.ShowDialog() == true)
-                    { 
-                        var mvm = new MainViewModel(vm.Session, new AnalyticClient(), new UserClient(), new PricingEverydayClient());
-                        mainWindow.DataContext = mvm;
-                        mainWindow.Show();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogManager.GetCurrentClassLogger().Log(LogLevel.Error, "Unhandled Exception", ex);
-                    App.Current.Shutdown();
-                }
-
-
             }            
 
             base.OnStartup(e);

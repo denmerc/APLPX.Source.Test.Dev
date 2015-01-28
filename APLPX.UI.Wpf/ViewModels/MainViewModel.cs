@@ -66,15 +66,8 @@ namespace APLPX.UI.WPF.ViewModels
                             )
             : this()
         {
-            //var loadFiltersCommand = ReactiveCommand.CreateAsyncTask<List<DTO.FilterGroup>>(async _ =>
-            //await Task.Run(() =>
-            //{
-            //    return new Data.MockUserService().FilterGroups;
-            //})).ExecuteAsync().Subscribe(x =>
-            //{
-            //    session.FilterGroups = x;
-            //});
-            
+
+           
             if (session == null)
             {
                 throw new ArgumentNullException("session", "session cannot be null.");
@@ -153,14 +146,31 @@ namespace APLPX.UI.WPF.ViewModels
             LogoutCommand = ReactiveCommand.Create();
             LogoutCommand.Subscribe(x =>
             {
-                App.Current.MainWindow.Hide();
-                App.Current.MainWindow.OwnedWindows[4].Show();
                 //var loginWindow = new LoginWindow();
-                //loginWindow.DataContext = new LoginViewModel(_userService, _analyticService, _pricingEverydayService);
+                //loginWindow.DataContext = new LoginViewModel(_userService);
                 //loginWindow.ShowMaxRestoreButton = false;
                 //loginWindow.ShowMinButton = false;
                 //loginWindow.Show();
                 //App.Current.Windows[0].Close();
+
+                var loginWindow = new LoginWindow();
+                var vm = new LoginViewModel(_userService);
+                loginWindow.DataContext = vm;
+                loginWindow.ShowMaxRestoreButton = false;
+                loginWindow.ShowMinButton = false;
+
+
+                if (loginWindow.ShowDialog() == true)
+                {
+                    //TODO: reload Session??? 
+                    //TODO: fire this at timeout interval
+                    var mvm = new MainViewModel(vm.Session, _analyticService, _userService, _pricingEverydayService);
+                    App.Current.MainWindow.DataContext = mvm;
+                    
+                    
+                }
+
+
             });
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -680,6 +690,8 @@ namespace APLPX.UI.WPF.ViewModels
                 //Save the current entity.
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentitySave:
                     //TODO: call analytic save method on service.
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic - {0} being saved.", SelectedAnalytic.Id)); 
+
                     ExecuteAsyncCommand(SaveAnalyticIdentityCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Identity saving...", "Identity saved.");
                     SelectedAnalytic.IsDirty = false;
                     SelectedFeature.EnableRemainingSteps();

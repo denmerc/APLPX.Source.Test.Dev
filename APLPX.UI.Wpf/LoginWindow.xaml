@@ -76,17 +76,15 @@
                     <KeyBinding Command="{Binding LoginCommand}" Key="Return"/>
                 </PasswordBox.InputBindings>
             </PasswordBox>
-                        <!--Command="{Binding LoginCommand}"--> 
             <Button  Grid.Column="1" Grid.Row="4"
                         Background="White"
                         Foreground="Black"
                     
                         Height="50" Width="50"
                         FontSize="20"
+                        Command="{Binding LoginCommand}" 
                         HorizontalAlignment="Right"
-                     
-                     Click="Button_Click"
-                         Style="{DynamicResource MetroCircleButtonStyle}"
+                        Style="{DynamicResource MetroCircleButtonStyle}"
                     >
 
                 <Rectangle Width="20"

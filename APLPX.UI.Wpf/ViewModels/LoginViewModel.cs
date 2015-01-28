@@ -10,16 +10,15 @@ using System.Reactive;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace APLPX.UI.WPF.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        public LoginViewModel(IUserService userService, IAnalyticService analyticService, IPricingEverydayService pricingService)
+        public LoginViewModel(IUserService userService)
         {
             UserService = userService;
-            PricingService = pricingService;
-            AnalyticService = analyticService;
             StatusMessage = "";
             
             InitializeCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -47,19 +46,12 @@ namespace APLPX.UI.WPF.ViewModels
 
                         if(Session.SessionOk)
                         {
-                            //StatusMessage = "Loading modules...";
-                           // var cred  = new UserCredential(UserName, Password);
-                            //Session.User.Credential = cred;
-                            //Session.Analytics = analyticService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
-                            //Session.Pricing = pricingService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
-                            //var mvm = new MainViewModel(Session, analyticService, userService, pricingService);
-                            //var mainWindow = new MainWindow();
-                            //mainWindow.DataContext = mvm;
-                            App.Current.Windows[0].DialogResult = true;
 
-                            
-                            
-                            //mainWindow.Show();
+                            foreach (Window item in App.Current.Windows)
+                            {
+                                if ( item.GetType().Name == "LoginWindow")
+                                    item.DialogResult = true;
+                            }
                         
                         } 
                         else //failed

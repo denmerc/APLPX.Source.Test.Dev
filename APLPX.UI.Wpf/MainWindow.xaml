@@ -20,7 +20,7 @@
                       WindowState="Maximized"
                       WindowTitleBrush="{DynamicResource ApplicationTitleBarColor}"
                       d:DesignHeight="1354"
-                      mc:Ignorable="d">
+                      mc:Ignorable="d" Loaded="MetroWindow_Loaded">
 
     <controls:MetroWindow.Resources>
         <ResourceDictionary>

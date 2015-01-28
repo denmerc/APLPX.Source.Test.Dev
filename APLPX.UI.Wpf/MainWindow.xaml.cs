@@ -142,5 +142,10 @@ namespace APLPX.UI.WPF
             // When they change the selection, just set the theme to the selected value.
             manager.SetTheme(themePicker.SelectedValue.ToString());
         }
+
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow = this;
+        }
     }
 }

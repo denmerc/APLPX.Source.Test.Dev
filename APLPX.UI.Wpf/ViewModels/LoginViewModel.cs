@@ -1,5 +1,6 @@
 ﻿using APLPX.Client.Contracts;
 using APLPX.Entity;
+using NLog;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -19,53 +20,57 @@ namespace APLPX.UI.WPF.ViewModels
             UserService = userService;
             PricingService = pricingService;
             AnalyticService = analyticService;
-
-            //var sharedKey = UserService.Initialize();
-            //InitializeCommand.ExecuteAsync();
-
+            StatusMessage = "";
+            
             InitializeCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 {
-                    StatusMessage = "Initializing PriceExpert...";
-                    
                     Session = await Initialize();   
                 });
-            
             InitializeCommand.ExecuteAsync().Subscribe( x =>
                     {
-                        //enable login button
-                        StatusMessage = "";
+                        //TODO: enable login button
                     }
                 );
+
+            
+
             LoginCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 {
                     try
                     {
-
+                        
+                        StatusMessage = "Initializing";
+                        Session = await Initialize();
                         StatusMessage = "Authenticating...";
 
                         Session = await Authenticate(UserName, Password);
 
                         if(Session.SessionOk)
                         {
-                            StatusMessage = "Loading modules...";
-                            var cred  = new UserCredential(UserName, Password);
+                            //StatusMessage = "Loading modules...";
+                           // var cred  = new UserCredential(UserName, Password);
                             //Session.User.Credential = cred;
                             //Session.Analytics = analyticService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
                             //Session.Pricing = pricingService.LoadList(new Session<NullT> { SqlKey = Session.SqlKey }).Data;
-                            var mvm = new MainViewModel(Session, analyticService, userService, pricingService);
-                            var mainWindow = new MainWindow();
-                            mainWindow.DataContext = mvm;
-                            App.Current.Windows[0].Close();
-                            mainWindow.Show();
+                            //var mvm = new MainViewModel(Session, analyticService, userService, pricingService);
+                            //var mainWindow = new MainWindow();
+                            //mainWindow.DataContext = mvm;
+                            App.Current.Windows[0].DialogResult = true;
+
+                            
+                            
+                            //mainWindow.Show();
                         
                         } 
                         else //failed
                         {
+                            LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, "Login attempt failed");
                             ClearWhenLoginFails();
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        LogManager.GetCurrentClassLogger().Log(LogLevel.Error, ex);
                         ClearWhenLoginFails();
                     }
                 }
@@ -82,7 +87,8 @@ namespace APLPX.UI.WPF.ViewModels
         public string StatusMessage { get { return _statusMessage; } set { this.RaiseAndSetIfChanged(ref _statusMessage, value); } }
         public ReactiveCommand<Unit> LoginCommand { get; set; }
         public ReactiveCommand<Unit> InitializeCommand { get; set; }
-        public Session<NullT> Session { get; set; }
+        private Session<NullT> _session;
+        public Session<NullT> Session { get { return _session; } set { this.RaiseAndSetIfChanged(ref _session, value); } }
 
         public async Task<Session<NullT>> Initialize()
         {
@@ -118,9 +124,11 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //                       )
                 //};
-                Session.User = new User(new UserCredential(loginName, password));
-                return UserService.Authenticate(Session); //TODO:Using and Dispose of proxy.
 
+                    Session.User = new User(new UserCredential(loginName, password));
+                    var response = UserService.Authenticate(Session); //TODO:Using and Dispose of proxy.
+                
+                return response;
             });
         }
 
@@ -128,6 +136,7 @@ namespace APLPX.UI.WPF.ViewModels
         {
             Password = string.Empty;
             StatusMessage = "Failed to authenticate. Please try again.";
+            
         }
 
         

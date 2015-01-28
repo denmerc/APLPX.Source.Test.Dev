@@ -59,10 +59,13 @@ namespace APLPX.UI.WPF.ViewModels
         /// <param name="session">An autheticated session for the current user.</param>
         /// <param name="analyticService"An IAnalyticService provider.></param>
         /// <param name="userService">An IUserService provider.</param>
-        public MainViewModel(DTO.Session<DTO.NullT> session, IAnalyticService analyticService, IUserService userService, IPricingEverydayService pricingService)
+        public MainViewModel(   DTO.Session<DTO.NullT> session, 
+                                IAnalyticService analyticService, 
+                                IUserService userService, 
+                                IPricingEverydayService pricingService
+                            )
             : this()
         {
-            LogManager.GetCurrentClassLogger().Log(LogLevel.Debug, "this is a test."); throw new ArgumentNullException("session", "session cannot be null.");
             //var loadFiltersCommand = ReactiveCommand.CreateAsyncTask<List<DTO.FilterGroup>>(async _ =>
             //await Task.Run(() =>
             //{
@@ -150,12 +153,14 @@ namespace APLPX.UI.WPF.ViewModels
             LogoutCommand = ReactiveCommand.Create();
             LogoutCommand.Subscribe(x =>
             {
-                var loginWindow = new LoginWindow();
-                loginWindow.DataContext = new LoginViewModel(_userService, _analyticService, _pricingEverydayService);
-                loginWindow.ShowMaxRestoreButton = false;
-                loginWindow.ShowMinButton = false;
-                loginWindow.Show();
-                App.Current.Windows[0].Close();
+                App.Current.MainWindow.Hide();
+                App.Current.MainWindow.OwnedWindows[4].Show();
+                //var loginWindow = new LoginWindow();
+                //loginWindow.DataContext = new LoginViewModel(_userService, _analyticService, _pricingEverydayService);
+                //loginWindow.ShowMaxRestoreButton = false;
+                //loginWindow.ShowMinButton = false;
+                //loginWindow.Show();
+                //App.Current.Windows[0].Close();
             });
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>

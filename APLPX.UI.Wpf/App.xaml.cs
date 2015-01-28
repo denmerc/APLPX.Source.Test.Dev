@@ -40,8 +40,6 @@ namespace APLPX.UI.WPF
                 var analyticClient = (IAnalyticService) plugins[0];
                 var pricingEverydayClient = (IPricingEverydayService) plugins[1];
                 var userClient = (IUserService)plugins[2];
-
-
                 
                 var session = new DTO.Session<DTO.NullT>
                 {
@@ -64,14 +62,9 @@ namespace APLPX.UI.WPF
                     //session.Pricing = response.Pricing;
                     //session.FilterGroups = response.FilterGroups;
                     var mvm = new MainViewModel(session, analyticClient, userClient, pricingEverydayClient);
-                var mainWindow = new MainWindow();
-                mainWindow.DataContext = mvm;
-                mainWindow.Show();
-
-                }
-                else
-                {
-                    
+                    var mainWindow = new MainWindow();
+                    mainWindow.DataContext = mvm;
+                    mainWindow.Show();
                 }
 
 
@@ -83,78 +76,27 @@ namespace APLPX.UI.WPF
                 try
                 {
                     var loginWindow = new LoginWindow();
-                    loginWindow.DataContext = new LoginViewModel(new UserClient(), new AnalyticClient(), new PricingEverydayClient());
+                    var vm = new LoginViewModel(new UserClient(), new AnalyticClient(), new PricingEverydayClient());
+                    loginWindow.DataContext = vm;
                     loginWindow.ShowMaxRestoreButton = false;
                     loginWindow.ShowMinButton = false;
-                    loginWindow.ShowDialog();
+                    var mainWindow = new MainWindow();
+                    
+                    if (loginWindow.ShowDialog() == true)
+                    { 
+                        var mvm = new MainViewModel(vm.Session, new AnalyticClient(), new UserClient(), new PricingEverydayClient());
+                        mainWindow.DataContext = mvm;
+                        mainWindow.Show();
+                    }
                 }
                 catch (Exception ex)
                 {
-                    App.Current.Windows[0].Close();
-                    LogManager.GetCurrentClassLogger().Log(LogLevel.Error, ex);
-                    MessageBox.Show("Application startup failure");
-
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Error, "Unhandled Exception", ex);
+                    App.Current.Shutdown();
                 }
 
 
             }            
-
-
-            //var userService = new MockUserService();
-            //var analyticService = new MockAnalyticService();
-
-            //var eventManager = new EventAggregator();
-            //App.Current.Resources.Add("EventManager", eventManager);
-
-            //if (ConfigurationManager.AppSettings["Environment"] != "DEV")
-                //{
-            //    var loginWindow = new LoginWindow();
-            //    loginWindow.DataContext = new LoginViewModel(userService);
-            //    loginWindow.ShowMaxRestoreButton = false;
-            //    loginWindow.ShowMinButton = false;
-            //    loginWindow.ShowDialog();
-            //}
-            //else // DEV environment mode
-            //{
-            //    var session = new DTO.Session<DTO.NullT>
-            //    {
-            //        User = new DTO.User(
-            //                                2,
-            //                                "UserKey",
-            //                                new DTO.UserRole(3, "Administrator", "Role description"),
-            //                                new DTO.UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
-            //                                new DTO.UserCredential("admin", "password", "passwordnew"),
-            //                                new List<DTO.SQLEnumeration>()
-
-            //                           )
-            //    };
-
-                //    var mvm = new MainViewModel(session, analyticService, userService);
-                //    var mainWindow = new MainWindow();
-                //    mainWindow.DataContext = mvm;
-                //    mainWindow.Show();
-
-            //    //TODO: UNCOMMENT WHEN UserService is updated to work with new entity model:
-
-            //    //DTO.Session<DTO.NullT> response = userService.Authenticate(session);
-            //    //if (response.SessionOk)
-            //    //{
-            //    //    session.Modules = response.Modules;
-            //    //    session.Analytics = response.Analytics;
-            //    //    session.Pricing = response.Pricing;
-            //    //    //session.FilterGroups = FilterGroups;
-            //    //    var mvm = new MainViewModel(session, analyticService, userService);
-            //    //    var mainWindow = new MainWindow();
-            //    //    mainWindow.DataContext = mvm;
-            //    //    mainWindow.Show();
-            //    //}
-            //    //else
-            //    //{
-            //    //    MessageBox.Show(response.ClientMessage);
-            //    //}
-                //}
-                //TODO: UNCOMMENT WHEN UserService is updated to work with new entity model:
-            
 
             base.OnStartup(e);
 
@@ -165,7 +107,5 @@ namespace APLPX.UI.WPF
             base.OnExit(e);
         }
 
-        //protected ReactiveCommand<Unit> LoadFiltersCommand { get; private set; }
-        //public List<FilterGroup> FilterGroups { get; set; }
     }
 }

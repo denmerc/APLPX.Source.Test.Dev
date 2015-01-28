@@ -25,5 +25,9 @@ namespace APLPX.UI.WPF
             InitializeComponent();
             FocusManager.SetFocusedElement(this, NameTextBox);
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }

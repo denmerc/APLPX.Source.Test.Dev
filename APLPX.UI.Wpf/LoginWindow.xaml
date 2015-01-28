@@ -73,9 +73,10 @@
                          ext:PasswordBoxAssistant.BindPassword="true"
                          ext:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay}">
                 <PasswordBox.InputBindings>
-                    <KeyBinding Command="{Binding LoginCommand}" Key="Return" />
+                    <KeyBinding Command="{Binding LoginCommand}" Key="Return"/>
                 </PasswordBox.InputBindings>
             </PasswordBox>
+                        <!--Command="{Binding LoginCommand}"--> 
             <Button  Grid.Column="1" Grid.Row="4"
                         Background="White"
                         Foreground="Black"
@@ -83,7 +84,8 @@
                         Height="50" Width="50"
                         FontSize="20"
                         HorizontalAlignment="Right"
-                        Command="{Binding LoginCommand}"
+                     
+                     Click="Button_Click"
                          Style="{DynamicResource MetroCircleButtonStyle}"
                     >
 

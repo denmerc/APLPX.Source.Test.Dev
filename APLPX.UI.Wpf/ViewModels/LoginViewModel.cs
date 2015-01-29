@@ -105,6 +105,9 @@ namespace APLPX.UI.WPF.ViewModels
                 Session.User = new User(new UserCredential(loginName, password));
                 var response = UserService.Authenticate(Session); //TODO:Using and Dispose of proxy.
 
+                if(response.SessionOk)
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("User - {0} successfully logged in.", Session.User.Credential.Login)); 
+
                 return response;
             });
         }

@@ -9,15 +9,15 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class AnalyticPriceListGroup : PriceListGroup
+    public class AnalyticPriceListGroup : PriceListGroup, IDisposable
     {
 
         #region Private Fields
 
         private ReactiveList<PriceList> _priceLists;
 
-        private ISubject<PriceList> _priceListChangeSubject;
         private IDisposable _itemChangedSubscription;
+        private bool _isDisposed;
 
         #endregion
 
@@ -27,9 +27,8 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             PriceLists = new ReactiveList<PriceList>();
 
-            //Initialize change notification related items.
-            _priceListChangeSubject = new Subject<PriceList>();
-            PriceListChanges = _priceListChangeSubject.AsObservable();
+            PriceLists.ChangeTrackingEnabled = true;
+            _itemChangedSubscription = PriceLists.ItemChanged.Subscribe(pl => OnPriceListChanged(pl));
         }
 
         #endregion
@@ -39,27 +38,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         public ReactiveList<PriceList> PriceLists
         {
             get { return _priceLists; }
-            set
-            {
-                if (_priceLists != value)
-                {
-                    if (_priceLists != null && _itemChangedSubscription != null)
-                    {
-                        _itemChangedSubscription.Dispose();
-                    }
-
-                    _priceLists = value;
-                    this.RaisePropertyChanged("PriceLists");
-
-                    if (_priceLists != null)
-                    {
-                        //Subscribe to change notifications for any FIlter in this group. 
-                        //This enables us to detect when a Filter is selected or unselected.
-                        _priceLists.ChangeTrackingEnabled = true;
-                        _itemChangedSubscription = _priceLists.ItemChanged.Subscribe(pl => OnPriceListChanged(pl));
-                    }
-                }
-            }
+            set { this.RaiseAndSetIfChanged(ref _priceLists, value); }
         }
 
         public bool? AreAllItemsSelected
@@ -84,18 +63,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             }
         }
 
-        /// <summary>
-        /// Exposes an IObservable sequence of Filters within this group whose IsSelected property has changed.        
-        /// </summary>
-        public IObservable<PriceList> PriceListChanges
-        {
-            private set;
-            get;
-        }
-
-
         #endregion
-
 
         private void OnPriceListChanged(IReactivePropertyChangedEventArgs<PriceList> args)
         {
@@ -103,13 +71,41 @@ namespace APLPX.UI.WPF.DisplayEntities
 
             if (priceList != null)
             {
-                _priceListChangeSubject.OnNext(priceList);
-
                 //Update dependent properties.
                 OnPropertyChanged("AreAllItemsSelected");
                 OnPropertyChanged("SelectedCount");
             }
         }
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_itemChangedSubscription != null)
+                    {
+                        _itemChangedSubscription.Dispose();
+                        _itemChangedSubscription = null;
+                    }
+                    if (PriceLists != null)
+                    {
+                        PriceLists.ChangeTrackingEnabled = false;
+                    }
+                }
+                _isDisposed = true;
+            }
+        }
+
+        #endregion
 
     }
 }

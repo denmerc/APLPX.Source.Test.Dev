@@ -336,10 +336,21 @@ namespace APLPX.UI.WPF.DisplayEntities
                         _valueDriverChangedListener.Dispose();
                         _valueDriverChangedListener = null;
                     }
-                    if (ValueDrivers != null)
+                    foreach (IDisposable driver in ValueDrivers)
                     {
-                        ValueDrivers.ChangeTrackingEnabled = false;
+                        driver.Dispose();
                     }
+                    ValueDrivers.ChangeTrackingEnabled = false;
+
+                    foreach (IDisposable group in FilterGroups)
+                    {
+                        group.Dispose();
+                    }
+                    foreach (IDisposable group in PriceListGroups)
+                    {
+                        group.Dispose();
+                    }
+                  
                 }
                 _isDisposed = true;
             }

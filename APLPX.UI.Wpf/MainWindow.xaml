@@ -13,7 +13,8 @@
                       MinWidth="1080"
                       MinHeight="530"
                       BorderThickness="1"
-                      GlowBrush="{DynamicResource ApplicationGlowBrushBorderColor}"
+                      GlowBrush="{DynamicResource AccentColorBrush}"
+                      NonActiveGlowBrush="Red"
                       NonActiveWindowTitleBrush="{DynamicResource ApplicationTitleBarColorInactive}"
                       ShowIconOnTitleBar="True"
                       WindowStartupLocation="CenterScreen"
@@ -24,6 +25,19 @@
 
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
 
@@ -45,10 +59,10 @@
                 <StackPanel Height="65"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                    <Canvas x:Name="itemCanvas" Style="{StaticResource moduleCanvasStyle}">
+                    <Canvas x:Name="itemCanvas" Style="{DynamicResource moduleCanvasStyle}">
                         <Path x:Name="itemPath"
                               Data="F1 M 18.0025,57.0081L 18.0025,23.0032L 23.0032,23.0032L 23.0032,20.0028C 23.0033,18.898 23.8988,18.0025 25.0035,18.0025L 29.004,18.0025C 30.1087,18.0025 31.0042,18.898 31.0043,20.0026L 31.0043,23.0032L 45.0063,23.0032L 45.0062,20.0026C 45.0062,18.8978 45.9018,18.0023 47.0065,18.0023L 51.0071,18.0023C 52.1118,18.0023 53.0074,18.8978 53.0074,20.0026L 53.0074,23.0032L 58.0081,23.0032L 58.0081,57.0081L 18.0025,57.0081 Z M 21.0029,54.0077L 55.0076,54.0077L 55.0076,31.0044L 21.0029,31.0044L 21.0029,54.0077 Z M 23.0032,47.0066L 29.004,47.0066L 29.004,52.0073L 23.0032,52.0073L 23.0032,47.0066 Z M 31.0043,47.0066L 37.0051,47.0066L 37.0051,52.0073L 31.0043,52.0073L 31.0043,47.0066 Z M 39.0054,47.0066L 45.0063,47.0066L 45.0063,52.0073L 39.0054,52.0073L 39.0054,47.0066 Z M 47.0065,47.0066L 53.0074,47.0066L 53.0074,52.0073L 47.0065,52.0073L 47.0065,47.0066 Z M 23.0032,40.0056L 29.004,40.0056L 29.004,45.0063L 23.0032,45.0063L 23.0032,40.0056 Z M 31.0043,40.0056L 37.0051,40.0056L 37.0051,45.0063L 31.0043,45.0063L 31.0043,40.0056 Z M 39.0054,40.0056L 45.0063,40.0056L 45.0063,45.0063L 39.0054,45.0063L 39.0054,40.0056 Z M 47.0065,40.0056L 53.0074,40.0056L 53.0074,45.0063L 47.0065,45.0063L 47.0065,40.0056 Z M 31.0043,33.0048L 37.0051,33.0048L 37.0051,38.0055L 31.0043,38.0055L 31.0043,33.0048 Z M 39.0054,33.0048L 45.0063,33.0048L 45.0063,38.0055L 39.0054,38.0055L 39.0054,33.0048 Z M 47.0065,33.0048L 53.0074,33.0048L 53.0074,38.0055L 47.0065,38.0055L 47.0065,33.0048 Z M 48.5067,20.0028C 47.6782,20.0028 47.0065,20.6745 47.0065,21.5031L 47.0065,24.5035C 47.0065,25.332 47.6782,26.0037 48.5067,26.0037L 49.5069,26.0037C 50.3354,26.0037 51.0071,25.332 51.0071,24.5035L 51.0071,21.5031C 51.0071,20.6745 50.3354,20.0028 49.5069,20.0028L 48.5067,20.0028 Z M 26.5037,20.0028C 25.6751,20.0028 25.0035,20.6745 25.0035,21.503L 25.0035,24.5034C 25.0035,25.332 25.6751,26.0037 26.5037,26.0037L 27.5038,26.0037C 28.3324,26.0037 29.004,25.332 29.004,24.5034L 29.004,21.503C 29.004,20.6745 28.3324,20.0028 27.5038,20.0028L 26.5037,20.0028 Z "
-                              Style="{StaticResource moduleGraphicsPathStyle}" />
+                              Style="{DynamicResource moduleGraphicsPathStyle}" />
                     </Canvas>
                     <TextBlock x:Name="txtTitle"
                                HorizontalAlignment="Center"
@@ -78,14 +92,14 @@
 
             <DataTemplate x:Key="featureItemTemplate">
                 <StackPanel Width="115" VerticalAlignment="Center">
-                    <Canvas x:Name="itemCanvas" Style="{StaticResource featureCanvasStyle}">
+                    <Canvas x:Name="itemCanvas" Style="{DynamicResource featureCanvasStyle}">
                         <Path x:Name="itemPath"
                               Data="F1 M 22,52L 22,35L 30,35L 30,52L 22,52 Z M 32,52L 32,22L 39,22L 39,52L 32,52 Z M 41,52L 41,41L 49,41L 49,52L 41,52 Z M 51,52L 51,29L 59,29L 59,52L 51,52 Z M 17,19L 20,19L 20,54L 59,54L 59,57L 17,57L 17,19 Z "
-                              Style="{StaticResource featureGraphicsPathStyle}" />
+                              Style="{DynamicResource featureGraphicsPathStyle}" />
                     </Canvas>
                     <TextBlock HorizontalAlignment="Center"
                                FontSize="14"
-                               Foreground="{StaticResource Foreground}"
+                               Foreground="{DynamicResource Foreground}"
                                Text="{Binding Path=Name}"
                                ToolTip="{Binding Path=Title}" />
                 </StackPanel>
@@ -123,6 +137,7 @@
             </DataTemplate>
 
         </ResourceDictionary>
+
     </controls:MetroWindow.Resources>
 
     <controls:MetroWindow.IconTemplate>
@@ -150,13 +165,21 @@
                       HorizontalContentAlignment="Center"
                       VerticalContentAlignment="Center"
                       Foreground="Black"
-                      SelectionChanged="themePicker_SelectionChanged" />
-
+                      SelectionChanged="themePicker_SelectionChanged">
+                <ComboBoxItem Content="Theme 1" />
+                <ComboBoxItem Content="Theme 2" />
+            </ComboBox>
             <Button Command="{Binding Path=LaunchWebPageCommand}"
                     CommandParameter="http://www.advancedpricinglogic.com/"
-                    Content="PRICEXPERT.com"
-                    ToolTip="PRICEXPERT.com web site" />
-
+                    ToolTip="PRICEXPERT.com web site">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="PRICE" />
+                        <TextBlock Foreground="LightGreen" Text="X" />
+                        <TextBlock Text="PERT" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
             <Button Content="About" ToolTip="About PRICEXPERT" />
 
             <!--  <Button Click="LaunchRibbonDemo" Content="Ribbon Demo (.NET 4.5)" />  -->
@@ -177,12 +200,10 @@
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl>
             <controls:Flyout x:Name="MessageCenter"
-                             ContextMenuClosing="MessageCenter_ContextMenuClosing"
                              Header="Message Center"
-                             IsOpenChanged="MessageCenter_IsOpenChanged"
+                             IsOpen="{Binding Path=IsMessageCenterVisible}"
                              Position="Right"
-                             Theme="Accent"
-                             Unloaded="Flyout_Unloaded">
+                             Theme="Accent">
                 <Grid Width="400" Margin="10">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Top"
@@ -192,21 +213,21 @@
                             <ListView Width="Auto"
                                       MinHeight="250"
                                       Margin="10,10,10,23"
-                                      Background="{StaticResource HighlightBrush}"
+                                      Background="{DynamicResource HighlightBrush}"
                                       BorderThickness="0"
                                       FontSize="16"
                                       FontWeight="Bold"
                                       Foreground="White"
                                       Padding="0,0,0,6">
-                                <ListViewItem Content="1 - My Analytics" Foreground="{StaticResource MenuItemDisabledBrush}" />
+                                <ListViewItem Content="1 - My Analytics" Foreground="{DynamicResource MenuItemDisabledBrush}" />
                                 <ListViewItem BorderThickness="0"
                                               Content="2 - Identity"
                                               FontSize="16"
                                               Foreground="White" />
-                                <ListViewItem Content="3 - Filters" Foreground="{StaticResource MenuItemDisabledBrush}" />
-                                <ListViewItem Content="4 - Price Lists" Foreground="{StaticResource MenuItemDisabledBrush}" />
-                                <ListViewItem Content="5 - Value Drivers" Foreground="{StaticResource MenuItemDisabledBrush}" />
-                                <ListViewItem Content="6 - Results" Foreground="{StaticResource MenuItemDisabledBrush}" />
+                                <ListViewItem Content="3 - Filters" Foreground="{DynamicResource MenuItemDisabledBrush}" />
+                                <ListViewItem Content="4 - Price Lists" Foreground="{DynamicResource MenuItemDisabledBrush}" />
+                                <ListViewItem Content="5 - Value Drivers" Foreground="{DynamicResource MenuItemDisabledBrush}" />
+                                <ListViewItem Content="6 - Results" Foreground="{DynamicResource MenuItemDisabledBrush}" />
 
                             </ListView>
                         </GroupBox>
@@ -214,12 +235,10 @@
                 </Grid>
             </controls:Flyout>
             <controls:Flyout x:Name="Properties"
-                             ContextMenuClosing="MessageCenter_ContextMenuClosing"
                              Header="Dialog Sample"
-                             IsOpenChanged="MessageCenter_IsOpenChanged"
+                             IsOpen="{Binding Path=IsPropertiesPanelVisible}"
                              Position="Right"
-                             Theme="Accent"
-                             Unloaded="Flyout_Unloaded">
+                             Theme="Accent">
                 <Grid Width="400" Margin="10">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Top"
@@ -248,7 +267,7 @@
                                 <ListView Width="Auto"
                                           MinHeight="250"
                                           Margin="10,10,10,23"
-                                          Background="{StaticResource HighlightBrush}"
+                                          Background="{DynamicResource HighlightBrush}"
                                           BorderThickness="0"
                                           FontSize="16"
                                           FontWeight="Bold"
@@ -260,12 +279,12 @@
                                         <StackPanel>
                                             <TextBlock Text="Filters Selected:" />
                                             <Separator />
-                                            <ListBox Background="{StaticResource HighlightBrush}" Foreground="White">
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Filter1</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Filter2</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Filter3</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Filter4</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Filter5</ListBoxItem>
+                                            <ListBox Background="{DynamicResource HighlightBrush}" Foreground="White">
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Filter1</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Filter2</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Filter3</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Filter4</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Filter5</ListBoxItem>
                                             </ListBox>
                                         </StackPanel>
 
@@ -275,28 +294,28 @@
                                         <StackPanel>
                                             <TextBlock Text="Included Price Lists:" />
                                             <Separator />
-                                            <ListBox Background="{StaticResource HighlightBrush}" Foreground="White">
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Price List 1</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Price List 2</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Price List 3</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Price List 4</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Price List 5</ListBoxItem>
+                                            <ListBox Background="{DynamicResource HighlightBrush}" Foreground="White">
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Price List 1</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Price List 2</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Price List 3</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Price List 4</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Price List 5</ListBoxItem>
                                             </ListBox>
                                         </StackPanel>
 
                                     </ListViewItem>
 
-                                    <ListViewItem Foreground="{StaticResource MenuItemDisabledBrush}" />
+                                    <ListViewItem Foreground="{DynamicResource MenuItemDisabledBrush}" />
 
                                     <StackPanel>
                                         <TextBlock Text="Included Value Drivers:" />
                                         <Separator />
-                                        <ListBox Background="{StaticResource HighlightBrush}" Foreground="White">
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 1</ListBoxItem>
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 2</ListBoxItem>
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 3</ListBoxItem>
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 4</ListBoxItem>
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 5</ListBoxItem>
+                                        <ListBox Background="{DynamicResource HighlightBrush}" Foreground="White">
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 1</ListBoxItem>
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 2</ListBoxItem>
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 3</ListBoxItem>
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 4</ListBoxItem>
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 5</ListBoxItem>
                                         </ListBox>
                                     </StackPanel>
 
@@ -371,12 +390,10 @@
                 </Grid>
             </controls:Flyout>
             <controls:Flyout x:Name="Folders"
-                             ContextMenuClosing="MessageCenter_ContextMenuClosing"
                              Header="Add Folders:"
-                             IsOpenChanged="MessageCenter_IsOpenChanged"
+                             IsOpen="{Binding Path=IsFoldersPanelVisible}"
                              Position="Right"
-                             Theme="Accent"
-                             Unloaded="Flyout_Unloaded">
+                             Theme="Accent">
                 <Grid Width="400" Margin="10">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Top"
@@ -405,7 +422,7 @@
                                 <ListView Width="Auto"
                                           MinHeight="250"
                                           Margin="10,10,10,23"
-                                          Background="{StaticResource HighlightBrush}"
+                                          Background="{DynamicResource HighlightBrush}"
                                           BorderThickness="0"
                                           FontSize="16"
                                           FontWeight="Bold"
@@ -417,14 +434,14 @@
                                         <StackPanel>
                                             <TextBlock Text="Selected Analytic Folders:" />
                                             <Separator />
-                                            <ListBox Background="{StaticResource HighlightBrush}"
+                                            <ListBox Background="{DynamicResource HighlightBrush}"
                                                      Foreground="White"
                                                      SelectionMode="Multiple">
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 1</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 2</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 3</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 4</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 5</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 1</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 2</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 3</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 4</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 5</ListBoxItem>
                                             </ListBox>
                                         </StackPanel>
 
@@ -434,28 +451,28 @@
                                         <StackPanel>
                                             <TextBlock Text="Included Pricing Folders:" />
                                             <Separator />
-                                            <ListBox Background="{StaticResource HighlightBrush}" Foreground="White">
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 1</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 2</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 3</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 4</ListBoxItem>
-                                                <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Folder 5</ListBoxItem>
+                                            <ListBox Background="{DynamicResource HighlightBrush}" Foreground="White">
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 1</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 2</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 3</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 4</ListBoxItem>
+                                                <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Folder 5</ListBoxItem>
                                             </ListBox>
                                         </StackPanel>
 
                                     </ListViewItem>
 
-                                    <ListViewItem Foreground="{StaticResource MenuItemDisabledBrush}" />
+                                    <ListViewItem Foreground="{DynamicResource MenuItemDisabledBrush}" />
 
                                     <StackPanel>
                                         <TextBlock Text="Included Value Drivers:" />
                                         <Separator />
-                                        <ListBox Background="{StaticResource HighlightBrush}" Foreground="White">
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 1</ListBoxItem>
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 2</ListBoxItem>
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 3</ListBoxItem>
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 4</ListBoxItem>
-                                            <ListBoxItem Background="{StaticResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 5</ListBoxItem>
+                                        <ListBox Background="{DynamicResource HighlightBrush}" Foreground="White">
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 1</ListBoxItem>
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 2</ListBoxItem>
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 3</ListBoxItem>
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 4</ListBoxItem>
+                                            <ListBoxItem Background="{DynamicResource HighlightBrush}" FontWeight="ExtraLight">Value Driver 5</ListBoxItem>
                                         </ListBox>
                                     </StackPanel>
 
@@ -516,7 +533,7 @@
             <ListBox x:Name="ModuleListBox"
                      Grid.Row="0"
                      Margin="5,5,0,0"
-                     ItemTemplate="{StaticResource moduleItemTemplate}"
+                     ItemTemplate="{DynamicResource moduleItemTemplate}"
                      ItemsSource="{Binding Source={StaticResource cvsModules}}"
                      SelectedItem="{Binding Path=SelectedModule}">
                 <ListBox.ItemsPanel>
@@ -553,7 +570,7 @@
                      Grid.RowSpan="2"
                      Grid.Column="0"
                      Margin="0,27,0,0"
-                     ItemTemplate="{StaticResource featureItemTemplate}"
+                     ItemTemplate="{DynamicResource featureItemTemplate}"
                      ItemsSource="{Binding Source={StaticResource cvsFeatures}}"
                      SelectedItem="{Binding Path=SelectedModule.SelectedFeature}"
                      Visibility="{Binding Path=IsFeatureSelectorAvailable,
@@ -573,7 +590,7 @@
                                           StringFormat=User: {0}}" />
 
                 <TextBlock x:Name="txtSelectedModule"
-                           Style="{StaticResource MainWindowHeaderTextStyle}"
+                           Style="{DynamicResource MainWindowHeaderTextStyle}"
                            Text="{Binding Path=SelectedModule.Name,
                                           StringFormat={}Module: {0}}" />
 
@@ -613,7 +630,7 @@
                           Grid.Column="2"
                           Width="Auto"
                           Height="Auto"
-                          Background="{DynamicResource MainWindowBackground}"
+                          Background="{DynamicResource WindowBackgroundBrush}"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           ScrollViewer.VerticalScrollBarVisibility="Disabled"
                           d:IsEffectDisabled="True">
@@ -621,16 +638,14 @@
                     <DropShadowEffect BlurRadius="10" Opacity="0" />
                 </ScrollViewer.Effect>
 
-                <ContentControl x:Name="ContentMain"
-                                Background="DarkGray"
-                                Content="{Binding SelectedFeatureViewModel}" />
+                <ContentControl x:Name="ContentMain" Content="{Binding SelectedFeatureViewModel}" />
             </ScrollViewer>
 
             <Grid x:Name="ActionGrid"
                   Grid.Row="1"
                   Grid.Column="3"
                   MinWidth="200"
-                  Background="Gray"
+                  Style="{x:Null}"
                   Visibility="{Binding Path=IsActionSelectorAvailable,
                                        Converter={StaticResource BooleanToVisibilityConverter}}">
 
@@ -651,7 +666,8 @@
                 <TextBlock Grid.Row="0"
                            Margin="10,0"
                            FontSize="18"
-                           Foreground="{StaticResource Foreground}"
+                           Foreground="{DynamicResource Foreground}"
+                           Style="{x:Null}"
                            Text="Actions" />
 
                 <ItemsControl x:Name="ActionsListBox"
@@ -659,7 +675,8 @@
                               Margin="0"
                               BorderThickness="1"
                               ItemsSource="{Binding Source={StaticResource cvsActions}}"
-                              Padding="5">
+                              Padding="5"
+                              Style="{x:Null}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <MenuItem Command="{Binding ElementName=layoutRoot,
@@ -680,8 +697,8 @@
             <StackPanel x:Name="StepsPanel"
                         Grid.Row="2"
                         Grid.Column="1"
-                        Background="Gray"
                         Orientation="Vertical"
+                        Style="{x:Null}"
                         Visibility="{Binding Path=IsStepSelectorAvailable,
                                              Converter={StaticResource BooleanToVisibilityConverter}}">
 
@@ -701,18 +718,16 @@
 
                 <ListBox x:Name="StepsListBox"
                          Grid.Column="1"
-                         Margin="5"
+                         Margin="5,0,5,5"
                          ItemsSource="{Binding Source={StaticResource cvsSteps}}"
-                         SelectedItem="{Binding Path=SelectedFeature.SelectedStep}">
-
-                    <ListBox.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray" />
-                    </ListBox.Resources>
+                         SelectedItem="{Binding Path=SelectedFeature.SelectedStep}"
+                         Style="{DynamicResource baseListBoxStyle}">
+                    <!--  Background="#FF696969">  -->
 
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Style="{x:Null}">
-                                <Grid>
+                                <Grid Style="{x:Null}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
@@ -722,7 +737,7 @@
                                                Width="150"
                                                Margin="2"
                                                FontFamily="SegoeUI"
-                                               Style="{StaticResource AnalyticStepTextStyle}"
+                                               Style="{x:Null}"
                                                Text="{Binding Path=Name}"
                                                ToolTip="{Binding Path=Title}" />
                                     <Image x:Name="checkMarkImage"
@@ -735,9 +750,12 @@
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+
                     <ListBox.ItemContainerStyle>
-                        <Style BasedOn="{StaticResource mainWindowItemContainerStyle}" TargetType="ListBoxItem" />
+                        <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" />
+
                     </ListBox.ItemContainerStyle>
+
                 </ListBox>
             </StackPanel>
 
@@ -748,17 +766,17 @@
                         Margin="2,0">
 
                 <Button x:Name="MessageCenterButton"
-                        Click="MessageCenterButton_Click"
-                        Style="{StaticResource commandButtonStyle}">
-                    <Canvas x:Name="appbar_inbox" Style="{StaticResource commandCanvasStyle}">
-                        <Path Data="F1 M 37.2083,42.75L 28.5,31.6667L 33.25,31.6667L 33.25,19L 42.75,19L 42.75,31.6667L 47.5,31.6667L 38.7917,42.75L 37.2083,42.75 Z M 19,38L 23.75,26.9167L 29.6875,26.9167L 29.6875,30.0833L 26.125,30.0833L 22.9583,38L 30.875,38C 30.875,41.935 34.065,45.125 38,45.125C 41.935,45.125 45.125,41.935 45.125,38L 53.0417,38L 49.875,30.0833L 46.3125,30.0833L 46.3125,26.9167L 52.25,26.9167L 57,38L 57,53.8333L 19,53.8333L 19,38 Z " Style="{StaticResource commandPathStyle}" />
+                        Command="{Binding Path=ShowMessageCenterCommand}"
+                        Style="{DynamicResource commandButtonStyle}">
+                    <Canvas x:Name="appbar_inbox" Style="{DynamicResource commandCanvasStyle}">
+                        <Path Data="F1 M 37.2083,42.75L 28.5,31.6667L 33.25,31.6667L 33.25,19L 42.75,19L 42.75,31.6667L 47.5,31.6667L 38.7917,42.75L 37.2083,42.75 Z M 19,38L 23.75,26.9167L 29.6875,26.9167L 29.6875,30.0833L 26.125,30.0833L 22.9583,38L 30.875,38C 30.875,41.935 34.065,45.125 38,45.125C 41.935,45.125 45.125,41.935 45.125,38L 53.0417,38L 49.875,30.0833L 46.3125,30.0833L 46.3125,26.9167L 52.25,26.9167L 57,38L 57,53.8333L 19,53.8333L 19,38 Z " Style="{DynamicResource commandPathStyle}" />
                     </Canvas>
                 </Button>
                 <Button x:Name="PropertiesButton"
-                        Click="PropertiesButton_Click"
-                        Style="{StaticResource commandButtonStyle}">
-                    <Canvas x:Name="appbar_list" Style="{StaticResource commandCanvasStyle}">
-                        <Path Data="F1 M 19,23L 27,23L 27,31L 19,31L 19,23 Z M 19,34L 27,34L 27,42L 19,42L 19,34 Z M 31,23L 57,23L 57,31L 31,31L 31,23 Z M 19,45L 27,45L 27,53L 19,53L 19,45 Z M 31,34L 57,34L 57,42L 31,42L 31,34 Z M 31,45L 57,45L 57,53L 31,53L 31,45 Z " Style="{StaticResource commandPathStyle}" />
+                        Command="{Binding Path=ShowPropertiesPanelCommand}"
+                        Style="{DynamicResource commandButtonStyle}">
+                    <Canvas x:Name="appbar_list" Style="{DynamicResource commandCanvasStyle}">
+                        <Path Data="F1 M 19,23L 27,23L 27,31L 19,31L 19,23 Z M 19,34L 27,34L 27,42L 19,42L 19,34 Z M 31,23L 57,23L 57,31L 31,31L 31,23 Z M 19,45L 27,45L 27,53L 19,53L 19,45 Z M 31,34L 57,34L 57,42L 31,42L 31,34 Z M 31,45L 57,45L 57,53L 31,53L 31,45 Z " Style="{DynamicResource commandPathStyle}" />
                     </Canvas>
                 </Button>
             </StackPanel>
@@ -778,12 +796,13 @@
                            TextTrimming="CharacterEllipsis" />
             </StatusBarItem>
             <StatusBarItem>
-                <ProgressBar x:Name="progressBarMain"
-                             Width="250"
-                             Height="20"
-                             Background="Transparent"
-                             BorderBrush="Transparent"
-                             IsIndeterminate="{Binding Path=IsActionInProgress}">
+                <controls:MetroProgressBar x:Name="progressBarMain"
+                                           Width="250"
+                                           Height="20"
+                                           Background="Transparent"
+                                           BorderBrush="Transparent"
+                                           Foreground="{DynamicResource AccentColorBrush2}"
+                                           IsIndeterminate="{Binding Path=IsActionInProgress}">
                     <ProgressBar.Triggers>
                         <EventTrigger RoutedEvent="ProgressBar.Loaded">
                             <BeginStoryboard>
@@ -798,7 +817,7 @@
                             </BeginStoryboard>
                         </EventTrigger>
                     </ProgressBar.Triggers>
-                </ProgressBar>
+                </controls:MetroProgressBar>
             </StatusBarItem>
         </StatusBar>
 

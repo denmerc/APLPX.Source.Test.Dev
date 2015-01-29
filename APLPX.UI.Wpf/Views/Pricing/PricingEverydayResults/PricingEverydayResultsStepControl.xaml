@@ -39,12 +39,12 @@
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="Views" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="{Binding ElementName=FilterGrid,
                                   Path=Items.Count,
                                   StringFormat={}Filters ({0})}" />
@@ -55,16 +55,26 @@
                  ItemsSource="{Binding Path=Views}"
                  SelectedIndex="0"
                  SelectedItem="{Binding Path=Entity.SelectedFilterGroup}"
-                 SelectionChanged="FilterGroupsListBox_SelectionChanged">
+                 SelectionChanged="FilterGroupsListBox_SelectionChanged"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent"
+                 Margin="5,0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Width="200"
                            Content="{Binding Path=Name}"
                            FontSize="16"
-                           Foreground="{StaticResource Foreground}" 
-                           IsEnabled="{Binding Path=IsEnabled}"/>
+                           IsEnabled="{Binding Path=IsEnabled}"
+                           Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <Canvas x:Name="pricingEverydayCanvas"

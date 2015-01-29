@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using MahApps.Metro;
 
 namespace APLPX.UI.WPF.Views
 {

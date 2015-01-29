@@ -14,12 +14,6 @@
 
         <SolidColorBrush x:Key="ListBoxSelectionColorBrush" Color="{DynamicResource ListBoxSelectionColor}" />
 
-        <Style x:Key="EditTextStyle"
-               BasedOn="{StaticResource {x:Type TextBox}}"
-               TargetType="TextBox">
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="helpers:TextBoxHelper.SelectAllTextOnFocus" Value="true" />
-        </Style>
     </UserControl.Resources>
 
     <UserControl.Triggers>
@@ -46,22 +40,36 @@
         <TextBlock x:Name="txtPricingModes"
                    Grid.Row="0"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
-                   Text="Mode" />
+                   Style="{DynamicResource ListTitleTextStyle}"
+                   Text="Mode" 
+                   VerticalAlignment="Center"
+                   Margin="0,5,0,0"/>
 
         <ListBox x:Name="lstPricingModes"
                  Grid.Row="1"
                  Grid.Column="0"
                  Margin="10,5"
                  ItemsSource="{Binding Path=PriceRoutine.PricingModes}"
-                 SelectedItem="{Binding Path=PriceRoutine.SelectedMode}">
+                 SelectedItem="{Binding Path=PriceRoutine.SelectedMode}"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Margin="5"
-                               Text="{Binding Path=Name}"
-                               ToolTip="{Binding Path=Title}" />
+                    <Label Margin="5"
+                           FontSize="16"
+                               Content="{Binding Path=Name}"
+                               ToolTip="{Binding Path=Title}"
+                               Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <StackPanel Grid.Row="0"
@@ -72,10 +80,12 @@
             <TextBlock x:Name="txtKeyPriceListsTitle"
                        Grid.Row="0"
                        Grid.Column="1"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="{Binding ElementName=lstKeyPriceLists,
                                       Path=Items.Count,
-                                      StringFormat={}Price Lists ({0})}" />
+                                      StringFormat={}Price Lists ({0})}" 
+                       VerticalAlignment="Center"
+                       Margin="0,5,0,0"/>
             <CheckBox x:Name="chkSelectAllPriceLists"
                       Margin="20,5,0,0"
                       VerticalAlignment="Center"
@@ -108,7 +118,9 @@
                  MinWidth="275"
                  Margin="10,5"
                  ItemsSource="{Binding Path=PriceRoutine.KeyPriceListGroup.PriceLists}"
-                 SelectedItem="{Binding Path=PriceRoutine.SelectedKeyPriceList}">
+                 SelectedItem="{Binding Path=PriceRoutine.SelectedKeyPriceList}"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel MinHeight="35" LastChildFill="True">
@@ -126,14 +138,23 @@
                                ToolTip="This is the Key Price List."
                                Visibility="{Binding Path=IsKey,
                                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <TextBlock Margin="5"
+                        <Label Margin="5"
+                               FontSize="16"
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource Foreground}"
-                                   Text="{Binding Path=Name}"
-                                   ToolTip="{Binding Path=Title}" />
+                                   Content="{Binding Path=Name}"
+                                   ToolTip="{Binding Path=Title}" 
+                                   Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <Grid x:Name="GlobalRulesGrid"
@@ -161,7 +182,7 @@
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
                        VerticalAlignment="Center"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="Key Price List Global Price Range" />
 
             <!--
@@ -193,9 +214,12 @@
             <TextBox x:Name="txtRangeLower"
                      Grid.Row="2"
                      Grid.Column="0"
-                     Margin="5,0"
-                     Style="{StaticResource EditTextStyle}"
-                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeLower}" />
+                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeLower}" 
+                     Style="{DynamicResource DescriptionHeaderStyleTextBox}"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Left"
+                     helpers:TextBoxHelper.SelectAllTextOnFocus="true" 
+                     Width="110"/>
 
             <Label Grid.Row="1"
                    Grid.Column="1"
@@ -205,9 +229,12 @@
             <TextBox x:Name="txtRangeUpper"
                      Grid.Row="2"
                      Grid.Column="1"
-                     Margin="5,0"
-                     Style="{StaticResource EditTextStyle}"
-                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeUpper}" />
+                     Text="{Binding Path=PriceRoutine.KeyPriceListRule.DollarRangeUpper}" 
+                     Style="{DynamicResource DescriptionHeaderStyleTextBox}"
+                     VerticalAlignment="Center" 
+                     HorizontalAlignment="Left"
+                     helpers:TextBoxHelper.SelectAllTextOnFocus="true" 
+                     Width="110"/>
 
             <Grid x:Name="RelationshipsGrid"
                   Grid.Row="3"
@@ -223,11 +250,11 @@
 
                 <StackPanel Grid.Row="0">
                     <TextBlock x:Name="txtRelationshipsTitle"
-                               Style="{StaticResource ListTitleTextStyle}"
+                               Style="{DynamicResource ListTitleTextStyle}"
                                Text="Price List Relationships" />
                     <TextBlock x:Name="txtRelationshipsSubtitle"
                                Margin="0"
-                               Style="{StaticResource ListTitleTextStyle}"
+                               Style="{DynamicResource ListTitleTextStyle}"
                                Text="{Binding Path=PriceRoutine.SelectedMode.Name,
                                               StringFormat={}{0} Mode}"
                                ToolTip="{Binding Path=PriceRoutine.SelectedMode.Title}" />
@@ -240,8 +267,7 @@
                               VerticalAlignment="Top"
                               Background="Transparent"
                               BorderBrush="Transparent"
-                              ItemsSource="{Binding Path=PriceRoutine.RoundingRulePriceLists}"
-                              Style="{x:Null}">
+                              ItemsSource="{Binding Path=PriceRoutine.RoundingRulePriceLists}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <DockPanel x:Name="itemPanel"
@@ -255,16 +281,19 @@
                                            DockPanel.Dock="Right"
                                            Text="%"
                                            Visibility="{Binding ElementName=txtPercentChange,
-                                                                Path=Visibility}" />
+                                                                Path=Visibility}" 
+                                           Style="{DynamicResource DescriptionHeaderStyleTextBlock}"/>
 
                                 <TextBox x:Name="txtPercentChange"
                                          Width="35"
                                          Margin="5"
                                          DockPanel.Dock="Right"
-                                         Style="{StaticResource EditTextStyle}"
                                          Text="{Binding Path=LinkedPriceListRule.PercentChange}"
                                          Visibility="{Binding Path=IsKey,
-                                                              Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                                                              Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
+                                        Style="{DynamicResource DescriptionHeaderStyleTextBox}"
+                                        VerticalAlignment="Center" 
+                                        helpers:TextBoxHelper.SelectAllTextOnFocus="true" />
 
                                 <Image x:Name="imgKey"
                                        Width="25"
@@ -287,22 +316,24 @@
                                       Margin="0,5,0,0"
                                       VerticalAlignment="Center"
                                       Data="M 0 -10 L 0 0 L 18 0 L12 -4 M 18 0 L12 4"
-                                      Stroke="{StaticResource Foreground}"
+                                      Stroke="{DynamicResource Foreground}"
                                       StrokeThickness="1" />
 
                                 <TextBlock x:Name="txtName"
                                            Margin="5"
                                            VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
                                            DockPanel.Dock="Left"
                                            Text="{Binding Path=Name}"
                                            ToolTip="{Binding Path=DataContext.PriceRoutine.SelectedMode.Name,
-                                                             RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                                                             RelativeSource={RelativeSource AncestorType=ListBox}}" 
+                                           Style="{DynamicResource DescriptionHeaderStyleTextBlock}"/>
                             </DockPanel>
 
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsKey}" Value="True">
                                     <Setter TargetName="arrow" Property="Visibility" Value="Collapsed" />
-                                    <Setter TargetName="itemPanel" Property="Background" Value="{StaticResource ListBoxSelectionColorBrush}" />
+                                    <Setter TargetName="itemPanel" Property="Background" Value="{DynamicResource AccentColorBrush2}" />
                                 </DataTrigger>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
@@ -329,6 +360,7 @@
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
+               
                 </ItemsControl>
             </Grid>
 
@@ -346,7 +378,7 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Margin="0,25,0,5"
-                Style="{StaticResource ListTitleTextStyle}"
+                Style="{DynamicResource ListTitleTextStyle}"
                 Text="{Binding ElementName=dgLinkedPriceLists,
                 Path=Items.Count,
                 StringFormat={}Linked Price Lists ({0})}"
@@ -369,8 +401,8 @@
                 <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,
                 UpdateSourceTrigger=PropertyChanged}"
-                EditingElementStyle="{StaticResource MetroDataGridCheckBox}"
-                ElementStyle="{StaticResource MetroDataGridCheckBox}"
+                EditingElementStyle="{DynamicResource MetroDataGridCheckBox}"
+                ElementStyle="{DynamicResource MetroDataGridCheckBox}"
                 Header="Selected" />
                 
                 <DataGridTextColumn Binding="{Binding Path=Name}"
@@ -403,11 +435,11 @@
             
             <StackPanel Grid.Row="0">
             <TextBlock x:Name="txtRelationshipsTitle"
-            Style="{StaticResource ListTitleTextStyle}"
+            Style="{DynamicResource ListTitleTextStyle}"
             Text="Price List Relationships" />
             <TextBlock x:Name="txtRelationshipsSubtitle"
             Margin="0"
-            Style="{StaticResource ListTitleTextStyle}"
+            Style="{DynamicResource ListTitleTextStyle}"
             Text="{Binding Path=PriceRoutine.SelectedMode.Name,
             StringFormat={}{0} Mode}" />
             </StackPanel>
@@ -455,7 +487,7 @@
             Margin="0,5,0,0"
             VerticalAlignment="Center"
             Data="M 0 -10 L 0 0 L 18 0 L12 -4 M 18 0 L12 4"
-            Stroke="{StaticResource Foreground}"
+            Stroke="{DynamicResource Foreground}"
             StrokeThickness="1" />
             
             <TextBlock x:Name="txtName"

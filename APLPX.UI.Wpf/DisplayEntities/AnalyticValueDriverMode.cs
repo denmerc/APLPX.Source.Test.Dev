@@ -156,7 +156,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private void SetAllGroupsEditable(bool isEditable)
         {
-            foreach (ValueDriverGroup group in Groups)
+            foreach (var group in Groups)
             {
                 group.IsMaxValueEditable = isEditable;
                 group.IsMinValueEditable = isEditable;

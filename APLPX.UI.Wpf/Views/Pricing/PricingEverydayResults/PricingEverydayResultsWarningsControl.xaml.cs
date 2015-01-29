@@ -29,7 +29,7 @@ namespace APLPX.UI.WPF
 
         private void LayoutUpdated(object sender, EventArgs e)
         {
-            
+
             double offset = 0;
             GetScrollViewer(dg);
             if (sv != null && sv.ComputedHorizontalScrollBarVisibility == Visibility.Visible)
@@ -40,14 +40,14 @@ namespace APLPX.UI.WPF
             double w = skuColumn.ActualWidth + descriptionColumn.ActualWidth + priceListsColumn.ActualWidth + currentPriceColumn.ActualWidth + currentMarkupColumn.ActualWidth - offset;
             Label1.Width = w < 0 ? 0 : w;
 
-            double w2 = totalPriceChangeColumn.ActualWidth + finalPriceColumn.ActualWidth + markupChangeColumn.ActualWidth + newMarkupColumn.ActualWidth ;
+            double w2 = totalPriceChangeColumn.ActualWidth + finalPriceColumn.ActualWidth + markupChangeColumn.ActualWidth + newMarkupColumn.ActualWidth;
             Label2.Width = w2;
-            
+
         }
 
         private void GetScrollViewer(DependencyObject obj)
         {
-            
+
             if (sv != null)
             {
                 return;
@@ -77,7 +77,8 @@ namespace APLPX.UI.WPF
                     GetScrollViewer(VisualTreeHelper.GetChild(obj, i));
                 }
             }
-            
+
         }
+
     }
 }

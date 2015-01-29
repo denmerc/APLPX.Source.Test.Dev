@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,12 +7,11 @@ using System.Windows.Interop;
 using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.Views;
 using MahApps.Metro.Controls;
-using APLPX.UI.WPF.Themes;
 
 namespace APLPX.UI.WPF
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Main window for this application.
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
@@ -43,8 +43,6 @@ namespace APLPX.UI.WPF
 
         private EventAggregator _eventManager;
 
-        ThemeManager manager = new ThemeManager();
-
         public MainWindow()
         {
             InitializeComponent();
@@ -57,13 +55,22 @@ namespace APLPX.UI.WPF
                    ShowMessageToaster(action);
                });
 
-            // Set the itemsource to the list of theme names.
-            themePicker.ItemsSource = manager.ThemeNameList;
-            // Set the start item to the default theme.
-            themePicker.SelectedItem = "dark";
 
-            
-            
+            var themes = MahApps.Metro.ThemeManager.AppThemes;
+
+            var accent = MahApps.Metro.ThemeManager.Accents.First(x => x.Name == "Blue");
+            var theme = MahApps.Metro.ThemeManager.AppThemes.First(x => x.Name == "BaseDark");
+
+            //dark theme
+            MahApps.Metro.ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
+
+
+            int i = 0;
+            i++;
+            // Set the itemsource to the list of theme names.
+            //themePicker.ItemsSource = manager.ThemeNameList;
+            // Set the start item to the default theme.
+            //themePicker.SelectedItem = "dark";
         }
 
         private void ShowMessageToaster(OperationCompletedEvent action)
@@ -85,62 +92,29 @@ namespace APLPX.UI.WPF
             toaster.Top = thisWindowTop + (this.ActualHeight - toaster.Height) / 2;
             toaster.Message = action.Message;
             toaster.Show();
-        }
-
-        private void MessageCenterButton_Click(object sender, RoutedEventArgs e)
-        {
-            var flyout = this.Flyouts.Items[0] as Flyout;
-            if (flyout == null)
-            {
-                return;
-            }
-
-            flyout.IsOpen = !flyout.IsOpen;
-
-            DetailContentScrollViewer.HorizontalAlignment = HorizontalAlignment.Stretch;
-            CommandBar.Width = 400;
-        }
-
-        private void Flyout_Unloaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MessageCenter_ContextMenuClosing(object sender, ContextMenuEventArgs e)
-        {
-
-        }
-
-        private void MessageCenter_IsOpenChanged(object sender, EventArgs e)
-        {
-            var f = sender as Flyout;
-            if (f != null && f.IsOpen == false)
-                CommandBar.Width = 55;
-        }
-
-        private void PropertiesButton_Click(object sender, RoutedEventArgs e)
-        {
-            var flyout = this.Flyouts.Items[1] as Flyout;
-            if (flyout == null)
-            {
-                return;
-            }
-
-            flyout.IsOpen = !flyout.IsOpen;
-
-            DetailContentScrollViewer.HorizontalAlignment = HorizontalAlignment.Stretch;
-            CommandBar.Width = 400;
-        }
-
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            base.OnClosing(e);
-        }
+        } 
 
         private void themePicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // When they change the selection, just set the theme to the selected value.
-            manager.SetTheme(themePicker.SelectedValue.ToString());
+            //manager.SetTheme(themePicker.SelectedValue.ToString());
+
+            
+
+            var themes = MahApps.Metro.ThemeManager.AppThemes;
+
+            
+
+            var accent = MahApps.Metro.ThemeManager.Accents.First(x => x.Name == "Blue");
+            var theme = MahApps.Metro.ThemeManager.AppThemes.First(x => x.Name == "BaseLight");
+
+            //dark theme
+            MahApps.Metro.ThemeManager.ChangeAppStyle( Application.Current,  accent, theme);
+
+
+            int i = 0;
+            i++;
+            
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)

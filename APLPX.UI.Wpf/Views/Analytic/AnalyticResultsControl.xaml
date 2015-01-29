@@ -128,37 +128,37 @@
         <!--
             <ListBoxItem x:Name="VendorSelectedListBoxItem" >
             <StackPanel Orientation="Horizontal">
-            <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178" Content="Movement"/>
+            <Label  FontSize="16" Foreground="{DynamicResource Foreground}" Width="178" Content="Movement"/>
             </StackPanel>
             </ListBoxItem>
             <ListBoxItem>
             <StackPanel Orientation="Horizontal">
-            <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Markup</Label>
+            <Label  FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Markup</Label>
             </StackPanel>
             </ListBoxItem>
             <ListBoxItem>
             <StackPanel Orientation="Horizontal">
-            <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Days On Hand</Label>
+            <Label  FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Days On Hand</Label>
             </StackPanel>
             </ListBoxItem>
             <ListBoxItem>
             <StackPanel Orientation="Horizontal">
-            <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Days Lead Time</Label>
+            <Label FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Days Lead Time</Label>
             </StackPanel>
             </ListBoxItem>
             <ListBoxItem>
             <StackPanel Orientation="Horizontal">
-            <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">In Stock Ratio</Label>
+            <Label FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">In Stock Ratio</Label>
             </StackPanel>
             </ListBoxItem>
             <ListBoxItem>
             <StackPanel Orientation="Horizontal">
-            <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Sales Trend Ratio</Label>
+            <Label FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Sales Trend Ratio</Label>
             </StackPanel>
             </ListBoxItem>
             <ListBoxItem>
             <StackPanel Orientation="Horizontal">
-            <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="178">Competition</Label>
+            <Label FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Competition</Label>
             </StackPanel>
             </ListBoxItem>
             </ListBox>
@@ -171,7 +171,7 @@
             Minimum="0"
             Maximum="100"
             Width="500"
-            Foreground="{StaticResource Foreground}"
+            Foreground="{DynamicResource Foreground}"
             Margin="0, -5, 0, 0" />
             <DataGrid x:Name="FilterGrid" ItemsSource="{Binding Results}" Height="500"
             AutoGenerateColumns="True" Visibility="Visible" Width="746">

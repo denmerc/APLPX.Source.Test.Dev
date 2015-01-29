@@ -10,11 +10,6 @@
         <ResourceDictionary>
             <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
 
-            <Style x:Key="ListItemTextStyle" TargetType="TextBlock">
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Foreground" Value="{StaticResource Foreground}" />
-            </Style>
-
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -50,19 +45,21 @@
                     Orientation="Horizontal">
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
-                       Margin="10,5"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Margin="15,5"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="Key Value Driver" />
             <RadioButton x:Name="rdoList"
                          Margin="5"
                          Content="List"
                          IsChecked="True"
-                         Visibility="Collapsed" />
+                         Visibility="Collapsed" 
+                         Style="{DynamicResource IdentityRadioButtonStyle}"/>
             <RadioButton x:Name="rdoCombo"
                          Margin="5"
                          Content="Combo"
                          IsChecked="False"
-                         Visibility="Collapsed" />
+                         Visibility="Collapsed"
+                         Style="{DynamicResource IdentityRadioButtonStyle}"/>
         </StackPanel>
 
         <ListBox x:Name="lstKeyDrivers"
@@ -73,7 +70,10 @@
                  SelectedItem="{Binding Path=PriceRoutine.SelectedValueDriver}"
                  Visibility="{Binding ElementName=rdoList,
                                       Path=IsChecked,
-                                      Converter={StaticResource BooleanToVisibilityConverter}}">
+                                      Converter={StaticResource BooleanToVisibilityConverter}}"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent"
+                 Margin="5,0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel MinHeight="35"
@@ -90,33 +90,36 @@
                                Visibility="{Binding Path=IsKey,
                                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                        <TextBlock x:Name="txtName"
-                                   Style="{StaticResource ListItemTextStyle}"
-                                   Text="{Binding Path=Name}" />
+                        <Label x:Name="txtName"
+                                FontSize="16"
+                                   Style="{DynamicResource DescriptionHeaderStyleLabel}"
+                                   Content="{Binding Path=Name}" 
+                                   VerticalAlignment="Center"/>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <ComboBox x:Name="cboKeyDrivers"
                   Grid.Row="1"
                   Grid.Column="0"
                   VerticalAlignment="Top"
-                  Background="{StaticResource WhiteBrush}"
                   ItemsSource="{Binding Path=PriceRoutine.ValueDrivers}"
                   SelectedItem="{Binding Path=PriceRoutine.SelectedValueDriver}"
                   Visibility="{Binding ElementName=rdoCombo,
                                        Path=IsChecked,
-                                       Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ComboBox.Resources>
-                <!--
-                    Fix for display issue with dropdown arrow.
-                    Redefining the brush here causes the implicit style (MetroComboBox)
-                    to use this value as the fill for BtnArrow in the control template.
-                -->
-                <Color x:Key="Gray1">#FFF9F9F9</Color>
-                <SolidColorBrush x:Key="GrayBrush1" Color="{StaticResource Gray1}" />
-            </ComboBox.Resources>
+                                       Converter={StaticResource BooleanToVisibilityConverter}}"
+                  Style="{DynamicResource MetroComboBox}">
+  
 
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -137,7 +140,7 @@
 
                         <TextBlock x:Name="txtName"
                                    DockPanel.Dock="Left"
-                                   Style="{StaticResource ListItemTextStyle}"
+                                   Style="{DynamicResource ListTitleTextStyle}"
                                    Text="{Binding Path=Name}" />
                     </DockPanel>
                 </DataTemplate>
@@ -147,7 +150,7 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
                    Margin="10,5"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="{Binding Path=PriceRoutine.SelectedValueDriver.Name,
                                   StringFormat={}{0} - Groups}" />
 
@@ -155,22 +158,31 @@
                  Grid.Row="1"
                  Grid.Column="1"
                  ItemsSource="{Binding Path=PriceRoutine.KeyValueDriver.Groups}"
-                 SelectedItem="{Binding Path=PriceRoutine.KeyValueDriver.SelectedGroup}">
+                 SelectedItem="{Binding Path=PriceRoutine.KeyValueDriver.SelectedGroup}"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Width="125"
-                               Foreground="{StaticResource Foreground}"
-                               Style="{StaticResource ListItemTextStyle}"
-                               Text="{Binding Path=ValueDriverGroupValue}"
-                               TextAlignment="Center" />
+                    <Label Width="125"
+                                FontSize="16"
+                               Style="{DynamicResource DescriptionHeaderStyleLabel}"
+                               Content="{Binding Path=ValueDriverGroupValue}"
+                                HorizontalContentAlignment="Center"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <TextBlock Grid.Row="0"
                    Grid.Column="2"
                    Margin="10,5"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyGroups,
                                   Path=SelectedItem.ValueDriverGroupValue,
                                   StringFormat=Group {0} - Optimization Rules}" />
@@ -200,7 +212,7 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="3"
                    Margin="10,5"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyGroups,
                                   Path=SelectedItem.ValueDriverGroupValue,
                                   StringFormat=Group {0} - Markup Rules}" />
@@ -233,15 +245,19 @@
 
         <TextBlock Grid.Row="3"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="{Binding Path=PriceRoutine.LinkedValueDrivers.Count,
-                                  StringFormat=Influencer Drivers ({0} selected)}" />
+                                  StringFormat=Influencer Drivers ({0} selected)}" 
+                   Margin="10,0,0,0"/>
 
         <ListBox x:Name="lstNonKeyDrivers"
                  Grid.Row="4"
                  Grid.Column="0"
                  ItemsSource="{Binding Path=PriceRoutine.NonKeyValueDriversCache}"
-                 SelectedIndex="0">
+                 SelectedIndex="0"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent"
+                 Margin="5,0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel MinHeight="35" LastChildFill="True">
@@ -250,18 +266,28 @@
                                   IsChecked="{Binding Path=IsSelected}"
                                   ToolTip="Check to include this value driver as an Influencer." />
 
-                        <TextBlock x:Name="txtName"
-                                   Style="{StaticResource ListItemTextStyle}"
-                                   Text="{Binding Path=Name}" />
+                        <Label x:Name="txtName"
+                               FontSize="16"
+                                   Style="{DynamicResource DescriptionHeaderStyleLabel}"
+                                   Content="{Binding Path=Name}" 
+                                   VerticalAlignment="Center"/>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <!--
             <TextBlock Grid.Row="3"
             Grid.Column="1"
-            Style="{StaticResource ListTitleTextStyle}"
+            Style="{DynamicResource ListTitleTextStyle}"
             Text="{Binding Path=PriceRoutine.LinkedValueDrivers.Count,
             StringFormat=Influencer Drivers ({0})}"
             Visibility="{Binding ElementName=lstLinkedDrivers,
@@ -277,7 +303,7 @@
             <DataTemplate>
             <StackPanel MinHeight="35" Orientation="Horizontal">
             <TextBlock x:Name="txtName"
-            Style="{StaticResource ListItemTextStyle}"
+            Style="{DynamicResource ListItemTextStyle}"
             Text="{Binding Path=Name}"
             ToolTip="{Binding Path=ValueDriverId}" />
             </StackPanel>
@@ -288,7 +314,7 @@
 
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstNonKeyDrivers,
                                   Path=SelectedItem.Name,
                                   StringFormat={}{0} - Groups}" />
@@ -297,21 +323,32 @@
                  Grid.Row="4"
                  Grid.Column="1"
                  ItemsSource="{Binding ElementName=lstNonKeyDrivers,
-                                       Path=SelectedItem.LinkedDriver.Groups}">
+                                       Path=SelectedItem.LinkedDriver.Groups}"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent"
+                 HorizontalAlignment="Center">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel Width="150" LastChildFill="True">
                         <TextBlock DockPanel.Dock="Right"
-                                   Style="{StaticResource ListItemTextStyle}"
+                                   Style="{DynamicResource DescriptionHeaderStyleTextBlock}"
                                    Text="{Binding Path=PercentChange,
                                                   StringFormat=% Change: {0}}" />
                         <TextBlock x:Name="txtGroupId"
                                    DockPanel.Dock="Left"
-                                   Style="{StaticResource ListItemTextStyle}"
-                                   Text="{Binding Path=ValueDriverGroupValue}" />
+                                   Style="{DynamicResource DescriptionHeaderStyleTextBlock}"
+                                   Text="{Binding Path=ValueDriverGroupValue}" 
+                                   HorizontalAlignment="Left"/>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <!--
@@ -330,7 +367,7 @@
             <TextBlock Grid.Row="6"
             Grid.Column="0"
             Margin="10,5"
-            Style="{StaticResource ListTitleTextStyle}"
+            Style="{DynamicResource ListTitleTextStyle}"
             Text="{Binding ElementName=lstDriverContainer,
             Path=Items.Count,
             StringFormat=Value Drivers ({0})}"
@@ -379,7 +416,7 @@
             </CheckBox>
             
             <TextBlock x:Name="txtName"
-            Style="{StaticResource ListItemTextStyle}"
+            Style="{DynamicResource ListItemTextStyle}"
             Text="{Binding Path=BaseDriver.Name}"
             ToolTip="{Binding Path=Id}" />
             

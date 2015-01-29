@@ -8,7 +8,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class PricingEveryday : DisplayEntityBase, ISearchableEntity, IFilterContainer
+    public class PricingEveryday : DisplayEntityBase, ISearchableEntity, IFilterContainer, IDisposable
     {
         #region Private Fields
 
@@ -36,12 +36,13 @@ namespace APLPX.UI.WPF.DisplayEntities
         private PricingEverydayValueDriver _selectedValueDriver;
 
         private FeatureSearchGroup _searchGroup;
-        private int _searchGroupId;        
+        private int _searchGroupId;
         private int _owningSearchGroupId;
         private string _searchGroupKey;
         private bool _canNameChange;
         private bool _canSearchKeyChange;
 
+        private bool _isDisposed;
         private IDisposable _valueDriverChangeListener;
         private List<PricingEverydayValueDriverWrapper> _valueDriversCache;
 
@@ -63,6 +64,9 @@ namespace APLPX.UI.WPF.DisplayEntities
             Results = new List<PricingEverydayResult>();
 
             _valueDriversCache = new List<PricingEverydayValueDriverWrapper>();
+
+            ValueDrivers.ChangeTrackingEnabled = true;
+            _valueDriverChangeListener = ValueDrivers.ItemChanged.Subscribe(driver => OnValueDriverItemChanged(driver));
         }
 
         #endregion
@@ -106,20 +110,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             {
                 if (_valueDrivers != value)
                 {
-                    if (_valueDrivers != null && _valueDriverChangeListener != null)
-                    {
-                        _valueDriverChangeListener.Dispose();
-                    }
-
                     _valueDrivers = value;
                     this.RaisePropertyChanged("ValueDrivers");
 
                     if (_valueDrivers != null)
                     {
-                        //Listen for changes to any value driver in the collection. This enables us to detect when a driver is selected or unselected.
-                        _valueDrivers.ChangeTrackingEnabled = true;
-                        _valueDriverChangeListener = _valueDrivers.ItemChanged.Subscribe(driver => OnValueDriverItemChanged(driver));
-
                         //Set default value if applicable.
                         if (SelectedValueDriver == null)
                         {
@@ -671,7 +666,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _owningSearchGroupId; }
             set { this.RaiseAndSetIfChanged(ref _owningSearchGroupId, value); }
-        } 
+        }
 
         public string EntityTypeName
         {
@@ -737,5 +732,47 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_valueDriverChangeListener != null)
+                    {
+                        _valueDriverChangeListener.Dispose();
+                        _valueDriverChangeListener = null;
+                    }
+                    if (_linkedPriceListChangeListener != null)
+                    {
+                        _linkedPriceListChangeListener.Dispose();
+                        _linkedPriceListChangeListener = null;
+                    }
+                    if (ValueDrivers != null)
+                    {
+                        ValueDrivers.ChangeTrackingEnabled = false;
+                    }
+                    foreach (IDisposable group in FilterGroups)
+                    {
+                        group.Dispose();
+                    }
+                    foreach (PricingEverydayPriceListGroup priceListGroup in PriceListGroups)
+                    {
+                        priceListGroup.Dispose();
+                    }
+                }
+                _isDisposed = true;
+            }
+        }
+
+        #endregion
     }
 }

@@ -111,11 +111,11 @@
                       ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" MaxHeight="650"  BorderBrush="White" BorderThickness="1">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="Auto" Header="SKU #" Binding="{Binding SkuName}" TextBlock.TextAlignment="Center"/>
-                    <DataGridTextColumn Header="Description" Binding="{Binding SkuTitle}" Width="400" ElementStyle="{StaticResource StandardDataGridAlphabeticalCellStyle}"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding SkuTitle}" Width="400" ElementStyle="{DynamicResource StandardDataGridAlphabeticalCellStyle}"/>
                     <DataGridTextColumn Width="Auto" Header="Price Lists" Binding="{Binding PriceLists[0].Name}" />
-                    <DataGridTextColumn Header="Current Price $" Binding="{Binding PriceLists[0].CurrentPrice}" Width="65" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
-                    <DataGridTextColumn Header="Total Value Driver Change $" Binding="{Binding PriceLists[0].PriceChange}" Width="110" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
-                    <DataGridTextColumn  Header="Final Price $" Width="65" ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Header="Current Price $" Binding="{Binding PriceLists[0].CurrentPrice}" Width="65" ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn Header="Total Value Driver Change $" Binding="{Binding PriceLists[0].PriceChange}" Width="110" ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"/>
+                    <DataGridTextColumn  Header="Final Price $" Width="65" ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"/>
                     <DataGridTextColumn Header="Edit Type" Width="65"/>         <!-- Binding="{Binding PriceLists[0].PriceEdit.Type}" MaxWidth="65"/> DEMO:BARRY -->
                     <DataGridTextColumn Header="Warning" Width="70"/>              <!-- Binding="{Binding PriceLists[0].PriceWarning.Type}" MaxWidth="70"/> DEMO: BARRY-->
                 </DataGrid.Columns>

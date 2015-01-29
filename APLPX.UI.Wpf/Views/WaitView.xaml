@@ -27,7 +27,8 @@
         <controls:ProgressRing x:Name="progressRing"
                                Grid.Row="1"
                                HorizontalAlignment="Center"
-                               IsActive="{Binding Path=IsIndicatorVisible}" />
+                               IsActive="{Binding Path=IsIndicatorVisible}" 
+                               Foreground="{DynamicResource AccentColorBrush2}"/>
 
         <TextBlock Grid.Row="2" Text="Working..." />
 

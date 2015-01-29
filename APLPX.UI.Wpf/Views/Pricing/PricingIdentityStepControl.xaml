@@ -32,40 +32,40 @@
         <Label Grid.Row="0"
                Grid.Column="0"
                Content="Price Routine _Name:"
-               Style="{StaticResource IdentityLabelStyle}"
+               Style="{DynamicResource IdentityLabelStyle}"
                Target="{Binding ElementName=txtPriceRoutineName}" />
 
         <TextBox x:Name="txtPriceRoutineName"
                  Grid.Row="0"
                  Grid.Column="1"
                  MinWidth="450"
-                 Style="{StaticResource IdentityTextBoxStyle}"
+                 Style="{DynamicResource IdentityTextBoxStyle}"
                  Text="{Binding PriceRoutine.Identity.Name}" />
 
         <Label Grid.Row="1"
                Grid.Column="0"
                Content="_Description:"
-               Style="{StaticResource IdentityLabelStyle}"
+               Style="{DynamicResource IdentityLabelStyle}"
                Target="{Binding ElementName=txtDescription}" />
 
         <TextBox x:Name="txtDescription"
                  Grid.Row="1"
                  Grid.Column="1"
                  MinWidth="450"
-                 Style="{StaticResource IdentityTextBoxStyle}"
+                 Style="{DynamicResource IdentityTextBoxStyle}"
                  Text="{Binding PriceRoutine.Identity.Description}" />
 
         <Label Grid.Row="2"
                Grid.Column="0"
                Content="_Analytic Name:"
-               Style="{StaticResource IdentityLabelStyle}"
+               Style="{DynamicResource IdentityLabelStyle}"
                Target="{Binding ElementName=txtAnalytic}" />
 
         <TextBox x:Name="txtAnalytic"
                  Grid.Row="2"
                  Grid.Column="1"
                  MinWidth="450"
-                 Style="{StaticResource IdentityTextBoxStyle}"
+                 Style="{DynamicResource IdentityTextBoxStyle}"
                  Text="{Binding PriceRoutine.Identity.AnalyticName}" />
     </Grid>
 </UserControl>

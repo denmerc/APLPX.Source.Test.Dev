@@ -86,19 +86,20 @@
                                     ElementStyle="{StaticResource CenteredElementStyle}"
                                     Header="Sort" />
 
-                <DataGridCheckBoxColumn Width="65"
+                <DataGridCheckBoxColumn Width="80"
                                         Binding="{Binding Path=CanSearchKeyChange}"
-                                        Header="Folder Editable" />
+                                        Header="Can Search Key Change" />
 
                 <DataGridCheckBoxColumn Width="65"
                                         Binding="{Binding Path=CanNameChange}"
-                                        Header="Name Editable" />
+                                        Header="Can Name Change" />
             </DataGrid.Columns>
         </DataGrid>
 
         <GridSplitter Grid.Row="2"
                       Grid.Column="1"
-                      Width="5"
+                      Width="3"
+                      ToolTip="Drag left or right to resize."
                       Margin="4,0"
                       HorizontalAlignment="Stretch"
                       Background="DodgerBlue" />
@@ -149,14 +150,14 @@
                                     Binding="{Binding Path=OwningSearchGroupId}"
                                     ElementStyle="{StaticResource CenteredElementStyle}"
                                     Header="Owning Search Group Id" />
-                
-                <DataGridCheckBoxColumn Width="65"
+
+                <DataGridCheckBoxColumn Width="80"
                                         Binding="{Binding Path=CanSearchKeyChange}"
-                                        Header="Folder Editable" />
+                                        Header="Can Search Key Change" />
 
                 <DataGridCheckBoxColumn Width="65"
                                         Binding="{Binding Path=CanNameChange}"
-                                        Header="Name Editable" />
+                                        Header="Can Name Change" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

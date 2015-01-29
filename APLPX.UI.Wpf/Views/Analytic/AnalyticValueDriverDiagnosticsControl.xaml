@@ -21,6 +21,12 @@
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
 
+        <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader" />
+
+        <Style x:Key="DataGridElementCenteredStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
         <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -59,27 +65,33 @@
                                             <TextBlock Margin="5"
                                                        FontSize="16"
                                                        Text="{Binding Path=Items[0].Driver.AreResultsCurrent,
-                                                                      StringFormat=Results Current? {0}}" />
+                                                                      StringFormat=AreResultsCurrent: {0}}" />
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="1"
                                                     Margin="10,0,0,0"
+                                                    VerticalAlignment="Center"
                                                     Orientation="Horizontal">
-
-                                            <TextBlock Margin="5,2" Text="IsSelected:" />
                                             <CheckBox Margin="5,2"
+                                                      Content="IsSelected"
+                                                      Focusable="False"
                                                       IsChecked="{Binding Path=Items[0].Driver.IsSelected,
                                                                           Mode=OneWay}"
-                                                      IsEnabled="False" />
-
-                                            <TextBlock Margin="5,2" Text="RunResults:" />
+                                                      IsHitTestVisible="False" />
                                             <CheckBox Margin="5,2"
+                                                      Content="RunResults"
+                                                      Focusable="False"
                                                       IsChecked="{Binding Path=Items[0].Driver.RunResults,
                                                                           Mode=OneWay}"
-                                                      IsEnabled="False" />
+                                                      IsHitTestVisible="False" />
 
-                                            <TextBlock Margin="10,2,2,2" Text="Selected Mode:" />
-                                            <TextBlock Margin="0,2" Text="{Binding Path=Items[0].Driver.SelectedMode.Name, FallbackValue=(null)}" />
+                                            <TextBlock Margin="10,2,2,2"
+                                                       VerticalAlignment="Center"
+                                                       Text="Selected Mode:" />
+                                            <TextBlock Margin="0,2"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding Path=Items[0].Driver.SelectedMode.Name,
+                                                                      FallbackValue=(null)}" />
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -109,7 +121,7 @@
                    Grid.Row="1"
                    Grid.Column="0"
                    Style="{StaticResource ListTitleTextStyle}"
-                   Text="Driver Modes" />
+                   Text="Value Driver Modes" />
 
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
@@ -132,35 +144,60 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
+                  GridLinesVisibility="All"
                   IsReadOnly="True"
                   ItemsSource="{Binding Source={StaticResource cvsDriverModeRows}}">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Mode.Name}" Header="Mode" />
-                <DataGridTextColumn Binding="{Binding Path=Mode.Key}" Header="Key" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=Mode.IsSelected}" Header="IsSelected" />
-                <DataGridTextColumn Binding="{Binding Path=DriverGroup.Value}" Header="Group" />
-                <DataGridTextColumn Binding="{Binding Path=DriverGroup.MinOutlier}" Header="MinOutlier" />
-                <DataGridTextColumn Binding="{Binding Path=DriverGroup.MaxOutlier}" Header="MaxOutlier" />
-                <DataGridTextColumn Binding="{Binding Path=DriverGroup.Sort}" Header="Group Sort" />
+                <DataGridTextColumn Binding="{Binding Path=Mode.Name}" Header="Mode Name" />
+                <DataGridTextColumn Width="60"
+                                    Binding="{Binding Path=Mode.Key}"
+                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
+                                    Header="Mode Key" />
+                <DataGridCheckBoxColumn Width="80"
+                                        Binding="{Binding Path=Mode.IsSelected}"
+                                        Header="Mode IsSelected" />
+                <DataGridTextColumn Width="60"
+                                    Binding="{Binding Path=DriverGroup.Value}"
+                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
+                                    Header="Group Value" />
+                <DataGridTextColumn Width="85"
+                                    Binding="{Binding Path=DriverGroup.MinOutlier}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Group MinOutlier" />
+                <DataGridTextColumn Width="85"
+                                    Binding="{Binding Path=DriverGroup.MaxOutlier}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Group MaxOutlier" />
+                <DataGridTextColumn Width="60"
+                                    Binding="{Binding Path=DriverGroup.Sort}"
+                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
+                                    Header="Group Sort" />
+                <DataGridCheckBoxColumn Width="75"
+                                        Binding="{Binding Path=DriverGroup.IsMinValueEditable}"
+                                        Header="Group MinValueEditable" />
+                <DataGridCheckBoxColumn Width="75"
+                                        Binding="{Binding Path=DriverGroup.IsMaxValueEditable}"
+                                        Header="Group MaxValueEditable" />
             </DataGrid.Columns>
             <DataGrid.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource ValueDriverGroupStyle}" />
             </DataGrid.GroupStyle>
         </DataGrid>
 
-        <GridSplitter Grid.Row="2"
-                      Grid.RowSpan="1"
+        <GridSplitter Grid.Row="1"
+                      Grid.RowSpan="2"
                       Grid.Column="1"
-                      Width="5"
+                      Width="3"
                       Margin="3,0"
                       HorizontalAlignment="Stretch"
-                      Background="DodgerBlue" />
+                      Background="DodgerBlue"
+                      ToolTip="Drag left or right to resize." />
 
         <TextBlock x:Name="txtTitleResults"
                    Grid.Row="1"
                    Grid.Column="2"
                    Style="{StaticResource ListTitleTextStyle}"
-                   Text="Driver Results" />
+                   Text="Value Driver Results" />
 
         <DataGrid x:Name="dgDriverResults"
                   Grid.Row="2"
@@ -168,14 +205,24 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
+                  GridLinesVisibility="All"
                   IsReadOnly="True"
                   ItemsSource="{Binding Source={StaticResource cvsDriverResultRows}}">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Driver.Name}" Header="Driver" />
-                <DataGridTextColumn Binding="{Binding Path=Result.Value}" Header="Group" />
-                <DataGridTextColumn Binding="{Binding Path=Result.MinOutlier}" Header="MinOutlier" />
-                <DataGridTextColumn Binding="{Binding Path=Result.MaxOutlier}" Header="MaxOutlier" />
-                <DataGridTextColumn Binding="{Binding Path=Result.SkuCount}" Header="SkuCount" />
+                <DataGridTextColumn Binding="{Binding Path=Driver.Name}" Header="Driver Name" />
+                <DataGridTextColumn Width="60"
+                                    Binding="{Binding Path=Result.Value}"
+                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
+                                    Header="Result Value" />
+                <DataGridTextColumn Binding="{Binding Path=Result.MinOutlier}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="MinOutlier" />
+                <DataGridTextColumn Binding="{Binding Path=Result.MaxOutlier}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="MaxOutlier" />
+                <DataGridTextColumn Binding="{Binding Path=Result.SkuCount}"
+                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
+                                    Header="SkuCount" />
                 <DataGridTextColumn Binding="{Binding Path=Result.SalesValue}" Header="SalesValue" />
             </DataGrid.Columns>
             <DataGrid.GroupStyle>

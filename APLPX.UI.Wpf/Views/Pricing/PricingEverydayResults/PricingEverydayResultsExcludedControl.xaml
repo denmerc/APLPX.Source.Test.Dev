@@ -209,10 +209,23 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Price Lists" x:Name="priceListsCheckBoxColumn" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsAlphabeticalCellStyle}" Style="{DynamicResource ListBoxResultsStyle}" HorizontalContentAlignment="Center">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <CheckBox x:Name="priceListCheckBox" Margin="8,0,0,0"/>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Price Lists" x:Name="priceListsColumn" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsAlphabeticalCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Name}"></TextBlock>
@@ -225,7 +238,7 @@
                         <DataGridTemplateColumn Header="Current Price $" x:Name="currentPriceColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding CurrentPrice}"></TextBlock>
@@ -238,7 +251,7 @@
                         <DataGridTemplateColumn Header="Current Mark-Up %" x:Name="currentMarkupColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding CurrentMarkupPercent}"></TextBlock>
@@ -251,7 +264,7 @@
                         <DataGridTemplateColumn Header="Total Price Change $" x:Name="totalPriceChangeColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding PriceChange}"></TextBlock>
@@ -264,7 +277,7 @@
                         <DataGridTemplateColumn Header="Final Price $" x:Name="finalPriceColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text=""></TextBlock>
@@ -277,7 +290,7 @@
                         <DataGridTemplateColumn Header="New Mark-Up %" x:Name="newMarkupColumn" Width="65">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding NewMarkupPercent}"></TextBlock>
@@ -290,7 +303,7 @@
                         <DataGridTemplateColumn Header="Edit Type" x:Name="editTypeColumn" Width="90">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsAlphabeticalCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="Default Price"></TextBlock>           <!-- DEMO:BARRY <TextBlock Text="{Binding PriceEdit.Type}"></TextBlock>-->
@@ -303,7 +316,7 @@
                         <DataGridTemplateColumn Header="Warning" x:Name="warningColumn" Width="70">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsCellStyleRed}" Style="{StaticResource ListBoxResultsStyle}">
+                                    <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsCellStyleRed}" Style="{DynamicResource ListBoxResultsStyle}">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="Below"></TextBlock>                   <!-- DEMO:BARRY <TextBlock Text="{Binding PriceWarning.Type}"></TextBlock> -->

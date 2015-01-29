@@ -36,6 +36,9 @@ namespace APLPX.UI.WPF.ViewModels
         private bool _isFeatureSelectorAvailable;
         private string _currentStatusText;
         private bool _isActionInProgress;
+        private bool _isFoldersPanelVisible;
+        private bool _isMessageCenterVisible;
+        private bool _isPropertiesPanelVisible;        
 
         private ISearchableEntity _originalEntity;
         private EventAggregator _eventManager;
@@ -142,6 +145,12 @@ namespace APLPX.UI.WPF.ViewModels
             LaunchWebPageCommand = ReactiveCommand.Create();
             LaunchWebPageCommand.Subscribe(x => LaunchWebPageExecuted(x));
 
+            ShowMessageCenterCommand = ReactiveCommand.Create();
+            ShowMessageCenterCommand.Subscribe(x => ShowMessageCenterExecuted(x));
+
+            ShowPropertiesPanelCommand = ReactiveCommand.Create();
+            ShowPropertiesPanelCommand.Subscribe(x => ShowPropertiesPanelExecuted(x));
+
             LogoutCommand = ReactiveCommand.Create();
             LogoutCommand.Subscribe(x =>
             {
@@ -151,6 +160,10 @@ namespace APLPX.UI.WPF.ViewModels
                 loginWindow.DataContext = vm;
                 loginWindow.ShowMaxRestoreButton = false;
                 loginWindow.ShowMinButton = false;
+                loginWindow.ShowCloseButton = true;
+                loginWindow.ShowInTaskbar = false;
+                loginWindow.ShowActivated = true;
+                loginWindow.Owner = App.Current.MainWindow;
 
 
                 if (loginWindow.ShowDialog() == true)
@@ -160,6 +173,7 @@ namespace APLPX.UI.WPF.ViewModels
                     var mvm = new MainViewModel(vm.Session, _analyticService, _userService, _pricingEverydayService);
                     App.Current.MainWindow.DataContext = mvm;
                 }
+                else { App.Current.Shutdown(); }
             });
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -308,6 +322,7 @@ namespace APLPX.UI.WPF.ViewModels
                     }
                 }));
         }
+
 
         #endregion
 
@@ -538,6 +553,33 @@ namespace APLPX.UI.WPF.ViewModels
             private set { this.RaiseAndSetIfChanged(ref _isActionInProgress, value); }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the folders panel should be displayed.
+        /// </summary>
+        public bool IsFoldersPanelVisible
+        {
+            get { return _isFoldersPanelVisible; }
+            set { this.RaiseAndSetIfChanged(ref _isFoldersPanelVisible, value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the message center should be displayed.
+        /// </summary>
+        public bool IsMessageCenterVisible
+        {
+            get { return _isMessageCenterVisible; }
+            set { this.RaiseAndSetIfChanged(ref _isMessageCenterVisible, value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the message center should be displayed.
+        /// </summary>
+        public bool IsPropertiesPanelVisible
+        {
+            get { return _isPropertiesPanelVisible; }
+            set { this.RaiseAndSetIfChanged(ref _isPropertiesPanelVisible, value); }
+        }
+
         #endregion
 
         #region Commands
@@ -578,19 +620,27 @@ namespace APLPX.UI.WPF.ViewModels
         public ReactiveCommand<object> ActionCommand { get; private set; }
 
         /// <summary>
+        /// Command to display the Message Center.
+        /// </summary>
+        public ReactiveCommand<object> ShowMessageCenterCommand { get; private set; }
+
+        /// <summary>
+        /// Command to display the Properties panel.
+        /// </summary>
+        public ReactiveCommand<object> ShowPropertiesPanelCommand { get; private set; }
+
+        /// <summary>
         /// Command to launch a web page.
         /// </summary>
         public ReactiveCommand<object> LaunchWebPageCommand { get; private set; }
 
-        private object ActionCommandExecuted(object sender)
+        private void ActionCommandExecuted(object sender)
         {
             var action = sender as DisplayEntities.Action;
             if (action != null && SelectedEntity != null)
             {
                 HandleSelectedAction(action);
             }
-
-            return null;
         }
 
         /// <summary>
@@ -718,7 +768,7 @@ namespace APLPX.UI.WPF.ViewModels
                     LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic Driver Results - {0} [{1}] :  being run.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
 
                     ExecuteAsyncCommand(RunValueDriversCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Value Drivers saving...", "Value Drivers saved.");
-                   
+
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsResultsRun:
                     LogManager.GetCurrentClassLogger().Log(LogLevel.Info, String.Format("Analytic Results - {0} [{1}] :  being run.", SelectedAnalytic.Identity.Name, SelectedAnalytic.Id)); 
@@ -1102,7 +1152,7 @@ namespace APLPX.UI.WPF.ViewModels
             HandleSelectedAction(action);
         }
 
-        private object LaunchWebPageExecuted(object parameter)
+        private void LaunchWebPageExecuted(object parameter)
         {
             string url = Convert.ToString(parameter);
 
@@ -1110,9 +1160,18 @@ namespace APLPX.UI.WPF.ViewModels
             {
                 System.Diagnostics.Process.Start(url);
             }
-
-            return url;
         }
+
+        private void ShowMessageCenterExecuted(object parameter)
+        {
+            IsMessageCenterVisible = true;
+        }
+
+        private void ShowPropertiesPanelExecuted(object parameter)
+        {
+            IsPropertiesPanelVisible = true;
+        }
+
 
         #endregion
 

@@ -32,7 +32,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -44,37 +44,56 @@
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
-                   Text="Filter Types" />
+                   Style="{DynamicResource ListTitleTextStyle}"
+                   Text="Filter Types" 
+                   Margin="10,0,1,0"  
+                   VerticalAlignment="Center"/>
 
         <ListBox x:Name="FilterGroupsListBox"
                  Grid.Row="1"
                  Grid.Column="0"
                  ItemsSource="{Binding Path=Entity.FilterGroups}"
                  SelectedIndex="0"
-                 SelectedItem="{Binding Path=Entity.SelectedFilterGroup}">
+                 SelectedItem="{Binding Path=Entity.SelectedFilterGroup}"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent"
+                 Margin="10,0,0,0">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Width="200"
                            Content="{Binding Path=Name}"
                            FontSize="16"
-                           Foreground="{StaticResource Foreground}" />
+                           Foreground="{DynamicResource Foreground}" 
+                           Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+        
+        <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <StackPanel Grid.Row="0" Grid.Column="1">
             <TextBlock x:Name="txtCount"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="{Binding ElementName=FilterGrid,
                                       Path=Items.Count,
-                                      StringFormat={}Filters ({0})}" />
+                                      StringFormat={}Filters ({0})}" 
+                       HorizontalAlignment="Center"
+                       Margin="15,10,0,0"
+                       VerticalAlignment="Center"/>
             <TextBlock x:Name="txtSelectedCount"
-                       Margin="5,0,5,10"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Margin="20,10,5,10"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="{Binding Path=Entity.SelectedFilterGroup.SelectedCount,
-                                      StringFormat={}Included: {0}}" />
+                                      StringFormat={}Included: {0}}" 
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
         </StackPanel>
 
         <DataGrid x:Name="FilterGrid"

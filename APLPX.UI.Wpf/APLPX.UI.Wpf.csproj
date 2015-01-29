@@ -228,7 +228,6 @@
     <Compile Include="Helpers\PricingExtensions.cs" />
     <Compile Include="Helpers\PasswordExtension.cs" />
     <Compile Include="Helpers\TextBoxHelper.cs" />
-    <Compile Include="Interfaces\IAnalyticRepository.cs" />
     <Compile Include="Interfaces\IDragSource.cs" />
     <Compile Include="Interfaces\IDropTarget.cs" />
     <Compile Include="Interfaces\IFilterContainer.cs" />
@@ -258,7 +257,6 @@
     <Compile Include="Mappers\FilterMapper.cs" />
     <Compile Include="Mappers\ErrorMapper.cs" />
     <Compile Include="Mappers\IdentityMapper.cs" />
-    <Compile Include="Themes\ThemeManager.cs" />
     <Compile Include="Validation\AnalyticValidations.cs" />
     <Compile Include="Validation\CommonValidations.cs" />
     <Compile Include="ViewModels\Admin\AdminUsersViewModel.cs" />
@@ -366,14 +364,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\Icons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Light.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Dark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -550,6 +540,7 @@
     </EmbeddedResource>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

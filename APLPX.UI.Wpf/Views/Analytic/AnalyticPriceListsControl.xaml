@@ -40,7 +40,7 @@
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="Price List Groups"
                    Visibility="{Binding Path=ShowPriceListGroups,
                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -57,21 +57,22 @@
                     <Label Width="200"
                            Content="{Binding Path=Name}"
                            FontSize="16"
-                           Foreground="{StaticResource Foreground}" />
+                           Foreground="{DynamicResource Foreground}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
         <StackPanel Grid.Row="0" Grid.Column="1">
             <TextBlock x:Name="txtCount"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="{Binding ElementName=dgPriceLists,
                                       Path=Items.Count,
-                                      StringFormat={}Price Lists ({0})}" />
+                                      StringFormat={}Price Lists ({0})}" 
+                       Margin="0,5,0,0"/>
 
             <TextBlock x:Name="txtSelectedCount"
-                       Margin="5,0,5,10"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Margin="5,5,5,10"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="{Binding Path=Entity.SelectedPriceListGroup.SelectedCount,
                                       StringFormat={}Included: {0}}" />
         </StackPanel>
@@ -108,7 +109,7 @@
                 <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
 
                 <DataGridTextColumn Binding="{Binding Path=Code}"
-                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
+                                    ElementStyle="{DynamicResource DataGridElementCenteredStyle}"
                                     Header="Code" />
             </DataGrid.Columns>
         </DataGrid>

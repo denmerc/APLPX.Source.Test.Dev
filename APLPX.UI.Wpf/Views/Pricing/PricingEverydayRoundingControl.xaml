@@ -32,14 +32,14 @@
         <TextBlock x:Name="txtKeyPriceListsTitle"
                    Grid.Row="0"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyPriceLists,
                                   Path=Items.Count,
                                   StringFormat=Price Lists ({0})}" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{DynamicResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyPriceLists,
                                   Path=SelectedItem.Name,
                                   StringFormat={}{0} - Rounding Rules}" />
@@ -49,7 +49,9 @@
                  Grid.Column="0"
                  Margin="10,5"
                  ItemsSource="{Binding Path=PriceRoutine.RoundingRulePriceLists}"
-                 SelectedItem="{Binding Path=SelectedPriceList}">
+                 SelectedItem="{Binding Path=SelectedPriceList}"
+                 Style="{DynamicResource baseListBoxStyle}"
+                 Background="Transparent">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -63,14 +65,24 @@
                                ToolTip="This is the Key Price List."
                                Visibility="{Binding Path=IsKey,
                                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <TextBlock Margin="5"
-                                   VerticalAlignment="Center"
-                                   Foreground="{StaticResource Foreground}"
-                                   Text="{Binding Path=Name}"
-                                   ToolTip="{Binding Path=Title}" />
+                        <Label Margin="5"
+                               FontSize="16"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource Foreground}"
+                               Content="{Binding Path=Name}"
+                               ToolTip="{Binding Path=Title}" 
+                               Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                    <Setter Property="Margin" Value="0,5"/>
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                </Style>
+
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <vc:RoundingRuleControl x:Name="ucPriceListRoundingRules"
@@ -110,7 +122,7 @@
 
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="Select A Template" />
 
             <ListBox x:Name="lstRoundingTemplates"
@@ -118,19 +130,31 @@
                      Grid.Column="0"
                      Margin="10,5"
                      ItemsSource="{Binding Path=RoundingTemplates}"
-                     SelectedItem="{Binding Path=SelectedTemplate}">
+                     SelectedItem="{Binding Path=SelectedTemplate}"
+                     Style="{DynamicResource baseListBoxStyle}"
+                     Background="Transparent">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock x:Name="txtName"
-                                   Text="{Binding Path=Name}"
-                                   ToolTip="{Binding Path=Description}" />
+                        <Label x:Name="txtName"
+                                FontSize="16"
+                                   Content="{Binding Path=Name}"
+                                   ToolTip="{Binding Path=Description}" 
+                               Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
+                        <Setter Property="Margin" Value="0,5"/>
+                        <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+
+                </ListBox.ItemContainerStyle>
             </ListBox>
 
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{DynamicResource ListTitleTextStyle}"
                        Text="{Binding ElementName=lstRoundingTemplates,
                                       Path=SelectedItem.Name,
                                       StringFormat={}{0} - Rounding Rules}" />

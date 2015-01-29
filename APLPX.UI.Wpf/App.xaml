@@ -22,9 +22,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+               <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />    
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml"/> 
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -38,6 +39,7 @@
 
             <!--  Application Styles  -->
 
+         
             <LinearGradientBrush x:Key="ContentBack">
                 <LinearGradientBrush.GradientStops>
                     <GradientStop Offset="0" Color="#121212" />
@@ -46,10 +48,69 @@
                 </LinearGradientBrush.GradientStops>
             </LinearGradientBrush>
 
+
+            <Style x:Key="DescriptionHeaderStyleLabel" BasedOn="{StaticResource MetroLabel}" TargetType="Label">
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Center" />
+                <Setter Property="Foreground" Value="{DynamicResource LabelTextBrush}" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="FontFamily" Value="SegoeUI" />
+            </Style>
+
+            <Style x:Key="DescriptionHeaderStyleTextBlock"
+                   TargetType="TextBlock">
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Center" />
+                <Setter Property="Foreground" Value="{DynamicResource LabelTextBrush}" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="FontFamily" Value="SegoeUI" />
+            </Style>
+
+            <Style x:Key="DescriptionHeaderStyleTextBox" BasedOn="{StaticResource MetroTextBox}" TargetType="TextBox">
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Center" />
+                <Setter Property="Foreground" Value="{DynamicResource LabelTextBrush}" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="FontFamily" Value="SegoeUI" />
+                <Setter Property="SelectionBrush" Value="{DynamicResource AccentColorBrush2}" />
+            </Style>
+
+
             <LinearGradientBrush x:Key="Buttongradient" StartPoint="0.500023,0.999996" EndPoint="0.500023,9.37507e-006">
                 <GradientStop Offset="1" Color="#373737" />
                 <GradientStop Offset="0" Color="AliceBlue" />
             </LinearGradientBrush>
+
+            <Style x:Key="SearchControlStyle" TargetType="Border">
+                <Setter Property="Opacity" Value=".35" />
+                <Setter Property="Background" Value="Silver" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="10" />
+            </Style>
+
+            <Style x:Key="SearchControlSeparatorStyle" TargetType="Separator" />
+
+
+            <SolidColorBrush x:Key="ApplicationTitleBarColor" Color="#2a2a2a" />
+            <SolidColorBrush x:Key="ApplicationTitleBarColorInactive" Color="Gray" />
+            <SolidColorBrush x:Key="ApplicationGlowBrushBorderColor" Color="DodgerBlue" />
+            <SolidColorBrush x:Key="MainWindowBackground" Color="#181818" />
+            <SolidColorBrush x:Key="SearchControlListBoxItemTextColor" Color="White" />
+            <SolidColorBrush x:Key="SearchControlTitleLabelTextColor" Color="AliceBlue" />
+            <SolidColorBrush x:Key="AnalyticStepTextColor" Color="White" />
+            <SolidColorBrush x:Key="MainWindowHeaderStyleTextColor" Color="Black" />
+            <SolidColorBrush x:Key="SearchControlSelectedItemDetailTextColor" Color="White" />
+            <SolidColorBrush x:Key="SearchControlSelectedItemDetailBackgroundColor" />
+            <SolidColorBrush x:Key="SearchControlListBoxTitleTextColor" Color="White" />
+            <Color x:Key="ListBoxSelectionColor">DodgerBlue</Color>
+
+
 
 
             <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
@@ -70,6 +131,7 @@
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="BorderBrush" Value="White" />
                 <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
             </Style>
 
             <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
@@ -105,7 +167,7 @@
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
-            <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
+            <Style x:Key="ListTitleTextStyle" TargetType="TextBlock" BasedOn="{StaticResource DescriptionHeaderStyleTextBlock}">
                 <Setter Property="TextAlignment" Value="Center" />
                 <Setter Property="FontWeight" Value="Bold" />
                 <Setter Property="FontSize" Value="14" />
@@ -122,6 +184,8 @@
                 <Setter Property="MaxWidth" Value="300" />
             </Style>
 
+            
+            <!--
             <Style x:Key="mainWindowTextBlockStyle"
                    BasedOn="{StaticResource MainWindowHeaderTextStyle}"
                    TargetType="{x:Type TextBlock}">
@@ -131,7 +195,10 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            -->
 
+        
+            
             <Style x:Key="SearchLblStyle" TargetType="{x:Type Label}">
                 <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="FontSize" Value="15" />
@@ -164,42 +231,179 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="IdentityLabelStyle" TargetType="{x:Type Label}">
+            <Style x:Key="IdentityLabelStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource DescriptionHeaderStyleLabel}">
                 <Setter Property="FontSize" Value="16" />
-                <Setter Property="Foreground" Value="{StaticResource Foreground}" />
+                <Setter Property="HorizontalAlignment" Value="Right"/>
                 <Setter Property="HorizontalContentAlignment" Value="Right" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="Margin" Value="5,2" />
             </Style>
 
-            <Style x:Key="IdentityTextBlockStyle"
-                   BasedOn="{StaticResource {x:Type TextBlock}}"
-                   TargetType="TextBlock">
+            <Style x:Key="IdentityTextBlockStyle" BasedOn="{StaticResource DescriptionHeaderStyleTextBlock}" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Foreground" Value="{StaticResource Foreground}" />
             </Style>
 
-            <Style x:Key="IdentityTextBoxStyle"
-                   BasedOn="{StaticResource TextBoxStyle1}"
-                   TargetType="TextBox">
+            <Style x:Key="IdentityTextBoxStyle" BasedOn="{StaticResource DescriptionHeaderStyleTextBox}" TargetType="TextBox">
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="TextWrapping" Value="Wrap" />
                 <Setter Property="MaxWidth" Value="800" />
-                <Setter Property="Foreground" Value="{StaticResource Foreground}" />
             </Style>
 
-            <Style x:Key="IdentityRadioButtonStyle"
-                   BasedOn="{StaticResource {x:Type RadioButton}}"
-                   TargetType="{x:Type RadioButton}">
+            <Style x:Key="IdentityRadioButtonStyle" BasedOn="{StaticResource MetroRadioButton}" TargetType="{x:Type RadioButton}">
                 <Setter Property="FontSize" Value="16" />
-                <Setter Property="Foreground" Value="{StaticResource Foreground}" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="Margin" Value="5" />
+
+                <Setter Property="BorderThickness"
+                Value="1" />
+        <!--        <Setter Property="Controls:ControlsHelper.FocusBorderBrush"
+                Value="{DynamicResource HighlightBrush}" />
+                <Setter Property="Controls:ControlsHelper.MouseOverBorderBrush"
+                Value="{DynamicResource CheckBoxMouseOverBrush}" /> -->
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                         Storyboard.TargetName="hover" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                         Storyboard.TargetName="pressed" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0"
+                                                         To=".55"
+                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                         Storyboard.TargetName="contentPresenter" />
+                                                <DoubleAnimation Duration="0"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                         Storyboard.TargetName="disabled" />
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="CheckStates">
+                                        <VisualState x:Name="Checked">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                         Storyboard.TargetName="Checked1" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Unchecked" />
+                                        <VisualState x:Name="Indeterminate" />
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="FocusStates">
+                                        <VisualState x:Name="Focused">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                         Storyboard.TargetName="focused" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Unfocused" />
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="18" x:Name="LeftCol" />
+                                    <ColumnDefinition Width="*" x:Name="RightCol" />
+                                </Grid.ColumnDefinitions>
+                                <Grid x:Name="PART_CHECKBOX">
+                                    <Rectangle Fill="{DynamicResource TransparentWhiteBrush}"
+                                       Margin="-6,0" />
+                                    <Ellipse x:Name="normal"
+                                     Opacity="1"
+                                     Stroke="{DynamicResource CheckBoxBrush}"
+                                     StrokeThickness="1"
+                                     Fill="{DynamicResource WhiteBrush}"
+                                     Width="18"
+                                     Height="18" />
+                                    <Ellipse x:Name="hover"
+                                     Stroke="{DynamicResource SemiTransparentWhiteBrush}"
+                                     StrokeThickness="1"
+                                     Opacity="0"
+                                     Width="18"
+                                     Height="18" /> 
+                                    <Ellipse x:Name="pressed"
+                                     Opacity="0"
+                                     Stroke="{DynamicResource AccentColorBrush1}"
+                                     StrokeThickness="1"
+                                     Fill="{DynamicResource WhiteBrush}"
+                                     Width="18"
+                                     Height="18" />
+                                    <Ellipse x:Name="focused"
+                                     Opacity="0"
+                                     Stroke="White"
+                                     StrokeThickness="1"
+                                     Fill="{DynamicResource WhiteBrush}"
+                                     Width="18"
+                                     Height="18" />     
+                                    <Ellipse x:Name="Checked1"
+                                     Fill="{DynamicResource AccentColorBrush2}"
+                                     Opacity="0"
+                                     Width="10"
+                                     Height="10" />
+                                    <Ellipse x:Name="disabled"
+                                     Opacity="0"
+                                     StrokeThickness="1"
+                                     Fill="{DynamicResource SemiTransparentWhiteBrush}"
+                                     Width="18"
+                                     Height="18" />
+                                </Grid>
+                                <ContentPresenter x:Name="contentPresenter"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Content="{TemplateBinding Content}"
+                                          Grid.Column="1"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Grid>
+                            <!--     <ControlTemplate.Triggers>
+                                <Trigger Property="Controls:ToggleButtonHelper.ContentDirection"
+                                 Value="RightToLeft">   
+                                    <Setter Property="Padding"
+                                    Value="0,0,6,0" />
+                                    <Setter TargetName="LeftCol"
+                                    Property="Width"
+                                    Value="*" />
+                                    <Setter TargetName="RightCol"
+                                    Property="Width"
+                                    Value="18" />
+                                    <Setter TargetName="PART_CHECKBOX"
+                                    Property="Grid.Column"
+                                    Value="1" />
+                                    <Setter TargetName="contentPresenter"
+                                    Property="Grid.Column"
+                                    Value="0" />
+                                </Trigger>
+                            </ControlTemplate.Triggers> -->
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
+
+ 
+
 
             <Style x:Key="commandButtonStyle" TargetType="{x:Type Button}">
                 <Setter Property="Height" Value="50" />
@@ -229,6 +433,9 @@
                 <Setter Property="Clip" Value="F1 M 0,0L 76,0L 76,76L 0,76L 0,0" />
             </Style>
 
+        
+            
+            
             <!--  DO NOT CHANGE COLORS RIGHT NOW (THESE ARE THE FEATURE & MODULE ICON COLORS  -->
             <Style x:Key="featureGraphicsPathStyle" TargetType="{x:Type Path}">
                 <Setter Property="Width" Value="75" />
@@ -253,13 +460,15 @@
                 <Setter Property="Stretch" Value="Fill" />
             </Style>
 
+      
+            <!--
             <Style x:Key="searchControlStyle1" TargetType="{x:Type ListBoxItem}">
                 <Style.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5" />
                     </Style>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
+ 
+          
                 </Style.Resources>
                 <Setter Property="Margin" Value="0,15,0,0" />
                 <Style.Triggers>
@@ -272,11 +481,7 @@
                         <Setter Property="FontFamily" Value="SegoeUI" />
                         <Setter Property="MaxWidth" Value="300" />
                     </DataTrigger>
-                    <!--
-                        <DataTrigger Binding="{Binding Path=ItemCount}" Value="0">
-                        <Setter Property="IsEnabled" Value="False" />
-                        </DataTrigger>
-                    -->
+
 
 
                     <MultiDataTrigger>
@@ -297,16 +502,15 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+-->
 
-
-
+<!--
             <Style x:Key="searchControlStyle2" TargetType="{x:Type ListBoxItem}">
                 <Style.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5" />
                     </Style>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
+    
                 </Style.Resources>
                 <Setter Property="Background" Value="#FF333337" />
                 <Setter Property="Margin" Value="0,2" />
@@ -321,24 +525,80 @@
                 </Style.Triggers>
             </Style>
 
-            <Style x:Key="mainWindowItemContainerStyle"
-                   BasedOn="{StaticResource {x:Type ListBoxItem}}"
-                   TargetType="{x:Type ListBoxItem}">
-                <Style.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource ListBoxSelectionColor}" />
-                </Style.Resources>
+            -->
+
+            
+
+
+            <Style x:Key="baseListBoxStyle"
+                   BasedOn="{StaticResource MetroListBox}"
+                   TargetType="{x:Type ListBox}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=IsEnabled}" Value="False">
                         <Setter Property="IsEnabled" Value="False" />
-                        <Setter Property="Background" Value="Gray" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Path=IsVisible}" Value="False">
                         <Setter Property="Visibility" Value="Collapsed" />
                     </DataTrigger>
                 </Style.Triggers>
+                <Setter Property="FontFamily" Value="SegoeUI" />
             </Style>
 
+            <Style x:Key="baseListBoxItemStyle"
+                   BasedOn="{StaticResource MetroListBoxItem}"
+                   TargetType="{x:Type ListBoxItem}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsEnabled}" Value="False">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsVisible}" Value="False">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+                <Setter Property="FontFamily" Value="SegoeUI" />
+          <!--      <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border Name="Border" Padding="2" SnapsToDevicePixels="true">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Border" Property="Background"
+                                            Value="{DynamicResource HighlightBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="Background"
+                                            Value="{DynamicResource HighlightBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>       -->
+            </Style>
 
+            
+        <!--    
+            <Style x:Key="baseItemsControlStyle"
+                   BasedOn="{StaticResource MetroListBoxItem}"
+                   TargetType="{x:Type ItemsControl}">
+                <Style.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Red"/>
+                </Style.Resources>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsEnabled}" Value="False">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsVisible}" Value="False">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+                <Setter Property="FontFamily" Value="SegoeUI" />
+            </Style>
+                -->
+
+
+            <!--
             <Style x:Key="ListBoxResultsStyle" TargetType="{x:Type ListBox}">
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
                 <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
@@ -377,6 +637,8 @@
                 <Setter Property="HorizontalContentAlignment" Value="Right" />
             </Style>
 
+            -->
+            
             <Style x:Key="StandardDataGridNumericalCellStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="Padding" Value="5,0,5,0" />
@@ -388,6 +650,7 @@
                 <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
             </Style>
 
+            <!--
             <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
                 <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}" />
                 <Setter Property="Background" Value="#FF3F3F46" />
@@ -410,8 +673,10 @@
                 </Setter>
             </Style>
 
+-->
 
-
+            
+            <!--
             <Style x:Key="ListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
                 <Setter Property="Background" Value="{DynamicResource Buttongradient}" />
                 <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
@@ -435,12 +700,12 @@
 
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="CornflowerBlue" />
+ 
                                     <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                                 </Trigger>
 
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="CornflowerBlue" />
+                
                                     <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
@@ -448,7 +713,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
+-->
 
             <DataTemplate DataType="{x:Type vm:HomeViewModel}">
                 <local:HomeView />

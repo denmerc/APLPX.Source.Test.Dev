@@ -10,7 +10,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class PricingEverydayPriceListGroup : PriceListGroup
+    public class PricingEverydayPriceListGroup : PriceListGroup, IDisposable
     {
         #region Private Fields
 
@@ -19,6 +19,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private IDisposable _itemChangedSubscription;
         private ISubject<PricingEverydayPriceList> _priceListChangeSubject;
+        private bool _isDisposed;
 
         #endregion
 
@@ -117,7 +118,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                     {
                         priceList.IsSelected = false;
                         priceList.CanChangeIsSelected = false;
-                    }                    
+                    }
                 }
             }
 
@@ -156,8 +157,38 @@ namespace APLPX.UI.WPF.DisplayEntities
             get;
         }
 
-
         #endregion
 
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_itemChangedSubscription != null)
+                    {
+                        _itemChangedSubscription.Dispose();
+                        _itemChangedSubscription = null;
+                    }
+
+                    var disposable = _priceListChangeSubject as IDisposable;
+                    if (disposable != null)
+                    {
+                        disposable.Dispose();
+                    }
+                }
+                _isDisposed = true;
+            }
+        }
+
+        #endregion
     }
 }

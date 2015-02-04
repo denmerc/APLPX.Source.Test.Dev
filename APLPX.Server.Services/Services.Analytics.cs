@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using APLPX.Entity;
 using APLPX.Server.Data;
 using APLPX.Server.Services.Contracts;
+using NLog;
+using Newtonsoft.Json;
 
 namespace APLPX.Server.Services
 {
@@ -22,6 +24,7 @@ namespace APLPX.Server.Services
             Session<Entity.Analytic> sessionOut = _analyticData.Load(sessionIn);
             _analyticData.Dispose();
 
+            LogManager.GetCurrentClassLogger().Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 

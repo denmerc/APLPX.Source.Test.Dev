@@ -7,6 +7,8 @@ using System.Windows.Interop;
 using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.Views;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using System.Threading.Tasks;
 
 namespace APLPX.UI.WPF
 {
@@ -53,6 +55,12 @@ namespace APLPX.UI.WPF
                .Subscribe(action =>
                {
                    ShowMessageToaster(action);
+               });
+
+            _eventManager.GetEvent<ErrorEvent>()
+               .Subscribe( evt =>
+               {
+                   ShowErrorDialog( evt );
                });
 
 
@@ -120,6 +128,19 @@ namespace APLPX.UI.WPF
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Application.Current.MainWindow = this;
+        }
+
+
+        private async void ShowErrorDialog(ErrorEvent evt)
+        {
+            var dialog = (BaseMetroDialog)this.Resources["ErrorDialog"];
+            dialog.DataContext = evt;
+
+            await this.ShowMetroDialogAsync(dialog);
+
+            await Task.Delay(2000);
+
+            await this.HideMetroDialogAsync(dialog);
         }
     }
 }

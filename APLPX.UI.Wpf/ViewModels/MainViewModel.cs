@@ -175,6 +175,22 @@ namespace APLPX.UI.WPF.ViewModels
                 }
                 else { App.Current.Shutdown(); }
             });
+
+
+            LoadAnalyticListCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+                    await Task.Run(() =>
+                        {
+                            var returnedSession = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = Session.SqlKey });
+                            List<DTO.Analytic> analyticDtos = returnedSession.Data;
+                            var displayAnalytics = analyticDtos.ToDisplayEntities();
+                            var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
+                            SelectedFeature.SearchableEntities = iSearchables;
+                        }
+
+
+                ));
+            LoadAnalyticListCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Analytic List", err));
+
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
                 {
@@ -201,6 +217,8 @@ namespace APLPX.UI.WPF.ViewModels
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                 }));
 
+            LoadAnalyticCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Analytic", err));
+
             LoadPricingEverydayCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
                 {
@@ -210,6 +228,8 @@ namespace APLPX.UI.WPF.ViewModels
                     //a.Data.FilterGroups = Session.FilterGroups;
                     SelectedPricingEveryday = a.Data.ToDisplayEntity();
                 }));
+            LoadPricingEverydayCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Pricing", err));
+
 
 
             SaveAnalyticIdentityCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -221,6 +241,9 @@ namespace APLPX.UI.WPF.ViewModels
                     var status = _analyticService.SaveIdentity(session);
                     SelectedAnalytic.Identity = _analyticService.Load(session).Data.Identity.ToDisplayEntity();
                 }));
+            SaveAnalyticIdentityCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Identity", err));
+
+
 
             SaveFiltersCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -231,6 +254,7 @@ namespace APLPX.UI.WPF.ViewModels
                     var status = _analyticService.SaveFilters(session);
                     //SelectedAnalytic.FilterGroups = _analyticService.LoadFilters(session).Data.FilterGroups.ToDisplayEntities();
                 }));
+            SaveFiltersCommand.ThrownExceptions.Subscribe(err => HandleException("API Error: Saving Analytic Filters", err));
 
             SavePriceListsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -245,6 +269,9 @@ namespace APLPX.UI.WPF.ViewModels
                     SelectedAnalytic.PriceListGroups = pl;
 
                 }));
+
+            SavePriceListsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Price Lists", err));
+
 
             SaveValueDriversCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -271,6 +298,7 @@ namespace APLPX.UI.WPF.ViewModels
                     //Restore the selected value driver.
                     SelectedAnalytic.SelectedValueDriver = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.Key == selectedDriverKey);
                 }));
+            SaveValueDriversCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Value Drivers", err));
 
             RunValueDriversCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -298,6 +326,9 @@ namespace APLPX.UI.WPF.ViewModels
                         SelectedAnalytic.SelectedValueDriver.AreResultsCurrent = true;
                     }
                 }));
+            RunValueDriversCommand.ThrownExceptions.Subscribe(err => HandleException("API Error: Running Analytic Value Drivers", err));
+
+
 
             RunResultsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -321,6 +352,9 @@ namespace APLPX.UI.WPF.ViewModels
                         driver.AreResultsCurrent = true;
                     }
                 }));
+
+            RunResultsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Running Analytic Results", err));
+
         }
 
 
@@ -590,6 +624,11 @@ namespace APLPX.UI.WPF.ViewModels
         protected ReactiveCommand<Unit> LoadAnalyticCommand { get; private set; }
 
         /// <summary>
+        /// Command for loading analytic list.
+        /// </summary>
+        protected ReactiveCommand<Unit> LoadAnalyticListCommand { get; private set; }
+
+        /// <summary>
         /// Command for loading an analytic.
         /// </summary>
         protected ReactiveCommand<Unit> LoadPricingEverydayCommand { get; private set; }
@@ -800,12 +839,11 @@ namespace APLPX.UI.WPF.ViewModels
                     case DTO.ModuleFeatureType.PlanningAnalytics:
                         if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
-                            var returnedSession = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = Session.SqlKey });
-                            List<DTO.Analytic> analyticDtos = returnedSession.Data;
-                            var displayAnalytics = analyticDtos.ToDisplayEntities();
-                            var iSearchables = displayAnalytics.Cast<ISearchableEntity>().ToList();
-                            SelectedFeature.SearchableEntities = iSearchables;
-                            _featureCache.Add(SelectedFeature.TypeId, SelectedFeature);
+                            ExecuteAsyncCommand(
+                                LoadAnalyticListCommand, 
+                                _ => { _featureCache.Add(SelectedFeature.TypeId, SelectedFeature); },
+                                "Loading Analytics...", "Successfully loaded Analytics",
+                                "API Error: Loading Analytic List");
                         }
                         else if (SelectedFeatureViewModel != null)
                         {
@@ -1017,7 +1055,8 @@ namespace APLPX.UI.WPF.ViewModels
         /// <param name="callbackAction">The action to perform when the command completes.</param>
         /// <param name="workingMessage">The message to display while the command is executing.</param>
         /// <param name="completedMessge">(Optional) The message to display when the command completes.</param>
-        private void ExecuteAsyncCommand<T>(ReactiveCommand<T> command, Action<T> callbackAction, string workingMessage, string completedMessge = null)
+        private void ExecuteAsyncCommand<T>(ReactiveCommand<T> command, 
+            Action<T> callbackAction, string workingMessage, string completedMessge = null, string errorTitle = "")
         {
             //Update the UI to indicate an operation is in progress.
             Mouse.OverrideCursor = Cursors.Wait;
@@ -1028,7 +1067,10 @@ namespace APLPX.UI.WPF.ViewModels
             {
                 //Execute the async command with the specifed callback delegate.
                 CancellationToken token = new CancellationToken(false);
-                command.ExecuteAsync().Subscribe(callbackAction, ex => HandleException(ex), () => OnCommandCompleted(completedMessge), token);
+                command.ExecuteAsync().Subscribe(callbackAction,
+                    //ex => HandleException(errorTitle, ex) //does not work here 
+                    _ => { }
+                    , () => OnCommandCompleted(completedMessge), token);
             }
         }
 
@@ -1054,9 +1096,14 @@ namespace APLPX.UI.WPF.ViewModels
             IsActionInProgress = false;
         }
 
-        private void HandleException(Exception error)
+        private void HandleException(string title, Exception error)
         {
-            ShowMessageBox(error.Message, MessageBoxImage.Error);
+
+            LogManager.GetCurrentClassLogger().Log(LogLevel.Error, String.Format("Api Error"), error);
+
+            _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = error.Message });
+
+            //ShowMessageBox(error.Message, MessageBoxImage.Error);
             ReenableUserInterface();
         }
 

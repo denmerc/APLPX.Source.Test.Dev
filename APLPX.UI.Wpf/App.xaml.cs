@@ -12,6 +12,7 @@ using System.Reflection;
 using APLPX.Client.Contracts;
 using APLPX.Client;
 using NLog;
+using System.Windows.Threading;
 
 
 namespace APLPX.UI.WPF
@@ -54,7 +55,7 @@ namespace APLPX.UI.WPF
                 }
                 catch (Exception ex)
                 {
-                    LogManager.GetCurrentClassLogger().Log(LogLevel.Error, "Unhandled Application Exception", ex);
+                    LogManager.GetCurrentClassLogger().Log(LogLevel.Error, "Unhandled Application Startup Exception", ex);
                     App.Current.Shutdown();
                 }
 
@@ -108,5 +109,12 @@ namespace APLPX.UI.WPF
             base.OnExit(e);
         }
 
+        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            LogManager.GetCurrentClassLogger().Log(LogLevel.Error, "Unhandled Application Exception", e.Exception);
+
+            // Prevent default unhandled exception processing
+            e.Handled = false;
+        }
     }
 }

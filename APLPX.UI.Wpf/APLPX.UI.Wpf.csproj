@@ -354,9 +354,6 @@
     <Compile Include="Views\SearchGroupSelector.xaml.cs">
       <DependentUpon>SearchGroupSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ValidationResultsControl.xaml.cs">
       <DependentUpon>ValidationResultsControl.xaml</DependentUpon>
     </Compile>
@@ -512,10 +509,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SearchGroupSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UserControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

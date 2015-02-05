@@ -53,6 +53,7 @@ namespace APLPX.UI.WPF.ViewModels
             _featureCache = new Dictionary<DTO.ModuleFeatureType, ModuleFeature>();
             InitializeEventHandlers();
             InitializeCommands();
+            InitializeCommandErrorHandlers();
             CurrentStatusText = "Ready";
         }
 
@@ -189,11 +190,7 @@ namespace APLPX.UI.WPF.ViewModels
 
 
                 ));
-            LoadAnalyticListCommand.ThrownExceptions.Subscribe(err => 
-                    { 
-                        HandleException("API Error : Loading Analytic List", err); 
-                    
-                    });
+
 
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -221,7 +218,6 @@ namespace APLPX.UI.WPF.ViewModels
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                 }));
 
-            LoadAnalyticCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Analytic", err));
 
             LoadPricingEverydayCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -232,7 +228,6 @@ namespace APLPX.UI.WPF.ViewModels
                     //a.Data.FilterGroups = Session.FilterGroups;
                     SelectedPricingEveryday = a.Data.ToDisplayEntity();
                 }));
-            LoadPricingEverydayCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Pricing", err));
 
 
 
@@ -245,7 +240,6 @@ namespace APLPX.UI.WPF.ViewModels
                     var status = _analyticService.SaveIdentity(session);
                     SelectedAnalytic.Identity = _analyticService.Load(session).Data.Identity.ToDisplayEntity();
                 }));
-            SaveAnalyticIdentityCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Identity", err));
 
 
 
@@ -258,7 +252,6 @@ namespace APLPX.UI.WPF.ViewModels
                     var status = _analyticService.SaveFilters(session);
                     //SelectedAnalytic.FilterGroups = _analyticService.LoadFilters(session).Data.FilterGroups.ToDisplayEntities();
                 }));
-            SaveFiltersCommand.ThrownExceptions.Subscribe(err => HandleException("API Error: Saving Analytic Filters", err));
 
             SavePriceListsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -274,7 +267,6 @@ namespace APLPX.UI.WPF.ViewModels
 
                 }));
 
-            SavePriceListsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Price Lists", err));
 
 
             SaveValueDriversCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -302,7 +294,6 @@ namespace APLPX.UI.WPF.ViewModels
                     //Restore the selected value driver.
                     SelectedAnalytic.SelectedValueDriver = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.Key == selectedDriverKey);
                 }));
-            SaveValueDriversCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Value Drivers", err));
 
             RunValueDriversCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -330,7 +321,6 @@ namespace APLPX.UI.WPF.ViewModels
                         SelectedAnalytic.SelectedValueDriver.AreResultsCurrent = true;
                     }
                 }));
-            RunValueDriversCommand.ThrownExceptions.Subscribe(err => HandleException("API Error: Running Analytic Value Drivers", err));
 
 
 
@@ -357,10 +347,27 @@ namespace APLPX.UI.WPF.ViewModels
                     }
                 }));
 
-            RunResultsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Running Analytic Results", err));
 
         }
 
+        private void InitializeCommandErrorHandlers()
+        {
+            LoadAnalyticListCommand.ThrownExceptions.Subscribe(err =>
+            {
+                HandleException("API Error : Loading Analytic List", err);
+
+            });
+            LoadAnalyticCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Analytic", err));
+            LoadPricingEverydayCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Pricing", err));
+            SaveAnalyticIdentityCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Identity", err));
+            SaveFiltersCommand.ThrownExceptions.Subscribe(err => HandleException("API Error: Saving Analytic Filters", err));
+            SavePriceListsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Price Lists", err));
+            SaveValueDriversCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Value Drivers", err));
+            RunValueDriversCommand.ThrownExceptions.Subscribe(err => HandleException("API Error: Running Analytic Value Drivers", err));
+            RunResultsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Running Analytic Results", err));
+            LogoutCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Logging User Out", err));
+
+        }
 
         #endregion
 
@@ -818,6 +825,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         public void Navigate()
         {
+            throw new ApplicationException();
             if (SelectedFeature != null)
             {
                 switch (SelectedFeature.TypeId)

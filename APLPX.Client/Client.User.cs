@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 //using APLPX.Client.Entity;
 using APLPX.Entity;
 using APLPX.Client.Contracts;
+using System.Reflection;
 
 
 namespace APLPX.Client
@@ -13,7 +14,10 @@ namespace APLPX.Client
     {
         public Session<NullT> Initialize(Session<NullT> session)
         {
-            return Channel.Initialize(session);
+            
+            var response = Channel.Initialize(session);
+            this.LogClientRequest<IUserService, NullT>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString())); 
+            return response;
         }
 
         //TODO: Future implementation
@@ -24,27 +28,39 @@ namespace APLPX.Client
 
         public Session<NullT> Authenticate(Session<NullT> session)
         {
-            return Channel.Authenticate(session);
+
+            var response = Channel.Authenticate(session);
+            //won't log for now because payload contains pwd
+            //this.LogClientRequest<IUserService, NullT>(session,  string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString())); 
+            return response;
         }
 
         public Session<List<User>> LoadList(Session<NullT> session)
         {
-            return Channel.LoadList(session);
+            var response = Channel.LoadList(session);
+            this.LogClientRequest<IUserService, NullT>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<User> LoadUser(Session<User> session)
         {
+            this.LogClientRequest<IUserService, User>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return Channel.LoadUser(session);
         }
 
         public Session<User> SaveUser(Session<User> session)
         {
-            return Channel.SaveUser(session);
+            var response = Channel.SaveUser(session);
+            this.LogClientRequest<IUserService, User>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<NullT> SavePassword(Session<NullT> session)
         {
-            return Channel.SavePassword(session);
+            var response = Channel.SavePassword(session);
+            //won't log for now because payload contains pwd
+            //this.LogClientRequest<IUserService, NullT>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
     }
 }

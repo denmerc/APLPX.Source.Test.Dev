@@ -2,6 +2,7 @@
 using APLPX.Entity;
 using APLPX.Server.Data;
 using APLPX.Server.Services.Contracts;
+using System.Reflection;
 
 namespace APLPX.Server.Services
 {
@@ -18,63 +19,62 @@ namespace APLPX.Server.Services
 
             Session<List<Entity.PricingEveryday>> sessionOut = _pricingData.LoadList(sessionIn);
             _pricingData.Dispose();
-
+            this.LogServiceResponse<IPricingEverydayService, List<Entity.PricingEveryday>>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
         }
 
         public Session<Entity.PricingEveryday> SaveIdentity(Session<Entity.PricingEveryday> sessionIn) {
             Session<Entity.PricingEveryday> sessionOut = _pricingData.SaveIdentity(sessionIn);
             _pricingData.Dispose();
-
+            this.LogServiceResponse<IPricingEverydayService, Entity.PricingEveryday>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
         }
 
         public Session<Entity.PricingEveryday> LoadFilters(Session<Entity.PricingEveryday> sessionIn) {
             Session<Entity.PricingEveryday> sessionOut = _pricingData.LoadFilters(sessionIn);
             _pricingData.Dispose();
-
+            this.LogServiceResponse<IPricingEverydayService, Entity.PricingEveryday>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
         }
 
         public Session<Entity.PricingEveryday> SaveFilters(Session<Entity.PricingEveryday> sessionIn) {
             Session<Entity.PricingEveryday> sessionOut = _pricingData.SaveFilters(sessionIn);
             _pricingData.Dispose();
-
+            this.LogServiceResponse<IPricingEverydayService, Entity.PricingEveryday>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
         }
 
         public Session<Entity.PricingEveryday> SaveDrivers(Session<Entity.PricingEveryday> sessionIn) {
             Session<Entity.PricingEveryday> sessionOut = _pricingData.SaveDrivers(sessionIn);
             _pricingData.Dispose();
-
+            this.LogServiceResponse<IPricingEverydayService, Entity.PricingEveryday>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
         }
 
         public Session<Entity.PricingEveryday> LoadDrivers(Session<Entity.PricingEveryday> sessionIn) {
             Session<Entity.PricingEveryday> sessionOut = _pricingData.LoadDrivers(sessionIn);
             _pricingData.Dispose();
-
+            this.LogServiceResponse<IPricingEverydayService, Entity.PricingEveryday>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
         }
 
         public Session<Entity.PricingEveryday> LoadPriceLists(Session<Entity.PricingEveryday> sessionIn) {
             Session<Entity.PricingEveryday> sessionOut = _pricingData.LoadPriceLists(sessionIn);
             _pricingData.Dispose();
-
             return sessionOut;
         }
 
         public Session<Entity.PricingEveryday> SavePriceLists(Session<Entity.PricingEveryday> sessionIn) {
             Session<Entity.PricingEveryday> sessionOut = _pricingData.SavePriceLists(sessionIn);
             _pricingData.Dispose();
-
+            this.LogServiceResponse<IPricingEverydayService, Entity.PricingEveryday>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
         }
 
         public Session<Entity.PricingEveryday> LoadResults(Session<Entity.PricingEveryday> sessionIn) {
             Session<Entity.PricingEveryday> sessionOut = _pricingData.LoadResults(sessionIn);
             _pricingData.Dispose();
-
+            this.LogServiceResponse<IPricingEverydayService, Entity.PricingEveryday>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
         }
 

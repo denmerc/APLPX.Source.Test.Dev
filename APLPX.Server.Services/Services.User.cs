@@ -6,6 +6,7 @@ using APLPX.Server.Data;
 //using APLPX.Server.Entity;
 using APLPX.Server.Services.Contracts;
 using APLPX.Entity;
+using System.Reflection;
 
 namespace APLPX.Server.Services
 {
@@ -26,7 +27,7 @@ namespace APLPX.Server.Services
         {
             APLPX.Entity.Session<NullT> sessionOut = _userData.Initialize(sessionIn);
             _userData.Dispose();
-
+            this.LogServiceResponse<IUserService,NullT>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
             return sessionOut;
 
         }
@@ -37,31 +38,6 @@ namespace APLPX.Server.Services
             _userData.Dispose();
 
             return sessionOut;
-            //return new Session<NullT>
-            //{
-            //    SessionOk = true,
-            //    Authenticated = true,
-            //    SqlKey = "sql123",
-            //    User = new User
-            //                {
-            //                    Id = 1,
-            //                    Key = "User Key",
-            //                    Identity = new UserIdentity {
-            //                        Email = "admin@test.com",
-            //                        FirstName = "Admin", LastName = "User",
-            //                        Active = true
-            //                    },
-            //                    Credential = new UserCredential { Login = "admin", OldPassword = "Password" },
-            //                    Role = new UserRole { Id = 3, Name = "Admin", Description = " This is the admin role"  },
-            //                    RoleTypes = new List<SQLEnumeration>()
-            //                }
-            //};
-
-                                            //            "UserKey",
-                                            //new DTO.UserRole(3, "Administrator", "Role description"),
-                                            //new DTO.UserIdentity("dave.jinkerson@advancedpricinglogic.com", "Analyst", "User", true),
-                                            //new DTO.UserCredential("admin", "password", "passwordnew"),
-                                            //new List<DTO.SQLEnumeration>()
         }
 
         public Session<NullT> SavePassword(Session<NullT> sessionIn) {

@@ -25,11 +25,11 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     Session = await Initialize();   
                 });
-            InitializeCommand.ExecuteAsync().Subscribe( x =>
-                    {
-                        //TODO: enable login button
-                    }
-                );
+            //InitializeCommand.ExecuteAsync().Subscribe( x =>
+            //        {
+            //            //TODO: enable login button
+            //        }
+            //    );
 
             
 

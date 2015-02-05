@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using APLPX.Client.Contracts;
 //using APLPX.Client.Entity;
 using APLPX.Entity;
+using System.Reflection;
 
 namespace APLPX.Client
 {
@@ -12,53 +13,71 @@ namespace APLPX.Client
     {
         public Session<List<PricingEveryday>> LoadList(Session<NullT> session) {
 
-            return Channel.LoadList(session);
+            var response = Channel.LoadList(session);
+            this.LogClientRequest<IPricingEverydayService, NullT>(session,  string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString())); 
+            return response;
         }
 
         public Session<PricingEveryday> SaveIdentity(Session<PricingEveryday> session) {
 
-            return Channel.SaveIdentity(session);
+            var response = Channel.SaveIdentity(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<PricingEveryday> LoadFilters(Session<PricingEveryday> session) {
 
-            return Channel.LoadFilters(session);
+            var response = Channel.LoadFilters(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<PricingEveryday> SaveFilters(Session<PricingEveryday> session) {
 
-            return Channel.SaveFilters(session);
+            var response = Channel.SaveFilters(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<PricingEveryday> SaveDrivers(Session<PricingEveryday> session) {
 
-            return Channel.SaveDrivers(session);
+            var response = Channel.SaveDrivers(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;            
         }
 
         public Session<PricingEveryday> LoadDrivers(Session<PricingEveryday> session) {
-
-            return Channel.LoadDrivers(session);
+            var response = Channel.LoadDrivers(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<PricingEveryday> LoadPriceLists(Session<PricingEveryday> session) {
 
-            return Channel.LoadPriceLists(session);
+            var response = Channel.LoadPriceLists(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<PricingEveryday> SavePriceLists(Session<PricingEveryday> session) {
-
-            return Channel.SavePriceLists(session);
+            var response  = Channel.SavePriceLists(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<PricingEveryday> LoadResults(Session<PricingEveryday> session) {
 
-            return Channel.LoadResults(session);
+
+            var response = Channel.LoadResults(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
 
         public Session<PricingEveryday> LoadPricingEveryday(Session<PricingEveryday> session)
         {
-
-            return Channel.LoadPricingEveryday(session);
+            var response = Channel.LoadPricingEveryday(session);
+            this.LogClientRequest<IPricingEverydayService, PricingEveryday>(session, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
+            return response;
         }
     }
 }

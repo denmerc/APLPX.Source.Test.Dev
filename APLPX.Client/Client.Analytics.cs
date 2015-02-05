@@ -48,23 +48,15 @@ namespace APLPX.Client
     [Export]
     public class AnalyticClient : ClientBase<IAnalyticService>, IAnalyticService
     {
-
-        public void LogIncomingSession<T>(Session<T> session) where T : class
-        {
-            
-            session.ClientMessage += MethodBase.GetCurrentMethod().ToString();
-            session.SqlKey = session.SqlKey.Substring(0, 8);
-            //string json = JsonConvert.SerializeObject(session,);
-            NLog.LogManager.GetCurrentClassLogger().Log(NLog.LogLevel.Debug, JsonConvert.SerializeObject(session));
-        }
-
         public Session<List<Analytic>> LoadList(Session<NullT> session)
         {
             this.LogClientRequest<IAnalyticService, NullT>(session, "[" + this.GetType().Name + "]." +
                 MethodBase.GetCurrentMethod().ToString());
+
+                return Channel.LoadList(session);
+
             //LogIncomingSession<NullT>(session);
 
-            return Channel.LoadList(session);
         }
 
         public Session<Analytic> SaveIdentity(Session<Analytic> session)
@@ -96,6 +88,9 @@ namespace APLPX.Client
 
         public Session<Analytic> LoadDrivers(Session<Analytic> session)
         {
+
+            this.LogClientRequest<IAnalyticService, Analytic>(session, "[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()); 
             return Channel.LoadDrivers(session);
         }
 
@@ -134,25 +129,29 @@ namespace APLPX.Client
 
         public Session<Analytic> LoadResults(Session<Analytic> session)
         {
-            this.LogClientRequest<IAnalyticService, Analytic>(session, MethodBase.GetCurrentMethod().ToString());
+            this.LogClientRequest<IAnalyticService, Analytic>(session, "[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString());
             throw new System.NotImplementedException();
         }
 
         public Session<Analytic> Load(Session<Analytic> session)
         {
-            this.LogClientRequest<IAnalyticService, Analytic>(session, MethodBase.GetCurrentMethod().ToString());
+            this.LogClientRequest<IAnalyticService, Analytic>(session, "[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString());
             return Channel.Load(session);
         }
 
         public Session<Analytic> LoadIdentity(Session<Analytic> session)
         {
-            this.LogClientRequest<IAnalyticService, Analytic>(session, MethodBase.GetCurrentMethod().ToString());
+            this.LogClientRequest<IAnalyticService, Analytic>(session, "[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString());
             throw new System.NotImplementedException();
         }
 
         public Session<Analytic> RunDrivers(Session<Analytic> session)
         {
-            this.LogClientRequest<IAnalyticService, Analytic>(session, MethodBase.GetCurrentMethod().ToString());
+            this.LogClientRequest<IAnalyticService, Analytic>(session, "[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString());
             throw new System.NotImplementedException();
         }
     }

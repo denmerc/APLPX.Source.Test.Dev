@@ -5,6 +5,7 @@ using APLPX.Server.Data;
 using APLPX.Server.Services.Contracts;
 using NLog;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace APLPX.Server.Services
 {
@@ -24,21 +25,26 @@ namespace APLPX.Server.Services
             Session<Entity.Analytic> sessionOut = _analyticData.Load(sessionIn);
             _analyticData.Dispose();
 
-            LogManager.GetCurrentClassLogger().Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
         public Session<List<Entity.Analytic>> LoadList(Session<Entity.NullT> sessionIn) {
-            Session<List<Entity.Analytic>> sessionOut = _analyticData.LoadList(sessionIn);
-            _analyticData.Dispose();
 
-            return sessionOut;
+                var sessionOut = _analyticData.LoadList(sessionIn);
+                _analyticData.Dispose();
+                LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                        MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
+                return sessionOut;
+
         }
 
         public Session<Entity.Analytic> LoadIdentity(Session<Entity.Analytic> sessionIn) {
             Session<Entity.Analytic> sessionOut = _analyticData.LoadIdentity(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                    MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
@@ -46,7 +52,8 @@ namespace APLPX.Server.Services
         {
             Session<Entity.Analytic> sessionOut = _analyticData.SaveIdentity(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
@@ -54,7 +61,8 @@ namespace APLPX.Server.Services
         {
             Session<Entity.Analytic> sessionOut = _analyticData.LoadFilters(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
@@ -62,7 +70,8 @@ namespace APLPX.Server.Services
         {
             Session<Entity.Analytic> sessionOut = _analyticData.SaveFilters(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
@@ -70,7 +79,8 @@ namespace APLPX.Server.Services
 
             Session<Entity.Analytic> sessionOut = _analyticData.LoadDrivers(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
@@ -78,14 +88,16 @@ namespace APLPX.Server.Services
         {
             Session<Entity.Analytic> sessionOut = _analyticData.SaveDrivers(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
         public Session<Entity.Analytic> RunDrivers(Session<Entity.Analytic> sessionIn) {
             Session<Entity.Analytic> sessionOut = _analyticData.SaveDrivers(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
@@ -93,7 +105,8 @@ namespace APLPX.Server.Services
         {
             Session<Entity.Analytic> sessionOut = _analyticData.LoadPriceLists(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
 
@@ -101,7 +114,8 @@ namespace APLPX.Server.Services
         {
             Session<Entity.Analytic> sessionOut = _analyticData.SavePriceLists(sessionIn);
             _analyticData.Dispose();
-
+            LogManager.GetLogger("[" + this.GetType().Name + "]." +
+                MethodBase.GetCurrentMethod().ToString()).Log(LogLevel.Debug, JsonConvert.SerializeObject(sessionOut));
             return sessionOut;
         }
     }

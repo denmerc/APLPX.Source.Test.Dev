@@ -96,7 +96,6 @@ namespace APLPX.Server.Data {
         }
 
         public Session<List<Entity.Analytic>> LoadList(Session<Entity.NullT> sessionIn) {
-            
             String sqlRequest = String.Empty;
             String sqlResponse = String.Empty;
             //Initialize session...
@@ -104,6 +103,7 @@ namespace APLPX.Server.Data {
 
             try {
                 sqlMapper.LoadListMapParameters(sessionIn, ref sqlService);
+                //throw new DataMisalignedException();
                 System.Data.DataTable dataTable = sqlService.ExecuteReader();
                 if (sqlService.SqlStatusOk) {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
@@ -117,6 +117,7 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
             }
             finally {
                 //SQL Service error...
@@ -156,6 +157,8 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionIn.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
+
             }
             finally {
                 //SQL Service error...
@@ -195,6 +198,7 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
             }
             finally {
                 //SQL Service error...
@@ -234,6 +238,7 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
             }
             finally {
                 //SQL Service error...
@@ -273,6 +278,8 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
+
             }
             finally {
                 //SQL Service error...
@@ -312,6 +319,7 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
             }
             finally {
                 //SQL Service error...
@@ -351,6 +359,8 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
+
             }
             finally {
                 //SQL Service error...
@@ -390,6 +400,8 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
+
             }
             finally {
                 //SQL Service error...
@@ -428,6 +440,8 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
+
             }
             finally {
                 //SQL Service error...
@@ -467,6 +481,8 @@ namespace APLPX.Server.Data {
             catch (Exception ex) {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
+                throw ex;
+
             }
             finally {
                 //SQL Service error...

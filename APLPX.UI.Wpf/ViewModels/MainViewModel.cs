@@ -825,7 +825,6 @@ namespace APLPX.UI.WPF.ViewModels
 
         public void Navigate()
         {
-            throw new ApplicationException();
             if (SelectedFeature != null)
             {
                 switch (SelectedFeature.TypeId)

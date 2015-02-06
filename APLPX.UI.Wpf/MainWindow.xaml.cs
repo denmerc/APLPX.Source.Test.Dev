@@ -108,7 +108,7 @@ namespace APLPX.UI.WPF
 
             await this.ShowMetroDialogAsync(dialog);
 
-            await Task.Delay(2000);
+            await Task.Delay(5000);
 
             await this.HideMetroDialogAsync(dialog);
         }

@@ -38,7 +38,7 @@ namespace APLPX.UI.WPF.ViewModels
                     try
                     {
                         
-                        StatusMessage = "Initializing";
+                        StatusMessage = "Initializing...";
                         Session = await Initialize();
                         StatusMessage = "Authenticating...";
 

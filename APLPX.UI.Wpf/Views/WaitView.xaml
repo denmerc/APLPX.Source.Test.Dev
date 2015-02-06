@@ -15,7 +15,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     </UserControl.Resources>
-    <Grid Background="{DynamicResource MainWindowBackground}">
+    <Grid Background="{StaticResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
@@ -27,8 +27,7 @@
         <controls:ProgressRing x:Name="progressRing"
                                Grid.Row="1"
                                HorizontalAlignment="Center"
-                               IsActive="{Binding Path=IsIndicatorVisible}" 
-                               Foreground="{DynamicResource AccentColorBrush2}"/>
+                               IsActive="{Binding Path=IsIndicatorVisible}" />
 
         <TextBlock Grid.Row="2" Text="Working..." />
 

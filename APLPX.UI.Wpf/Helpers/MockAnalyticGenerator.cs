@@ -48,8 +48,11 @@ namespace APLPX.UI.WPF.Helpers
             result.Identity.Author = _ownerNames[id];
             result.Identity.Editor = _ownerNames[id];
 
-            result.FilterGroups = MockFilterGenerator.GetFilterGroupsComplete();
-            result.PriceListGroups = GetAnalyticPriceListGroups();
+            var filterGroups = MockFilterGenerator.GetFilterGroupsComplete();
+            result.FilterGroups = new ReactiveList<FilterGroup>(filterGroups);
+
+            var priceListGroups = GetAnalyticPriceListGroups();
+            result.PriceListGroups = new ReactiveList<AnalyticPriceListGroup>(priceListGroups);
             result.ValueDrivers = new ReactiveList<AnalyticValueDriver>(GetAnalyticDrivers());
 
             //Default for display purposes.
@@ -107,8 +110,11 @@ namespace APLPX.UI.WPF.Helpers
                 analytic.Identity.Author = "APL Administrator";
                 analytic.Identity.Notes = "Optional notes...";
 
-                analytic.FilterGroups = MockFilterGenerator.GetFilterGroupsComplete();
-                analytic.PriceListGroups = GetAnalyticPriceListGroups();
+                var filterGroups = MockFilterGenerator.GetFilterGroupsComplete();
+                analytic.FilterGroups = new ReactiveList<FilterGroup>(filterGroups);
+
+                var priceListGroups = GetAnalyticPriceListGroups();
+                analytic.PriceListGroups = new ReactiveList<AnalyticPriceListGroup>(priceListGroups);
                 analytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(GetAnalyticDrivers());
 
             }

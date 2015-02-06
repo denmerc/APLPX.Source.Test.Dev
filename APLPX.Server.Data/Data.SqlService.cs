@@ -10,12 +10,13 @@ namespace APLPX.Server.Data {
         private String sqlProcedure;
         private Boolean sqlExecuted;
         private Boolean sqlConnected;
+        private Int32 sqlCommandTimeOut = 60; //default seconds, .NET default is 30
         private System.Data.SqlClient.SqlConnection sqlConnection;
         public Boolean SqlStatusOk { get { return sqlExecuted; } }
         public Boolean SqlConnectionOk { get { return sqlConnected; } }
         public String SqlStatusMessage { get { return sqlMessage; } }
         public String SqlProcedure { get { return sqlProcedure; } set { sqlProcedure = value; } }
-
+        public Int32 SqlCommandTimeOut { get { return sqlCommandTimeOut; } set { sqlCommandTimeOut = value; } }
         public Parameters sqlParameters = new Parameters();
 
         public SqlService(String ConnectionStringName) {
@@ -32,6 +33,35 @@ namespace APLPX.Server.Data {
                         sqlConnection = new System.Data.SqlClient.SqlConnection(ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString.ToString());
                         sqlConnection.Open();
                         if (sqlConnection.State == System.Data.ConnectionState.Open) { sqlConnected = true; sqlExecuted = true; }
+                        sqlMessage = "APLPXServices.sqlService initialized, connection status: " + sqlConnection.State.ToString();
+                    }
+                }
+                catch (System.Configuration.ConfigurationException ex1) {
+                    sqlMessage = "APLPXServices.sqlService, Invalid configuration, " + ex1.Source + ", " + ex1.Message;
+                }
+                catch (System.Data.SqlClient.SqlException ex2) {
+                    sqlMessage = "APLPXServices.sqlService, Invalid connection, " + ex2.Source + ", " + ex2.Message;
+                }
+                catch (System.Exception ex3) {
+                    sqlMessage = "APLPXServices.sqlService, " + ex3.Source + ", " + ex3.Message;
+                }
+            }
+        }
+
+        public SqlService(String ConnectionStringName, Int16 secondsToTimeOut) {
+            sqlExecuted = false;
+            System.Configuration.ConnectionStringSettingsCollection connections = System.Configuration.ConfigurationManager.ConnectionStrings;
+            if (connections == null)
+                sqlMessage = "APLPXServices.sqlService, Invalid App.config: SQL Connections section missing or invalid";
+            else {
+                try {
+                    System.Configuration.ConnectionStringSettings connectionString = ConfigurationManager.ConnectionStrings[ConnectionStringName];
+                    if (connectionString == null)
+                        sqlMessage = "APLPXServices.sqlService, Invalid App.config: SQL Connection name " + ConnectionStringName + " missing or invalid";
+                    else {
+                        sqlConnection = new System.Data.SqlClient.SqlConnection(ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString.ToString());
+                        sqlConnection.Open();
+                        if (sqlConnection.State == System.Data.ConnectionState.Open) { sqlConnected = true; sqlExecuted = true; sqlCommandTimeOut = secondsToTimeOut; }
                         sqlMessage = "APLPXServices.sqlService initialized, connection status: " + sqlConnection.State.ToString();
                     }
                 }
@@ -87,7 +117,7 @@ namespace APLPX.Server.Data {
         public DataSet ExecuteReaders() {
             sqlExecuted = false;
             DataSet sqlDataSet = null;
-
+           
             if (sqlConnection.State == ConnectionState.Open) {
                 try {
                     System.Data.SqlClient.SqlDataAdapter sqlAdapter = new SqlDataAdapter();
@@ -157,6 +187,7 @@ namespace APLPX.Server.Data {
         private SqlCommand BuildParameters(SqlServiceParameter[] Parameters) {
             SqlCommand sqlCommand = new SqlCommand(this.sqlProcedure);
             sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            sqlCommand.CommandTimeout = sqlCommandTimeOut;
             sqlCommand.Connection = sqlConnection;
             foreach (SqlServiceParameter parameter in Parameters) {
                 System.Data.SqlClient.SqlParameter param = new SqlParameter(parameter.dbName, parameter.dbType, parameter.dbSize);

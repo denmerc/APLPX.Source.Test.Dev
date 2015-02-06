@@ -41,8 +41,9 @@ namespace APLPX.UI.WPF.Helpers
             var result = new PricingEveryday { Id = id + 1 };
 
             result.Identity = GetPricingIdentity(_pricingEverydayNames[id], _ownerNames[id]);
-            
-            result.FilterGroups = MockFilterGenerator.GetFilterGroupsComplete();
+
+            var filterGroups = MockFilterGenerator.GetFilterGroupsComplete();
+            result.FilterGroups = new ReactiveList<FilterGroup>(filterGroups);
 
             //Price lists
             result.PricingModes = GetPricingModes();

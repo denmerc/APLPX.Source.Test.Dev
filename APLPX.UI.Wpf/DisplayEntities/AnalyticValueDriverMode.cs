@@ -113,7 +113,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                 {
                     //Set the default based on the previous group's minimum outlier.
                     ValueDriverGroup previousGroup = Groups[index - 1];
-                    defaultMaxOutlier = Convert.ToInt32(previousGroup.MinOutlier - 1);
+                    defaultMaxOutlier = Convert.ToInt32(Math.Max(0, previousGroup.MinOutlier - 1));
                 }
 
                 short groupValue = Convert.ToInt16(index + 1);
@@ -213,13 +213,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region IDisposable
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
             if (!_isDisposed)
             {
@@ -237,6 +231,8 @@ namespace APLPX.UI.WPF.DisplayEntities
                 }
                 _isDisposed = true;
             }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

@@ -11,7 +11,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private int _id;        
         private PricingIdentity _identity;
-        private List<FilterGroup> _filterGroups;
+        private ReactiveList<FilterGroup> _filterGroups;
         private FeatureSearchGroup _searchGroup;
         private int _searchGroupId;
         private string _searchGroupKey;
@@ -27,7 +27,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         public PricingKits()
         {
             Identity = new PricingIdentity();
-            FilterGroups = new List<FilterGroup>();
+            FilterGroups = new ReactiveList<FilterGroup>();
         }
 
         #endregion
@@ -58,7 +58,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _identity, value); }
         }
 
-        public List<FilterGroup> FilterGroups
+        public ReactiveList<FilterGroup> FilterGroups
         {
             get { return _filterGroups; }
             set { this.RaiseAndSetIfChanged(ref _filterGroups, value); }

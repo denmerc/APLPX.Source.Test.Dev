@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using APLPX.UI.WPF.DisplayEntities;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
@@ -7,6 +10,9 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     public class AnalyticPriceListViewModel : ViewModelBase
     {
         private Display.Analytic _entity;
+        private IDisposable _selectAllPriceListsSubscription;
+        private IDisposable _priceListChangedSubscription;
+        private bool _isDisposed;
 
         #region Constructor and Initialization
 
@@ -31,7 +37,14 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             var canExecute = this.WhenAnyValue(vm => vm.Entity.SelectedPriceListGroup, (plGroup) => SelectAllPriceListsCanExecute(plGroup));
             SelectAllPriceListsCommand = ReactiveCommand.Create(canExecute);
 
-            this.WhenAnyObservable(vm => vm.SelectAllPriceListsCommand).Subscribe(item => SelectAllPriceListsExecuted(item));
+            _selectAllPriceListsSubscription = this.WhenAnyObservable(vm => vm.SelectAllPriceListsCommand).Subscribe(item => SelectAllPriceListsExecuted(item));
+
+            _priceListChangedSubscription = this.Entity.PriceListGroups.ItemChanged.Subscribe(plg => OnPriceListChanged(plg));
+        }
+
+        private void OnPriceListChanged(IReactivePropertyChangedEventArgs<AnalyticPriceListGroup> plg)
+        {
+            this.RaisePropertyChanged("ValidationResults");
         }
 
         #endregion
@@ -59,6 +72,17 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             }
         }
 
+        public ObservableCollection<Error> ValidationResults
+        {
+            get
+            {
+                var errors = Entity.PriceListGroups.SelectMany(g => g.ValidationResults);
+
+                var result = new ObservableCollection<Error>(errors);
+                return result;
+            }
+        }
+
         #endregion
 
         #region Command Handlers
@@ -76,6 +100,33 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             {
                 priceList.IsSelected = isSelected;
             }
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_selectAllPriceListsSubscription != null)
+                    {
+                        _selectAllPriceListsSubscription.Dispose();
+                        _selectAllPriceListsSubscription = null;
+                    }
+                    if (_priceListChangedSubscription != null)
+                    {
+                        _priceListChangedSubscription.Dispose();
+                        _priceListChangedSubscription = null;
+                    }
+                }
+                _isDisposed = true;
+            }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

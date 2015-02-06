@@ -4,19 +4,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <Style x:Key="DataGridElementCenteredStyle" TargetType="TextBlock">
-            <Setter Property="TextAlignment" Value="Center" />
-        </Style>
+        <ResourceDictionary>
 
-        <CollectionViewSource x:Key="cvsPriceListGroups"
-                              IsLiveSortingRequested="True"
-                              Source="{Binding Path=Entity.PriceListGroups}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
+            <ResourceDictionary.MergedDictionaries />
+
+            <Style x:Key="DataGridElementCenteredStyle" TargetType="TextBlock">
+                <Setter Property="TextAlignment" Value="Center" />
+            </Style>
+
+            <CollectionViewSource x:Key="cvsPriceListGroups"
+                                  IsLiveSortingRequested="True"
+                                  Source="{Binding Path=Entity.PriceListGroups}">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <UserControl.Triggers>
@@ -25,7 +31,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
+    <Grid x:Name="layoutRoot" Background="{StaticResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -36,11 +42,12 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="Price List Groups"
                    Visibility="{Binding Path=ShowPriceListGroups,
                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -56,23 +63,22 @@
                 <DataTemplate>
                     <Label Width="200"
                            Content="{Binding Path=Name}"
-                           FontSize="16"
-                           Foreground="{DynamicResource Foreground}" />
+                           FontSize="16" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
         <StackPanel Grid.Row="0" Grid.Column="1">
             <TextBlock x:Name="txtCount"
-                       Style="{DynamicResource ListTitleTextStyle}"
+                       Margin="0,5,0,0"
+                       Style="{StaticResource ListTitleTextStyle}"
                        Text="{Binding ElementName=dgPriceLists,
                                       Path=Items.Count,
-                                      StringFormat={}Price Lists ({0})}" 
-                       Margin="0,5,0,0"/>
+                                      StringFormat={}Price Lists ({0})}" />
 
             <TextBlock x:Name="txtSelectedCount"
                        Margin="5,5,5,10"
-                       Style="{DynamicResource ListTitleTextStyle}"
+                       Style="{StaticResource ListTitleTextStyle}"
                        Text="{Binding Path=Entity.SelectedPriceListGroup.SelectedCount,
                                       StringFormat={}Included: {0}}" />
         </StackPanel>
@@ -89,8 +95,8 @@
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,
                                                           UpdateSourceTrigger=PropertyChanged}"
-                                        EditingElementStyle="{DynamicResource MetroDataGridCheckBox}"
-                                        ElementStyle="{DynamicResource MetroDataGridCheckBox}">
+                                        EditingElementStyle="{StaticResource MetroDataGridCheckBox}"
+                                        ElementStyle="{StaticResource MetroDataGridCheckBox}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
                             <CheckBox x:Name="chkSelectAll"
@@ -109,10 +115,15 @@
                 <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
 
                 <DataGridTextColumn Binding="{Binding Path=Code}"
-                                    ElementStyle="{DynamicResource DataGridElementCenteredStyle}"
+                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
                                     Header="Code" />
             </DataGrid.Columns>
         </DataGrid>
+
+        <views:ValidationResultsControl Grid.Row="1"
+                                        Grid.Column="2"
+                                        Margin="10,5"
+                                        Visibility="Collapsed" />
     </Grid>
 
 

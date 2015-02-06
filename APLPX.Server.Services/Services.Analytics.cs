@@ -33,7 +33,7 @@ namespace APLPX.Server.Services
                 var sessionOut = _analyticData.LoadList(sessionIn);
                 _analyticData.Dispose();
                 this.LogServiceResponse<IAnalyticService, List<Entity.Analytic>>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
-                return sessionOut;
+            return sessionOut;
 
         }
 
@@ -78,13 +78,6 @@ namespace APLPX.Server.Services
 
         public Session<Entity.Analytic> SaveDrivers(Session<Entity.Analytic> sessionIn)
         {
-            Session<Entity.Analytic> sessionOut = _analyticData.SaveDrivers(sessionIn);
-            _analyticData.Dispose();
-            this.LogServiceResponse<IAnalyticService, Entity.Analytic>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));
-            return sessionOut;
-        }
-
-        public Session<Entity.Analytic> RunDrivers(Session<Entity.Analytic> sessionIn) {
             Session<Entity.Analytic> sessionOut = _analyticData.SaveDrivers(sessionIn);
             _analyticData.Dispose();
             this.LogServiceResponse<IAnalyticService, Entity.Analytic>(sessionOut, string.Format("[{0}].{1}", this.GetType().Name, MethodBase.GetCurrentMethod().ToString()));

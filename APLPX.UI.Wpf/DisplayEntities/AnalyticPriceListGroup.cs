@@ -77,15 +77,21 @@ namespace APLPX.UI.WPF.DisplayEntities
             }
         }
 
-        #region IDisposable
-
-        public void Dispose()
+        public override List<Error> GetValidationErrors()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            var result = new List<Error>();
+            if (SelectedCount == 0)
+            {
+                string message = String.Format("{0} Price List: At least one item must be selected.", Name);
+                result.Add(new Error { Message = message });
+            }
+
+            return result;
         }
 
-        protected virtual void Dispose(bool isDisposing)
+        #region IDisposable
+
+        protected override void Dispose(bool isDisposing)
         {
             if (!_isDisposed)
             {
@@ -103,6 +109,8 @@ namespace APLPX.UI.WPF.DisplayEntities
                 }
                 _isDisposed = true;
             }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

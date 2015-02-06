@@ -11,11 +11,23 @@ namespace APLPX.UI.WPF.Validation
     /// </summary>
     public static class AnalyticValidations
     {
+
+        /// <summary>
+        /// Validates an <see cref="AnalyticIdentity"/>.
+        /// </summary>        
+        //// <returns>A list of <see cref="Error"/> objects populated with messages for each invalid item.</returns>
+        public static List<Error> CheckIsValid(this AnalyticIdentity identity)
+        {
+            var errors = new List<Error>();
+       
+            return errors;
+        }
+
         /// <summary>
         /// Validates a collection of <see cref="AnalyticPriceListGroup"/>s.
         /// </summary>        
         /// <returns>A list of <see cref="Error"/> objects populated with messages for each invalid item.</returns>
-        public static List<Error> Validate(this IEnumerable<AnalyticPriceListGroup> priceListGroups)
+        public static List<Error> CheckIsValid(this IEnumerable<AnalyticPriceListGroup> priceListGroups)
         {
             var errors = new List<Error>();
 
@@ -34,7 +46,7 @@ namespace APLPX.UI.WPF.Validation
         /// Validates a collection of <see cref="AnalyticValueDriver"/>s.
         /// </summary>        
         /// <returns>A list of <see cref="Error"/> objects populated with messages for each invalid item.</returns>
-        public static List<Error> Validate(this IEnumerable<AnalyticValueDriver> drivers)
+        public static List<Error> CheckIsValid(this IEnumerable<AnalyticValueDriver> drivers)
         {
             var errors = new List<Error>();
 

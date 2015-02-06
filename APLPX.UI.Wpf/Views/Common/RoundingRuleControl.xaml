@@ -34,17 +34,17 @@
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="colDollarRangeLower"
                                     Binding="{Binding Path=DollarRangeLower}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Min $ Value" />
 
                 <DataGridTextColumn x:Name="colDollarRangeUpper"
                                     Binding="{Binding Path=DollarRangeUpper}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Max $ Value" />
 
                 <DataGridTextColumn x:Name="colValueChange"
                                     Binding="{Binding Path=ValueChange}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Rounding Value" />
 
                 <DataGridTemplateColumn Header="Rounding Type">

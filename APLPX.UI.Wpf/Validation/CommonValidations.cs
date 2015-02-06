@@ -14,7 +14,7 @@ namespace APLPX.UI.WPF.Validation
         /// Validates a collection of <see cref="FilterGroup"/>s.
         /// </summary>
         /// <returns>A list of <see cref="Error"/> objects populated with messages for each invalid item.</returns>        
-        public static List<Error> Validate(this IEnumerable<FilterGroup> filterGroups)
+        public static List<Error> CheckIsValid(this IEnumerable<FilterGroup> filterGroups)
         {
             List<Error> errors = new List<Error>();
 

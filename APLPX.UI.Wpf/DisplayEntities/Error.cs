@@ -11,6 +11,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private string _message;
         private short _sort;
+        private string _source;
 
         #endregion
 
@@ -36,13 +37,19 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _sort, value); }
         }
 
+        public string Source
+        {
+            get { return _source; }
+            set { this.RaiseAndSetIfChanged(ref _source, value); }
+        }
+
         #endregion
 
         #region Overrides
 
         public override string ToString()
         {
-            string result = String.Format("{0}:Message={1}", GetType().Name, Message);
+            string result = String.Format("{0}:Message={1};Source={2}", GetType().Name, Message, Source);
 
             return result;
         }

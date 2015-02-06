@@ -38,7 +38,7 @@
 
 
 
-    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
         <!--
             <Grid.Background>
             <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg" Stretch="UniformToFill" />
@@ -58,7 +58,7 @@
         <Border Width="Auto"
             Height="Auto"
             Margin="0,0,0,600"
-            Background="{DynamicResource SearchControlSelectedItemDetailBackgroundColor}"
+            Background="{StaticResource SearchControlSelectedItemDetailBackgroundColor}"
             BorderBrush="White"
             BorderThickness="1"
             CornerRadius="5"
@@ -158,7 +158,7 @@
                           LayoutUpdated="LayoutUpdated"
                           GridLinesVisibility="Horizontal"
                           HorizontalGridLinesBrush="White"
-                          ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" 
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
                           MaxHeight="650"  BorderBrush="White" BorderThickness="1">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn" >
@@ -178,7 +178,7 @@
                             <DataGridTemplateColumn Header="Price Lists" x:Name="priceListsCheckBoxColumn" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsAlphabeticalCellStyle}" Style="{DynamicResource ListBoxResultsStyle}" HorizontalContentAlignment="Center">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}" HorizontalContentAlignment="Center">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <CheckBox x:Name="priceListCheckBox" Margin="8,0,0,0"/>
@@ -191,7 +191,7 @@
                             <DataGridTemplateColumn Header="Price Lists" x:Name="priceListsColumn" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsAlphabeticalCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Name}"></TextBlock>
@@ -204,7 +204,7 @@
                             <DataGridTemplateColumn Header="Current Price $" x:Name="currentPriceColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding CurrentPrice}"></TextBlock>
@@ -217,7 +217,7 @@
                             <DataGridTemplateColumn Header="Current Mark-Up %" x:Name="currentMarkupColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding CurrentMarkupPercent}"></TextBlock>
@@ -230,7 +230,7 @@
                             <DataGridTemplateColumn Header="Total Price Change $" x:Name="totalPriceChangeColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding PriceChange}"></TextBlock>
@@ -243,7 +243,7 @@
                             <DataGridTemplateColumn Header="Final Price $" x:Name="finalPriceColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text=""></TextBlock>
@@ -256,7 +256,7 @@
                             <DataGridTemplateColumn Header="Mark-Up Change %" x:Name="markupChangeColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text=""></TextBlock>
@@ -269,7 +269,7 @@
                             <DataGridTemplateColumn Header="New Mark-Up %" x:Name="newMarkupColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsNumerialCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsNumerialCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding NewMarkupPercent}"></TextBlock>
@@ -282,7 +282,7 @@
                             <DataGridTemplateColumn Header="Edit Type" x:Name="editTypeColumn" Width="65">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsAlphabeticalCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text=""></TextBlock>         <!-- <TextBlock Text="{Binding PriceEdit.Type}"></TextBlock>-->
@@ -295,7 +295,7 @@
                             <DataGridTemplateColumn Header="Warning" x:Name="warningColumn" Width="70">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{DynamicResource ListBoxResultsAlphabeticalCellStyle}" Style="{DynamicResource ListBoxResultsStyle}">
+                                        <ListBox ItemsSource="{Binding PriceLists}" ItemContainerStyle="{StaticResource ListBoxResultsAlphabeticalCellStyle}" Style="{StaticResource ListBoxResultsStyle}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text=""></TextBlock>    <!-- <TextBlock Text="{Binding PriceWarning.Type}"></TextBlock>-->
@@ -373,7 +373,7 @@
         <StackPanel Grid.Row="0" Grid.Column="0">
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Style="{DynamicResource ListTitleTextStyle}"
+                       Style="{StaticResource ListTitleTextStyle}"
                        Text="Select Price Lists" />
 
             <!-- PREVIOUS LISTBOX REMOVED FOR DEMO 
@@ -389,7 +389,7 @@
                         <Label Width="200"
                                Content="{Binding Path=Name}"
                                FontSize="16"
-                               Foreground="{DynamicResource Foreground}" />
+                               Foreground="{StaticResource Foreground}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -402,7 +402,7 @@
                  MinWidth="175"
                  Margin="10,5"
                  ItemsSource="{Binding Source={StaticResource cvsResultsDemo}}" Width="175"
-                 Style="{DynamicResource baseListBoxStyle}"    
+                 Style="{StaticResource baseListBoxStyle}"    
                  Background="Transparent">
 
                 <ListBox.Items>
@@ -439,7 +439,7 @@
                                    VerticalAlignment="Center"
                                    Content="Retail List Price"
                                    ToolTip="{Binding Path=Title}" 
-                                       Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
+                                       Style="{StaticResource DescriptionHeaderStyleLabel}"/>
 
                         </DockPanel>
                     </ListBoxItem>
@@ -465,7 +465,7 @@
 
                             <TextBlock Margin="5"
                                    VerticalAlignment="Center"
-                                   Foreground="{DynamicResource Foreground}"
+                                   Foreground="{StaticResource Foreground}"
                                    Text="Retail Sale Price"
                                    ToolTip="{Binding Path=Title}" />
 
@@ -492,7 +492,7 @@
 
                             <TextBlock Margin="5"
                                    VerticalAlignment="Center"
-                                   Foreground="{DynamicResource Foreground}"
+                                   Foreground="{StaticResource Foreground}"
                                    Text="Jobber - Trim Shop"
                                    ToolTip="{Binding Path=Title}" />
 
@@ -519,7 +519,7 @@
 
                             <TextBlock Margin="5"
                                    VerticalAlignment="Center"
-                                   Foreground="{DynamicResource Foreground}"
+                                   Foreground="{StaticResource Foreground}"
                                    Text="Dealer 1"
                                    ToolTip="{Binding Path=Title}" />
 
@@ -547,7 +547,7 @@
 
                             <TextBlock Margin="5"
                                    VerticalAlignment="Center"
-                                   Foreground="{DynamicResource Foreground}"
+                                   Foreground="{StaticResource Foreground}"
                                    Text="Dealer 2"
                                    ToolTip="{Binding Path=Title}" />
 
@@ -585,7 +585,7 @@
 
                             <TextBlock Margin="5"
                                    VerticalAlignment="Center"
-                                   Foreground="{DynamicResource Foreground}"
+                                   Foreground="{StaticResource Foreground}"
                                    Text="{Binding Path=Name}"
                                    ToolTip="{Binding Path=Title}" />
 
@@ -607,7 +607,7 @@
                 <ListBox.ItemContainerStyle>
                     <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
                         <Setter Property="Margin" Value="0,5"/>
-                        <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                     </Style>
 
                 </ListBox.ItemContainerStyle>

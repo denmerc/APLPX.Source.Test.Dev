@@ -34,9 +34,6 @@
             </Style>
 
             <ResourceDictionary.MergedDictionaries>
-                <!--  for design-time support, already in app.xml  -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -48,7 +45,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -68,19 +65,19 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Margin="10,5,0,5"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="Value Drivers" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="Modes"
                    Visibility="Collapsed" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="2"
                    Margin="10,5,0,5"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="Driver Groups"
                    Visibility="{Binding Path=IsValueDriverSelected,
                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -93,22 +90,21 @@
                  Background="Transparent"
                  ItemsSource="{Binding Path=Entity.ValueDrivers}"
                  SelectedItem="{Binding Path=Entity.SelectedValueDriver}"
-                 Style="{DynamicResource baseListBoxStyle}">
+                 Style="{StaticResource baseListBoxStyle}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding Path=IsSelected}" />
                         <Label Width="176"
                                Content="{Binding Path=Name}"
-                               FontSize="16"
-                               Foreground="{DynamicResource Foreground}" />
+                               FontSize="16" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemContainerStyle>
                 <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem">
                     <Setter Property="Margin" Value="0,5" />
-                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=IsDisplayOnly}" Value="True">
                             <Setter Property="IsEnabled" Value="False" />
@@ -148,7 +144,7 @@
                      ItemsSource="{Binding ElementName=DriversListBox,
                                            Path=SelectedItem.Modes}"
                      SelectedItem="{Binding Path=Entity.SelectedValueDriver.SelectedMode}"
-                     Style="{DynamicResource baseListBoxStyle}"
+                     Style="{StaticResource baseListBoxStyle}"
                      Visibility="{Binding Path=IsValueDriverSelected,
                                           Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ListBox.ItemTemplate>
@@ -157,7 +153,7 @@
                                      Content="{Binding Path=Name}"
                                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},
                                                          Path=IsSelected}"
-                                     Style="{StaticResource IdentityRadioButtonStyle}" />
+                                     Style="{StaticResource MetroRadioButton}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
@@ -168,7 +164,7 @@
                 <ListBox.ItemContainerStyle>
                     <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem">
                         <Setter Property="Margin" Value="5,0,0,0" />
-                        <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                     </Style>
 
                 </ListBox.ItemContainerStyle>
@@ -180,8 +176,7 @@
                         Visibility="{Binding Path=IsValueDriverModeSelected,
                                              Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="No. of Groups:"
-                       FontSize="16"
-                       Foreground="{DynamicResource Foreground}" />
+                       FontSize="16" />
 
                 <controls:NumericUpDown x:Name="GroupCountUpDown"
                                         Margin="5"
@@ -200,22 +195,7 @@
                            Visibility="{Binding Path=Entity.SelectedValueDriver.AreResultsCurrent,
                                                 Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
             </StackPanel>
-        </Grid>
-
-        <MenuItem x:Name="mnuRun"
-                  Grid.Row="1"
-                  Grid.Column="3"
-                  Margin="15,5,0,0"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  Background="DarkGray"
-                  Command="{Binding ElementName=LayoutRoot,
-                                    Path=DataContext.AutoCalculateCommand}"
-                  FontSize="16"
-                  Foreground="Blue"
-                  Header="Run"
-                  Style="{x:Null}"
-                  ToolTip="Automatically calculate the groups for this value driver." />
+        </Grid>        
 
         <!--
             Auxiliary element required to forward DataContext to a DataGridColumn (which is not in the main visual tree).
@@ -239,7 +219,8 @@
                   Visibility="{Binding Path=IsValueDriverModeSelected,
                                        Converter={StaticResource BooleanToVisibilityConverter}}">
             <DataGrid.Resources>
-                <Style x:Key="GroupMinElementStyle" TargetType="TextBlock">
+                <Style x:Key="GroupMinCellStyle" TargetType="DataGridCell">
+                    <Setter Property="VerticalAlignment" Value="Center" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=IsMinValueEditable}" Value="True">
                             <Setter Property="Background" Value="{StaticResource editableTextBackground}" />
@@ -247,7 +228,9 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-                <Style x:Key="GroupMaxElementStyle" TargetType="TextBlock">
+
+                <Style x:Key="GroupMaxCellStyle" TargetType="DataGridCell">
+                    <Setter Property="VerticalAlignment" Value="Center" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=IsMaxValueEditable}" Value="True">
                             <Setter Property="Background" Value="{StaticResource editableTextBackground}" />
@@ -255,36 +238,56 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
+
+                <Style x:Key="ElementCenteredStyle" TargetType="TextBlock">
+                    <Setter Property="TextAlignment" Value="Center" />
+                </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
+                <!--  Driver Group columns:  -->
                 <DataGridTextColumn x:Name="colGroup"
                                     Binding="{Binding Path=Value}"
-                                    Header="Group" />
+                                    ElementStyle="{StaticResource ElementCenteredStyle}"
+                                    Header="Group"
+                                    IsReadOnly="True" />
 
                 <DataGridTextColumn x:Name="colLower"
-                                    Binding="{Binding Path=MinOutlier}"
-                                    ElementStyle="{StaticResource GroupMinElementStyle}"
+                                    Binding="{Binding Path=MinOutlier,StringFormat={}{0:N0}}"
+                                    CellStyle="{StaticResource GroupMinCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Lower Limit" />
 
                 <DataGridTextColumn x:Name="colUpper"
-                                    Binding="{Binding Path=MaxOutlier}"
-                                    ElementStyle="{StaticResource GroupMaxElementStyle}"
+                                    Binding="{Binding Path=MaxOutlier,StringFormat={}{0:N0}}"
+                                    CellStyle="{StaticResource GroupMaxCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Upper Limit" />
 
-                <!--  Results columns:  -->
-                <DataGridTextColumn x:Name="colSkuCount"
-                                    Binding="{Binding Path=Results.SkuCount}"
-                                    Header="Sku Count"
-                                    IsReadOnly="True" />
+                <!--  Driver Results columns:  -->
                 <!--
                     Visibility="{Binding Path=DataContext.Entity.SelectedValueDriver.SelectedMode.AreResultsAvailable,
                     Source={x:Reference dataContextSource},
                     Converter={StaticResource BooleanToVisibilityConverter}}"
                 -->
 
-                <DataGridTextColumn x:Name="colSalesValue"
-                                    Binding="{Binding Path=Results.SalesValue}"
+                <DataGridTextColumn Binding="{Binding Path=Results.SkuCount,StringFormat={}{0:N0}}"
+                                    Header="Sku Count"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    IsReadOnly="True" />
+
+                <DataGridTextColumn Binding="{Binding Path=Results.SalesValue}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Sales Value"
+                                    IsReadOnly="True" />
+
+                <DataGridTextColumn Binding="{Binding Path=Results.MinOutlier,StringFormat={}{0:N0}}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Actual Lower"
+                                    IsReadOnly="True" />
+
+                <DataGridTextColumn Binding="{Binding Path=Results.MaxOutlier,StringFormat={}{0:N0}}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Actual Upper"
                                     IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>

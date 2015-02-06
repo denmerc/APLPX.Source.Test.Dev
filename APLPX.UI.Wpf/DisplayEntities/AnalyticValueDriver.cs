@@ -144,13 +144,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region IDisposable
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
             if (!_isDisposed)
             {
@@ -168,6 +162,8 @@ namespace APLPX.UI.WPF.DisplayEntities
                 }
                 _isDisposed = true;
             }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

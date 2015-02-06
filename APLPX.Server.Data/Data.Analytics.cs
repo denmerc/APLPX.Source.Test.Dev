@@ -15,7 +15,6 @@ namespace APLPX.Server.Data {
         Session<Entity.Analytic> SaveFilters(Session<Entity.Analytic> session);
         Session<Entity.Analytic> LoadDrivers(Session<Entity.Analytic> session);
         Session<Entity.Analytic> SaveDrivers(Session<Entity.Analytic> session);
-        Session<Entity.Analytic> RunDrivers(Session<Entity.Analytic> session);
         Session<Entity.Analytic> LoadPriceLists(Session<Entity.Analytic> session);
         Session<Entity.Analytic> SavePriceLists(Session<Entity.Analytic> session);
     }
@@ -41,7 +40,6 @@ namespace APLPX.Server.Data {
         }
 
         public AnalyticData() {
-
             sqlMapper = new AnalyticMap();            
             sqlService = new SqlService(this.sqlConnection);
             localServiceLog = new System.Diagnostics.EventLog();
@@ -49,7 +47,6 @@ namespace APLPX.Server.Data {
             //Setup <APLServiceEventLog> event source manually through registry key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Application
             //To resolve message IDs create a RG_EXPAND_SZ attribute, named "EventMessageFile" to: "C:\WINDOWS\Microsoft.NET\Framework\<current version>\EventLogMessages.dll"
             localServiceLog.Source = APLSERVICEEVENTLOG;
-
         }
 
         ~AnalyticData() {
@@ -103,7 +100,6 @@ namespace APLPX.Server.Data {
 
             try {
                 sqlMapper.LoadListMapParameters(sessionIn, ref sqlService);
-                //throw new DataMisalignedException();
                 System.Data.DataTable dataTable = sqlService.ExecuteReader();
                 if (sqlService.SqlStatusOk) {
                     sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
@@ -360,48 +356,6 @@ namespace APLPX.Server.Data {
                 sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
                 localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
                 throw ex;
-
-            }
-            finally {
-                //SQL Service error...
-                if (!sqlService.SqlStatusOk) {
-                    sessionOut.SessionOk = sqlService.SqlStatusOk;
-                    sessionOut.ClientMessage = sqlService.SqlStatusMessage;
-                    sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, sqlService.SqlStatusMessage);
-                }
-                //SQL Validation warning...
-                else if (sqlRequest != sqlResponse) {
-                    sessionOut.ClientMessage = sqlResponse;
-                }
-            }
-
-            return sessionOut;
-        }
-
-        public Session<Entity.Analytic> RunDrivers(Session<Entity.Analytic> sessionIn) {
-
-            String sqlRequest = String.Empty;
-            String sqlResponse = String.Empty;
-            //Initialize session...
-            Session<Entity.Analytic> sessionOut = Session<Analytic>.Clone<Analytic>(sessionIn);
-
-            try {
-                sqlMapper.SaveDriversMapParameters(sessionIn, ref sqlService);
-                System.Data.DataSet dataSet = sqlService.ExecuteReaders();
-                if (sqlService.SqlStatusOk) {
-                    sqlRequest = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbValue;
-                    sqlResponse = sqlService.sqlParameters[Server.Data.AnalyticMap.Names.sqlMessage].dbOutput;
-                    if (sqlRequest == sqlResponse) {
-                        sessionOut.Data = sqlMapper.LoadDriversMapData(dataSet);
-                        sessionOut.SessionOk = true;
-                    }
-                }
-            }
-            catch (Exception ex) {
-                sessionOut.ServerMessage = String.Format("{0}: {1}, {2}, {3}, {4} ", APLSERVICEEVENTLOG, sqlService.SqlProcedure, sqlRequest, ex.Source, ex.Message);
-                localServiceLog.WriteEntry(sessionOut.ServerMessage, System.Diagnostics.EventLogEntryType.FailureAudit);
-                throw ex;
-
             }
             finally {
                 //SQL Service error...

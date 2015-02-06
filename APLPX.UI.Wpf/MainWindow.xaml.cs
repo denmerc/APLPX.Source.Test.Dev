@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
 using APLPX.UI.WPF.Events;
+using APLPX.UI.WPF.ViewModels;
 using APLPX.UI.WPF.Views;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
@@ -51,11 +51,8 @@ namespace APLPX.UI.WPF
             
             _eventManager = ((EventAggregator)App.Current.Resources["EventManager"]);
 
-            _eventManager.GetEvent<OperationCompletedEvent>()
-               .Subscribe(action =>
-               {
-                   ShowMessageToaster(action);
-               });
+            _eventManager.GetEvent<OperationCompletedEvent>().Subscribe(action => ShowMessageToaster(action));
+            _eventManager.GetEvent<AboutViewModel>().Subscribe(vm => ShowAboutBox(vm));
 
             _eventManager.GetEvent<ErrorEvent>()
                .Subscribe( evt =>
@@ -63,22 +60,12 @@ namespace APLPX.UI.WPF
                    ShowErrorDialog( evt );
                });
 
-
             var themes = MahApps.Metro.ThemeManager.AppThemes;
 
             var accent = MahApps.Metro.ThemeManager.Accents.First(x => x.Name == "Blue");
             var theme = MahApps.Metro.ThemeManager.AppThemes.First(x => x.Name == "BaseDark");
 
-            //dark theme
             MahApps.Metro.ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
-
-
-            int i = 0;
-            i++;
-            // Set the itemsource to the list of theme names.
-            //themePicker.ItemsSource = manager.ThemeNameList;
-            // Set the start item to the default theme.
-            //themePicker.SelectedItem = "dark";
         }
 
         private void ShowMessageToaster(OperationCompletedEvent action)
@@ -100,35 +87,18 @@ namespace APLPX.UI.WPF
             toaster.Top = thisWindowTop + (this.ActualHeight - toaster.Height) / 2;
             toaster.Message = action.Message;
             toaster.Show();
-        } 
-
-        private void themePicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // When they change the selection, just set the theme to the selected value.
-            //manager.SetTheme(themePicker.SelectedValue.ToString());
-
-            
-
-            var themes = MahApps.Metro.ThemeManager.AppThemes;
-
-            
-
-            var accent = MahApps.Metro.ThemeManager.Accents.First(x => x.Name == "Blue");
-            var theme = MahApps.Metro.ThemeManager.AppThemes.First(x => x.Name == "BaseLight");
-
-            //dark theme
-            MahApps.Metro.ThemeManager.ChangeAppStyle( Application.Current,  accent, theme);
-
-
-            int i = 0;
-            i++;
-            
         }
 
-        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        private void ShowAboutBox(AboutViewModel viewModel)
         {
-            Application.Current.MainWindow = this;
+            var aboutBox = new AboutBox();
+            aboutBox.DataContext = viewModel;
+            aboutBox.ShowDialog(); 
+           
+            aboutBox = null;
         }
+
+
 
 
         private async void ShowErrorDialog(ErrorEvent evt)

@@ -17,7 +17,7 @@
                 <TextBlock Text="Users" FontSize="30" Margin="5 0 0 0" ></TextBlock>
                 <Separator ></Separator>
                 <ListBox x:Name="UserList"  Margin="0 5 0 0" Height="Auto" Width="Auto" Background="Transparent">
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel>
                             <TextBlock FontSize="20"
 								        Foreground="{StaticResource Foreground}"><Run Text="Dave Jinkerson"/></TextBlock>
@@ -29,7 +29,7 @@
                                                    Foreground="#AAAAAA"><Run Text="Current action: Sleeping"/></TextBlock>-->
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel>
                             <TextBlock FontSize="20"
 								        Foreground="{StaticResource Foreground}"><Run Text="Teri Ruiz"/></TextBlock>
@@ -41,28 +41,28 @@
                                                    Foreground="#AAAAAA"><Run Text="Current action: Sleeping"/></TextBlock>-->
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem x:Name="AftermarketListItem" Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem x:Name="AftermarketListItem" Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel>
                             <TextBlock FontSize="20"
 								        Foreground="{StaticResource Foreground}"><Run Text="Chad Gage"/></TextBlock>
 
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel>
                             <TextBlock FontSize="20"
 								        Foreground="{StaticResource Foreground}"><Run Text="Darious J"/></TextBlock>
 
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel>
                             <TextBlock FontSize="20"
 								        Foreground="{StaticResource Foreground}"><Run Text="Dave L"/></TextBlock>
 
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel>
                             <TextBlock FontSize="20"
 								        Foreground="{StaticResource Foreground}"><Run Text="Dennis Mercado"/></TextBlock>
@@ -94,37 +94,37 @@
                                                     <Setter Property="Background" Value="Transparent" />
                                                 </Style>
                                             </ListBox.ItemContainerStyle>-->
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel Orientation="Horizontal">
                             <Label  FontSize="16" Foreground="{StaticResource Foreground}" Width="150" Content="First Name:" HorizontalContentAlignment="Right"></Label>
-                            <TextBox x:Name="FirstNameTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="250" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}"></TextBox>
+                            <TextBox x:Name="FirstNameTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="250" VerticalAlignment="Bottom" Style="{StaticResource TextBoxStyle1}"></TextBox>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel Orientation="Horizontal">
                             <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="150" HorizontalContentAlignment="Right">Last Name:</Label>
-                            <TextBox x:Name="LastNameTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="450" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                            <TextBox x:Name="LastNameTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="450" Style="{StaticResource TextBoxStyle1}" ></TextBox>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel Orientation="Horizontal">
                             <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="150" HorizontalContentAlignment="Right">Login:</Label>
-                            <TextBox x:Name="LoginTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="150" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                            <TextBox x:Name="LoginTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="150" VerticalAlignment="Bottom" Style="{StaticResource TextBoxStyle1}" ></TextBox>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel Orientation="Horizontal">
                             <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="150" HorizontalContentAlignment="Right">Email:</Label>
-                            <TextBox x:Name="EmailTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="150" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                            <TextBox x:Name="EmailTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="150" VerticalAlignment="Bottom" Style="{StaticResource TextBoxStyle1}" ></TextBox>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel Orientation="Horizontal">
                             <Label FontSize="16" Foreground="{StaticResource Foreground}" Width="150" HorizontalContentAlignment="Right">Password:</Label>
-                            <TextBox x:Name="PasswordTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="150" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}" ></TextBox>
+                            <TextBox x:Name="PasswordTextBox" FontSize="16" Foreground="{StaticResource Foreground}" Width="150" VerticalAlignment="Bottom" Style="{StaticResource TextBoxStyle1}" ></TextBox>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem Style="{DynamicResource ListBoxItemStyle1}">
+                    <ListBoxItem Style="{StaticResource ListBoxItemStyle1}">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <!--<StackPanel.Resources>
 														<Style TargetType="{x:Type Button}">

@@ -5,63 +5,96 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             d:DesignHeight="800"
-             d:DesignWidth="800"
              mc:Ignorable="d">
+
     <UserControl.Resources>
         <ResourceDictionary>
-            <CollectionViewSource x:Key="cvsResults" Source="{Binding Results}">
+            <CollectionViewSource x:Key="cvsResults" Source="{Binding Path=DriverResultRows}">
                 <CollectionViewSource.GroupDescriptions>
-                    <PropertyGroupDescription PropertyName="DriverName" />
+                    <PropertyGroupDescription PropertyName="Driver.Name" />
                 </CollectionViewSource.GroupDescriptions>
                 <CollectionViewSource.SortDescriptions>
-                    <scm:SortDescription PropertyName="Id" />
-
-
+                    <scm:SortDescription Direction="Ascending" PropertyName="Result.Value" />
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
 
+            <Style x:Key="DataGridElementCenteredStyle" TargetType="TextBlock">
+                <Setter Property="TextAlignment" Value="Center" />
+            </Style>
+
             <ResourceDictionary.MergedDictionaries>
-                <!--  for design-time support, already in app.xml  -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
-                <!--  <ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />  -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <UserControl.Triggers>
-        <EventTrigger RoutedEvent="UserControl.Loaded" >
-            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}"/>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource sbDefaultFadeIn}" />
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
-   
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-
         </Grid.RowDefinitions>
+
+        <TextBlock x:Name="txtTitle"
+                   Grid.Row="0"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="Value Driver Results" />
+
+        <StackPanel x:Name="RunResultsPanel"
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+            <TextBlock x:Name="txtRerunCount"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="{Binding Path=DriversToRunCount,
+                                      StringFormat={}Drivers to Include in Next Run: ({0} selected)}" />
+            <CheckBox x:Name="chkSelectAll"
+                      Margin="15,0"
+                      Command="{Binding Path=SelectAllDriversCommand}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self},
+                                                 Path=IsChecked}"
+                      Content="Include All Drivers"
+                      IsChecked="{Binding Path=AreAllValueDriversSelectedToRun,
+                                          Mode=OneWay}"
+                      ToolTip="Check or uncheck to select or de-select all value drivers." />
+        </StackPanel>
+
         <DataGrid x:Name="FilterGrid"
-                  Grid.Row="0"
+                  Grid.Row="2"
                   AutoGenerateColumns="False"
+                  HorizontalScrollBarVisibility="Auto"
+                  IsReadOnly="True"
                   ItemsSource="{Binding Source={StaticResource cvsResults}}"
-                  Visibility="Visible" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                  VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding DriverName}" Visibility="Hidden" Header="Driver Name" />             
-                <DataGridTextColumn Binding="{Binding SkuCount}" Header="Sku Count" />
-                <DataGridTextColumn Binding="{Binding MinOutlier}" Header="Min Value" />
-                <DataGridTextColumn Binding="{Binding MaxOutlier}" Header="Max Value" />
-                <DataGridTextColumn Binding="{Binding SalesValue}" Header="Sales Value" />
-
-
+                <DataGridTextColumn Binding="{Binding Result.Value}"
+                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
+                                    Header="Group" />
+                <DataGridTextColumn Binding="{Binding Result.SkuCount,
+                                                      StringFormat={}{0:N0}}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Sku Count" />
+                <DataGridTextColumn Binding="{Binding Result.MinOutlier,
+                                                      StringFormat={}{0:N0}}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Min Value" />
+                <DataGridTextColumn Binding="{Binding Result.MaxOutlier,
+                                                      StringFormat={}{0:N0}}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Max Value" />
+                <DataGridTextColumn Binding="{Binding Result.SalesValue}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Sales Value" />
             </DataGrid.Columns>
             <DataGrid.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.ContainerStyle>
-
-
                         <Style TargetType="{x:Type GroupItem}">
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -72,8 +105,22 @@
                                                   IsExpanded="True">
                                             <Expander.Header>
                                                 <Grid>
+                                                    <DockPanel MinWidth="275"
+                                                               HorizontalAlignment="Left"
+                                                               LastChildFill="True">
+                                                        <CheckBox x:Name="chkRunDriver"
+                                                                  Margin="5"
+                                                                  VerticalAlignment="Center"
+                                                                  Content="Include in Run"
+                                                                  DockPanel.Dock="Right"
+                                                                  IsChecked="{Binding Path=Items[0].Driver.RunResults}"
+                                                                  ToolTip="Check to recalculate this driver's results when you choose Run." />
 
-                                                    <TextBlock Text="{Binding Name, StringFormat={}{0}}" />
+                                                        <TextBlock x:Name="txtName"
+                                                                   VerticalAlignment="Center"
+                                                                   Text="{Binding Path=Name,
+                                                                                  StringFormat={}{0}}" />
+                                                    </DockPanel>
                                                 </Grid>
                                             </Expander.Header>
                                             <ItemsPresenter />
@@ -84,123 +131,8 @@
                         </Style>
                     </GroupStyle.ContainerStyle>
                 </GroupStyle>
-
-
             </DataGrid.GroupStyle>
-            <!--
-                <GridView>
-                <GridViewColumn Header="Group" DisplayMemberBinding="{Binding Group}"/>
-                <GridViewColumn Header="Sales Value" DisplayMemberBinding="{Binding SalesValue}"/>
-                </GridView>
-            -->
-
         </DataGrid>
-        <!--
-            <Style TargetType="{x:Type GroupItem}">
-            <Setter Property="Template">
-            <Setter.Value>
-            <ControlTemplate TargetType="{x:Type GroupItem}">
-            <Expander x:Name="exp" IsExpanded="True"
-            Background="Black"
-            Foreground="White">
-            <Expander.Header>
-            <Grid>
-            
-            <TextBlock Text="{Binding Name}"/>
-            </Grid>
-            </Expander.Header>
-            <ItemsPresenter />
-            </Expander>
-            </ControlTemplate>
-            </Setter.Value>
-            </Setter>
-            </Style>
-        -->
-        <!--  <StackPanel Orientation="Horizontal">  -->
-        <!--  <ListBox x:Name="StepContentListBox"  Margin="0 0 0 0" Height="Auto" Width="Auto" >  -->
-        <!--
-            <ListBox.ItemContainerStyle>
-            <Style TargetType="{x:Type ListBoxItem}">
-            <Setter Property="Background" Value="Transparent" />
-            </Style>
-            </ListBox.ItemContainerStyle>
-        -->
-        <!--
-            <ListBoxItem x:Name="VendorSelectedListBoxItem" >
-            <StackPanel Orientation="Horizontal">
-            <Label  FontSize="16" Foreground="{DynamicResource Foreground}" Width="178" Content="Movement"/>
-            </StackPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-            <StackPanel Orientation="Horizontal">
-            <Label  FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Markup</Label>
-            </StackPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-            <StackPanel Orientation="Horizontal">
-            <Label  FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Days On Hand</Label>
-            </StackPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-            <StackPanel Orientation="Horizontal">
-            <Label FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Days Lead Time</Label>
-            </StackPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-            <StackPanel Orientation="Horizontal">
-            <Label FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">In Stock Ratio</Label>
-            </StackPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-            <StackPanel Orientation="Horizontal">
-            <Label FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Sales Trend Ratio</Label>
-            </StackPanel>
-            </ListBoxItem>
-            <ListBoxItem>
-            <StackPanel Orientation="Horizontal">
-            <Label FontSize="16" Foreground="{DynamicResource Foreground}" Width="178">Competition</Label>
-            </StackPanel>
-            </ListBoxItem>
-            </ListBox>
-        -->
-        <!--
-            <StackPanel Orientation="Vertical" Height="auto" Width="746">
-            
-            <controls:MetroProgressBar IsIndeterminate="True"
-            x:Name="ProgressBar"
-            Minimum="0"
-            Maximum="100"
-            Width="500"
-            Foreground="{DynamicResource Foreground}"
-            Margin="0, -5, 0, 0" />
-            <DataGrid x:Name="FilterGrid" ItemsSource="{Binding Results}" Height="500"
-            AutoGenerateColumns="True" Visibility="Visible" Width="746">
-        -->
-        <!--  was 800  -->
-        <!--
-            <DataGrid.Columns>
-            <DataGridTextColumn
-            Width="200"
-            Header="Distribution Groups"
-            />
-            <DataGridTextColumn Header="SKU Count" Width="100"
-            />
-            <DataGridTextColumn Header="Min"
-            Width="Auto"/>
-            <DataGridTextColumn Header="Max"
-            Width="50"/>
-            
-            
-            <DataGridTextColumn Header="Sales Value"
-            Width="100"/>
-            </DataGrid.Columns>
-        -->
-        <!--
-            </DataGrid>
-            
-            </StackPanel>
-        -->
-        <!--  </StackPanel>  -->
     </Grid>
 
 </UserControl>

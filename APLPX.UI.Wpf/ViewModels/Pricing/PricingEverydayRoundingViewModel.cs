@@ -18,6 +18,8 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
         private List<PricingRoundingTemplate> _roundingTemplates;
         private PricingRoundingTemplate _selectedTemplate;
         private bool _canApplyTemplate;
+        private IDisposable _applyTemplateSubscription;
+        private bool _isDisposed;
 
         #endregion
 
@@ -52,7 +54,7 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
 
             //Note: see http://stackoverflow.com/questions/22213444/what-are-the-distinctions-between-the-various-whenany-methods-in-reactive-ui
             //for subscribing to a command via WhenAnyObservable() vs. subscribing directly.
-            this.WhenAnyObservable(vm => vm.ApplyTemplateCommand).Subscribe(item => ApplyTemplateExecuted(item));
+            _applyTemplateSubscription = this.WhenAnyObservable(vm => vm.ApplyTemplateCommand).Subscribe(item => ApplyTemplateExecuted(item));
         }
 
         #endregion
@@ -93,8 +95,8 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
                     this.RaisePropertyChanged("RoundingTemplates");
 
                     //Select the first template by default.
-                    if (_roundingTemplates != null && 
-                        _roundingTemplates.Count > 0 && 
+                    if (_roundingTemplates != null &&
+                        _roundingTemplates.Count > 0 &&
                         SelectedTemplate == null)
                     {
                         SelectedTemplate = _roundingTemplates[0];
@@ -153,5 +155,26 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
 
         #endregion
 
+        #region IDisposable
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_applyTemplateSubscription != null)
+                    {
+                        _applyTemplateSubscription.Dispose();
+                        _applyTemplateSubscription = null;
+                    }
+                }
+                _isDisposed = true;
+            }
+
+            base.Dispose(isDisposing);
+        }
+
+        #endregion
     }
 }

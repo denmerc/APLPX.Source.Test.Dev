@@ -608,6 +608,7 @@ namespace APLPX.Server.Data {
 
             //Map the command...
             service.SqlProcedure = AnalyticMap.Names.updateCommand;
+            service.SqlCommandTimeOut = 90; // save/run drivers, extend the default command timeout...
             String commandMessage = AnalyticMap.Names.saveDriversMessage;
 
             //Build comma delimited key list - type;mode;group;min;max, ...
@@ -640,9 +641,6 @@ namespace APLPX.Server.Data {
                 new SqlServiceParameter(AnalyticMap.Names.sqlMessage, SqlDbType.VarChar, 500, ParameterDirection.InputOutput, commandMessage)
             }; service.sqlParameters.List = parameters;
         }
-        #endregion
-
-        #region Run Drivers...
         #endregion
 
         #region Load Price lists...
@@ -803,11 +801,6 @@ namespace APLPX.Server.Data {
             public const String saveFiltersMessage = "updateFilters";
             public const String saveDriversMessage = "updateDrivers";
             public const String savePriceListsMessage = "updatePriceLists";
-
-            //Process commands...
-            public const String runProcessMarkup = "updateProcessMarkup";
-            public const String runProcessMovement = "updateProcessMover";
-            public const String runProcessDaysOnHand = "updateProcessDaysOnHand";
             #endregion
 
             #region Defaults Parameters...

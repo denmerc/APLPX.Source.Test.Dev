@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-
+using System.Collections.ObjectModel;
+using System.Linq;
+using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
-using APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -13,6 +13,8 @@ namespace APLPX.UI.WPF.ViewModels
     public class FilterViewModel : ViewModelBase
     {
         private IFilterContainer _entity;
+        private IDisposable _selectAllFilterSubscription;
+        private bool _isDisposed;
 
         #region Constructor and Initialization
 
@@ -24,7 +26,7 @@ namespace APLPX.UI.WPF.ViewModels
             }
 
             Entity = entity;
-         
+
             if (entity.SelectedFilterGroup == null && entity.FilterGroups.Count > 0)
             {
                 entity.SelectedFilterGroup = entity.FilterGroups[0];
@@ -38,7 +40,8 @@ namespace APLPX.UI.WPF.ViewModels
             var canExecute = this.WhenAnyValue(vm => vm.Entity.SelectedFilterGroup, (group) => SelectAllFiltersCanExecute(group));
             SelectAllFiltersCommand = ReactiveCommand.Create(canExecute);
 
-            this.WhenAnyObservable(vm => vm.SelectAllFiltersCommand).Subscribe(item => SelectAllFiltersCommandExecuted(item));
+            _selectAllFilterSubscription = this.WhenAnyObservable(vm => vm.SelectAllFiltersCommand).Subscribe(item => SelectAllFiltersCommandExecuted(item));
+            Entity.FilterGroups.ItemChanged.Subscribe(g => OnFilterGroupChanged(g));
         }
 
         #endregion
@@ -57,9 +60,20 @@ namespace APLPX.UI.WPF.ViewModels
             private set { this.RaiseAndSetIfChanged(ref _entity, value); }
         }
 
-        #endregion
+        public ObservableCollection<Error> ValidationResults
+        {
+            get
+            {
+                var errors = Entity.FilterGroups.SelectMany(grp => grp.ValidationResults);
 
-        #region Command Handlers
+                var result = new ObservableCollection<Error>(errors);
+                return result;
+            }
+        }
+
+        #endregion   
+
+        #region Command and Event Handlers
 
         private bool SelectAllFiltersCanExecute(FilterGroup filterGroup)
         {
@@ -78,7 +92,33 @@ namespace APLPX.UI.WPF.ViewModels
             }
         }
 
+        private void OnFilterGroupChanged(IReactivePropertyChangedEventArgs<FilterGroup> g)
+        {
+            this.RaisePropertyChanged("ValidationResults");
+        }
+
         #endregion
 
+        #region IDisposable
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_selectAllFilterSubscription != null)
+                    {
+                        _selectAllFilterSubscription.Dispose();
+                        _selectAllFilterSubscription = null;
+                    }
+                }
+                _isDisposed = true;
+            }
+
+            base.Dispose(isDisposing);
+        }
+
+        #endregion
     }
 }

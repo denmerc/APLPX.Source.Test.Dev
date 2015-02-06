@@ -17,19 +17,25 @@
 
         <TextBlock x:Name="txtTitle"
                    Grid.Row="0"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding Path=Errors.Count,
-                                  StringFormat=Messages ({0})}"
+                                  StringFormat=Please check the following items ({0}):}"
+                   TextWrapping="Wrap"
                    Visibility="{Binding ElementName=lstErrors,
                                         Path=HasItems,
                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <ListBox x:Name="lstErrors"
                  Grid.Row="1"
-                 ItemsSource="{Binding Path=Errors}">
+                 ItemsSource="{Binding Path=ValidationResults}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path=Message}" />
+                        <TextBlock MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                      Path=MaxWidth}"
+                                   Margin="0,0,0,5"
+                                   Text="{Binding Path=Message}"
+                                   TextWrapping="Wrap" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

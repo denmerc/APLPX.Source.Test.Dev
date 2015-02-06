@@ -8,8 +8,11 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
 {
     public class PricingEverydayStrategyViewModel : ViewModelBase
     {
-
         private PricingEveryday _priceRoutine;
+        private IDisposable _setKeyDriverSubscription;
+        private bool _isDisposed;
+
+        #region Constructor and Initialization
 
         public PricingEverydayStrategyViewModel(PricingEveryday priceRoutine)
         {
@@ -27,8 +30,10 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
             var canSetAsKey = this.WhenAnyValue(vm => vm.PriceRoutine.SelectedValueDriverWrapper, (wrapper) => SetKeyDriverCanExecute(wrapper));
             SetKeyDriverCommand = ReactiveCommand.Create(canSetAsKey);
 
-            this.WhenAnyObservable(vm => vm.SetKeyDriverCommand).Subscribe(item => SetKeyDriverExecuted(item));
+            _setKeyDriverSubscription = this.WhenAnyObservable(vm => vm.SetKeyDriverCommand).Subscribe(item => SetKeyDriverExecuted(item));
         }
+
+        #endregion
 
         #region Properties
 
@@ -50,7 +55,7 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
 
         private bool SetKeyDriverCanExecute(PricingEverydayValueDriverWrapper wrapper)
         {
-            bool result = (wrapper != null && 
+            bool result = (wrapper != null &&
                            wrapper.BaseDriver != null &&
                           !wrapper.BaseDriver.IsKey);
 
@@ -69,5 +74,26 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
 
         #endregion
 
+        #region IDisposable
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_setKeyDriverSubscription != null)
+                    {
+                        _setKeyDriverSubscription.Dispose();
+                        _setKeyDriverSubscription = null;
+                    }
+                }
+                _isDisposed = true;
+            }
+
+            base.Dispose(isDisposing);
+        }
+
+        #endregion
     }
 }

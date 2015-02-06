@@ -4,15 +4,12 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DesignHeight="800"
-             d:DesignWidth="800"
+             xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!--  for design-time support, already in app.xml  -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -32,47 +29,48 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}" >
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Style="{DynamicResource ListTitleTextStyle}"
-                   Text="Filter Types" 
-                   Margin="10,0,1,0"  
-                   VerticalAlignment="Center"/>
+                   Margin="10,0,1,0"
+                   VerticalAlignment="Center"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="Filter Types" />
 
         <ListBox x:Name="FilterGroupsListBox"
                  Grid.Row="1"
                  Grid.Column="0"
+                 Margin="10,0,0,0"
+                 Background="Transparent"
                  ItemsSource="{Binding Path=Entity.FilterGroups}"
                  SelectedIndex="0"
                  SelectedItem="{Binding Path=Entity.SelectedFilterGroup}"
-                 Style="{DynamicResource baseListBoxStyle}"
-                 Background="Transparent"
-                 Margin="10,0,0,0">
+                 Style="{StaticResource baseListBoxStyle}">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Width="200"
                            Content="{Binding Path=Name}"
                            FontSize="16"
-                           Foreground="{DynamicResource Foreground}" 
-                           Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
+                           Style="{StaticResource DescriptionHeaderStyleLabel}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        
-        <ListBox.ItemContainerStyle>
-                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
-                    <Setter Property="Margin" Value="0,5"/>
-                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+
+            <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="0,5" />
+                    <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                 </Style>
 
             </ListBox.ItemContainerStyle>
@@ -80,20 +78,20 @@
 
         <StackPanel Grid.Row="0" Grid.Column="1">
             <TextBlock x:Name="txtCount"
-                       Style="{DynamicResource ListTitleTextStyle}"
+                       Margin="15,10,0,0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource ListTitleTextStyle}"
                        Text="{Binding ElementName=FilterGrid,
                                       Path=Items.Count,
-                                      StringFormat={}Filters ({0})}" 
-                       HorizontalAlignment="Center"
-                       Margin="15,10,0,0"
-                       VerticalAlignment="Center"/>
+                                      StringFormat={}Filters ({0})}" />
             <TextBlock x:Name="txtSelectedCount"
                        Margin="20,10,5,10"
-                       Style="{DynamicResource ListTitleTextStyle}"
-                       Text="{Binding Path=Entity.SelectedFilterGroup.SelectedCount,
-                                      StringFormat={}Included: {0}}" 
                        HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"
+                       Style="{StaticResource ListTitleTextStyle}"
+                       Text="{Binding Path=Entity.SelectedFilterGroup.SelectedCount,
+                                      StringFormat={}Included: {0}}" />
         </StackPanel>
 
         <DataGrid x:Name="FilterGrid"
@@ -106,13 +104,14 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   ItemsSource="{Binding ElementName=FilterGroupsListBox,
-                                        Path=SelectedItem.Filters}" SelectionMode="Single">
+                                        Path=SelectedItem.Filters}"
+                  SelectionMode="Single">
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding IsSelected,
                                                           UpdateSourceTrigger=PropertyChanged}"
-                                        EditingElementStyle="{DynamicResource MetroDataGridCheckBox}"
-                                        ElementStyle="{DynamicResource MetroDataGridCheckBox}">
+                                        EditingElementStyle="{StaticResource MetroDataGridCheckBox}"
+                                        ElementStyle="{StaticResource MetroDataGridCheckBox}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
                             <CheckBox x:Name="chkSelectAll"
@@ -132,5 +131,12 @@
                 <DataGridTextColumn Binding="{Binding Code}" Header="Code" />
             </DataGrid.Columns>
         </DataGrid>
+
+        <views:ValidationResultsControl x:Name="ucValidationResults"
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        Margin="10,5"
+                                        Visibility="Collapsed" />
+
     </Grid>
 </UserControl>

@@ -8,13 +8,13 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class PricingEveryday : DisplayEntityBase, ISearchableEntity, IFilterContainer, IDisposable
+    public class PricingEveryday : DisplayEntityBase, ISearchableEntity, IFilterContainer
     {
         #region Private Fields
 
         private int _id;
         private PricingIdentity _identity;
-        private List<FilterGroup> _filterGroups;
+        private ReactiveList<FilterGroup> _filterGroups;
 
         private ReactiveList<PricingEverydayValueDriver> _valueDrivers;
         private PricingEverydayKeyValueDriver _keyValueDriver;
@@ -53,7 +53,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         public PricingEveryday()
         {
             Identity = new PricingIdentity();
-            FilterGroups = new List<FilterGroup>();
+            FilterGroups = new ReactiveList<FilterGroup>();
             ValueDrivers = new ReactiveList<PricingEverydayValueDriver>();
             KeyValueDriver = new PricingEverydayKeyValueDriver();
             LinkedValueDrivers = new ObservableCollection<PricingEverydayLinkedValueDriver>();
@@ -97,7 +97,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _identity, value); }
         }
 
-        public List<FilterGroup> FilterGroups
+        public ReactiveList<FilterGroup> FilterGroups
         {
             get { return _filterGroups; }
             set { this.RaiseAndSetIfChanged(ref _filterGroups, value); }
@@ -734,13 +734,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region IDisposable
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
             if (!_isDisposed)
             {
@@ -771,6 +765,8 @@ namespace APLPX.UI.WPF.DisplayEntities
                 }
                 _isDisposed = true;
             }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

@@ -14,7 +14,7 @@
              mc:Ignorable="d">
 
 
-    <Grid x:Name="LayoutRoot" Background="{DynamicResource WindowBackgroundBrush}">
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource WhiteBrush}" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -25,11 +25,9 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        
-        
+
+
         <views:SearchGroupSelector x:Name="ucSearchGroupSelector"
-                                   Grid.Row="0"
-                                   Grid.RowSpan="1"
                                    Grid.Column="0" />
 
         <!--  For diagnostics only  -->
@@ -40,61 +38,56 @@
                                      Visibility="{Binding Path=AreDiagnosticsVisible,
                                                           Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-        <Border Grid.Row="0"
-                Grid.RowSpan="1"
-                Grid.Column="2"
+
+
+
+
+        <Border Grid.Column="1"
                 Width="625"
-                Opacity=".35"
-                Background="{DynamicResource GrayBrush1}"
+                Opacity="1"
+                Background="{StaticResource GrayBrush2}"
                 BorderThickness="1"
                 CornerRadius="10"
                 Height="405"
-                HorizontalAlignment="Left"
                 Visibility="{Binding IsDetailDisplayed,
-                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-        <StackPanel x:Name="DetailStackPanel"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="0,20,0,0"
-                    HorizontalAlignment="Center"
-                    Visibility="{Binding IsDetailDisplayed,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                                     Converter={StaticResource BooleanToVisibilityConverter}}" 
+                HorizontalAlignment="Left">
 
 
 
-
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
             <Label Width="525"
-                   Margin="5,15,0,5"
                    HorizontalAlignment="Center" 
                    HorizontalContentAlignment="Center"
-               VerticalAlignment="Center"
+                Grid.Row="0"
                FontSize="20"
                FontWeight="Bold"
-               Style="{DynamicResource DescriptionHeaderStyleLabel}" >
+               Style="{StaticResource DescriptionHeaderStyleLabel}" 
+                   Margin="5,10,0,5">
                 <Label.Content>
                     <AccessText Text="{Binding Path=SelectedFeature.SelectedEntity.Identity.Name, StringFormat='Details: {0}'}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" Foreground="White"/>
                 </Label.Content>
             </Label>
 
-            <Separator x:Name="itemSeparator2"
-                   Grid.Row="0"
-                   Grid.Column="2"
-                   Width="550"
-                   VerticalAlignment="Bottom"
-                   Panel.ZIndex="1000"                 
+            <Separator x:Name="itemSeparator2"            
                    Visibility="{Binding Path=IsSearchFilterSelected,
-                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        Converter={StaticResource BooleanToVisibilityConverter}}" 
+                   Grid.Row="1"
+                       Margin="10,0"/>
 
-            <Border Width="550"
-                    Margin="0,12.5"
-                    Height="300"
-                    Background="{DynamicResource WhiteBrush}"
-                    BorderBrush="{DynamicResource SearchControlSelectedItemDetailBackgroundColor}"
+                <Border Margin="15"
+                    Background="{StaticResource WhiteBrush}"
+                    BorderBrush="{StaticResource SearchControlSelectedItemDetailBackgroundColor}"
                     BorderThickness="1"
-                    CornerRadius="5">
+                    CornerRadius="5"
+                    Grid.Row="2">
 
-                <Grid x:Name="SelectedItemDetailGrid"
+                    <Grid x:Name="SelectedItemDetailGrid"
                       Margin="10,5"
                       DataContext="{Binding Path=SelectedFeature.SelectedEntity}" >
                     <Grid.Resources>
@@ -236,8 +229,9 @@
                                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
             </Border>
-        </StackPanel>
 
+            </Grid>
+        </Border>
 
 
         <CheckBox x:Name="chkDiagnostics"

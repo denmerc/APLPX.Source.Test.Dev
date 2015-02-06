@@ -146,6 +146,7 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Comparers\AnalyticValueDriverComparer.cs" />
     <Compile Include="Converters\MultiplierConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
@@ -258,8 +259,10 @@
     <Compile Include="Mappers\FilterMapper.cs" />
     <Compile Include="Mappers\ErrorMapper.cs" />
     <Compile Include="Mappers\IdentityMapper.cs" />
-    <Compile Include="Validation\AnalyticValidations.cs" />
+    <Compile Include="SimpleCommand.cs" />
+	<Compile Include="Validation\AnalyticValidations.cs" />
     <Compile Include="Validation\CommonValidations.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\Admin\AdminUsersViewModel.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticDriverViewModel.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticIdentityViewModel.cs" />
@@ -288,6 +291,9 @@
     <Compile Include="ViewModels\Pricing\PricingIdentityViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\WaitViewModel.cs" />
+    <Compile Include="Views\AboutBox.xaml.cs">
+      <DependentUpon>AboutBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Admin\UserAdminControl.xaml.cs">
       <DependentUpon>UserAdminControl.xaml</DependentUpon>
     </Compile>
@@ -365,6 +371,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AboutBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -621,7 +631,9 @@
   <ItemGroup>
     <Resource Include="Resources\completedStepCheck.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Pricexpert-Logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

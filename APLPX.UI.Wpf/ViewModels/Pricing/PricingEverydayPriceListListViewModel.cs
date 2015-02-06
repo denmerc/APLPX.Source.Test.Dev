@@ -9,6 +9,9 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
     public class PricingEverydayPriceListListViewModel : ViewModelBase
     {
 
+        private IDisposable _selectAllPriceListsSubscription;
+        private bool _isDisposed;
+
         #region Constructor and Initialization
 
         public PricingEverydayPriceListListViewModel(PricingEveryday priceRoutine)
@@ -29,7 +32,7 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
             var canExecute = this.WhenAnyValue(vm => vm.PriceRoutine.LinkedPriceListGroup, (val) => SelectAllPriceListsCanExecute(val));
             SelectAllPriceListsCommand = ReactiveCommand.Create(canExecute);
 
-            this.WhenAnyObservable(vm => vm.SelectAllPriceListsCommand).Subscribe(item => SelectAllPriceListsCommandExecuted(item));
+            _selectAllPriceListsSubscription = this.WhenAnyObservable(vm => vm.SelectAllPriceListsCommand).Subscribe(item => SelectAllPriceListsCommandExecuted(item));
         }
 
         #endregion
@@ -85,6 +88,28 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
             }
 
             return isSelected;
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_selectAllPriceListsSubscription != null)
+                    {
+                        _selectAllPriceListsSubscription.Dispose();
+                        _selectAllPriceListsSubscription = null;
+                    }
+                }
+                _isDisposed = true;
+            }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

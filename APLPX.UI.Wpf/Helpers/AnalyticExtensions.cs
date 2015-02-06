@@ -19,8 +19,8 @@ namespace APLPX.UI.WPF.Helpers
         /// <returns>The analytic with only the payload-relevant properties populated.</returns>
         public static Analytic ToPayload(this Analytic source)
         {
-            var payload = new Analytic { Id = source.Id , SearchGroupId = source.SearchGroupId};
-            
+            var payload = new Analytic { Id = source.Id, SearchGroupId = source.SearchGroupId };
+
             return payload;
         }
 
@@ -50,19 +50,19 @@ namespace APLPX.UI.WPF.Helpers
 
             foreach (FilterGroup filterGroup in source.FilterGroups)
             {
-                var filterGroupCopy = filterGroup.Copy();
+                FilterGroup filterGroupCopy = filterGroup.Copy();
                 copy.FilterGroups.Add(filterGroupCopy);
             }
 
             foreach (AnalyticValueDriver driver in source.ValueDrivers)
             {
-                var driverCopy = driver.Copy();
+                AnalyticValueDriver driverCopy = driver.Copy();
                 copy.ValueDrivers.Add(driverCopy);
             }
 
-            foreach (var item in source.PriceListGroups)
+            foreach (AnalyticPriceListGroup item in source.PriceListGroups)
             {
-                var priceListGroupCopy = item.Copy();
+                AnalyticPriceListGroup priceListGroupCopy = item.Copy();
                 copy.PriceListGroups.Add(priceListGroupCopy);
             }
 
@@ -71,7 +71,7 @@ namespace APLPX.UI.WPF.Helpers
             return copy;
         }
 
- 
+
         /// <summary>
         /// Creates a copy of an <see cref="AnalyticValueDriver"/>.
         /// </summary>
@@ -81,14 +81,25 @@ namespace APLPX.UI.WPF.Helpers
 
             copy.Id = source.Id;
             copy.IsSelected = source.IsSelected;
-            copy.Key = source.Key;
-            copy.SelectedMode = source.SelectedMode.Copy();
+            copy.Key = source.Key;            
             copy.Name = source.Name;
             copy.Sort = source.Sort;
+
+            foreach (AnalyticValueDriverMode mode in source.Modes)
+            {
+                copy.Modes.Add(mode.Copy());
+            }
+            if (source.SelectedMode != null)
+            {
+                copy.SelectedMode = copy.Modes.SingleOrDefault(m => m.Key == source.SelectedMode.Key);
+            }            
 
             return copy;
         }
 
+        /// <summary>
+        /// Creates a copy of an <see cref="AnalyticValueDriverMode"/>.
+        /// </summary>      
         public static AnalyticValueDriverMode Copy(this AnalyticValueDriverMode source)
         {
             var copy = new AnalyticValueDriverMode();
@@ -99,15 +110,18 @@ namespace APLPX.UI.WPF.Helpers
             copy.Sort = source.Sort;
             copy.IsSelected = source.IsSelected;
 
-            foreach (var driverGroup in source.Groups)
+            foreach (AnalyticValueDriverGroup driverGroup in source.Groups)
             {
-                var driverGroupCopy = driverGroup.Copy();
-                source.Groups.Add(driverGroupCopy);
-            }            
+                AnalyticValueDriverGroup driverGroupCopy = driverGroup.Copy();
+                copy.Groups.Add(driverGroupCopy);
+            }
 
             return copy;
         }
 
+        /// <summary>
+        ///  Creates a copy of an <see cref="AnalyticValueDriverGroup"/>.
+        /// </summary>    
         public static AnalyticValueDriverGroup Copy(this AnalyticValueDriverGroup source)
         {
             var copy = new AnalyticValueDriverGroup();
@@ -123,9 +137,7 @@ namespace APLPX.UI.WPF.Helpers
 
         /// <summary>
         /// Creates a copy of a <see cref="FilterGroup"/>.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
+        /// </summary>    
         public static FilterGroup Copy(this FilterGroup source)
         {
             var copy = new FilterGroup();
@@ -135,7 +147,7 @@ namespace APLPX.UI.WPF.Helpers
 
             foreach (Filter filter in source.Filters)
             {
-                var filterCopy = filter.Copy();
+                Filter filterCopy = filter.Copy();
                 copy.Filters.Add(filterCopy);
             }
 
@@ -165,7 +177,7 @@ namespace APLPX.UI.WPF.Helpers
         public static AnalyticPriceListGroup Copy(this AnalyticPriceListGroup source)
         {
             var copy = new AnalyticPriceListGroup();
-            
+
             copy.Key = source.Key;
             copy.Name = source.Name;
             copy.Title = source.Title;
@@ -173,7 +185,7 @@ namespace APLPX.UI.WPF.Helpers
 
             foreach (PriceList priceList in source.PriceLists)
             {
-                var priceListCopy = priceList.Copy();
+                PriceList priceListCopy = priceList.Copy();
                 copy.PriceLists.Add(priceListCopy);
             }
 
@@ -198,7 +210,7 @@ namespace APLPX.UI.WPF.Helpers
 
             return copy;
         }
- 
+
         public static string Dump(this IEnumerable<Analytic> list)
         {
             StringBuilder sb = new StringBuilder();

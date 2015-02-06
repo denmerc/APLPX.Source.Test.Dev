@@ -21,7 +21,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
         <!--
             <Grid.Background>
             <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg" Stretch="UniformToFill" />
@@ -39,12 +39,12 @@
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="Views" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding ElementName=FilterGrid,
                                   Path=Items.Count,
                                   StringFormat={}Filters ({0})}" />
@@ -56,7 +56,7 @@
                  SelectedIndex="0"
                  SelectedItem="{Binding Path=Entity.SelectedFilterGroup}"
                  SelectionChanged="FilterGroupsListBox_SelectionChanged"
-                 Style="{DynamicResource baseListBoxStyle}"
+                 Style="{StaticResource baseListBoxStyle}"
                  Background="Transparent"
                  Margin="5,0">
             <ListBox.ItemTemplate>
@@ -65,13 +65,13 @@
                            Content="{Binding Path=Name}"
                            FontSize="16"
                            IsEnabled="{Binding Path=IsEnabled}"
-                           Style="{DynamicResource DescriptionHeaderStyleLabel}"/>
+                           Style="{StaticResource DescriptionHeaderStyleLabel}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemContainerStyle>
                 <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
                     <Setter Property="Margin" Value="0,5"/>
-                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                 </Style>
 
             </ListBox.ItemContainerStyle>

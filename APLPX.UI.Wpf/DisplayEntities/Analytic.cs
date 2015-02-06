@@ -8,15 +8,15 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class Analytic : DisplayEntityBase, ISearchableEntity, IFilterContainer, IDisposable
+    public class Analytic : DisplayEntityBase, ISearchableEntity, IFilterContainer
     {
         #region Private Fields
 
         private int _id;
         private AnalyticIdentity _identity;
         private ReactiveList<AnalyticValueDriver> _valueDrivers;
-        private List<FilterGroup> _filterGroups;
-        private List<AnalyticPriceListGroup> _priceListGroups;
+        private ReactiveList<FilterGroup> _filterGroups;
+        private ReactiveList<AnalyticPriceListGroup> _priceListGroups;
         private FilterGroup _selectedFilterGroup;
         private AnalyticPriceListGroup _selectedPriceListGroup;
         private AnalyticValueDriver _selectedValueDriver;
@@ -29,6 +29,8 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private Dictionary<int, bool> _listAreDriverResultsCurrent;
 
+        private IDisposable _filterChangedListener;
+        private IDisposable _priceListChangedListener;
         private IDisposable _valueDriverChangedListener;
         private bool _isDisposed;
 
@@ -39,9 +41,15 @@ namespace APLPX.UI.WPF.DisplayEntities
         public Analytic()
         {
             Identity = new AnalyticIdentity();
-            FilterGroups = new List<FilterGroup>();
+            FilterGroups = new ReactiveList<FilterGroup>();
+            PriceListGroups = new ReactiveList<AnalyticPriceListGroup>();
             ValueDrivers = new ReactiveList<AnalyticValueDriver>();
-            PriceListGroups = new List<AnalyticPriceListGroup>();
+
+            FilterGroups.ChangeTrackingEnabled = true;
+            _filterChangedListener = FilterGroups.ItemChanged.Subscribe(fg => OnFilterChanged(fg));
+
+            PriceListGroups.ChangeTrackingEnabled = true;
+            _priceListChangedListener = PriceListGroups.ItemChanged.Subscribe(pl => OnPriceListChanged(pl));
 
             _listAreDriverResultsCurrent = new Dictionary<int, bool>();
             ValueDrivers.ChangeTrackingEnabled = true;
@@ -58,7 +66,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _id, value); }
         }
 
-        public List<FilterGroup> FilterGroups
+        public ReactiveList<FilterGroup> FilterGroups
         {
             get { return _filterGroups; }
             set { this.RaiseAndSetIfChanged(ref _filterGroups, value); }
@@ -70,7 +78,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _valueDrivers, value); }
         }
 
-        public List<AnalyticPriceListGroup> PriceListGroups
+        public ReactiveList<AnalyticPriceListGroup> PriceListGroups
         {
             get { return _priceListGroups; }
             set { this.RaiseAndSetIfChanged(ref _priceListGroups, value); }
@@ -112,7 +120,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
                     if (SelectedValueDriver != null)
                     {
-                        UpdateRunResultsProperty();
+                        SetRunResultsSelectedDriverOnly();
                         EnsureModeIsSelected(SelectedValueDriver);
                     }
                 }
@@ -160,6 +168,7 @@ namespace APLPX.UI.WPF.DisplayEntities
                 return rows;
             }
         }
+
         #endregion
 
         #region ISearchableEntity
@@ -215,6 +224,10 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Helper Methods
 
+        /// <summary>
+        /// Ensures that the SelectedMode is set for the specified ValueDriver.
+        /// This is to support expected behavior in bound views.
+        /// </summary>        
         public void EnsureModeIsSelected(AnalyticValueDriver driver)
         {
             if (driver.SelectedMode == null)
@@ -268,16 +281,43 @@ namespace APLPX.UI.WPF.DisplayEntities
             }
         }
 
-        private void UpdateRunResultsProperty()
+        private void OnFilterChanged(IReactivePropertyChangedEventArgs<FilterGroup> args)
         {
-            //Set RunResults for the selected driver.         
-            SelectedValueDriver.RunResults = true;
-
-            //Clear RunResults for the remaining drivers.
-            var unselectedDrivers = ValueDrivers.Where(item => item != SelectedValueDriver);
-            foreach (AnalyticValueDriver driver in unselectedDrivers)
+            var filter = args.Sender as FilterGroup;
+            if (filter != null)
             {
-                driver.RunResults = false;
+                filter.Validate();
+            }
+        }
+
+
+        private void OnPriceListChanged(IReactivePropertyChangedEventArgs<AnalyticPriceListGroup> args)
+        {
+            var priceListGroup = args.Sender as AnalyticPriceListGroup;
+            if (priceListGroup != null)
+            {
+                priceListGroup.Validate();
+            }
+        }
+
+        /// <summary>
+        /// Sets RunResults to true for the Selected value driver and clears it for all other value drivers.      
+        /// Explanation: this is a convenience method to support views that may "expect" this behavior,
+        /// i.e., running only one value driver at a time.
+        /// </summary>
+        public void SetRunResultsSelectedDriverOnly()
+        {
+            if (SelectedValueDriver != null)
+            {
+                //Set RunResults for the selected driver.         
+                SelectedValueDriver.RunResults = true;
+
+                //Clear RunResults for the remaining drivers.
+                var unselectedDrivers = ValueDrivers.Where(item => item != SelectedValueDriver);
+                foreach (AnalyticValueDriver driver in unselectedDrivers)
+                {
+                    driver.RunResults = false;
+                }
             }
         }
 
@@ -285,20 +325,44 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #region Overrides
 
-        public override bool Validate()
+        /// <summary>
+        /// Validates this object.
+        /// </summary>
+        /// <returns>A List containing an <see cref="Error"/> item for each validation error.</returns>
+        public override List<Error> GetValidationErrors()
         {
-            Errors.Clear();
+            var consolidatedList = new List<Error>();
 
-            var errors = FilterGroups.Validate();
-            errors.ForEach(item => Errors.Add(item));
+            if (SearchGroupId == 0)
+            {
+                consolidatedList.Add(new Error { Message = "A folder must be selected for this Analytic." });
+            }
 
-            errors = PriceListGroups.Validate();
-            errors.ForEach(item => Errors.Add(item));
+            var entityErrors = Identity.CheckIsValid();
+            foreach (Error error in entityErrors)
+            {
+                consolidatedList.Add(error);
+            }
 
-            errors = ValueDrivers.Validate();
-            errors.ForEach(item => Errors.Add(item));
+            entityErrors = FilterGroups.CheckIsValid();
+            foreach (Error error in entityErrors)
+            {
+                consolidatedList.Add(error);
+            }
 
-            return (Errors.Count == 0);
+            entityErrors = PriceListGroups.CheckIsValid();
+            foreach (Error error in entityErrors)
+            {
+                consolidatedList.Add(error);
+            }
+
+            entityErrors = ValueDrivers.CheckIsValid();
+            foreach (Error error in entityErrors)
+            {
+                consolidatedList.Add(error);
+            }
+
+            return consolidatedList;
         }
 
         public override string ToString()
@@ -316,16 +380,9 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
-
         #region IDisposable
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
             if (!_isDisposed)
             {
@@ -335,6 +392,11 @@ namespace APLPX.UI.WPF.DisplayEntities
                     {
                         _valueDriverChangedListener.Dispose();
                         _valueDriverChangedListener = null;
+                    }
+                    if (_priceListChangedListener != null)
+                    {
+                        _priceListChangedListener.Dispose();
+                        _priceListChangedListener = null;
                     }
                     foreach (IDisposable driver in ValueDrivers)
                     {
@@ -350,10 +412,12 @@ namespace APLPX.UI.WPF.DisplayEntities
                     {
                         group.Dispose();
                     }
-                  
+
                 }
                 _isDisposed = true;
             }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

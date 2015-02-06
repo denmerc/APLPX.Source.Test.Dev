@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Collections.Generic;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
@@ -11,11 +10,12 @@ namespace APLPX.UI.WPF.DisplayEntities
     public abstract class DisplayEntityBase : ReactiveObject
     {
         private bool _isDirty;
-        private ObservableCollection<Error> _errors;
+        private ReactiveList<Error> _errors;
+        private bool _isDisposed;
 
         protected DisplayEntityBase()
         {
-            Errors = new ObservableCollection<Error>();        
+            ValidationResults = new ReactiveList<Error>();
         }
 
         #region Properties
@@ -27,9 +27,9 @@ namespace APLPX.UI.WPF.DisplayEntities
         }
 
         /// <summary>
-        /// Gets the list of validation errors for this object.
+        /// Gets the list of validation results/errors for this object.
         /// </summary>
-        public ObservableCollection<Error> Errors
+        public ReactiveList<Error> ValidationResults
         {
             get { return _errors; }
             protected set { this.RaiseAndSetIfChanged(ref _errors, value); }
@@ -52,12 +52,46 @@ namespace APLPX.UI.WPF.DisplayEntities
         /// <summary>
         /// Validates this object against business rules (display-layer only).
         /// </summary>
-        /// <returns></returns>
-        public virtual bool Validate()
+        /// <returns>A list containing a populated <see cref="Error"/> object for each validation error.</returns>
+        public virtual List<Error> GetValidationErrors()
         {
-            bool result = (Errors.Count == 0);
+            var result = new List<Error>();
 
             return result;
+        }
+
+        public virtual bool Validate()
+        {
+            ValidationResults.Clear();
+
+            var errors = GetValidationErrors();
+            foreach (Error error in errors)
+            {
+                ValidationResults.Add(error);
+            }
+
+            return (errors.Count == 0);
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                }
+                _isDisposed = true;
+            }
         }
 
         #endregion

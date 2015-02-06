@@ -7,13 +7,14 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     /// <summary>
     /// View model for analytic driver-related views.
     /// </summary>
-    public class AnalyticDriverViewModel : ViewModelBase, IDisposable
+    public class AnalyticDriverViewModel : ViewModelBase
     {
         #region Private Fields
 
         private DisplayEntities.Analytic _entity;
         private IDisposable _modeChangedSubscription;
         private IDisposable _driverChangedSubscription;
+
         private bool _isDisposed;
 
         #endregion
@@ -31,18 +32,12 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
             if (entity.SelectedValueDriver != null)
             {
+                //Prepare the selected driver for the bound view.
                 entity.EnsureModeIsSelected(entity.SelectedValueDriver);
+                entity.SetRunResultsSelectedDriverOnly();
             }
 
-            InitializeCommands();
             InitializeEventHandlers();
-        }
-
-        private void InitializeCommands()
-        {
-            var canExecute = this.WhenAnyValue(vm => vm.IsValueDriverModeSelected);
-            AutoCalculateCommand = ReactiveCommand.Create(canExecute);
-            AutoCalculateCommand.Subscribe(_ => AutoCalculateCommandExecuted(_));
         }
 
         private void InitializeEventHandlers()
@@ -102,30 +97,6 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #endregion
 
-        #region Commands
-
-        /// <summary>
-        /// Command for triggering an auto-calculation of the value driver groups.
-        /// </summary>
-        public ReactiveCommand<object> AutoCalculateCommand { get; private set; }
-
-        private object AutoCalculateCommandExecuted(object parameter)
-        {
-            if (Entity != null && Entity.SelectedValueDriver != null)
-            {
-                AnalyticValueDriverMode mode = Entity.SelectedValueDriver.SelectedMode;
-                if (mode != null && mode.Groups.Count > 0)
-                {
-                    //TODO: for testing only. In production, will call server method.
-                    mode.MockAutoCalculateDriverGroups();
-                    mode.AreResultsAvailable = true;
-                }
-            }
-            return parameter;
-        }
-
-        #endregion
-
         #region Event Handlers
 
         private object OnSelectedValueDriverChanged(AnalyticValueDriver driver)
@@ -134,8 +105,6 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
             return null;
         }
-
-
 
         private object OnSelectedValueDriverModeChanged(AnalyticValueDriverMode mode)
         {
@@ -147,13 +116,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #region IDisposable
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
             if (!_isDisposed)
             {
@@ -172,6 +135,8 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                 }
                 _isDisposed = true;
             }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

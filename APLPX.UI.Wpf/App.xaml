@@ -17,16 +17,20 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+    <!--            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />   -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-               <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />    
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+    <!--            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />        -->
+    <!--            <ResourceDictionary Source="/Resources/Icons.xaml" />   -->
+                
+                
+                
+       <!--         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />        -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml"/> 
-                <ResourceDictionary Source="/Resources/Icons.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
 
             <Storyboard x:Key="sbDefaultFadeIn">
@@ -37,6 +41,8 @@
                                  To="1" />
             </Storyboard>
 
+
+         
             <!--  Application Styles  -->
 
          
@@ -48,13 +54,21 @@
                 </LinearGradientBrush.GradientStops>
             </LinearGradientBrush>
 
+            <LinearGradientBrush x:Key="Flat3DBorderBrush"
+                         StartPoint="0.499,0" EndPoint="0.501,1">
+                <GradientStop Color="#FFF" Offset="0" />
+                <GradientStop Color="#DDD" Offset="0.01" />
+                <GradientStop Color="#AAA" Offset="0.99" />
+                <GradientStop Color="#888" Offset="1" />
+            </LinearGradientBrush>
+
 
             <Style x:Key="DescriptionHeaderStyleLabel" BasedOn="{StaticResource MetroLabel}" TargetType="Label">
                 <Setter Property="FontSize"
                         Value="12" />
                 <Setter Property="HorizontalAlignment"
                         Value="Center" />
-                <Setter Property="Foreground" Value="{DynamicResource LabelTextBrush}" />
+         <!--       <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}" />    -->
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
             </Style>
@@ -65,7 +79,7 @@
                         Value="12" />
                 <Setter Property="HorizontalAlignment"
                         Value="Center" />
-                <Setter Property="Foreground" Value="{DynamicResource LabelTextBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}" />
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
             </Style>
@@ -75,10 +89,10 @@
                         Value="12" />
                 <Setter Property="HorizontalAlignment"
                         Value="Center" />
-                <Setter Property="Foreground" Value="{DynamicResource LabelTextBrush}" />
+         <!--       <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}" />    -->
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
-                <Setter Property="SelectionBrush" Value="{DynamicResource AccentColorBrush2}" />
+         <!--       <Setter Property="SelectionBrush" Value="{StaticResource AccentColorBrush2}" /> -->
             </Style>
 
 
@@ -136,8 +150,8 @@
 
             <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
                 <Setter Property="Background" Value="#FF333337" />
-                <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
-                <Setter Property="CaretBrush" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
+                <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxItemTextColor}" />
+                <Setter Property="CaretBrush" Value="{StaticResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="helpers:TextBoxHelper.SelectAllTextOnFocus" Value="True" />
                 <Setter Property="Template">
                     <Setter.Value>
@@ -155,13 +169,13 @@
 
             <Style x:Key="MainWindowHeaderTextStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="14" />
-                <Setter Property="Foreground" Value="{DynamicResource MainWindowHeaderStyleTextColor}" />
+                <Setter Property="Foreground" Value="{StaticResource MainWindowHeaderStyleTextColor}" />
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="Margin" Value="5" />
             </Style>
 
             <Style x:Key="AnalyticStepTextStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="{DynamicResource AnalyticStepTextColor}" />
+                <Setter Property="Foreground" Value="{StaticResource AnalyticStepTextColor}" />
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -175,7 +189,7 @@
             </Style>
 
             <Style x:Key="SearchControlSelectedItemDetailStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="{DynamicResource SearchControlSelectedItemDetailTextColor}" />
+                <Setter Property="Foreground" Value="{StaticResource SearchControlSelectedItemDetailTextColor}" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="Margin" Value="2,2,5,2" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
@@ -200,7 +214,7 @@
         
             
             <Style x:Key="SearchLblStyle" TargetType="{x:Type Label}">
-                <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
+                <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -208,7 +222,7 @@
 
             <Style x:Key="SearchControlTitleLabelStyle" TargetType="{x:Type Label}">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="{DynamicResource SearchControlTitleLabelTextColor}" />
+                <Setter Property="Foreground" Value="{StaticResource SearchControlTitleLabelTextColor}" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
                 <Setter Property="Height" Value="55" />
                 <Setter Property="FontSize" Value="20" />
@@ -251,158 +265,9 @@
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="TextWrapping" Value="Wrap" />
                 <Setter Property="MaxWidth" Value="800" />
+                <Setter Property="helpers:TextBoxHelper.SelectAllTextOnFocus" Value="True"/>                
             </Style>
 
-            <Style x:Key="IdentityRadioButtonStyle" BasedOn="{StaticResource MetroRadioButton}" TargetType="{x:Type RadioButton}">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Margin" Value="5" />
-
-                <Setter Property="BorderThickness"
-                Value="1" />
-        <!--        <Setter Property="Controls:ControlsHelper.FocusBorderBrush"
-                Value="{DynamicResource HighlightBrush}" />
-                <Setter Property="Controls:ControlsHelper.MouseOverBorderBrush"
-                Value="{DynamicResource CheckBoxMouseOverBrush}" /> -->
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="RadioButton">
-                            <Grid>
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal" />
-                                        <VisualState x:Name="MouseOver">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0"
-                                                         To="1"
-                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                         Storyboard.TargetName="hover" />
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="Pressed">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0"
-                                                         To="1"
-                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                         Storyboard.TargetName="pressed" />
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="Disabled">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0"
-                                                         To=".55"
-                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                         Storyboard.TargetName="contentPresenter" />
-                                                <DoubleAnimation Duration="0"
-                                                         To="1"
-                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                         Storyboard.TargetName="disabled" />
-                                            </Storyboard>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                    <VisualStateGroup x:Name="CheckStates">
-                                        <VisualState x:Name="Checked">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0"
-                                                         To="1"
-                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                         Storyboard.TargetName="Checked1" />
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="Unchecked" />
-                                        <VisualState x:Name="Indeterminate" />
-                                    </VisualStateGroup>
-                                    <VisualStateGroup x:Name="FocusStates">
-                                        <VisualState x:Name="Focused">
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0"
-                                                         To="1"
-                                                         Storyboard.TargetProperty="(UIElement.Opacity)"
-                                                         Storyboard.TargetName="focused" />
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="Unfocused" />
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="18" x:Name="LeftCol" />
-                                    <ColumnDefinition Width="*" x:Name="RightCol" />
-                                </Grid.ColumnDefinitions>
-                                <Grid x:Name="PART_CHECKBOX">
-                                    <Rectangle Fill="{DynamicResource TransparentWhiteBrush}"
-                                       Margin="-6,0" />
-                                    <Ellipse x:Name="normal"
-                                     Opacity="1"
-                                     Stroke="{DynamicResource CheckBoxBrush}"
-                                     StrokeThickness="1"
-                                     Fill="{DynamicResource WhiteBrush}"
-                                     Width="18"
-                                     Height="18" />
-                                    <Ellipse x:Name="hover"
-                                     Stroke="{DynamicResource SemiTransparentWhiteBrush}"
-                                     StrokeThickness="1"
-                                     Opacity="0"
-                                     Width="18"
-                                     Height="18" /> 
-                                    <Ellipse x:Name="pressed"
-                                     Opacity="0"
-                                     Stroke="{DynamicResource AccentColorBrush1}"
-                                     StrokeThickness="1"
-                                     Fill="{DynamicResource WhiteBrush}"
-                                     Width="18"
-                                     Height="18" />
-                                    <Ellipse x:Name="focused"
-                                     Opacity="0"
-                                     Stroke="White"
-                                     StrokeThickness="1"
-                                     Fill="{DynamicResource WhiteBrush}"
-                                     Width="18"
-                                     Height="18" />     
-                                    <Ellipse x:Name="Checked1"
-                                     Fill="{DynamicResource AccentColorBrush2}"
-                                     Opacity="0"
-                                     Width="10"
-                                     Height="10" />
-                                    <Ellipse x:Name="disabled"
-                                     Opacity="0"
-                                     StrokeThickness="1"
-                                     Fill="{DynamicResource SemiTransparentWhiteBrush}"
-                                     Width="18"
-                                     Height="18" />
-                                </Grid>
-                                <ContentPresenter x:Name="contentPresenter"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          Content="{TemplateBinding Content}"
-                                          Grid.Column="1"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="{TemplateBinding Padding}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            </Grid>
-                            <!--     <ControlTemplate.Triggers>
-                                <Trigger Property="Controls:ToggleButtonHelper.ContentDirection"
-                                 Value="RightToLeft">   
-                                    <Setter Property="Padding"
-                                    Value="0,0,6,0" />
-                                    <Setter TargetName="LeftCol"
-                                    Property="Width"
-                                    Value="*" />
-                                    <Setter TargetName="RightCol"
-                                    Property="Width"
-                                    Value="18" />
-                                    <Setter TargetName="PART_CHECKBOX"
-                                    Property="Grid.Column"
-                                    Value="1" />
-                                    <Setter TargetName="contentPresenter"
-                                    Property="Grid.Column"
-                                    Value="0" />
-                                </Trigger>
-                            </ControlTemplate.Triggers> -->
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
- 
 
 
             <Style x:Key="commandButtonStyle" TargetType="{x:Type Button}">
@@ -476,7 +341,7 @@
                         <Setter Property="Margin" Value="15,0,0,0" />
                         <Setter Property="Background" Value="#FF333337" />
                         <Setter Property="Margin" Value="0,2" />
-                        <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
+                        <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxItemTextColor}" />
                         <Setter Property="FontSize" Value="15" />
                         <Setter Property="FontFamily" Value="SegoeUI" />
                         <Setter Property="MaxWidth" Value="300" />
@@ -498,7 +363,7 @@
                     <DataTrigger Binding="{Binding Path=HasSubGroups}" Value="True">
                         <Setter Property="FontSize" Value="17" />
                         <Setter Property="IsEnabled" Value="False" />
-                        <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxTitleTextColor}" />
+                        <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxTitleTextColor}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -514,7 +379,7 @@
                 </Style.Resources>
                 <Setter Property="Background" Value="#FF333337" />
                 <Setter Property="Margin" Value="0,2" />
-                <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
+                <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="Width" Value="300" />
@@ -565,11 +430,11 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter TargetName="Border" Property="Background"
-                                            Value="{DynamicResource HighlightBrush}"/>
+                                            Value="{StaticResource HighlightBrush}"/>
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="Border" Property="Background"
-                                            Value="{DynamicResource HighlightBrush}"/>
+                                            Value="{StaticResource HighlightBrush}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -678,8 +543,8 @@
             
             <!--
             <Style x:Key="ListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
-                <Setter Property="Background" Value="{DynamicResource Buttongradient}" />
-                <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
+                <Setter Property="Background" Value="{StaticResource Buttongradient}" />
+                <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
                 <Setter Property="Height" Value="30" />
@@ -701,12 +566,12 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
  
-                                    <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
+                                    <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxItemTextColor}" />
                                 </Trigger>
 
                                 <Trigger Property="IsSelected" Value="True">
                 
-                                    <Setter Property="Foreground" Value="{DynamicResource SearchControlListBoxItemTextColor}" />
+                                    <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxItemTextColor}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

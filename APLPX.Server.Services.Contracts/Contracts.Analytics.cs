@@ -24,8 +24,6 @@ namespace APLPX.Server.Services.Contracts
         [OperationContract]
         Session<Entity.Analytic> SaveDrivers(Session<Entity.Analytic> session);
         [OperationContract]
-        Session<Entity.Analytic> RunDrivers(Session<Entity.Analytic> session);
-        [OperationContract]
         Session<Entity.Analytic> LoadPriceLists(Session<Entity.Analytic> session);
         [OperationContract]
         Session<Entity.Analytic> SavePriceLists(Session<Entity.Analytic> session);

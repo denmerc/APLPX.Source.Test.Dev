@@ -19,7 +19,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
+    <Grid x:Name="layoutRoot" Background="{StaticResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -46,20 +46,20 @@
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
                        Margin="15,5"
-                       Style="{DynamicResource ListTitleTextStyle}"
+                       Style="{StaticResource ListTitleTextStyle}"
                        Text="Key Value Driver" />
             <RadioButton x:Name="rdoList"
                          Margin="5"
                          Content="List"
                          IsChecked="True"
                          Visibility="Collapsed" 
-                         Style="{DynamicResource IdentityRadioButtonStyle}"/>
+                         Style="{StaticResource MetroRadioButton}"/>
             <RadioButton x:Name="rdoCombo"
                          Margin="5"
                          Content="Combo"
                          IsChecked="False"
                          Visibility="Collapsed"
-                         Style="{DynamicResource IdentityRadioButtonStyle}"/>
+                         Style="{StaticResource MetroRadioButton}"/>
         </StackPanel>
 
         <ListBox x:Name="lstKeyDrivers"
@@ -71,7 +71,7 @@
                  Visibility="{Binding ElementName=rdoList,
                                       Path=IsChecked,
                                       Converter={StaticResource BooleanToVisibilityConverter}}"
-                 Style="{DynamicResource baseListBoxStyle}"
+                 Style="{StaticResource baseListBoxStyle}"
                  Background="Transparent"
                  Margin="5,0">
             <ListBox.ItemTemplate>
@@ -92,7 +92,7 @@
 
                         <Label x:Name="txtName"
                                 FontSize="16"
-                                   Style="{DynamicResource DescriptionHeaderStyleLabel}"
+                                   Style="{StaticResource DescriptionHeaderStyleLabel}"
                                    Content="{Binding Path=Name}" 
                                    VerticalAlignment="Center"/>
                     </DockPanel>
@@ -101,7 +101,7 @@
             <ListBox.ItemContainerStyle>
                 <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
                     <Setter Property="Margin" Value="0,5"/>
-                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                     <Setter Property="VerticalAlignment" Value="Center" />
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                 </Style>
@@ -118,7 +118,7 @@
                   Visibility="{Binding ElementName=rdoCombo,
                                        Path=IsChecked,
                                        Converter={StaticResource BooleanToVisibilityConverter}}"
-                  Style="{DynamicResource MetroComboBox}">
+                  Style="{StaticResource MetroComboBox}">
   
 
             <ComboBox.ItemTemplate>
@@ -140,7 +140,7 @@
 
                         <TextBlock x:Name="txtName"
                                    DockPanel.Dock="Left"
-                                   Style="{DynamicResource ListTitleTextStyle}"
+                                   Style="{StaticResource ListTitleTextStyle}"
                                    Text="{Binding Path=Name}" />
                     </DockPanel>
                 </DataTemplate>
@@ -150,7 +150,7 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
                    Margin="10,5"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding Path=PriceRoutine.SelectedValueDriver.Name,
                                   StringFormat={}{0} - Groups}" />
 
@@ -159,13 +159,13 @@
                  Grid.Column="1"
                  ItemsSource="{Binding Path=PriceRoutine.KeyValueDriver.Groups}"
                  SelectedItem="{Binding Path=PriceRoutine.KeyValueDriver.SelectedGroup}"
-                 Style="{DynamicResource baseListBoxStyle}"
+                 Style="{StaticResource baseListBoxStyle}"
                  Background="Transparent">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Width="125"
                                 FontSize="16"
-                               Style="{DynamicResource DescriptionHeaderStyleLabel}"
+                               Style="{StaticResource DescriptionHeaderStyleLabel}"
                                Content="{Binding Path=ValueDriverGroupValue}"
                                 HorizontalContentAlignment="Center"/>
                 </DataTemplate>
@@ -173,7 +173,7 @@
             <ListBox.ItemContainerStyle>
                 <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
                     <Setter Property="Margin" Value="0,5"/>
-                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                 </Style>
 
             </ListBox.ItemContainerStyle>
@@ -182,7 +182,7 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="2"
                    Margin="10,5"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyGroups,
                                   Path=SelectedItem.ValueDriverGroupValue,
                                   StringFormat=Group {0} - Optimization Rules}" />
@@ -198,13 +198,13 @@
                   SelectedIndex="0">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=DollarRangeLower}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Min $ Value" />
                 <DataGridTextColumn Binding="{Binding Path=DollarRangeUpper}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Max $ Value" />
                 <DataGridTextColumn Binding="{Binding Path=PercentChange}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header=" Opt %" />
             </DataGrid.Columns>
         </DataGrid>
@@ -212,7 +212,7 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="3"
                    Margin="10,5"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyGroups,
                                   Path=SelectedItem.ValueDriverGroupValue,
                                   StringFormat=Group {0} - Markup Rules}" />
@@ -227,16 +227,16 @@
                   VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=DollarRangeLower}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="$ Lower" />
                 <DataGridTextColumn Binding="{Binding Path=DollarRangeUpper}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="$ Upper" />
                 <DataGridTextColumn Binding="{Binding Path=PercentLimitLower}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="% Lower" />
                 <DataGridTextColumn Binding="{Binding Path=PercentLimitUpper}"
-                                    ElementStyle="{DynamicResource StandardDataGridNumericalCellStyle}"
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="% Upper" />
             </DataGrid.Columns>
         </DataGrid>
@@ -245,7 +245,7 @@
 
         <TextBlock Grid.Row="3"
                    Grid.Column="0"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding Path=PriceRoutine.LinkedValueDrivers.Count,
                                   StringFormat=Influencer Drivers ({0} selected)}" 
                    Margin="10,0,0,0"/>
@@ -255,7 +255,7 @@
                  Grid.Column="0"
                  ItemsSource="{Binding Path=PriceRoutine.NonKeyValueDriversCache}"
                  SelectedIndex="0"
-                 Style="{DynamicResource baseListBoxStyle}"
+                 Style="{StaticResource baseListBoxStyle}"
                  Background="Transparent"
                  Margin="5,0">
             <ListBox.ItemTemplate>
@@ -268,7 +268,7 @@
 
                         <Label x:Name="txtName"
                                FontSize="16"
-                                   Style="{DynamicResource DescriptionHeaderStyleLabel}"
+                                   Style="{StaticResource DescriptionHeaderStyleLabel}"
                                    Content="{Binding Path=Name}" 
                                    VerticalAlignment="Center"/>
                     </DockPanel>
@@ -277,7 +277,7 @@
             <ListBox.ItemContainerStyle>
                 <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
                     <Setter Property="Margin" Value="0,5"/>
-                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                 </Style>
 
@@ -287,7 +287,7 @@
         <!--
             <TextBlock Grid.Row="3"
             Grid.Column="1"
-            Style="{DynamicResource ListTitleTextStyle}"
+            Style="{StaticResource ListTitleTextStyle}"
             Text="{Binding Path=PriceRoutine.LinkedValueDrivers.Count,
             StringFormat=Influencer Drivers ({0})}"
             Visibility="{Binding ElementName=lstLinkedDrivers,
@@ -303,7 +303,7 @@
             <DataTemplate>
             <StackPanel MinHeight="35" Orientation="Horizontal">
             <TextBlock x:Name="txtName"
-            Style="{DynamicResource ListItemTextStyle}"
+            Style="{StaticResource ListItemTextStyle}"
             Text="{Binding Path=Name}"
             ToolTip="{Binding Path=ValueDriverId}" />
             </StackPanel>
@@ -314,7 +314,7 @@
 
         <TextBlock Grid.Row="3"
                    Grid.Column="1"
-                   Style="{DynamicResource ListTitleTextStyle}"
+                   Style="{StaticResource ListTitleTextStyle}"
                    Text="{Binding ElementName=lstNonKeyDrivers,
                                   Path=SelectedItem.Name,
                                   StringFormat={}{0} - Groups}" />
@@ -324,19 +324,19 @@
                  Grid.Column="1"
                  ItemsSource="{Binding ElementName=lstNonKeyDrivers,
                                        Path=SelectedItem.LinkedDriver.Groups}"
-                 Style="{DynamicResource baseListBoxStyle}"
+                 Style="{StaticResource baseListBoxStyle}"
                  Background="Transparent"
                  HorizontalAlignment="Center">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel Width="150" LastChildFill="True">
                         <TextBlock DockPanel.Dock="Right"
-                                   Style="{DynamicResource DescriptionHeaderStyleTextBlock}"
+                                   Style="{StaticResource DescriptionHeaderStyleTextBlock}"
                                    Text="{Binding Path=PercentChange,
                                                   StringFormat=% Change: {0}}" />
                         <TextBlock x:Name="txtGroupId"
                                    DockPanel.Dock="Left"
-                                   Style="{DynamicResource DescriptionHeaderStyleTextBlock}"
+                                   Style="{StaticResource DescriptionHeaderStyleTextBlock}"
                                    Text="{Binding Path=ValueDriverGroupValue}" 
                                    HorizontalAlignment="Left"/>
                     </DockPanel>
@@ -345,7 +345,7 @@
             <ListBox.ItemContainerStyle>
                 <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem" >
                     <Setter Property="Margin" Value="0,5"/>
-                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
+                    <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                 </Style>
 
             </ListBox.ItemContainerStyle>
@@ -367,7 +367,7 @@
             <TextBlock Grid.Row="6"
             Grid.Column="0"
             Margin="10,5"
-            Style="{DynamicResource ListTitleTextStyle}"
+            Style="{StaticResource ListTitleTextStyle}"
             Text="{Binding ElementName=lstDriverContainer,
             Path=Items.Count,
             StringFormat=Value Drivers ({0})}"
@@ -416,7 +416,7 @@
             </CheckBox>
             
             <TextBlock x:Name="txtName"
-            Style="{DynamicResource ListItemTextStyle}"
+            Style="{StaticResource ListItemTextStyle}"
             Text="{Binding Path=BaseDriver.Name}"
             ToolTip="{Binding Path=Id}" />
             

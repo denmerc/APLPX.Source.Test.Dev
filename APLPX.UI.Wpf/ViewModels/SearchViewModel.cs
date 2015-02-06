@@ -11,6 +11,10 @@ namespace APLPX.UI.WPF.ViewModels
     /// </summary>
     public class SearchViewModel : ViewModelBase
     {
+        private IDisposable _selectedEntityChangedSubscription;
+        private IDisposable _selectedGroupChangedSubscription;
+        private bool _isDisposed;
+
         #region Constructor and Initialization
 
         public SearchViewModel(ModuleFeature feature)
@@ -31,10 +35,10 @@ namespace APLPX.UI.WPF.ViewModels
         private void InitializeEventHandlers()
         {
             var selectedSearchGroupChanged = this.WhenAnyValue(vm => vm.SelectedFeature.SelectedSearchGroup);
-            selectedSearchGroupChanged.Subscribe(m => OnSelectedSearchGroupChanged(m));
+            _selectedGroupChangedSubscription = selectedSearchGroupChanged.Subscribe(m => OnSelectedSearchGroupChanged(m));
 
             var selectedEntityChanged = this.WhenAnyValue(vm => vm.SelectedFeature.SelectedEntity);
-            selectedEntityChanged.Subscribe(m => OnSelectedEntityChanged(m));
+            _selectedEntityChangedSubscription = selectedEntityChanged.Subscribe(m => OnSelectedEntityChanged(m));
         }
 
         #endregion
@@ -112,6 +116,34 @@ namespace APLPX.UI.WPF.ViewModels
                 EventAggregator notifier = ((EventAggregator)App.Current.Resources["EventManager"]);
                 notifier.Publish(parentGroup);
             }
+        }
+
+        #endregion
+
+
+        #region IDisposable
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                    if (_selectedGroupChangedSubscription != null)
+                    {
+                        _selectedGroupChangedSubscription.Dispose();
+                        _selectedGroupChangedSubscription = null;
+                    }
+                    if (_selectedEntityChangedSubscription != null)
+                    {
+                        _selectedEntityChangedSubscription.Dispose();
+                        _selectedEntityChangedSubscription = null;
+                    }
+                }
+                _isDisposed = true;
+            }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

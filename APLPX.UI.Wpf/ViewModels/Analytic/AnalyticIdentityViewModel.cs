@@ -12,7 +12,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     /// <summary>
     /// View model for analytic identity-related views.
     /// </summary>
-    public class AnalyticIdentityViewModel : ViewModelBase, IDisposable
+    public class AnalyticIdentityViewModel : ViewModelBase
     {
         #region Private Fields
 
@@ -71,13 +71,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #region IDisposable
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
             if (!_isDisposed)
             {
@@ -91,6 +85,8 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                 }
                 _isDisposed = true;
             }
+
+            base.Dispose(isDisposing);
         }
 
         #endregion

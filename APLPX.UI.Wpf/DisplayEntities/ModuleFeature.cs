@@ -373,6 +373,14 @@ namespace APLPX.UI.WPF.DisplayEntities
             SetRemainingStepsEnabled(true);
         }
 
+        public void SetAllStepsCompleted(bool isCompleted)
+        {
+            foreach (var step in Steps)
+            {
+                step.IsCompleted = isCompleted;
+            }
+        }
+
         public void SetAllStepsEnabled(bool isEnabled)
         {
             foreach (var step in Steps)
@@ -385,7 +393,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             if (SelectedStep != null)
             {
-                var steps = Steps.Where(step => step.TypeId != SelectedStep.TypeId).OrderBy(step => step.Sort);
+                var steps = Steps.Where(step => step.Sort > SelectedStep.Sort);
                 foreach (var step in steps)
                 {
                     step.IsEnabled = isEnabled;

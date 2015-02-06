@@ -11,7 +11,7 @@ using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.ViewModels
 {
-    public abstract class ViewModelBase : ReactiveObject
+    public abstract class ViewModelBase : ReactiveObject, IDisposable
     {
         #region Private Fields
 
@@ -26,6 +26,7 @@ namespace APLPX.UI.WPF.ViewModels
         //private UserDisplayServices _userDisplayServices;
         private bool _isDebugMode;
         private bool _areDiagnosticsVisible;
+        private bool _isDisposed;
 
         #endregion
 
@@ -149,5 +150,32 @@ namespace APLPX.UI.WPF.ViewModels
 
             return result;
         }
+
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (!_isDisposed)
+            {
+                if (isDisposing)
+                {
+                }
+                _isDisposed = true;
+            }
+        }
+
+        ~ViewModelBase()
+        {
+            Dispose(false);
+        }
+
+        #endregion
     }
 }

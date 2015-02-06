@@ -10,7 +10,7 @@
                       BorderThickness="1"
                       
                       >
-    <controls:MetroWindow.Resources>
+    <Window.Resources>
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
@@ -19,7 +19,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />   
+      <!--          <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />   -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml"/>  
@@ -27,7 +27,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         
-    </controls:MetroWindow.Resources>
+    </Window.Resources>
     <Grid HorizontalAlignment="Center" Margin="25">
         <Grid.ColumnDefinitions>
             
@@ -89,7 +89,8 @@
                         FontSize="20"
                         Command="{Binding LoginCommand}" 
                         HorizontalAlignment="Right"
-                        Style="{DynamicResource MetroCircleButtonStyle}"
+                        
+                         Style="{StaticResource MetroCircleButtonStyle}"
                     >
 
                 <Rectangle Width="20"
@@ -97,7 +98,7 @@
                                Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill"
-                                         Visual="{DynamicResource appbar_arrow_right}" />
+                                         Visual="{StaticResource appbar_arrow_right}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
 

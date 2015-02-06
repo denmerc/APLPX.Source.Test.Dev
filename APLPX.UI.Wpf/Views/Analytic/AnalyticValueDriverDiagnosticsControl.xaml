@@ -117,12 +117,6 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="txtTitleModes"
-                   Grid.Row="1"
-                   Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
-                   Text="Value Driver Modes" />
-
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
@@ -137,6 +131,12 @@
                        Text="{Binding Path=Entity.SelectedValueDriver.Key,
                                       StringFormat=(Key: {0})}" />
         </StackPanel>
+
+        <TextBlock x:Name="txtTitleModes"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   Style="{StaticResource ListTitleTextStyle}"
+                   Text="Value Driver Modes and Groups" />
 
         <DataGrid x:Name="dgDriverModes"
                   Grid.Row="2"

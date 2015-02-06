@@ -140,7 +140,8 @@
                           GridLinesVisibility="Horizontal"
                           HorizontalGridLinesBrush="White"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          MaxHeight="650"   BorderBrush="White" BorderThickness="1" Tag="False">
+                          MaxHeight="650"   BorderBrush="White" BorderThickness="1" Tag="False"
+                          Style="{StaticResource MetroDataGrid}">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn" >
                             <DataGridTemplateColumn.CellTemplate>

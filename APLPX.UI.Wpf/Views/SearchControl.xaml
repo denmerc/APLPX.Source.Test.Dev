@@ -14,7 +14,7 @@
              mc:Ignorable="d">
 
 
-    <Grid x:Name="LayoutRoot" Background="{DynamicResource WhiteBrush}" >
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -45,7 +45,7 @@
         <Border Grid.Column="1"
                 Width="625"
                 Opacity="1"
-                Background="{StaticResource GrayBrush2}"
+                Background="{DynamicResource GrayBrush2}"
                 BorderThickness="1"
                 CornerRadius="10"
                 Height="405"
@@ -62,15 +62,14 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
             <Label Width="525"
-                   HorizontalAlignment="Center" 
                    HorizontalContentAlignment="Center"
                 Grid.Row="0"
                FontSize="20"
                FontWeight="Bold"
-               Style="{StaticResource DescriptionHeaderStyleLabel}" 
+               Style="{StaticResource BaseStyleLabel}" 
                    Margin="5,10,0,5">
                 <Label.Content>
-                    <AccessText Text="{Binding Path=SelectedFeature.SelectedEntity.Identity.Name, StringFormat='Details: {0}'}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" Foreground="White"/>
+                    <AccessText Text="{Binding Path=SelectedFeature.SelectedEntity.Identity.Name, StringFormat='Details: {0}'}" TextTrimming="CharacterEllipsis" HorizontalAlignment="Center" />
                 </Label.Content>
             </Label>
 
@@ -81,8 +80,7 @@
                        Margin="10,0"/>
 
                 <Border Margin="15"
-                    Background="{StaticResource WhiteBrush}"
-                    BorderBrush="{StaticResource SearchControlSelectedItemDetailBackgroundColor}"
+                    Background="{DynamicResource WhiteBrush}"
                     BorderThickness="1"
                     CornerRadius="5"
                     Grid.Row="2">
@@ -91,9 +89,9 @@
                       Margin="10,5"
                       DataContext="{Binding Path=SelectedFeature.SelectedEntity}" >
                     <Grid.Resources>
-                        <Style BasedOn="{StaticResource DescriptionHeaderStyleTextBlock}" TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Left" />
-                        </Style>
+                        <Style BasedOn="{StaticResource BaseStyleTextBlock}" TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                            </Style>
                     </Grid.Resources>
 
                     <Grid.RowDefinitions>
@@ -186,13 +184,11 @@
                                Grid.Column="0"
                                Text="Created:" 
                                Padding="0,5"/>
-                    <TextBlock Grid.Row="7"
+                        <TextBlock Grid.Row="7"
                                Grid.Column="1"
                                Text="{Binding Path=Identity.Created}" 
                                Padding="10,5"/>
-
-
-                    <TextBlock Grid.Row="8"
+                        <TextBlock Grid.Row="8"
                                Grid.Column="0"
                                Text="Author:" 
                                Padding="0,5"/>

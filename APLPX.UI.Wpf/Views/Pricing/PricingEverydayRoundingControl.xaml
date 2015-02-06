@@ -14,7 +14,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="layoutRoot" Background="{StaticResource MainWindowBackground}">
+    <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -32,14 +32,14 @@
         <TextBlock x:Name="txtKeyPriceListsTitle"
                    Grid.Row="0"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyPriceLists,
                                   Path=Items.Count,
                                   StringFormat=Price Lists ({0})}" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="{Binding ElementName=lstKeyPriceLists,
                                   Path=SelectedItem.Name,
                                   StringFormat={}{0} - Rounding Rules}" />
@@ -66,12 +66,10 @@
                                Visibility="{Binding Path=IsKey,
                                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <Label Margin="5"
-                               FontSize="16"
                                VerticalAlignment="Center"
-                               Foreground="{StaticResource Foreground}"
                                Content="{Binding Path=Name}"
                                ToolTip="{Binding Path=Title}" 
-                               Style="{StaticResource DescriptionHeaderStyleLabel}"/>
+                               Style="{StaticResource ButtonStyleLabel}"/>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -122,7 +120,7 @@
 
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="Select A Template" />
 
             <ListBox x:Name="lstRoundingTemplates"
@@ -136,10 +134,9 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Label x:Name="txtName"
-                                FontSize="16"
                                    Content="{Binding Path=Name}"
                                    ToolTip="{Binding Path=Description}" 
-                               Style="{StaticResource DescriptionHeaderStyleLabel}"/>
+                               Style="{StaticResource ButtonStyleLabel}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
@@ -154,7 +151,7 @@
 
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="{Binding ElementName=lstRoundingTemplates,
                                       Path=SelectedItem.Name,
                                       StringFormat={}{0} - Rounding Rules}" />

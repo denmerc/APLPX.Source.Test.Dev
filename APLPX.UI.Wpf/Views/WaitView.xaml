@@ -15,21 +15,21 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     </UserControl.Resources>
-    <Grid Background="{StaticResource MainWindowBackground}">
+    <Grid Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="{Binding Path=StatusMessage}" />
+        <TextBlock Grid.Row="0" Text="{Binding Path=StatusMessage}" Style="{StaticResource BaseStyleTextBlock}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
 
         <controls:ProgressRing x:Name="progressRing"
                                Grid.Row="1"
                                HorizontalAlignment="Center"
                                IsActive="{Binding Path=IsIndicatorVisible}" />
 
-        <TextBlock Grid.Row="2" Text="Working..." />
+        <TextBlock Grid.Row="2" Text="Working..." Style="{StaticResource BaseStyleTextBlock}"  FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
 
     </Grid>
 </UserControl>

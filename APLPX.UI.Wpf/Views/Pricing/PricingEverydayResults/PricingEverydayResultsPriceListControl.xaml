@@ -38,7 +38,7 @@
 
 
 
-    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <!--
             <Grid.Background>
             <ImageBrush ImageSource="/APLPX.UI.WPF;component/Resources/bodyBackground.jpg" Stretch="UniformToFill" />
@@ -159,7 +159,8 @@
                           GridLinesVisibility="Horizontal"
                           HorizontalGridLinesBrush="White"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
-                          MaxHeight="650"  BorderBrush="White" BorderThickness="1">
+                          MaxHeight="650"  BorderBrush="White" BorderThickness="1"
+                              Style="{StaticResource MetroDataGrid}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="SKU #" x:Name="skuColumn" >
                                 <DataGridTemplateColumn.CellTemplate>
@@ -373,7 +374,7 @@
         <StackPanel Grid.Row="0" Grid.Column="0">
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="Select Price Lists" />
 
             <!-- PREVIOUS LISTBOX REMOVED FOR DEMO 
@@ -435,11 +436,10 @@
                                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                             <Label Margin="5"
-                                       FontSize="16"
                                    VerticalAlignment="Center"
                                    Content="Retail List Price"
                                    ToolTip="{Binding Path=Title}" 
-                                       Style="{StaticResource DescriptionHeaderStyleLabel}"/>
+                                       Style="{StaticResource ButtonStyleLabel}"/>
 
                         </DockPanel>
                     </ListBoxItem>

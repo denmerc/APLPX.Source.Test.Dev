@@ -45,7 +45,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -65,19 +65,19 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Margin="10,5,0,5"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="Value Drivers" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="1"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="Modes"
                    Visibility="Collapsed" />
 
         <TextBlock Grid.Row="0"
                    Grid.Column="2"
                    Margin="10,5,0,5"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="Driver Groups"
                    Visibility="{Binding Path=IsValueDriverSelected,
                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -175,13 +175,12 @@
                         Orientation="Horizontal"
                         Visibility="{Binding Path=IsValueDriverModeSelected,
                                              Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Label Content="No. of Groups:"
-                       FontSize="16" />
+                <Label Content="No. of Groups:" FontSize="16" />
 
                 <controls:NumericUpDown x:Name="GroupCountUpDown"
                                         Margin="5"
                                         HorizontalAlignment="Left"
-                                        IsReadOnly="True"
+                                        IsReadOnly="False"
                                         Maximum="15"
                                         Minimum="1"
                                         Value="{Binding Path=Entity.SelectedValueDriver.SelectedMode.GroupCount}" />
@@ -195,7 +194,7 @@
                            Visibility="{Binding Path=Entity.SelectedValueDriver.AreResultsCurrent,
                                                 Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
             </StackPanel>
-        </Grid>        
+        </Grid>
 
         <!--
             Auxiliary element required to forward DataContext to a DataGridColumn (which is not in the main visual tree).
@@ -217,7 +216,8 @@
                   CanUserSortColumns="False"
                   ItemsSource="{Binding Path=Entity.SelectedValueDriver.SelectedMode.Groups}"
                   Visibility="{Binding Path=IsValueDriverModeSelected,
-                                       Converter={StaticResource BooleanToVisibilityConverter}}">
+                                       Converter={StaticResource BooleanToVisibilityConverter}}"
+                  Style="{StaticResource MetroDataGrid}">
             <DataGrid.Resources>
                 <Style x:Key="GroupMinCellStyle" TargetType="DataGridCell">
                     <Setter Property="VerticalAlignment" Value="Center" />
@@ -252,13 +252,15 @@
                                     IsReadOnly="True" />
 
                 <DataGridTextColumn x:Name="colLower"
-                                    Binding="{Binding Path=MinOutlier,StringFormat={}{0:N0}}"
+                                    Binding="{Binding Path=MinOutlier,
+                                                      StringFormat={}{0:N0}}"
                                     CellStyle="{StaticResource GroupMinCellStyle}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Lower Limit" />
 
                 <DataGridTextColumn x:Name="colUpper"
-                                    Binding="{Binding Path=MaxOutlier,StringFormat={}{0:N0}}"
+                                    Binding="{Binding Path=MaxOutlier,
+                                                      StringFormat={}{0:N0}}"
                                     CellStyle="{StaticResource GroupMaxCellStyle}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Upper Limit" />
@@ -270,9 +272,10 @@
                     Converter={StaticResource BooleanToVisibilityConverter}}"
                 -->
 
-                <DataGridTextColumn Binding="{Binding Path=Results.SkuCount,StringFormat={}{0:N0}}"
-                                    Header="Sku Count"
+                <DataGridTextColumn Binding="{Binding Path=Results.SkuCount,
+                                                      StringFormat={}{0:N0}}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                    Header="Sku Count"
                                     IsReadOnly="True" />
 
                 <DataGridTextColumn Binding="{Binding Path=Results.SalesValue}"
@@ -280,12 +283,14 @@
                                     Header="Sales Value"
                                     IsReadOnly="True" />
 
-                <DataGridTextColumn Binding="{Binding Path=Results.MinOutlier,StringFormat={}{0:N0}}"
+                <DataGridTextColumn Binding="{Binding Path=Results.MinOutlier,
+                                                      StringFormat={}{0:N0}}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Actual Lower"
                                     IsReadOnly="True" />
 
-                <DataGridTextColumn Binding="{Binding Path=Results.MaxOutlier,StringFormat={}{0:N0}}"
+                <DataGridTextColumn Binding="{Binding Path=Results.MaxOutlier,
+                                                      StringFormat={}{0:N0}}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Actual Upper"
                                     IsReadOnly="True" />

@@ -29,7 +29,8 @@
                   ItemsSource="{Binding}"
                   PreviewKeyDown="dgRoundingRules_PreviewKeyDown"
                   RowHeaderWidth="15"
-                  SelectionMode="Single">
+                  SelectionMode="Single"
+                  Style="{StaticResource MetroDataGrid}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="colDollarRangeLower"

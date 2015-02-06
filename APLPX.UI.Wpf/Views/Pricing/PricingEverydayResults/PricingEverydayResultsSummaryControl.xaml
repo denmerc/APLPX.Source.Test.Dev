@@ -33,7 +33,7 @@
         <Grid x:Name="SelectedItemDetailGrid"
               Margin="10,5,10,5">
             <Grid.Resources>
-                <Style BasedOn="{StaticResource SearchControlSelectedItemDetailStyle}" TargetType="{x:Type TextBlock}" />
+                <Style BasedOn="{StaticResource BaseStyleTextBlock}" TargetType="{x:Type TextBlock}" />
             </Grid.Resources>
 
 

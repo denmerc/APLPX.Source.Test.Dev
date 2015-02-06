@@ -34,7 +34,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -43,7 +43,7 @@
 
         <TextBlock x:Name="txtTitle"
                    Grid.Row="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="Value Driver Results" />
 
         <StackPanel x:Name="RunResultsPanel"
@@ -51,7 +51,7 @@
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <TextBlock x:Name="txtRerunCount"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="{Binding Path=DriversToRunCount,
                                       StringFormat={}Drivers to Include in Next Run: ({0} selected)}" />
             <CheckBox x:Name="chkSelectAll"
@@ -71,7 +71,8 @@
                   HorizontalScrollBarVisibility="Auto"
                   IsReadOnly="True"
                   ItemsSource="{Binding Source={StaticResource cvsResults}}"
-                  VerticalScrollBarVisibility="Auto">
+                  VerticalScrollBarVisibility="Auto"
+                  Style="{StaticResource MetroDataGrid}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Result.Value}"
                                     ElementStyle="{StaticResource DataGridElementCenteredStyle}"

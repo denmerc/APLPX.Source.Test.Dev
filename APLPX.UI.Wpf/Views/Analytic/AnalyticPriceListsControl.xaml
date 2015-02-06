@@ -31,7 +31,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="layoutRoot" Background="{StaticResource MainWindowBackground}">
+    <Grid x:Name="layoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -47,7 +47,7 @@
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="Price List Groups"
                    Visibility="{Binding Path=ShowPriceListGroups,
                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -71,14 +71,14 @@
         <StackPanel Grid.Row="0" Grid.Column="1">
             <TextBlock x:Name="txtCount"
                        Margin="0,5,0,0"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="{Binding ElementName=dgPriceLists,
                                       Path=Items.Count,
                                       StringFormat={}Price Lists ({0})}" />
 
             <TextBlock x:Name="txtSelectedCount"
                        Margin="5,5,5,10"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="{Binding Path=Entity.SelectedPriceListGroup.SelectedCount,
                                       StringFormat={}Included: {0}}" />
         </StackPanel>
@@ -90,7 +90,10 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
-                  ItemsSource="{Binding Path=Entity.SelectedPriceListGroup.PriceLists}">
+                  CanUserSortColumns="False"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding Path=Entity.SelectedPriceListGroup.PriceLists}"
+                  Style="{StaticResource MetroDataGrid}">
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected,
@@ -113,10 +116,6 @@
                 </DataGridCheckBoxColumn>
 
                 <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
-
-                <DataGridTextColumn Binding="{Binding Path=Code}"
-                                    ElementStyle="{StaticResource DataGridElementCenteredStyle}"
-                                    Header="Code" />
             </DataGrid.Columns>
         </DataGrid>
 

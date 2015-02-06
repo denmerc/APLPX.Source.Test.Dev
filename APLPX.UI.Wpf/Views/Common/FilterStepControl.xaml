@@ -29,7 +29,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="{StaticResource MainWindowBackground}">
+    <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -45,7 +45,7 @@
                    Grid.Column="0"
                    Margin="10,0,1,0"
                    VerticalAlignment="Center"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="Filter Types" />
 
         <ListBox x:Name="FilterGroupsListBox"
@@ -63,14 +63,14 @@
                     <Label Width="200"
                            Content="{Binding Path=Name}"
                            FontSize="16"
-                           Style="{StaticResource DescriptionHeaderStyleLabel}" />
+                           Style="{StaticResource ButtonStyleLabel}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
 
             <ListBox.ItemContainerStyle>
                 <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="ListBoxItem">
                     <Setter Property="Margin" Value="0,5" />
-                    <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
                 </Style>
 
             </ListBox.ItemContainerStyle>
@@ -81,7 +81,7 @@
                        Margin="15,10,0,0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="{Binding ElementName=FilterGrid,
                                       Path=Items.Count,
                                       StringFormat={}Filters ({0})}" />
@@ -89,7 +89,7 @@
                        Margin="20,10,5,10"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="{Binding Path=Entity.SelectedFilterGroup.SelectedCount,
                                       StringFormat={}Included: {0}}" />
         </StackPanel>
@@ -98,23 +98,26 @@
                   Grid.Row="1"
                   Grid.Column="1"
                   Height="500"
-                  Margin="20 0 0 0"
+                  Margin="20, 0, 0, 0"
                   VerticalAlignment="Top"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
+                  CanUserSortColumns="False"
+                  IsReadOnly="True"
                   ItemsSource="{Binding ElementName=FilterGroupsListBox,
                                         Path=SelectedItem.Filters}"
-                  SelectionMode="Single">
+                  SelectionMode="Single"
+                  Style="{StaticResource MetroDataGrid}">
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Binding="{Binding IsSelected,
                                                           UpdateSourceTrigger=PropertyChanged}"
                                         EditingElementStyle="{StaticResource MetroDataGridCheckBox}"
                                         ElementStyle="{StaticResource MetroDataGridCheckBox}">
-                    <DataGridCheckBoxColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <CheckBox x:Name="chkSelectAll"
+                <DataGridCheckBoxColumn.HeaderTemplate>
+                    <DataTemplate>
+                        <CheckBox x:Name="chkSelectAll"
                                       Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid},
                                                         Path=DataContext.SelectAllFiltersCommand}"
                                       CommandParameter="{Binding RelativeSource={RelativeSource Self},
@@ -128,7 +131,6 @@
                 </DataGridCheckBoxColumn>
 
                 <DataGridTextColumn Binding="{Binding Name}" Header="Filter Value" />
-                <DataGridTextColumn Binding="{Binding Code}" Header="Code" />
             </DataGrid.Columns>
         </DataGrid>
 

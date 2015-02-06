@@ -28,7 +28,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="layoutRoot" Margin="5,20,5,20" Background="{DynamicResource WhiteBrush}">
+    <Grid x:Name="layoutRoot" Margin="5,20,5,20" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -44,7 +44,7 @@
                 Grid.Column="0"
                 Width="350"
                 Height="405"
-                Background="{StaticResource GrayBrush2}"
+                Background="{DynamicResource GrayBrush2}"
                 BorderThickness="1"
                 CornerRadius="10">
 
@@ -60,11 +60,10 @@
                Margin="5,10,0,5"
                Content="{Binding Path=SelectedFeature.Classification}"
                ContentStringFormat="Locate {0}"
-               HorizontalAlignment="Center" 
                VerticalAlignment="Top"
                FontSize="20"
                FontWeight="Bold"
-               Style="{StaticResource DescriptionHeaderStyleLabel}"/>
+               Style="{StaticResource BaseStyleLabel}"/>
 
                 <Separator x:Name="itemSeparator1"
                            Grid.Row="1"
@@ -80,7 +79,8 @@
                  ItemsSource="{Binding Source={StaticResource cvsSearchGroups}}"
            
                  SelectedItem="{Binding Path=SelectedFeature.SelectedSearchGroup}"
-                 Background="Transparent">
+                 Background="Transparent"
+                     MaxHeight="300">
 
                 <ListBox.Resources>
                     <Style TargetType="Border">
@@ -115,7 +115,7 @@
                                 </StackPanel.ContextMenu>
 
                                 <Label x:Name="lblValue"
-                                   Margin="4,2" Style="{StaticResource DescriptionHeaderStyleLabel}" Foreground="{StaticResource LabelTextBrush}">
+                                   Margin="4,2" Style="{StaticResource BaseStyleLabel}" Foreground="{DynamicResource LabelTextBrush}">
                                     <Label.Content>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -130,7 +130,7 @@
                                     </Label.Content>
                                 </Label>
                                 <Label x:Name="btnValue"
-                                   Margin="0,2" Style="{StaticResource DescriptionHeaderStyleLabel}" >
+                                   Margin="0,2" Style="{StaticResource BaseStyleLabel}" >
                                     <Label.Content>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -146,7 +146,7 @@
                                     </Label.Content>
                                 </Label>
                                 <Label x:Name="lblBtn"
-                                   Margin="0,2" Style="{StaticResource DescriptionHeaderStyleLabel}" >
+                                   Margin="0,2" Style="{StaticResource BaseStyleLabel}" >
                                     <Label.Content>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -215,8 +215,9 @@
                             </Style>
                         </Style.Resources>
                             <Setter Property="helpers:DragDropHelper.DropTarget" Value="{StaticResource searchItemDropTarget}" />
-                            <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
 							<Setter Property="Margin" Value="0,2.5" />
+                            <Setter Property="MaxWidth" Value="305" />
 
                         <Style.Triggers>
 
@@ -244,7 +245,7 @@
 
         <Border Grid.Column="2"
                 Width="350"
-                Background="{StaticResource GrayBrush2}"
+                Background="{DynamicResource GrayBrush2}"
                 BorderThickness="1"
                 CornerRadius="10"
                 Height="405"
@@ -264,11 +265,10 @@
                Margin="5,10,0,5"
                Content="{Binding Path=SelectedFeature.Classification}"
                ContentStringFormat="Select {0}"
-               HorizontalAlignment="Center" 
                VerticalAlignment="Center"
                FontSize="20"
                FontWeight="Bold"
-               Style="{StaticResource DescriptionHeaderStyleLabel}"
+               Style="{StaticResource BaseStyleLabel}"
                Visibility="{Binding Path=IsSearchFilterSelected,
                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
 
@@ -288,7 +288,9 @@
                  Visibility="{Binding Path=IsSearchFilterSelected,
                                       Converter={StaticResource BooleanToVisibilityConverter}}"
                  Background="Transparent"
-                 Margin="15">
+                 Margin="15"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         MaxHeight="300">
 
 
                 <ListBox.Resources>
@@ -305,14 +307,15 @@
                             </Style>
                         </Style.Resources>
                             <Setter Property="helpers:DragDropHelper.DragSource" Value="{StaticResource searchableEntityDragSource}" />
-                        	<Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
 							<Setter Property="Margin" Value="0,2.5" />
-                    </Style>
+                            <Setter Property="MaxWidth" Value="305" />
+                        </Style>
                 </ListBox.ItemContainerStyle>
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Label Margin="0,2" ToolTip="{Binding Path=Identity.Name}">
+                            <Label Margin="0,2" ToolTip="{Binding Path=Identity.Name}" Style="{StaticResource BaseStyleLabel}" HorizontalAlignment="Left">
                             <Label.Content>
                                 <AccessText Text="{Binding Path=Identity.Name}"
                                         TextTrimming="CharacterEllipsis" />

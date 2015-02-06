@@ -17,18 +17,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-    <!--            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />   -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-    <!--            <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Styles.xaml" />        -->
-    <!--            <ResourceDictionary Source="/Resources/Icons.xaml" />   -->
-                
-                
-                
-       <!--         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />        -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml"/> 
 
             </ResourceDictionary.MergedDictionaries>
@@ -45,7 +37,7 @@
          
             <!--  Application Styles  -->
 
-         
+         <!--
             <LinearGradientBrush x:Key="ContentBack">
                 <LinearGradientBrush.GradientStops>
                     <GradientStop Offset="0" Color="#121212" />
@@ -53,6 +45,7 @@
                     <GradientStop Offset="1.2" Color="#181818" />
                 </LinearGradientBrush.GradientStops>
             </LinearGradientBrush>
+            -->
 
             <LinearGradientBrush x:Key="Flat3DBorderBrush"
                          StartPoint="0.499,0" EndPoint="0.501,1">
@@ -63,53 +56,59 @@
             </LinearGradientBrush>
 
 
-            <Style x:Key="DescriptionHeaderStyleLabel" BasedOn="{StaticResource MetroLabel}" TargetType="Label">
+            <Style x:Key="BaseStyleLabel" BasedOn="{StaticResource MetroLabel}" TargetType="Label">
                 <Setter Property="FontSize"
                         Value="12" />
                 <Setter Property="HorizontalAlignment"
                         Value="Center" />
-         <!--       <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}" />    -->
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
             </Style>
 
-            <Style x:Key="DescriptionHeaderStyleTextBlock"
+            <Style x:Key="BaseStyleTextBlock"
                    TargetType="TextBlock">
                 <Setter Property="FontSize"
                         Value="12" />
                 <Setter Property="HorizontalAlignment"
                         Value="Center" />
-                <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource LabelTextBrush}" />
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
             </Style>
 
-            <Style x:Key="DescriptionHeaderStyleTextBox" BasedOn="{StaticResource MetroTextBox}" TargetType="TextBox">
+            <Style x:Key="BaseStyleTextBox" BasedOn="{StaticResource MetroTextBox}" TargetType="TextBox">
                 <Setter Property="FontSize"
                         Value="12" />
                 <Setter Property="HorizontalAlignment"
                         Value="Center" />
-         <!--       <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}" />    -->
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
-         <!--       <Setter Property="SelectionBrush" Value="{StaticResource AccentColorBrush2}" /> -->
             </Style>
 
+            <Style x:Key="ButtonStyleLabel" BasedOn="{StaticResource BaseStyleLabel}" TargetType="Label">
+                <Setter Property="FontSize"
+                        Value="16" />
+            </Style>
 
+<!--
             <LinearGradientBrush x:Key="Buttongradient" StartPoint="0.500023,0.999996" EndPoint="0.500023,9.37507e-006">
                 <GradientStop Offset="1" Color="#373737" />
                 <GradientStop Offset="0" Color="AliceBlue" />
             </LinearGradientBrush>
-
+            -->
+<!--
             <Style x:Key="SearchControlStyle" TargetType="Border">
                 <Setter Property="Opacity" Value=".35" />
                 <Setter Property="Background" Value="Silver" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="CornerRadius" Value="10" />
             </Style>
-
+        -->
+            
+            <!--
             <Style x:Key="SearchControlSeparatorStyle" TargetType="Separator" />
-
+-->
+            <!--
 
             <SolidColorBrush x:Key="ApplicationTitleBarColor" Color="#2a2a2a" />
             <SolidColorBrush x:Key="ApplicationTitleBarColorInactive" Color="Gray" />
@@ -124,7 +123,9 @@
             <SolidColorBrush x:Key="SearchControlListBoxTitleTextColor" Color="White" />
             <Color x:Key="ListBoxSelectionColor">DodgerBlue</Color>
 
+            -->
 
+            <SolidColorBrush x:Key="MainWindowBackground" Color="#181818" />
 
 
             <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
@@ -167,27 +168,33 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="MainWindowHeaderTextStyle" TargetType="{x:Type TextBlock}">
+            <!--
+            <Style x:Key="MainWindowHeaderTextStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseStyleTextBlock}">
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="Foreground" Value="{StaticResource MainWindowHeaderStyleTextColor}" />
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="Margin" Value="5" />
             </Style>
 
+          
+            
             <Style x:Key="AnalyticStepTextStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="Foreground" Value="{StaticResource AnalyticStepTextColor}" />
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
+            
+            -->
 
-            <Style x:Key="ListTitleTextStyle" TargetType="TextBlock" BasedOn="{StaticResource DescriptionHeaderStyleTextBlock}">
+            <Style x:Key="StepTitleTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseStyleTextBlock}">
                 <Setter Property="TextAlignment" Value="Center" />
                 <Setter Property="FontWeight" Value="Bold" />
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="Margin" Value="5" />
             </Style>
 
+            <!--
             <Style x:Key="SearchControlSelectedItemDetailStyle" TargetType="{x:Type TextBlock}">
                 <Setter Property="Foreground" Value="{StaticResource SearchControlSelectedItemDetailTextColor}" />
                 <Setter Property="FontSize" Value="15" />
@@ -197,7 +204,7 @@
                 <Setter Property="TextWrapping" Value="Wrap" />
                 <Setter Property="MaxWidth" Value="300" />
             </Style>
-
+        -->
             
             <!--
             <Style x:Key="mainWindowTextBlockStyle"
@@ -212,14 +219,16 @@
             -->
 
         
-            
+            <!--
             <Style x:Key="SearchLblStyle" TargetType="{x:Type Label}">
                 <Setter Property="Foreground" Value="{StaticResource SearchControlListBoxItemTextColor}" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="FontFamily" Value="SegoeUI" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
+            -->
 
+            <!--
             <Style x:Key="SearchControlTitleLabelStyle" TargetType="{x:Type Label}">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Foreground" Value="{StaticResource SearchControlTitleLabelTextColor}" />
@@ -244,8 +253,9 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            -->
 
-            <Style x:Key="IdentityLabelStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource DescriptionHeaderStyleLabel}">
+            <Style x:Key="IdentityLabelStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource BaseStyleLabel}">
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="HorizontalAlignment" Value="Right"/>
                 <Setter Property="HorizontalContentAlignment" Value="Right" />
@@ -253,13 +263,13 @@
                 <Setter Property="Margin" Value="5,2" />
             </Style>
 
-            <Style x:Key="IdentityTextBlockStyle" BasedOn="{StaticResource DescriptionHeaderStyleTextBlock}" TargetType="TextBlock">
+            <Style x:Key="IdentityTextBlockStyle" BasedOn="{StaticResource BaseStyleTextBlock}" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
-            <Style x:Key="IdentityTextBoxStyle" BasedOn="{StaticResource DescriptionHeaderStyleTextBox}" TargetType="TextBox">
+            <Style x:Key="IdentityTextBoxStyle" BasedOn="{StaticResource BaseStyleTextBox}" TargetType="TextBox">
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -270,7 +280,7 @@
 
 
 
-            <Style x:Key="commandButtonStyle" TargetType="{x:Type Button}">
+            <Style x:Key="commandButtonStyle" TargetType="{x:Type Button}" >
                 <Setter Property="Height" Value="50" />
                 <Setter Property="Width" Value="50" />
                 <Setter Property="HorizontalAlignment" Value="Center" />

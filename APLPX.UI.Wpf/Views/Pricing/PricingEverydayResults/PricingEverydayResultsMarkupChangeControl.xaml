@@ -109,7 +109,8 @@
             <DataGrid Grid.Row="3"
                       ItemsSource="{Binding Source={StaticResource cvsResults}}"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      AutoGenerateColumns="False" MaxHeight="650"  BorderBrush="White" BorderThickness="1">
+                      AutoGenerateColumns="False" MaxHeight="650"  BorderBrush="White" BorderThickness="1"
+                      Style="{StaticResource MetroDataGrid}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="Auto" Header="SKU #" Binding="{Binding SkuName}" TextBlock.TextAlignment="Center"/>
                     <DataGridTextColumn Width="325" Header="Description" Binding="{Binding SkuTitle}" ElementStyle="{StaticResource StandardDataGridAlphabeticalCellStyle}"/>

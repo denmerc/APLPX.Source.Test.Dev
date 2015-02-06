@@ -11,14 +11,9 @@
                TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
-        <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
-            <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Margin" Value="5" />
-        </Style>
+ 
         <Style x:Key="SubtitleTextStyle"
-               BasedOn="{StaticResource ListTitleTextStyle}"
+               BasedOn="{StaticResource StepTitleTextStyle}"
                TargetType="TextBlock">
             <Setter Property="FontSize" Value="13" />
             <Setter Property="Margin" Value="0,0,0,5" />
@@ -42,7 +37,7 @@
         <TextBlock x:Name="txtTitleSearchGroups"
                    Grid.Row="0"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="{Binding Path=SelectedFeature.SearchGroups.Count,
                                   StringFormat=Search Groups ({0})}"
                    TextAlignment="Center" />
@@ -62,7 +57,8 @@
                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
                   IsReadOnly="True"
                   ItemsSource="{Binding Path=SelectedFeature.SearchGroups}"
-                  SelectionMode="Single">
+                  SelectionMode="Single"
+                  Style="{StaticResource MetroDataGrid}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Width="70"
@@ -108,7 +104,7 @@
         <TextBlock x:Name="txtTitleSearchableEntities"
                    Grid.Row="0"
                    Grid.Column="2"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="{Binding Path=SelectedFeature.SearchableEntities.Count,
                                   StringFormat=Searchable Entities ({0})}" />
 
@@ -127,7 +123,8 @@
                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}"
                   IsReadOnly="True"
                   ItemsSource="{Binding Path=SelectedFeature.SearchableEntities}"
-                  SelectionMode="Single">
+                  SelectionMode="Single"
+                  Style="{StaticResource MetroDataGrid}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Width="55"

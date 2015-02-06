@@ -17,11 +17,11 @@
                       BorderThickness="1"
                       GlowBrush="{StaticResource AccentColorBrush}"
                       NonActiveGlowBrush="Red"
-                      NonActiveWindowTitleBrush="{StaticResource ApplicationTitleBarColorInactive}"
+                      NonActiveWindowTitleBrush="Gray"
                       ShowIconOnTitleBar="True"
                       WindowStartupLocation="CenterScreen"
                       WindowState="Maximized"
-                      WindowTitleBrush="{StaticResource ApplicationTitleBarColor}"
+                      WindowTitleBrush="#2a2a2a"
                       d:DesignHeight="1354"
                       mc:Ignorable="d">
 
@@ -240,16 +240,14 @@
                           ItemsSource="{Binding AppThemes,
                                                 Mode=OneWay}"
                           TextBlock.FontFamily="Segoe UI"
-                          TextBlock.FontSize="12"
-                          TextBlock.Foreground="{StaticResource IdealForegroundColorBrush}" />
+                          TextBlock.FontSize="12" />
                 <MenuItem Background="Transparent"
                           Header="Accent"
                           ItemContainerStyle="{StaticResource AccentColorMenuItemStyle}"
                           ItemsSource="{Binding AccentColors,
                                                 Mode=OneWay}"
                           TextBlock.FontFamily="Segoe UI"
-                          TextBlock.FontSize="12"
-                          TextBlock.Foreground="{StaticResource IdealForegroundColorBrush}" />
+                          TextBlock.FontSize="12" />
             </Menu>
 
             <Button Command="{Binding Path=AboutCommand}"
@@ -696,26 +694,35 @@
                                              Converter={StaticResource BooleanToVisibilityConverter}}">
 
                 <TextBlock x:Name="txtUser"
-                           Style="{StaticResource MainWindowHeaderTextStyle}"
+                           Style="{StaticResource BaseStyleTextBlock}"
                            Text="{Binding Path=Session.User.Identity.Name,
-                                          StringFormat=User: {0}}" />
+                                          StringFormat=User: {0}}" 
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Margin="5"/>
 
                 <TextBlock x:Name="txtSelectedModule"
-                           Style="{StaticResource MainWindowHeaderTextStyle}"
+                           Style="{StaticResource BaseStyleTextBlock}"
                            Text="{Binding Path=SelectedModule.Name,
-                                          StringFormat={}Module: {0}}" />
+                                          StringFormat={}Module: {0}}" 
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Margin="5"/>
 
                 <TextBlock x:Name="txtSelectedFeature"
                            Margin="15,5"
                            Text="{Binding Path=SelectedFeature.Name,
                                           StringFormat={}Feature: {0}}">
                     <TextBlock.Style>
-                        <Style BasedOn="{StaticResource MainWindowHeaderTextStyle}" TargetType="TextBlock">
+                        <Style BasedOn="{StaticResource BaseStyleTextBlock}" TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=SelectedFeature}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
+                            <Setter Property="FontSize" Value="14" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="Margin" Value="5" />
                         </Style>
 
                     </TextBlock.Style>
@@ -725,12 +732,15 @@
                            Text="{Binding Path=SelectedEntity.Identity.Name,
                                           StringFormat={}Selected: {0}}">
                     <TextBlock.Style>
-                        <Style BasedOn="{StaticResource MainWindowHeaderTextStyle}" TargetType="TextBlock">
+                        <Style BasedOn="{StaticResource BaseStyleTextBlock}" TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=SelectedEntity}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
+                            <Setter Property="FontSize" Value="14" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="Margin" Value="5" />
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
@@ -778,7 +788,7 @@
                 <TextBlock Grid.Row="0"
                            Margin="10,0"
                            FontSize="18"
-                           Style="{StaticResource DescriptionHeaderStyleTextBlock}"
+                           Style="{StaticResource BaseStyleTextBlock}"
                            Text="Actions" />
 
                 <ItemsControl x:Name="ActionsListBox"

@@ -27,12 +27,6 @@
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
-        <Style x:Key="ListTitleTextStyle" TargetType="TextBlock">
-            <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Margin" Value="5" />
-        </Style>
 
         <Style x:Key="ValueDriverGroupStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
@@ -123,11 +117,11 @@
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <TextBlock x:Name="txtSelectedName"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="{Binding Path=Entity.SelectedValueDriver.Name,
                                       StringFormat=Selected Value Driver: {0}}" />
             <TextBlock x:Name="txtSelectedKey"
-                       Style="{StaticResource ListTitleTextStyle}"
+                       Style="{StaticResource StepTitleTextStyle}"
                        Text="{Binding Path=Entity.SelectedValueDriver.Key,
                                       StringFormat=(Key: {0})}" />
         </StackPanel>
@@ -135,7 +129,7 @@
         <TextBlock x:Name="txtTitleModes"
                    Grid.Row="1"
                    Grid.Column="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="Value Driver Modes and Groups" />
 
         <DataGrid x:Name="dgDriverModes"
@@ -146,7 +140,8 @@
                   CanUserDeleteRows="False"
                   GridLinesVisibility="All"
                   IsReadOnly="True"
-                  ItemsSource="{Binding Source={StaticResource cvsDriverModeRows}}">
+                  ItemsSource="{Binding Source={StaticResource cvsDriverModeRows}}"
+                  Style="{StaticResource MetroDataGrid}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Mode.Name}" Header="Mode Name" />
                 <DataGridTextColumn Width="60"
@@ -196,7 +191,7 @@
         <TextBlock x:Name="txtTitleResults"
                    Grid.Row="1"
                    Grid.Column="2"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="Value Driver Results" />
 
         <DataGrid x:Name="dgDriverResults"
@@ -207,7 +202,8 @@
                   CanUserDeleteRows="False"
                   GridLinesVisibility="All"
                   IsReadOnly="True"
-                  ItemsSource="{Binding Source={StaticResource cvsDriverResultRows}}">
+                  ItemsSource="{Binding Source={StaticResource cvsDriverResultRows}}"
+                  Style="{StaticResource MetroDataGrid}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Driver.Name}" Header="Driver Name" />
                 <DataGridTextColumn Width="60"

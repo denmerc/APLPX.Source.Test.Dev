@@ -17,7 +17,7 @@
 
         <TextBlock x:Name="txtTitle"
                    Grid.Row="0"
-                   Style="{StaticResource ListTitleTextStyle}"
+                   Style="{StaticResource StepTitleTextStyle}"
                    Text="{Binding Path=Errors.Count,
                                   StringFormat=Please check the following items ({0}):}"
                    TextWrapping="Wrap"

@@ -304,6 +304,7 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         SelectedFeature.SelectedStep.IsEnabled = true;
                     }
+
                     SelectedFeature.EnableRemainingSteps();
                 }));
 

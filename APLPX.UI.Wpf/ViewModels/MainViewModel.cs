@@ -293,8 +293,43 @@ namespace APLPX.UI.WPF.ViewModels
                     var payload = SelectedAnalytic.ToPayload();
                     payload.Identity = SelectedAnalytic.Identity;
                     var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
-                    var status = _analyticService.SaveIdentity(session);
+                    var newAResponse = _analyticService.SaveIdentity(session);
+
                     SelectedAnalytic.Identity = _analyticService.Load(session).Data.Identity.ToDisplayEntity();
+                    LoadAnalyticListCommand.Execute(null);
+                    //if(newAResponse.SessionOk == false) 
+                    //{
+                    //    //TODO: handle client and server message display for issues  eg; duplicate names not allowed
+                    //}
+                    //else //should have new identity
+                    //{
+                    //    SelectedAnalytic = newAResponse.Data.ToDisplayEntity();
+                    //    //SelectedAnalytic.Identity = _analyticService.Load(session).Data.Identity.ToDisplayEntity();
+
+                    //    //refresh searchable entities
+                    //    if(SelectedFeature.SearchableEntities.Exists(a => a.Id == SelectedAnalytic.Id)) //existing
+                    //    {
+                    //        var searchItem = SelectedFeature.SearchableEntities.FirstOrDefault(a => a.Id == newAResponse.Data.Id);
+                    //        if (searchItem != null) 
+                    //        {
+                    //            var analyticEdited = ((DisplayEntities.Analytic)searchItem);
+                    //            analyticEdited.Identity = SelectedAnalytic.Identity;
+                    //        }
+                    //    }
+                    //    else //newly added
+                    //    {
+                    //        var realSearchGroupKey = SelectedAnalytic.SearchGroupKey;
+                    //        var realSearchGroupId = SelectedAnalytic.SearchGroupId;
+                    //        SelectedAnalytic.SearchGroupKey = "RecentAnalytics";
+                    //        SelectedAnalytic.SearchGroupId = 0;
+                    //        SelectedFeature.SearchableEntities.Add(SelectedAnalytic);
+                    //        SelectedAnalytic.SearchGroupKey = realSearchGroupKey;
+                    //        SelectedAnalytic.SearchGroupId = realSearchGroupId;
+                    //        SelectedFeature.SearchableEntities.Add(SelectedAnalytic);
+                            
+                    //    }
+                    //}
+
 
                     SelectedFeature.SelectedStep.IsCompleted = true;
 
@@ -303,7 +338,6 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         SelectedFeature.SelectedStep.IsEnabled = true;
                     }
-
                     SelectedFeature.EnableRemainingSteps();
                 }));
 

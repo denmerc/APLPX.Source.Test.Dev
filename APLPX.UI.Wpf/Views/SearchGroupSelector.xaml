@@ -258,69 +258,70 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-            
-            <Label x:Name="txtFilteredTitle"
+
+                <Label x:Name="txtFilteredTitle"
                Grid.Row="0"
                Margin="5,10,0,5"
-               Content="{Binding Path=SelectedFeature.Classification}"
+               Content="{Binding SelectedFeature.Classification}"
                ContentStringFormat="Select {0}"
                HorizontalAlignment="Center" 
                VerticalAlignment="Center"
                FontSize="20"
                FontWeight="Bold"
                Style="{StaticResource DescriptionHeaderStyleLabel}"
-               Visibility="{Binding Path=IsSearchFilterSelected,
-                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+               Visibility="{Binding IsSearchFilterSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <Separator x:Name="itemSeparator2"
                    Grid.Row="1"
                    Margin="10,0"
                    VerticalAlignment="Top"
                    Panel.ZIndex="1000"                 
-                   Visibility="{Binding Path=IsSearchFilterSelected,
-                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+                   Visibility="{Binding IsSearchFilterSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
 
                 <ListBox x:Name="lstFiltered"
                 Grid.Row="2"
-                 ItemsSource="{Binding Path=SelectedFeature.FilteredSearchableEntities}"
-                 SelectedItem="{Binding Path=SelectedFeature.SelectedEntity}"
-                 Visibility="{Binding Path=IsSearchFilterSelected,
-                                      Converter={StaticResource BooleanToVisibilityConverter}}"
+                 ItemsSource="{Binding SelectedFeature.FilteredSearchableEntities}"
+                 SelectedItem="{Binding SelectedFeature.SelectedEntity}"
                  Background="Transparent"
                  Margin="15">
 
 
-                <ListBox.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="10" />
-                    </Style>
-                </ListBox.Resources>
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="10" />
+                        </Style>
+                    </ListBox.Resources>
 
-                <ListBox.ItemContainerStyle>
-                    <Style  TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource baseListBoxItemStyle}">
-                        <Style.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="5"/>
-                            </Style>
-                        </Style.Resources>
+                    <ListBox.Visibility>
+                        <Binding Converter="{StaticResource BooleanToVisibilityConverter}" Path="IsSearchFilterSelected"/>
+                    </ListBox.Visibility>
+
+                    <ListBox.ItemContainerStyle>
+                        <Style  TargetType="{x:Type ListBoxItem}">
+                            <Style.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Style.Resources>
                             <Setter Property="helpers:DragDropHelper.DragSource" Value="{StaticResource searchableEntityDragSource}" />
-                        	<Setter Property="Background" Value="{StaticResource WhiteBrush}" />
-							<Setter Property="Margin" Value="0,2.5" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
+                            <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+                            <Setter Property="Margin" Value="0,2.5" />
+                            <Style.BasedOn>
+                                <StaticResource ResourceKey="baseListBoxItemStyle"/>
+                            </Style.BasedOn>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Label Margin="0,2" ToolTip="{Binding Path=Identity.Name}">
-                            <Label.Content>
-                                <AccessText Text="{Binding Path=Identity.Name}"
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Margin="0,2" ToolTip="{Binding Identity.Name}">
+                                <AccessText Text="{Binding Identity.Name}"
                                         TextTrimming="CharacterEllipsis" />
-                            </Label.Content>
-                        </Label>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                            </Label>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </Border>
     </Grid>

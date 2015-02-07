@@ -261,7 +261,7 @@
                 <Button.Content>
                     <TextBlock>
                         <Run Text="Logout - " />
-                        <TextBlock Text="{Binding CurrentUser.Login}" />
+                        <TextBlock Text="{Binding CurrentUser.Identity.Name}" />
                     </TextBlock>
 
                 </Button.Content>

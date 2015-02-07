@@ -194,13 +194,23 @@ namespace APLPX.UI.WPF.ViewModels
                 loginWindow.ShowActivated = true;
                 loginWindow.Owner = App.Current.MainWindow;
 
+                
 
                 if (loginWindow.ShowDialog() == true)
                 {
                     //TODO: reload Session??? 
                     //TODO: trigger this at inactive timeout interval
-                    var mvm = new MainViewModel(vm.Session, _analyticService, _userService, _pricingEverydayService);
-                    App.Current.MainWindow.DataContext = mvm;
+                    if (vm.Session.Authenticated){
+
+                        var mvm = new MainViewModel(vm.Session, _analyticService, _userService, _pricingEverydayService);
+                        var mainW = new MainWindow();
+                        mainW.DataContext = mvm;
+                        mainW.Show();
+                        App.Current.Windows[0].DataContext = null;
+                        App.Current.Windows[0].Close();
+                        App.Current.MainWindow = mainW;
+                    }
+                    else {loginWindow.ShowDialog();}
                 }
                 else { App.Current.Shutdown(); }
             });
@@ -363,22 +373,15 @@ namespace APLPX.UI.WPF.ViewModels
 
 
 
-            RunResultsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+            RunResultsCommand = ReactiveCommand.CreateAsyncTask<DTO.Session<DTO.Analytic>>(async _ =>
                 await Task.Run(() =>
                 {
                     DisplayEntities.Analytic payload = SelectedAnalytic.ToPayload();
                     payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
                     var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
                     var response = _analyticService.SaveDrivers(session);
-                    var drivers = response.Data.ValueDrivers.ToDisplayEntities();
-                    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
+                    return response;
 
-                    foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
-                    {
-                        driver.AssignResultsToDriverGroups();
-                        driver.AreResultsCurrent = true;
-                    }
-                    SelectedFeature.SelectedStep.IsCompleted = true;
                 }));
 
 
@@ -407,7 +410,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Properties
 
-        public ReactiveCommand<Unit> RunResultsCommand { get; private set; }
+        public ReactiveCommand<DTO.Session<DTO.Analytic>> RunResultsCommand { get; private set; }
 
         public ReactiveCommand<object> LogoutCommand { get; private set; }
 
@@ -833,7 +836,29 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         string runList = String.Join("\n", driversToRun);
                         message = String.Format("Recalculating Value Drivers:\n{0}", runList);
-                        ExecuteAsyncCommand(RunResultsCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), message, "Value Drivers run successfully.");
+                        ExecuteAsyncCommand(RunResultsCommand, response =>
+
+                            { 
+                                SelectedFeatureViewModel = GetViewModel(SelectedStep);
+                                if (response.SessionOk)
+                                {
+                                    var drivers = response.Data.ValueDrivers.ToDisplayEntities();
+                                    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
+
+                                    foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
+                                    {
+                                        driver.AssignResultsToDriverGroups();
+                                        driver.AreResultsCurrent = true;
+                                    }
+
+                                }
+                                else
+                                {
+                                    HandleInvalidRequest("Invalid Api Request", string.Format("{0}\n{1}", response.ServerMessage, response.ClientMessage));
+                                }
+                                SelectedFeature.SelectedStep.IsCompleted = true;
+                            
+                            }, message, "Value Drivers run successfully.");
                     }
                     else
                     {
@@ -852,7 +877,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Methods
 
-        private bool SetIsFeatureSelectorAvailable()
+      private bool SetIsFeatureSelectorAvailable()
         {
             bool isAvailable = (SelectedModule != null);
             if (isAvailable)
@@ -1171,6 +1196,17 @@ namespace APLPX.UI.WPF.ViewModels
             _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = error.Message });
             //ShowMessageBox(error.Message, MessageBoxImage.Error);
             ReenableUserInterface();
+            Navigate();
+
+        }
+
+        private void HandleInvalidRequest(string title, string messages)
+        {
+
+            LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, String.Format("Invalid Api Request"), messages);
+            ReenableUserInterface();
+            //Navigate();
+
         }
 
         /// <summary>

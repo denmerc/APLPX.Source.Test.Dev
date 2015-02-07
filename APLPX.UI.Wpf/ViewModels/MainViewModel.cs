@@ -17,9 +17,9 @@ using APLPX.UI.WPF.Mappers;
 using APLPX.UI.WPF.ViewModels.Analytic;
 using APLPX.UI.WPF.ViewModels.Pricing;
 using MahApps.Metro;
+using NLog;
 using ReactiveUI;
 using DTO = APLPX.Entity;
-using NLog;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -40,7 +40,7 @@ namespace APLPX.UI.WPF.ViewModels
         private bool _isActionInProgress;
         private bool _isFoldersPanelVisible;
         private bool _isMessageCenterVisible;
-        private bool _isPropertiesPanelVisible;        
+        private bool _isPropertiesPanelVisible;
 
         private ISearchableEntity _originalEntity;
         private EventAggregator _eventManager;
@@ -88,9 +88,9 @@ namespace APLPX.UI.WPF.ViewModels
         /// <param name="session">An autheticated session for the current user.</param>
         /// <param name="analyticService">An IAnalyticService provider.></param>
         /// <param name="userService">An IUserService provider.</param>
-        public MainViewModel(   DTO.Session<DTO.NullT> session, 
-                                IAnalyticService analyticService, 
-                                IUserService userService, 
+        public MainViewModel(DTO.Session<DTO.NullT> session,
+                                IAnalyticService analyticService,
+                                IUserService userService,
                                 IPricingEverydayService pricingService
                             )
             : this()
@@ -263,7 +263,6 @@ namespace APLPX.UI.WPF.ViewModels
                         driver.AreResultsCurrent = true;
                     }
 
-                    SelectedFeature.SelectedStep.IsCompleted = true;
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                     SelectedFeature.SelectedStep.IsCompleted = false;
 
@@ -369,6 +368,7 @@ namespace APLPX.UI.WPF.ViewModels
                         SelectedAnalytic.SelectedValueDriver.AssignResultsToDriverGroups();
                         SelectedAnalytic.SelectedValueDriver.AreResultsCurrent = true;
                     }
+                    SelectedFeature.SelectedStep.IsCompleted = true;
                 }));
 
 
@@ -400,7 +400,7 @@ namespace APLPX.UI.WPF.ViewModels
             SaveFiltersCommand.ThrownExceptions.Subscribe(err => HandleException("API Error: Saving Analytic Filters", err));
             SavePriceListsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Price Lists", err));
             SaveOrRunValueDriversCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Value Drivers", err));
-           
+
             RunResultsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Running Analytic Results", err));
             LogoutCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Logging User Out", err));
 
@@ -496,7 +496,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                 return result;
             }
-                }
+        }
 
         /// <summary>
         /// Gets/sets the currently selected sub view model.
@@ -930,7 +930,7 @@ namespace APLPX.UI.WPF.ViewModels
                         if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
                             ExecuteAsyncCommand(
-                                LoadAnalyticListCommand, 
+                                LoadAnalyticListCommand,
                                 _ => { _featureCache.Add(SelectedFeature.TypeId, SelectedFeature); },
                                 "Loading Analytics...", "Successfully loaded Analytics",
                                 "API Error: Loading Analytic List");
@@ -1147,7 +1147,7 @@ namespace APLPX.UI.WPF.ViewModels
         /// <param name="callbackAction">The action to perform when the command completes.</param>
         /// <param name="workingMessage">The message to display while the command is executing.</param>
         /// <param name="completedMessge">(Optional) The message to display when the command completes.</param>
-        private void ExecuteAsyncCommand<T>(ReactiveCommand<T> command, 
+        private void ExecuteAsyncCommand<T>(ReactiveCommand<T> command,
             Action<T> callbackAction, string workingMessage, string completedMessge = null, string errorTitle = "")
         {
             //Update the UI to indicate an operation is in progress.

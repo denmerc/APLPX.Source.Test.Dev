@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using APLPX.Entity;
 using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
@@ -17,7 +17,7 @@ namespace APLPX.UI.WPF.DisplayEntities
         private int _key;
         private string _name;
         private string _title;
-        private short _sort;        
+        private short _sort;
         private bool _isSelected;
 
         private bool _isDisplayOnly;
@@ -75,6 +75,35 @@ namespace APLPX.UI.WPF.DisplayEntities
             get { return _isDisplayOnly; }
             set { this.RaiseAndSetIfChanged(ref _isDisplayOnly, value); }
         }
+
+        /// <summary>
+        /// Gets a string representing the unit of measure that applies to this driver.
+        /// </summary>
+        public string UnitOfMeasure
+        {
+            get
+            {
+                string result = String.Empty;
+
+                PricingAnalyticsDriverType driverType = (PricingAnalyticsDriverType)Key;
+                switch (driverType)
+                {
+                    case PricingAnalyticsDriverType.DriverMarkup:
+                        result = "%";
+                        break;
+                    case PricingAnalyticsDriverType.DriverMovement:
+                        result = "QTY";
+                        break;
+                    case PricingAnalyticsDriverType.DriverDaysOnHand:
+                        result = "DAYS";
+                        break;
+                    default:
+                        break;
+                }
+                return result;
+            }
+        }
+
         #endregion
 
         #region Overrides

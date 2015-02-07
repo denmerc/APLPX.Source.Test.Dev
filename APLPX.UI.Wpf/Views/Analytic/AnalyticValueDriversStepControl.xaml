@@ -33,6 +33,9 @@
                 <Setter Property="helpers:TextBoxHelper.SelectAllTextOnFocus" Value="True" />
             </Style>
 
+            <Style x:Key="HeaderTemplateTextStyle" TargetType="TextBlock">
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -166,7 +169,6 @@
                         <Setter Property="Margin" Value="5,0,0,0" />
                         <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
                     </Style>
-
                 </ListBox.ItemContainerStyle>
             </ListBox>
 
@@ -252,18 +254,31 @@
                                     IsReadOnly="True" />
 
                 <DataGridTextColumn x:Name="colLower"
+                                    Width="75"
                                     Binding="{Binding Path=MinOutlier,
                                                       StringFormat={}{0:N0}}"
                                     CellStyle="{StaticResource GroupMinCellStyle}"
-                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Lower Limit" />
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=LOWER LIMIT ({0})}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
 
                 <DataGridTextColumn x:Name="colUpper"
+                                    Width="75"
                                     Binding="{Binding Path=MaxOutlier,
                                                       StringFormat={}{0:N0}}"
                                     CellStyle="{StaticResource GroupMaxCellStyle}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Upper Limit" />
+                                    Header="Upper Limit">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=UPPER LIMIT ({0})}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
 
                 <!--  Driver Results columns:  -->
                 <!--
@@ -283,17 +298,29 @@
                                     Header="Sales Value"
                                     IsReadOnly="True" />
 
-                <DataGridTextColumn Binding="{Binding Path=Results.MinOutlier,
+                <DataGridTextColumn Width="75"
+                                    Binding="{Binding Path=Results.MinOutlier,
                                                       StringFormat={}{0:N0}}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Actual Lower"
-                                    IsReadOnly="True" />
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=ACTUAL LOWER ({0})}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding Path=Results.MaxOutlier,
+                <DataGridTextColumn Width="75"
+                                    Binding="{Binding Path=Results.MaxOutlier,
                                                       StringFormat={}{0:N0}}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Actual Upper"
-                                    IsReadOnly="True" />
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=ACTUAL UPPER ({0})}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
 

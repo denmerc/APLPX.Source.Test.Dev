@@ -92,6 +92,8 @@ namespace APLPX.UI.WPF.Mappers
                 }
             }
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 

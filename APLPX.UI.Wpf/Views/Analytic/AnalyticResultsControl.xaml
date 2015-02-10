@@ -22,6 +22,10 @@
                 <Setter Property="TextAlignment" Value="Center" />
             </Style>
 
+            <Style x:Key="HeaderTemplateTextStyle" TargetType="TextBlock">
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -71,8 +75,8 @@
                   HorizontalScrollBarVisibility="Auto"
                   IsReadOnly="True"
                   ItemsSource="{Binding Source={StaticResource cvsResults}}"
-                  VerticalScrollBarVisibility="Auto"
-                  Style="{StaticResource MetroDataGrid}">
+                  Style="{StaticResource MetroDataGrid}"
+                  VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Result.Value}"
                                     ElementStyle="{StaticResource DataGridElementCenteredStyle}"
@@ -81,14 +85,26 @@
                                                       StringFormat={}{0:N0}}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Sku Count" />
-                <DataGridTextColumn Binding="{Binding Result.MinOutlier,
+                <DataGridTextColumn Width="75"
+                                    Binding="{Binding Result.MinOutlier,
                                                       StringFormat={}{0:N0}}"
-                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Min Value" />
-                <DataGridTextColumn Binding="{Binding Result.MaxOutlier,
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=MIN VALUE ({0})}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="75"
+                                    Binding="{Binding Result.MaxOutlier,
                                                       StringFormat={}{0:N0}}"
-                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Max Value" />
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=MAX VALUE ({0})}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Result.SalesValue}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
                                     Header="Sales Value" />

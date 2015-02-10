@@ -28,6 +28,8 @@ namespace APLPX.UI.WPF.Mappers
                 displayEntity.NewPassword = dto.Credential.NewPassword;
             }
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 

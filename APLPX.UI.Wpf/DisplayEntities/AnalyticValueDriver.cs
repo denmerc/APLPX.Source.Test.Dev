@@ -122,10 +122,12 @@ namespace APLPX.UI.WPF.DisplayEntities
                 if (args.PropertyName == "MinOutlier" ||
                     args.PropertyName == "MaxOutlier" ||
                     args.PropertyName == "IsSelected" ||
-                    args.PropertyName == "GroupCount")
+                    args.PropertyName == "GroupCount"||
+                    args.PropertyName == "IsDirty")
                 {
                     //Update dependent properties.
                     AreResultsCurrent = false;
+                    IsDirty = true;
                 }
 
                 this.RaisePropertyChanged(args.PropertyName);

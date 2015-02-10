@@ -16,14 +16,21 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #region Constructor and Initialization
 
-        public AnalyticPriceListViewModel(Display.Analytic entity)
+        public AnalyticPriceListViewModel(Display.Analytic entity, Display.ModuleFeature feature)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
 
+            if (feature == null)
+            {
+                throw new ArgumentNullException("feature");
+            }
+
             Entity = entity;
+            SelectedFeature = feature;
+
             if (Entity.PriceListGroups.Count > 0 && Entity.SelectedPriceListGroup == null)
             {
                 Entity.SelectedPriceListGroup = Entity.PriceListGroups[0];
@@ -40,11 +47,6 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             _selectAllPriceListsSubscription = this.WhenAnyObservable(vm => vm.SelectAllPriceListsCommand).Subscribe(item => SelectAllPriceListsExecuted(item));
 
             _priceListChangedSubscription = this.Entity.PriceListGroups.ItemChanged.Subscribe(plg => OnPriceListChanged(plg));
-        }
-
-        private void OnPriceListChanged(IReactivePropertyChangedEventArgs<AnalyticPriceListGroup> plg)
-        {
-            this.RaisePropertyChanged("ValidationResults");
         }
 
         #endregion
@@ -83,9 +85,22 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether any PriceListGroup has unsaved changes.
+        /// </summary>
+        public bool IsAnyPriceListGroupDirty
+        {
+            get
+            {
+                bool result = Entity.PriceListGroups.Any(grp => grp.IsDirty);
+
+                return result;
+            }
+        }
+
         #endregion
 
-        #region Command Handlers
+        #region Command and Event Handlers
 
         private bool SelectAllPriceListsCanExecute(Display.AnalyticPriceListGroup priceListGroup)
         {
@@ -102,6 +117,20 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             }
         }
 
+        private void OnPriceListChanged(IReactivePropertyChangedEventArgs<AnalyticPriceListGroup> args)
+        {
+            var source = args.Sender as AnalyticPriceListGroup;
+            if (source != null && source.IsDirty)
+            {
+                SelectedFeature.SelectedStep.IsCompleted = false;
+                SelectedFeature.DisableRemainingSteps();
+            }
+
+            //Update dependent calculated properties.
+            this.RaisePropertyChanged("ValidationResults");
+            this.RaisePropertyChanged("IsAnyPriceListGroupDirty");
+        }
+
         #endregion
 
         #region IDisposable
@@ -115,12 +144,10 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                     if (_selectAllPriceListsSubscription != null)
                     {
                         _selectAllPriceListsSubscription.Dispose();
-                        _selectAllPriceListsSubscription = null;
                     }
                     if (_priceListChangedSubscription != null)
                     {
                         _priceListChangedSubscription.Dispose();
-                        _priceListChangedSubscription = null;
                     }
                 }
                 _isDisposed = true;

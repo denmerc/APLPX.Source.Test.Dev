@@ -54,6 +54,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="1.5*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -217,9 +218,9 @@
                   CanUserDeleteRows="False"
                   CanUserSortColumns="False"
                   ItemsSource="{Binding Path=Entity.SelectedValueDriver.SelectedMode.Groups}"
+                  Style="{StaticResource MetroDataGrid}"
                   Visibility="{Binding Path=IsValueDriverModeSelected,
-                                       Converter={StaticResource BooleanToVisibilityConverter}}"
-                  Style="{StaticResource MetroDataGrid}">
+                                       Converter={StaticResource BooleanToVisibilityConverter}}">
             <DataGrid.Resources>
                 <Style x:Key="GroupMinCellStyle" TargetType="DataGridCell">
                     <Setter Property="VerticalAlignment" Value="Center" />
@@ -324,7 +325,19 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <GridSplitter Grid.Row="3"
+        <TextBlock x:Name="txtIsDirty"
+                   Grid.Row="3"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2"
+                   Margin="0,10,0,5"
+                   VerticalAlignment="Top"
+                   Style="{StaticResource DirtyIndicatorTextBlockStyle}"
+                   Text="You have unsaved changes."
+                   ToolTip="To proceed to the next step, please choose Save or Run from the menu."
+                   Visibility="{Binding Path=IsAnyValueDriverDirty,
+                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <GridSplitter Grid.Row="4"
                       Grid.Column="0"
                       Grid.ColumnSpan="4"
                       Height="3"
@@ -336,7 +349,7 @@
                                            Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <local:AnalyticValueDriverDiagnosticsControl x:Name="ucDiagnostics"
-                                                     Grid.Row="4"
+                                                     Grid.Row="5"
                                                      Grid.Column="0"
                                                      Grid.ColumnSpan="4"
                                                      HorizontalAlignment="Left"

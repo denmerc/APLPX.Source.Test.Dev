@@ -37,19 +37,43 @@ namespace APLPX.UI.WPF.DisplayEntities
         public string Name
         {
             get { return _name; }
-            set { this.RaiseAndSetIfChanged(ref _name, value); }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged("Name");
+                    IsDirty = true;
+                }
+            }
         }
 
         public string Description
         {
             get { return _description; }
-            set { this.RaiseAndSetIfChanged(ref _description, value); }
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    OnPropertyChanged("Description");
+                    IsDirty = true;
+                }
+            }
         }
 
         public string Notes
         {
             get { return _notes; }
-            set { this.RaiseAndSetIfChanged(ref _notes, value); }
+            set
+            {
+                if (_notes != value)
+                {
+                    _notes = value;
+                    OnPropertyChanged("Notes");
+                    IsDirty = true;
+                }
+            }
         }
 
         public string RefreshedText
@@ -119,6 +143,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
                     //Update dependent value.
                     this.RaisePropertyChanged("StatusDescription");
+                    IsDirty = true;
                 }
             }
         }
@@ -135,6 +160,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
                     //Update dependent value.
                     this.RaisePropertyChanged("SharedDescription");
+                    IsDirty = true;
                 }
             }
         }

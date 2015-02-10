@@ -13,19 +13,25 @@ namespace APLPX.UI.WPF.ViewModels
     public class FilterViewModel : ViewModelBase
     {
         private IFilterContainer _entity;
+        private IDisposable _filterChangedSubscription;
         private IDisposable _selectAllFilterSubscription;
         private bool _isDisposed;
 
         #region Constructor and Initialization
 
-        public FilterViewModel(IFilterContainer entity)
+        public FilterViewModel(IFilterContainer entity, ModuleFeature feature)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
+            if (feature == null)
+            {
+                throw new ArgumentNullException("feature");
+            }
 
             Entity = entity;
+            SelectedFeature = feature;
 
             if (entity.SelectedFilterGroup == null && entity.FilterGroups.Count > 0)
             {
@@ -41,7 +47,7 @@ namespace APLPX.UI.WPF.ViewModels
             SelectAllFiltersCommand = ReactiveCommand.Create(canExecute);
 
             _selectAllFilterSubscription = this.WhenAnyObservable(vm => vm.SelectAllFiltersCommand).Subscribe(item => SelectAllFiltersCommandExecuted(item));
-            Entity.FilterGroups.ItemChanged.Subscribe(g => OnFilterGroupChanged(g));
+            _filterChangedSubscription = Entity.FilterGroups.ItemChanged.Subscribe(g => OnFilterGroupChanged(g));
         }
 
         #endregion
@@ -71,7 +77,20 @@ namespace APLPX.UI.WPF.ViewModels
             }
         }
 
-        #endregion   
+        /// <summary>
+        /// Gets a value indicating whether any FilterGroup has unsaved changes.
+        /// </summary>
+        public bool IsAnyFilterGroupDirty
+        {
+            get
+            {
+                bool result = Entity.FilterGroups.Any(grp => grp.IsDirty);
+
+                return result;
+            }
+        }
+
+        #endregion
 
         #region Command and Event Handlers
 
@@ -92,9 +111,18 @@ namespace APLPX.UI.WPF.ViewModels
             }
         }
 
-        private void OnFilterGroupChanged(IReactivePropertyChangedEventArgs<FilterGroup> g)
+        private void OnFilterGroupChanged(IReactivePropertyChangedEventArgs<FilterGroup> args)
         {
+            var source = args.Sender as FilterGroup;
+            if (source != null && source.IsDirty)
+            {
+                SelectedFeature.SelectedStep.IsCompleted = false;
+                SelectedFeature.DisableRemainingSteps();
+            }
+
+            //Update dependent calculated properties.
             this.RaisePropertyChanged("ValidationResults");
+            this.RaisePropertyChanged("IsAnyFilterGroupDirty");
         }
 
         #endregion
@@ -110,7 +138,10 @@ namespace APLPX.UI.WPF.ViewModels
                     if (_selectAllFilterSubscription != null)
                     {
                         _selectAllFilterSubscription.Dispose();
-                        _selectAllFilterSubscription = null;
+                    }
+                    if (_filterChangedSubscription != null)
+                    {
+                        _filterChangedSubscription.Dispose();
                     }
                 }
                 _isDisposed = true;

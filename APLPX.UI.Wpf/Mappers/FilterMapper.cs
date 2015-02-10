@@ -24,6 +24,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.IsSelected = dto.IsSelected;
             displayEntity.Sort = dto.Sort;
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -58,7 +60,9 @@ namespace APLPX.UI.WPF.Mappers
                 {
                     displayEntity.Filters.Add(filterDto.ToDisplayEntity());
                 }
-            }            
+            }
+
+            displayEntity.IsDirty = false;
 
             return displayEntity;
         }

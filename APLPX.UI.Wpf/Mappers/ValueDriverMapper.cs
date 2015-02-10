@@ -42,6 +42,8 @@ namespace APLPX.UI.WPF.Mappers
                 }
             }
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -109,6 +111,8 @@ namespace APLPX.UI.WPF.Mappers
                 displayEntity.Groups.Add(group.ToDisplayEntity());
             }
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -158,6 +162,8 @@ namespace APLPX.UI.WPF.Mappers
             }
             var dto = new DTO.PricingEverydayKeyValueDriver(displayEntity.ValueDriverId, groups);
 
+            displayEntity.IsDirty = false;
+
             return dto;
         }
 
@@ -172,6 +178,8 @@ namespace APLPX.UI.WPF.Mappers
             {
                 displayEntity.Groups.Add(group.ToDisplayEntity());
             }
+
+            displayEntity.IsDirty = false;
 
             return displayEntity;
         }

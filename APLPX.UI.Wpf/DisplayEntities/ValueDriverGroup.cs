@@ -48,13 +48,29 @@ namespace APLPX.UI.WPF.DisplayEntities
         public decimal MinOutlier
         {
             get { return _minOutlier; }
-            set { this.RaiseAndSetIfChanged(ref _minOutlier, value); }
+            set
+            {
+                if (_minOutlier != value)
+                {
+                    _minOutlier = value;
+                    IsDirty = true;
+                    this.RaisePropertyChanged("MinOutlier");
+                }
+            }
         }
 
         public decimal MaxOutlier
         {
             get { return _maxOutlier; }
-            set { this.RaiseAndSetIfChanged(ref _maxOutlier, value); }
+            set
+            {
+                if (_maxOutlier != value)
+                {
+                    _maxOutlier = value;
+                    IsDirty = true;
+                    this.RaisePropertyChanged("MaxOutlier");
+                }
+            }
         }
 
         public short Sort

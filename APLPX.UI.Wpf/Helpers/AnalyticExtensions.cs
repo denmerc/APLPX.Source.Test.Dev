@@ -81,7 +81,7 @@ namespace APLPX.UI.WPF.Helpers
 
             copy.Id = source.Id;
             copy.IsSelected = source.IsSelected;
-            copy.Key = source.Key;            
+            copy.Key = source.Key;
             copy.Name = source.Name;
             copy.Sort = source.Sort;
 
@@ -92,7 +92,7 @@ namespace APLPX.UI.WPF.Helpers
             if (source.SelectedMode != null)
             {
                 copy.SelectedMode = copy.Modes.SingleOrDefault(m => m.Key == source.SelectedMode.Key);
-            }            
+            }
 
             return copy;
         }
@@ -209,6 +209,25 @@ namespace APLPX.UI.WPF.Helpers
             copy.Sort = source.Sort;
 
             return copy;
+        }
+
+        /// <summary>
+        /// Clears the dirty flag for a collection of <see cref="AnalyticValueDriver"/>s.
+        /// </summary>  
+        public static void ClearIsDirty(this IEnumerable<AnalyticValueDriver> drivers)
+        {
+            foreach (AnalyticValueDriver driver in drivers.Where(drv => drv.IsDirty))
+            {
+                foreach (AnalyticValueDriverMode mode in driver.Modes.Where(mode => mode.IsDirty))
+                {
+                    foreach (AnalyticValueDriverGroup driverGroup in mode.Groups.Where(grp=>grp.IsDirty))
+                    {
+                        driverGroup.IsDirty = false;
+                    }
+                    mode.IsDirty = false;
+                }
+                driver.IsDirty = false;
+            }
         }
 
         public static string Dump(this IEnumerable<Analytic> list)

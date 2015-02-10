@@ -23,6 +23,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.MaxOutlier = dto.MaxOutlier;
             displayEntity.Sort = dto.Sort;
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -49,6 +51,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.MaxOutlier = dto.MaxOutlier;
             displayEntity.Sort = dto.Sort;
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -65,6 +69,8 @@ namespace APLPX.UI.WPF.Mappers
 
             displayEntity.SkuCount = dto.SkuCount;
             displayEntity.SalesValue = dto.SalesValue;
+
+            displayEntity.IsDirty = false;
 
             return displayEntity;
         }
@@ -145,6 +151,8 @@ namespace APLPX.UI.WPF.Mappers
                 }
             }
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -178,6 +186,8 @@ namespace APLPX.UI.WPF.Mappers
             var displayEntity = new Display.PricingEverydayLinkedValueDriverGroup();
             displayEntity.ValueDriverGroupId = dto.ValueDriverGroupId;
             displayEntity.PercentChange = dto.PercentChange;
+
+            displayEntity.IsDirty = false;
 
             return displayEntity;
         }

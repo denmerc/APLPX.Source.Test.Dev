@@ -74,6 +74,10 @@ namespace APLPX.UI.WPF.DisplayEntities
                 //Update dependent properties.
                 OnPropertyChanged("AreAllItemsSelected");
                 OnPropertyChanged("SelectedCount");
+                if (priceList.IsDirty)
+                {
+                    IsDirty = true;
+                }
             }
         }
 
@@ -100,7 +104,6 @@ namespace APLPX.UI.WPF.DisplayEntities
                     if (_itemChangedSubscription != null)
                     {
                         _itemChangedSubscription.Dispose();
-                        _itemChangedSubscription = null;
                     }
                     if (PriceLists != null)
                     {

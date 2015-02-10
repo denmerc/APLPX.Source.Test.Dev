@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using APLPX.UI.WPF.DisplayEntities;
 using ReactiveUI;
 
@@ -12,8 +13,9 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         #region Private Fields
 
         private DisplayEntities.Analytic _entity;
-        private IDisposable _modeChangedSubscription;
         private IDisposable _driverChangedSubscription;
+        private IDisposable _modeChangedSubscription;
+        private IDisposable _selectedChangedSubscription;
 
         private bool _isDisposed;
 
@@ -21,14 +23,19 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #region Constructor and Initialization
 
-        public AnalyticDriverViewModel(DisplayEntities.Analytic entity)
+        public AnalyticDriverViewModel(DisplayEntities.Analytic entity, ModuleFeature feature)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
+            if (feature == null)
+            {
+                throw new ArgumentNullException("feature");
+            }
 
             Entity = entity;
+            SelectedFeature = feature;
 
             if (entity.SelectedValueDriver != null)
             {
@@ -43,11 +50,19 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         private void InitializeEventHandlers()
         {
             var selectedValueDriverChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver);
-            _driverChangedSubscription = selectedValueDriverChanged.Subscribe(driver => OnSelectedValueDriverChanged(driver));
+            _selectedChangedSubscription = selectedValueDriverChanged.Subscribe(driver => OnSelectedDriverChanged(driver));
 
             var selectedValueDriverModeChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver.SelectedMode);
-            _modeChangedSubscription = selectedValueDriverModeChanged.Subscribe(mode => OnSelectedValueDriverModeChanged(mode));
+            _modeChangedSubscription = selectedValueDriverModeChanged.Subscribe(mode => OnSelectedDriverModeChanged(mode));
+
+            //TODO: for some reason, this handler is getting unhooked after executing the Save or Run commands.
+            //The dirtyChanged approach (below) works correctly.
+            //_driverChangedSubscription = this.Entity.ValueDrivers.ItemChanged.Subscribe(drv => OnValueDriverChanged(drv));
+
+            var dirtyChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver.IsDirty);
+            _driverChangedSubscription = dirtyChanged.Subscribe(isDirty => OnDriverDirtyChanged(isDirty));
         }
+
 
         #endregion
 
@@ -95,21 +110,56 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether any ValueDriver has unsaved changes.
+        /// </summary>
+        public bool IsAnyValueDriverDirty
+        {
+            get
+            {
+                bool result = Entity.ValueDrivers.Any(driver => driver.IsDirty);
+
+                return result;
+            }
+        }
+
         #endregion
 
         #region Event Handlers
 
-        private object OnSelectedValueDriverChanged(AnalyticValueDriver driver)
+        private void OnDriverDirtyChanged(bool isDirty)
         {
-            this.RaisePropertyChanged("IsValueDriverSelected");
+            if (isDirty)
+            {
+                SelectedFeature.SelectedStep.IsCompleted = false;
+                SelectedFeature.DisableRemainingSteps();                
+            }
 
-            return null;
+            //Update dependent calculated properties.
+            this.RaisePropertyChanged("IsAnyValueDriverDirty");
         }
 
-        private object OnSelectedValueDriverModeChanged(AnalyticValueDriverMode mode)
+
+        private void OnValueDriverChanged(IReactivePropertyChangedEventArgs<AnalyticValueDriver> args)
+        {
+            var source = args.Sender as AnalyticValueDriver;
+            if (source != null && source.IsDirty)
+            {
+                SelectedFeature.SelectedStep.IsCompleted = false;
+                SelectedFeature.DisableRemainingSteps();
+            }
+            //Update dependent calculated properties.
+            this.RaisePropertyChanged("IsAnyValueDriverDirty");
+        }
+
+        private void OnSelectedDriverChanged(AnalyticValueDriver driver)
+        {
+            this.RaisePropertyChanged("IsValueDriverSelected");
+        }
+
+        private void OnSelectedDriverModeChanged(AnalyticValueDriverMode mode)
         {
             this.RaisePropertyChanged("IsValueDriverModeSelected");
-            return null;
         }
 
         #endregion
@@ -122,15 +172,17 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             {
                 if (isDisposing)
                 {
-                    if (_modeChangedSubscription != null)
-                    {
-                        _modeChangedSubscription.Dispose();
-                        _modeChangedSubscription = null;
-                    }
                     if (_driverChangedSubscription != null)
                     {
                         _driverChangedSubscription.Dispose();
-                        _driverChangedSubscription = null;
+                    }
+                    if (_modeChangedSubscription != null)
+                    {
+                        _modeChangedSubscription.Dispose();
+                    }
+                    if (_selectedChangedSubscription != null)
+                    {
+                        _selectedChangedSubscription.Dispose();
                     }
                 }
                 _isDisposed = true;

@@ -24,6 +24,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.Sort = dto.Sort;
             displayEntity.IsSelected = dto.IsSelected;
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -105,6 +107,8 @@ namespace APLPX.UI.WPF.Mappers
                 dto.PriceLists.ForEach(item => displayEntity.PriceLists.Add(item.ToDisplayEntity()));
             }
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -156,6 +160,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.IsSelected = dto.IsSelected;
 
             displayEntity.IsKey = dto.IsKey;
+
+            displayEntity.IsDirty = false;
 
             return displayEntity;
         }

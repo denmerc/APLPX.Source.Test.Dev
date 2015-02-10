@@ -29,6 +29,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         private Dictionary<int, bool> _listAreDriverResultsCurrent;
 
+        private IDisposable _identityChangedListener;
         private IDisposable _filterChangedListener;
         private IDisposable _priceListChangedListener;
         private IDisposable _valueDriverChangedListener;
@@ -36,7 +37,7 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
-        #region Constructors
+        #region Constructor and Initialization
 
         public Analytic()
         {
@@ -44,6 +45,14 @@ namespace APLPX.UI.WPF.DisplayEntities
             FilterGroups = new ReactiveList<FilterGroup>();
             PriceListGroups = new ReactiveList<AnalyticPriceListGroup>();
             ValueDrivers = new ReactiveList<AnalyticValueDriver>();
+
+            InitializeChangeListeners();
+        }
+
+        private void InitializeChangeListeners()
+        {
+            var identityChanged = this.WhenAnyValue(v => v.Identity.IsDirty);
+            _identityChangedListener = identityChanged.Subscribe(v => OnIdentityChanged(v));
 
             FilterGroups.ChangeTrackingEnabled = true;
             _filterChangedListener = FilterGroups.ItemChanged.Subscribe(fg => OnFilterChanged(fg));
@@ -182,7 +191,15 @@ namespace APLPX.UI.WPF.DisplayEntities
         public int SearchGroupId
         {
             get { return _searchGroupId; }
-            set { this.RaiseAndSetIfChanged(ref _searchGroupId, value); }
+            set
+            {
+                if (_searchGroupId != value)
+                {
+                    _searchGroupId = value;
+                    OnPropertyChanged("SearchGroupId");
+                    IsDirty = true;
+                }
+            }
         }
 
         /// <summary>
@@ -218,6 +235,48 @@ namespace APLPX.UI.WPF.DisplayEntities
         {
             get { return _canSearchKeyChange; }
             set { _canSearchKeyChange = value; }
+        }
+
+        #endregion
+
+        #region Property Changed Listeners - contained objects
+
+        private void OnIdentityChanged(bool isDirty)
+        {
+            if (isDirty && !IsDirty)
+            {
+                IsDirty = true;
+            }
+        }
+
+        /// <summary>
+        /// Detects property changes to any Value Driver within this Analytic.
+        /// </summary> 
+        private void OnDriverChanged(IReactivePropertyChangedEventArgs<AnalyticValueDriver> args)
+        {
+            if (args.PropertyName == "AreResultsCurrent" || args.PropertyName == "GroupCount")
+            {
+                //Update dependent properties.
+                this.RaisePropertyChanged("ValueDriverModeRows");
+            }
+        }
+
+        private void OnFilterChanged(IReactivePropertyChangedEventArgs<FilterGroup> args)
+        {
+            var filter = args.Sender as FilterGroup;
+            if (filter != null)
+            {
+                filter.Validate();
+            }
+        }
+
+        private void OnPriceListChanged(IReactivePropertyChangedEventArgs<AnalyticPriceListGroup> args)
+        {
+            var priceListGroup = args.Sender as AnalyticPriceListGroup;
+            if (priceListGroup != null)
+            {
+                priceListGroup.Validate();
+            }
         }
 
         #endregion
@@ -266,37 +325,6 @@ namespace APLPX.UI.WPF.DisplayEntities
             foreach (AnalyticValueDriver driver in ValueDrivers)
             {
                 _listAreDriverResultsCurrent.Add(driver.Key, driver.AreResultsCurrent);
-            }
-        }
-
-        /// <summary>
-        /// Detects property changes to any Value Driver within this Analytic.
-        /// </summary> 
-        private void OnDriverChanged(IReactivePropertyChangedEventArgs<AnalyticValueDriver> args)
-        {
-            if (args.PropertyName == "AreResultsCurrent" || args.PropertyName == "GroupCount")
-            {
-                //Update dependent properties.
-                this.RaisePropertyChanged("ValueDriverModeRows");
-            }
-        }
-
-        private void OnFilterChanged(IReactivePropertyChangedEventArgs<FilterGroup> args)
-        {
-            var filter = args.Sender as FilterGroup;
-            if (filter != null)
-            {
-                filter.Validate();
-            }
-        }
-
-
-        private void OnPriceListChanged(IReactivePropertyChangedEventArgs<AnalyticPriceListGroup> args)
-        {
-            var priceListGroup = args.Sender as AnalyticPriceListGroup;
-            if (priceListGroup != null)
-            {
-                priceListGroup.Validate();
             }
         }
 
@@ -388,6 +416,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             {
                 if (isDisposing)
                 {
+                    if (_identityChangedListener != null)
+                    {
+                        _identityChangedListener.Dispose();
+                        _identityChangedListener = null;
+                    }
                     if (_valueDriverChangedListener != null)
                     {
                         _valueDriverChangedListener.Dispose();

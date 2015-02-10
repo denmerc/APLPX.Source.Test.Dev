@@ -32,6 +32,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.IsActive = dto.Active;
             displayEntity.Shared = dto.Shared;
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 

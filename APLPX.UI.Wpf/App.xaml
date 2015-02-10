@@ -278,7 +278,10 @@
                 <Setter Property="helpers:TextBoxHelper.SelectAllTextOnFocus" Value="True"/>                
             </Style>
 
-
+            <Style x:Key="DirtyIndicatorTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource IdentityTextBlockStyle}">
+                <Setter Property="FontStyle" Value="Italic"/>
+                <Setter Property="Foreground" Value="Yellow"/>
+            </Style>
 
             <Style x:Key="commandButtonStyle" TargetType="{x:Type Button}" >
                 <Setter Property="Height" Value="50" />

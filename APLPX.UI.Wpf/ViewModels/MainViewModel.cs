@@ -200,7 +200,8 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     //TODO: reload Session??? 
                     //TODO: trigger this at inactive timeout interval
-                    if (vm.Session.Authenticated){
+                    if (vm.Session.Authenticated)
+                    {
 
                         var mvm = new MainViewModel(vm.Session, _analyticService, _userService, _pricingEverydayService);
                         var mainW = new MainWindow();
@@ -210,7 +211,7 @@ namespace APLPX.UI.WPF.ViewModels
                         App.Current.Windows[0].Close();
                         App.Current.MainWindow = mainW;
                     }
-                    else {loginWindow.ShowDialog();}
+                    else { loginWindow.ShowDialog(); }
                 }
                 else { App.Current.Shutdown(); }
             });
@@ -264,18 +265,17 @@ namespace APLPX.UI.WPF.ViewModels
                     }
 
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
-                    SelectedFeature.SelectedStep.IsCompleted = false;
 
                     if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit)
                     {
                         //Treat the edit as completed when initially loaded. 
                         SelectedFeature.SelectedStep.IsCompleted = true;
                         SelectedFeature.EnableRemainingSteps();
-                        //TODO: Detect changes to the identity. If it is dirty or invalid, disable remaining steps
-                        // until successfully saved.
                     }
                     else
                     {
+                        SelectedAnalytic.IsDirty = true;
+                        SelectedFeature.SelectedStep.IsCompleted = false;
                         SelectedFeature.DisableRemainingSteps();
                     }
                 }));
@@ -304,6 +304,7 @@ namespace APLPX.UI.WPF.ViewModels
                     var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
                     var response = _analyticService.SaveIdentity(session);
                     SelectedAnalytic.Identity = response.Data.Identity.ToDisplayEntity();
+                    SelectedAnalytic.IsDirty = false;
                     LoadAnalyticListCommand.Execute(null);
 
                     SelectedFeature.SelectedStep.IsCompleted = true;
@@ -325,8 +326,10 @@ namespace APLPX.UI.WPF.ViewModels
                     var payload = SelectedAnalytic.ToPayload();
                     payload.FilterGroups = SelectedAnalytic.FilterGroups;
                     var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
-                    var status = _analyticService.SaveFilters(session);
+                    var response = _analyticService.SaveFilters(session);
+                    SelectedAnalytic.FilterGroups.ClearIsDirty();
                     SelectedFeature.SelectedStep.IsCompleted = true;
+                    SelectedFeature.EnableRemainingSteps();
                 }));
 
             SavePriceListsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -338,9 +341,11 @@ namespace APLPX.UI.WPF.ViewModels
                     var status = _analyticService.SavePriceLists(session);
 
                     var response = _analyticService.LoadPriceLists(session);
-                    var pl = response.Data.PriceListGroups.ToDisplayEntities();
-                    SelectedAnalytic.PriceListGroups = new ReactiveList<AnalyticPriceListGroup>(pl);
+                    var priceListGroups = response.Data.PriceListGroups.ToDisplayEntities();
+                    SelectedAnalytic.PriceListGroups = new ReactiveList<AnalyticPriceListGroup>(priceListGroups);
+                    SelectedAnalytic.FilterGroups.ClearIsDirty();
                     SelectedFeature.SelectedStep.IsCompleted = true;
+                    SelectedFeature.EnableRemainingSteps();
                 }));
 
 
@@ -350,21 +355,21 @@ namespace APLPX.UI.WPF.ViewModels
                     SelectedAnalytic.SaveStateAreDriverResultsCurrent();
                     var driverToRun = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
                     var driverKey = driverToRun.Key;
-                    
+
                     var response = _analyticDisplayServices.RunResults(SelectedAnalytic);
                     return new Tuple<DTO.Session<DTO.Analytic>, int>(response, driverKey) ;
 
                 }));
-                
+
 
                 var disposeSaveOrRunValueDriversCommand = SaveOrRunValueDriversCommand.Subscribe(
                                 response => {
                                     if (!response.Item1.SessionOk)
-                                    {
+                    {
                                         HandleInvalidRequest("Invalid Request - Run Results", 
                                                             string.Format("{0}" + Environment.NewLine + "{1}", 
                                                             response.Item1.ClientMessage, response.Item1.ServerMessage));
-                                    }
+                    }
                                     else
                                     {
                                         OnSaveOrRunValueDriversCommandCompleted(response.Item1, response.Item2);
@@ -384,15 +389,15 @@ namespace APLPX.UI.WPF.ViewModels
                     return _analyticDisplayServices.RunResults(SelectedAnalytic);
 
                 }));
-                
+
                 var disposeResults  = RunResultsCommand.Subscribe(
-                    
+
                     response =>
                     {
                         if(!response.SessionOk)
                         {
                             HandleInvalidRequest("Invalid Request - Run Results", string.Format("{0}" + Environment.NewLine + "{1}", response.ClientMessage, response.ServerMessage ));
-                        }
+        }
                         else
                         {
                             OnRunResultsCommandCompleted(response);
@@ -895,31 +900,35 @@ namespace APLPX.UI.WPF.ViewModels
             }
             SelectedFeature.SelectedStep.IsCompleted = true;
 
+            SelectedAnalytic.ValueDrivers.ClearIsDirty();
+            SelectedFeature.SelectedStep.IsCompleted = true;
+            SelectedFeature.EnableRemainingSteps();
+
         }
 
         private void OnRunResultsCommandCompleted(DTO.Session<DTO.Analytic> response)
-        {
-            SelectedFeatureViewModel = GetViewModel(SelectedStep);
-            if (response.SessionOk)
-            {
-                var drivers = response.Data.ValueDrivers.ToDisplayEntities();
-                SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
+                            { 
+                                SelectedFeatureViewModel = GetViewModel(SelectedStep);
+                                if (response.SessionOk)
+                                {
+                                    var drivers = response.Data.ValueDrivers.ToDisplayEntities();
+                                    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
 
-                foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
-                {
-                    driver.AssignResultsToDriverGroups();
-                    driver.AreResultsCurrent = true;
-                }
+                                    foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
+                                    {
+                                        driver.AssignResultsToDriverGroups();
+                                        driver.AreResultsCurrent = true;
+                                    }
 
-            }
-            else
-            {
-                HandleInvalidRequest("Invalid Api Request", string.Format("{0}\n{1}", response.ServerMessage, response.ClientMessage));
-            }
-            SelectedFeature.SelectedStep.IsCompleted = true;
-        }
+                                }
+                                else
+                                {
+                                    HandleInvalidRequest("Invalid Api Request", string.Format("{0}\n{1}", response.ServerMessage, response.ClientMessage));
+                                }
+                                SelectedFeature.SelectedStep.IsCompleted = true;
+                    }
         private void DisposeCommandSubscriptions()
-        {
+                    {
             //TODO: on app shutdown - dispose of all command subscriptions
 
         }
@@ -928,7 +937,7 @@ namespace APLPX.UI.WPF.ViewModels
 
 
 
-        private bool SetIsFeatureSelectorAvailable()
+      private bool SetIsFeatureSelectorAvailable()
         {
             bool isAvailable = (SelectedModule != null);
             if (isAvailable)
@@ -1083,10 +1092,10 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Filters
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsFilters:
-                    result = new FilterViewModel(SelectedAnalytic);
+                    result = new FilterViewModel(SelectedAnalytic, SelectedFeature);
                     break;
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingFilters:
-                    result = new FilterViewModel(SelectedPricingEveryday);
+                    result = new FilterViewModel(SelectedPricingEveryday, SelectedFeature);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningPromotionPricingFilters:
@@ -1095,7 +1104,7 @@ namespace APLPX.UI.WPF.ViewModels
 
                 //Price Lists
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsPriceLists:
-                    result = new AnalyticPriceListViewModel(SelectedAnalytic);
+                    result = new AnalyticPriceListViewModel(SelectedAnalytic, SelectedFeature);
                     break;
 
                 case DTO.ModuleFeatureStepType.PlanningEverydayPricingPriceLists:
@@ -1107,7 +1116,7 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
                 //Value Drivers
                 case DTO.ModuleFeatureStepType.PlanningAnalyticsValueDrivers:
-                    result = new AnalyticDriverViewModel(SelectedAnalytic);
+                    result = new AnalyticDriverViewModel(SelectedAnalytic, SelectedFeature);
                     break;
 
                 //Results

@@ -729,8 +729,13 @@
                 </TextBlock>
                 <TextBlock x:Name="txtSelectedEntity"
                            Margin="15,5"
-                           Text="{Binding Path=SelectedEntity.Identity.Name,
-                                          StringFormat={}Selected: {0}}">
+                          >
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} Name: {1}">
+                            <Binding Path="SelectedFeature.Classification" />
+                            <Binding Path="SelectedEntity.Identity.Name" />
+                        </MultiBinding>
+                    </TextBlock.Text>
                     <TextBlock.Style>
                         <Style BasedOn="{StaticResource BaseStyleTextBlock}" TargetType="TextBlock">
                             <Style.Triggers>

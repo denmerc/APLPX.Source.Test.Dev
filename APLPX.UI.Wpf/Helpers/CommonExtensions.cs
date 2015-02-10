@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Helpers
 {
@@ -37,6 +38,36 @@ namespace APLPX.UI.WPF.Helpers
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Clears the dirty flag for a collection of <see cref="FilterGroup"/>s.
+        /// </summary>  
+        public static void ClearIsDirty(this IEnumerable<FilterGroup> filterGroups)
+        {
+            foreach (FilterGroup filterGroup in filterGroups.Where(grp => grp.IsDirty))
+            {
+                foreach (Filter filter in filterGroup.Filters.Where(fil => fil.IsDirty))
+                {
+                    filter.IsDirty = false;
+                }
+                filterGroup.IsDirty = false;
+            }
+        }
+
+        /// <summary>
+        /// Clears the dirty flag for a collection of <see cref="AnalyticPriceListGroup"/>s.
+        /// </summary>        
+        public static void ClearIsDirty(this IEnumerable<AnalyticPriceListGroup> priceListGroups)
+        {
+            foreach (AnalyticPriceListGroup priceListGroup in priceListGroups.Where(grp => grp.IsDirty))
+            {
+                foreach (PriceList priceList in priceListGroup.PriceLists.Where(pl => pl.IsDirty))
+                {
+                    priceList.IsDirty = false;
+                }
+                priceListGroup.IsDirty = false;
+            }
         }
     }
 }

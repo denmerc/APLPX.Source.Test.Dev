@@ -31,6 +31,8 @@ namespace APLPX.UI.WPF.Mappers
                 }
             }
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 
@@ -70,6 +72,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.KeyPriceListGroupKey = dto.KeyPriceListGroupKey;
             displayEntity.LinkedPriceListGroupKey = dto.LinkedPriceListGroupKey;
             displayEntity.Sort = dto.Sort;
+
+            displayEntity.IsDirty = false;
 
             return displayEntity;
         }

@@ -150,6 +150,10 @@ namespace APLPX.UI.WPF.DisplayEntities
             var driverGroup = args.Sender as AnalyticValueDriverGroup;
             if (driverGroup != null)
             {
+                if (driverGroup.IsDirty)
+                {
+                    IsDirty = true;
+                }
                 this.RaisePropertyChanged(args.PropertyName);
             }
         }

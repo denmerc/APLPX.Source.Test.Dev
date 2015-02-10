@@ -26,6 +26,8 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.IsSearchKeyChanged = dto.IsSearchGroupChanged;
             displayEntity.Sort = dto.Sort;
 
+            displayEntity.IsDirty = false;
+
             return displayEntity;
         }
 

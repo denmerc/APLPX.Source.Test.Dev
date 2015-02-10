@@ -116,9 +116,13 @@ namespace APLPX.UI.WPF.DisplayEntities
 
             if (filter != null)
             {
-                //Update dependent properties.
+                //Update dependent properties.                
                 OnPropertyChanged("AreAllFiltersSelected");
                 OnPropertyChanged("SelectedCount");
+                if (filter.IsDirty)
+                {
+                    IsDirty = true;
+                }
             }
         }
 
@@ -135,7 +139,7 @@ namespace APLPX.UI.WPF.DisplayEntities
             return result;
         }
 
-        #region IDisposable   
+        #region IDisposable
 
         protected override void Dispose(bool isDisposing)
         {
@@ -146,7 +150,6 @@ namespace APLPX.UI.WPF.DisplayEntities
                     if (_itemChangedSubscription != null)
                     {
                         _itemChangedSubscription.Dispose();
-                        _itemChangedSubscription = null;
                     }
                     if (Filters != null)
                     {

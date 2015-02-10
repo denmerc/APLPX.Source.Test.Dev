@@ -38,9 +38,13 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             _analytic = analytic;
             base.SelectedFeature = feature;
 
+            var dirtyChanged = _analytic.WhenAnyValue(item => item.IsDirty);
+            dirtyChanged.Subscribe(val => OnAnalyticIsDirtyChanged(val));
+           
             var searchKeyChanged = _analytic.WhenAnyValue(item => item.SearchGroupKey);
             _searchKeyChangedSubscription = searchKeyChanged.Subscribe(key => OnSearchKeyChanged(key));
         }
+
 
         #endregion
 
@@ -58,6 +62,16 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                 var result = searchGroups.ToList();
 
                 return result;
+            }
+        }
+
+
+        private void OnAnalyticIsDirtyChanged(bool isDirty)
+        {
+            if (isDirty)
+            {
+                SelectedFeature.SelectedStep.IsCompleted = false;
+                SelectedFeature.DisableRemainingSteps();
             }
         }
 

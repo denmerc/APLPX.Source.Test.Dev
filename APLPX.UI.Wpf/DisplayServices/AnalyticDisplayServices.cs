@@ -46,12 +46,11 @@ namespace APLPX.UI.WPF.DisplayServices
             payload.ValueDrivers = analytic.ValueDrivers;
 
             var session = CreateNewRequest(payload);
-
-            //var session = new DTO.Session<DTO.Analytic>() { 
-            //    Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
             var response = _analyticService.SaveDrivers(session);
             return response;
         }
+
+
 
 
         private DTO.Session<DTO.Analytic> CreateNewRequest(Analytic payload)

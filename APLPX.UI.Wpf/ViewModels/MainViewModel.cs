@@ -344,32 +344,37 @@ namespace APLPX.UI.WPF.ViewModels
                 }));
 
 
-            SaveOrRunValueDriversCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+            SaveOrRunValueDriversCommand = ReactiveCommand.CreateAsyncTask<Tuple<DTO.Session<DTO.Analytic>, int>>(async _ =>
                 await Task.Run(() =>
                 {
                     SelectedAnalytic.SaveStateAreDriverResultsCurrent();
-
                     var driverToRun = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
                     var driverKey = driverToRun.Key;
+                    
+                    var response = _analyticDisplayServices.RunResults(SelectedAnalytic);
+                    return new Tuple<DTO.Session<DTO.Analytic>, int>(response, driverKey) ;
 
-                    var payload = SelectedAnalytic.ToPayload();
-                    payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
-                    var response = _analyticService.SaveDrivers(session);
-                    var drivers = response.Data.ValueDrivers.ToDisplayEntities();
-                    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
-
-                    SelectedAnalytic.RestoreStateAreDriverResultsCurrent();
-
-                    //Restore the selected value driver (the one that the service just recalculated) and mark its results current.
-                    SelectedAnalytic.SelectedValueDriver = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.Key == driverKey);
-                    if (SelectedAnalytic.SelectedValueDriver != null)
-                    {
-                        SelectedAnalytic.SelectedValueDriver.AssignResultsToDriverGroups();
-                        SelectedAnalytic.SelectedValueDriver.AreResultsCurrent = true;
-                    }
-                    SelectedFeature.SelectedStep.IsCompleted = true;
                 }));
+                
+
+                var disposeSaveOrRunValueDriversCommand = SaveOrRunValueDriversCommand.Subscribe(
+                                response => {
+                                    if (!response.Item1.SessionOk)
+                                    {
+                                        HandleInvalidRequest("Invalid Request - Run Results", 
+                                                            string.Format("{0}" + Environment.NewLine + "{1}", 
+                                                            response.Item1.ClientMessage, response.Item1.ServerMessage));
+                                    }
+                                    else
+                                    {
+                                        OnSaveOrRunValueDriversCommandCompleted(response.Item1, response.Item2);
+                                    }
+                                });
+
+
+
+
+
 
 
 
@@ -378,48 +383,22 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     return _analyticDisplayServices.RunResults(SelectedAnalytic);
 
-                    //DisplayEntities.Analytic payload = SelectedAnalytic.ToPayload();
-                    //payload.ValueDrivers = SelectedAnalytic.ValueDrivers;
-                    //var session = new DTO.Session<DTO.Analytic>() { 
-                    //            Data = payload.ToDto(), 
-                    //            SqlKey = Session.SqlKey, 
-                    //            ClientCommand = Session.ClientCommand };
-
-                    
-                    
-
-                    //var response = _analyticService.SaveDrivers(session);
-                    //return response;
-
                 }));
-                
-                
                 
                 var disposeResults  = RunResultsCommand.Subscribe(
                     
                     response =>
                     {
-                        OnRunResultsCommandCompleted(response);
+                        if(!response.SessionOk)
+                        {
+                            HandleInvalidRequest("Invalid Request - Run Results", string.Format("{0}" + Environment.NewLine + "{1}", response.ClientMessage, response.ServerMessage ));
+                        }
+                        else
+                        {
+                            OnRunResultsCommandCompleted(response);
+                        }
 
-                        //SelectedFeatureViewModel = GetViewModel(SelectedStep);
-                        //if (response.SessionOk)
-                        //{
-                        //    var drivers = response.Data.ValueDrivers.ToDisplayEntities();
-                        //    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
-
-                        //    foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
-                        //    {
-                        //        driver.AssignResultsToDriverGroups();
-                        //        driver.AreResultsCurrent = true;
-                        //    }
-
-                        //}
-                        //else
-                        //{
-                        //    HandleInvalidRequest("Invalid Api Request", string.Format("{0}\n{1}", response.ServerMessage, response.ClientMessage));
-                        //}
-                        //SelectedFeature.SelectedStep.IsCompleted = true;                 
-                    }, ex => HandleException("Run Results", ex), () => {}
+                    }, ex => HandleException("Unhandled Exception - Run Results", ex), () => {}
 
                 );
         }
@@ -719,7 +698,7 @@ namespace APLPX.UI.WPF.ViewModels
         /// <summary>
         /// Command to save or run Value Drivers.
         /// </summary>
-        protected ReactiveCommand<Unit> SaveOrRunValueDriversCommand { get; private set; }
+        protected ReactiveCommand<Tuple<DTO.Session<DTO.Analytic>, int>> SaveOrRunValueDriversCommand { get; private set; }
 
         /// <summary>
         /// Command that is invoked when any action is selected in the bound view.
@@ -898,6 +877,25 @@ namespace APLPX.UI.WPF.ViewModels
 
 
         #region Command Callbacks
+
+
+        private void OnSaveOrRunValueDriversCommandCompleted(DTO.Session<DTO.Analytic> response, int driverKey)
+        {
+
+            SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(response.Data.ValueDrivers.ToDisplayEntities());
+
+            SelectedAnalytic.RestoreStateAreDriverResultsCurrent();
+
+            //Restore the selected value driver (the one that the service just recalculated) and mark its results current.
+            SelectedAnalytic.SelectedValueDriver = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.Key == driverKey);
+            if (SelectedAnalytic.SelectedValueDriver != null)
+            {
+                SelectedAnalytic.SelectedValueDriver.AssignResultsToDriverGroups();
+                SelectedAnalytic.SelectedValueDriver.AreResultsCurrent = true;
+            }
+            SelectedFeature.SelectedStep.IsCompleted = true;
+
+        }
 
         private void OnRunResultsCommandCompleted(DTO.Session<DTO.Analytic> response)
         {
@@ -1257,6 +1255,7 @@ namespace APLPX.UI.WPF.ViewModels
         {
 
             LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, String.Format("Invalid Api Request"), messages);
+            _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = messages });
             ReenableUserInterface();
             //Navigate();
 

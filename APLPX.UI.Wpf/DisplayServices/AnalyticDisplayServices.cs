@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 using APLPX.Client.Contracts;
 using APLPX.UI.WPF.DisplayEntities;
+using APLPX.UI.WPF.Helpers;
 using APLPX.UI.WPF.Mappers;
 using DTO = APLPX.Entity;
+using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayServices
 {
@@ -14,22 +16,57 @@ namespace APLPX.UI.WPF.DisplayServices
     public class AnalyticDisplayServices
     {
         private readonly IAnalyticService _analyticService;
+        private DTO.Session<DTO.NullT> _session;
 
         #region Constructors
 
-        public AnalyticDisplayServices(IAnalyticService analyticService)
+        public AnalyticDisplayServices(IAnalyticService analyticService, DTO.Session<DTO.NullT> session)
         {
             if (analyticService == null)
             {
                 throw new ArgumentNullException("analyticService", "Value cannot be null.");
             }
+            if (session == null)
+            {
+                throw new ArgumentNullException("session", "Value cannot be null.");
+            }
+
 
             _analyticService = analyticService;
+            _session = session;
         }
 
         #endregion
 
         #region Public Methods
+
+        public DTO.Session<DTO.Analytic> RunResults(DisplayEntities.Analytic analytic)
+        {
+            DisplayEntities.Analytic payload = analytic.ToPayload();
+            payload.ValueDrivers = analytic.ValueDrivers;
+
+            var session = CreateNewRequest(payload);
+
+            //var session = new DTO.Session<DTO.Analytic>() { 
+            //    Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
+            var response = _analyticService.SaveDrivers(session);
+            return response;
+        }
+
+
+        private DTO.Session<DTO.Analytic> CreateNewRequest(Analytic payload)
+        {
+
+            var p = payload.ToPayload().ToDto();
+            var session = new DTO.Session<DTO.Analytic>()
+            {
+                Data = p,
+                SqlKey = _session.SqlKey,
+                ClientCommand = _session.ClientCommand
+            };
+            return session;
+        }
+
 
         public List<Analytic> LoadAnalytics(DTO.Session<DTO.NullT> session)
         {

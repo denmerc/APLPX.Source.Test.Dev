@@ -31,6 +31,7 @@ namespace APLPX.UI.WPF.ViewModels
         private readonly IAnalyticService _analyticService;
         private readonly IPricingEverydayService _pricingEverydayService;
         private readonly AnalyticDisplayServices _analyticDisplayServices;
+        private readonly PricingEverydayDisplayService _pricingEverydayDisplayServices;
 
         private List<Module> _modules;
         private ViewModelBase _selectedFeatureViewModel;
@@ -117,6 +118,8 @@ namespace APLPX.UI.WPF.ViewModels
             _userService = userService;
             _pricingEverydayService = pricingService;
             _analyticDisplayServices = new AnalyticDisplayServices(_analyticService, Session);
+            _pricingEverydayDisplayServices = new PricingEverydayDisplayService(_pricingEverydayService, Session);
+
             CurrentUser = session.User.ToDisplayEntity();
 
             //TODO: COMMENT THIS OUT WHEN UserService is updated to work with new entity model:
@@ -289,12 +292,14 @@ namespace APLPX.UI.WPF.ViewModels
             LoadPricingEverydayCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
                 {
-                    DTO.PricingIdentity identity = SelectedPricingEveryday.Identity.ToDto();
-                    var id = new DTO.PricingEveryday(SelectedEntity.Id, identity);
-                    var a = _pricingEverydayService.LoadPricingEveryday(new DTO.Session<DTO.PricingEveryday>() { Data = id });
-                    //a.Data.FilterGroups = Session.FilterGroups;
-                    SelectedPricingEveryday = a.Data.ToDisplayEntity();
+                    //DTO.PricingIdentity identity = SelectedPricingEveryday.Identity.ToDto();
+                    //var id = new DTO.PricingEveryday(SelectedEntity.Id, identity);
+                    //var a = _pricingEverydayService.LoadPricingEveryday(new DTO.Session<DTO.PricingEveryday>() { Data = id });
+                    var response = _pricingEverydayDisplayServices.LoadPricingEveryDay(SelectedPricingEveryday.Identity, SelectedEntity.Id);
 
+
+                    //Callback
+                    SelectedPricingEveryday = (DisplayEntities.PricingEveryday)response.Data;
                     SelectedFeature.SelectedStep.IsCompleted = true;
                     SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
                 }));
@@ -1324,7 +1329,7 @@ namespace APLPX.UI.WPF.ViewModels
         private void HandleInvalidRequest(string title, string messages)
         {
 
-            LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, String.Format("Invalid Api Request"), messages);
+            LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, String.Format("{0}/n{1}", title, messages));
             ReenableUserInterface();
             _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = messages });
             Navigate();

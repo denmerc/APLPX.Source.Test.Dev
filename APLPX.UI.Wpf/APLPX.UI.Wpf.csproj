@@ -185,6 +185,7 @@
     <Compile Include="DisplayEntities\PriceOptimizationRule.cs" />
     <Compile Include="DisplayEntities\ValueDriver.cs" />
     <Compile Include="DisplayServices\AnalyticDisplayServices.cs" />
+    <Compile Include="DisplayServices\PricingEverydayDisplayService.cs" />
     <Compile Include="DisplayServices\UserDisplayServices.cs" />
     <Compile Include="DisplayEntities\Advisor.cs" />
     <Compile Include="DisplayEntities\Analytic.cs" />
@@ -260,7 +261,7 @@
     <Compile Include="Mappers\ErrorMapper.cs" />
     <Compile Include="Mappers\IdentityMapper.cs" />
     <Compile Include="SimpleCommand.cs" />
-	<Compile Include="Validation\AnalyticValidations.cs" />
+    <Compile Include="Validation\AnalyticValidations.cs" />
     <Compile Include="Validation\CommonValidations.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\Admin\AdminUsersViewModel.cs" />

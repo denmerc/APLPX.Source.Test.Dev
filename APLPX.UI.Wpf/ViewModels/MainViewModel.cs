@@ -296,41 +296,77 @@ namespace APLPX.UI.WPF.ViewModels
 
 
 
-            SaveAnalyticIdentityCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+            SaveAnalyticIdentityCommand = ReactiveCommand.CreateAsyncTask<Session<DisplayEntities.Analytic>>(async _ =>
                 await Task.Run(() =>
                 {
-                    var payload = SelectedAnalytic.ToPayload();
-                    payload.Identity = SelectedAnalytic.Identity;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
-                    var response = _analyticService.SaveIdentity(session);
-                    SelectedAnalytic.Identity = response.Data.Identity.ToDisplayEntity();
-                    SelectedAnalytic.IsDirty = false;
-                    LoadAnalyticListCommand.Execute(null);
+                    //var payload = SelectedAnalytic.ToPayload();
+                    //payload.Identity = SelectedAnalytic.Identity;
+                    //var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
+                    //var response = _analyticService.SaveIdentity(session);
+                    return _analyticDisplayServices.SaveAnalyticIdentity(SelectedAnalytic);
 
-                    SelectedFeature.SelectedStep.IsCompleted = true;
 
-                    //TODO: determine why current step is sometimes disabled here.
-                    if (!SelectedFeature.SelectedStep.IsEnabled)
-                    {
-                        SelectedFeature.SelectedStep.IsEnabled = true;
-                    }
 
-                    SelectedFeature.EnableRemainingSteps();
                 }));
 
+            var dispSaveAnalyticIdentityCommand = SaveAnalyticIdentityCommand.Subscribe(response => 
+            { 
+                    if(!response.SessionOk)
+                    {
+                        HandleInvalidRequest("Invalid Request - Run Results",
+                                               string.Format("{0}" + Environment.NewLine + "{1}",
+                                               response.ClientMessage, response.ServerMessage));
+                    }
+                    else
+                    {
+                        //on callback
+                        SelectedAnalytic.Identity = ((DisplayEntities.Analytic)(response.Data)).Identity;
+                        SelectedAnalytic.IsDirty = false;
+
+                        LoadAnalyticListCommand.Execute(null);
+
+                        SelectedFeature.SelectedStep.IsCompleted = true;
+
+                        //TODO: determine why current step is sometimes disabled here.
+                        if (!SelectedFeature.SelectedStep.IsEnabled)
+                        {
+                            SelectedFeature.SelectedStep.IsEnabled = true;
+                        }
+
+                        SelectedFeature.EnableRemainingSteps();
+
+                    }
+            
+            });
 
 
-            SaveFiltersCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+            SaveFiltersCommand = ReactiveCommand.CreateAsyncTask<Session<DisplayEntities.Analytic>>(async _ =>
                 await Task.Run(() =>
                 {
-                    var payload = SelectedAnalytic.ToPayload();
-                    payload.FilterGroups = SelectedAnalytic.FilterGroups;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
-                    var response = _analyticService.SaveFilters(session);
+                    //var payload = SelectedAnalytic.ToPayload();
+                    //payload.FilterGroups = SelectedAnalytic.FilterGroups;
+                    //var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
+                    //var response = _analyticService.SaveFilters(session);
+
+                    return _analyticDisplayServices.SaveFilters(SelectedAnalytic);
+                }));
+
+            var saveFiltersCommand = SaveFiltersCommand.Subscribe(response =>
+            {
+                if(!response.SessionOk)
+                {
+                    HandleInvalidRequest("Invalid Request - Run Results",
+                    string.Format("{0}" + Environment.NewLine + "{1}",
+                    response.ClientMessage, response.ServerMessage));
+                }
+                else
+                {
+
                     SelectedAnalytic.FilterGroups.ClearIsDirty();
                     SelectedFeature.SelectedStep.IsCompleted = true;
                     SelectedFeature.EnableRemainingSteps();
-                }));
+                }
+            });
 
             SavePriceListsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -709,12 +745,12 @@ namespace APLPX.UI.WPF.ViewModels
         /// <summary>
         /// Command for saving an analytic identity.
         /// </summary>
-        protected ReactiveCommand<Unit> SaveAnalyticIdentityCommand { get; private set; }
+        protected ReactiveCommand<Session<DisplayEntities.Analytic>> SaveAnalyticIdentityCommand { get; private set; }
 
         /// <summary>
         /// Command to save filters.
         /// </summary>
-        protected ReactiveCommand<Unit> SaveFiltersCommand { get; private set; }
+        protected ReactiveCommand<Session<DisplayEntities.Analytic>> SaveFiltersCommand { get; private set; }
 
         /// <summary>
         /// Command to save price lists

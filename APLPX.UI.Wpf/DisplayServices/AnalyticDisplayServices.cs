@@ -40,12 +40,32 @@ namespace APLPX.UI.WPF.DisplayServices
 
         #region Public Methods
 
+        public Session<Analytic> SaveFilters(DisplayEntities.Analytic analytic)
+        {
+            var payload = analytic.ToPayload();
+            payload.FilterGroups = analytic.FilterGroups;
+            var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
+            var response = _analyticService.SaveFilters(session);
+            return CreateResponseForUI(response);
+        }
+
+        public Session<Analytic> SaveAnalyticIdentity(Analytic analytic)
+        {
+            var payload = analytic.ToPayload();
+            payload.Identity = analytic.Identity;
+            var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
+            var response = _analyticService.SaveIdentity(session);
+            return CreateResponseForUI(response);
+        }
+
+
+
         public DTO.Session<DTO.Analytic> RunResults(DisplayEntities.Analytic analytic)
         {
             DisplayEntities.Analytic payload = analytic.ToPayload();
             payload.ValueDrivers = analytic.ValueDrivers;
 
-            var session = CreateNewRequest(payload);
+            var session = CreateRequest(payload);
             var response = _analyticService.SaveDrivers(session);
             return response;
         }
@@ -59,7 +79,7 @@ namespace APLPX.UI.WPF.DisplayServices
 
 
             var response = _analyticService.SavePriceLists(session);
-            return CreateNewResponse(response);
+            return CreateResponseForUI(response);
         }
 
 
@@ -69,11 +89,11 @@ namespace APLPX.UI.WPF.DisplayServices
             payload.PriceListGroups = analytic.PriceListGroups;
             var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
             var response =  _analyticService.SavePriceLists(session);
-            return CreateNewResponse(response);
+            return CreateResponseForUI(response);
         }
 
 
-        private Session<Analytic> CreateNewResponse(DTO.Session<DTO.Analytic> response )
+        private Session<Analytic> CreateResponseForUI(DTO.Session<DTO.Analytic> response )
         {
             var d = (response.Data as DTO.Analytic);
             var a = d.ToDisplayEntity();
@@ -90,7 +110,7 @@ namespace APLPX.UI.WPF.DisplayServices
             };
         }
 
-        private DTO.Session<DTO.Analytic> CreateNewRequest(Analytic payload)
+        private DTO.Session<DTO.Analytic> CreateRequest(Analytic payload)
         {
 
             var p = payload.ToPayload().ToDto();

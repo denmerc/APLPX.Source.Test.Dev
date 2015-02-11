@@ -335,20 +335,41 @@ namespace APLPX.UI.WPF.ViewModels
             SavePriceListsCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
                 {
-                    var payload = SelectedAnalytic.ToPayload();
-                    payload.PriceListGroups = SelectedAnalytic.PriceListGroups;
-                    var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
-                    var status = _analyticService.SavePriceLists(session);
+                    //var payload = SelectedAnalytic.ToPayload();
+                    //payload.PriceListGroups = SelectedAnalytic.PriceListGroups;
+                    //var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = Session.SqlKey, ClientCommand = Session.ClientCommand };
+                    //var status = _analyticService.SavePriceLists(session);
 
-                    var response = _analyticService.LoadPriceLists(session);
-                    var priceListGroups = response.Data.PriceListGroups.ToDisplayEntities();
-                    SelectedAnalytic.PriceListGroups = new ReactiveList<AnalyticPriceListGroup>(priceListGroups);
-                    SelectedAnalytic.FilterGroups.ClearIsDirty();
-                    SelectedFeature.SelectedStep.IsCompleted = true;
-                    SelectedFeature.EnableRemainingSteps();
+                    var response = _analyticDisplayServices.SavePriceLists(SelectedAnalytic);
+
+                    //var response = _analyticService.LoadPriceLists(session);
+                    //var responseLoad = _analyticDisplayServices.LoadPriceLists(responseSave.Data);
+
+                    return response;
+                    
+
                 }));
 
 
+            var disposePriceListsCommand = SavePriceListsCommand.Subscribe( response =>
+                {
+                    if (!response.SessionOk)
+                    {
+                        HandleInvalidRequest("Invalid Request - Run Results", 
+                                            string.Format("{0}" + Environment.NewLine + "{1}", 
+                                            response.ClientMessage, response.ServerMessage));
+                    }
+                    else
+                    {
+                        var priceListGroups = ((DisplayEntities.Analytic)(response.Data)).PriceListGroups;
+                        SelectedAnalytic.PriceListGroups = new ReactiveList<AnalyticPriceListGroup>(priceListGroups);
+                        SelectedAnalytic.FilterGroups.ClearIsDirty();
+                        SelectedFeature.SelectedStep.IsCompleted = true;
+                        SelectedFeature.EnableRemainingSteps();
+                    }
+                });
+
+           
             SaveOrRunValueDriversCommand = ReactiveCommand.CreateAsyncTask<Tuple<DTO.Session<DTO.Analytic>, int>>(async _ =>
                 await Task.Run(() =>
                 {
@@ -365,11 +386,11 @@ namespace APLPX.UI.WPF.ViewModels
                 var disposeSaveOrRunValueDriversCommand = SaveOrRunValueDriversCommand.Subscribe(
                                 response => {
                                     if (!response.Item1.SessionOk)
-                    {
+                                    {
                                         HandleInvalidRequest("Invalid Request - Run Results", 
                                                             string.Format("{0}" + Environment.NewLine + "{1}", 
                                                             response.Item1.ClientMessage, response.Item1.ServerMessage));
-                    }
+                                    }
                                     else
                                     {
                                         OnSaveOrRunValueDriversCommandCompleted(response.Item1, response.Item2);
@@ -397,7 +418,7 @@ namespace APLPX.UI.WPF.ViewModels
                         if(!response.SessionOk)
                         {
                             HandleInvalidRequest("Invalid Request - Run Results", string.Format("{0}" + Environment.NewLine + "{1}", response.ClientMessage, response.ServerMessage ));
-        }
+                        }
                         else
                         {
                             OnRunResultsCommandCompleted(response);
@@ -698,7 +719,7 @@ namespace APLPX.UI.WPF.ViewModels
         /// <summary>
         /// Command to save price lists
         /// </summary>
-        protected ReactiveCommand<Unit> SavePriceListsCommand { get; private set; }
+        protected ReactiveCommand<Session<DisplayEntities.Analytic>> SavePriceListsCommand { get; private set; }
 
         /// <summary>
         /// Command to save or run Value Drivers.
@@ -898,7 +919,6 @@ namespace APLPX.UI.WPF.ViewModels
                 SelectedAnalytic.SelectedValueDriver.AssignResultsToDriverGroups();
                 SelectedAnalytic.SelectedValueDriver.AreResultsCurrent = true;
             }
-            SelectedFeature.SelectedStep.IsCompleted = true;
 
             SelectedAnalytic.ValueDrivers.ClearIsDirty();
             SelectedFeature.SelectedStep.IsCompleted = true;
@@ -1264,9 +1284,9 @@ namespace APLPX.UI.WPF.ViewModels
         {
 
             LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, String.Format("Invalid Api Request"), messages);
-            _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = messages });
             ReenableUserInterface();
-            //Navigate();
+            _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = messages });
+            Navigate();
 
         }
 

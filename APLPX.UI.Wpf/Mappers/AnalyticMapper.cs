@@ -19,7 +19,10 @@ namespace APLPX.UI.WPF.Mappers
             displayEntity.SearchGroupId = dto.SearchGroupId;
             displayEntity.Id = dto.Id;
 
-            displayEntity.Identity = dto.Identity.ToDisplayEntity();
+            if(dto.Identity != null)
+            {
+                displayEntity.Identity = dto.Identity.ToDisplayEntity();
+            }
 
             if (dto.FilterGroups != null)
             {

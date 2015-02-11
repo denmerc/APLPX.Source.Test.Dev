@@ -256,37 +256,45 @@ namespace APLPX.UI.WPF.ViewModels
 
             var disposeLoadAnalyticCommand = LoadAnalyticCommand.Subscribe(response =>
                 {
-                    var newAnalytic = (DisplayEntities.Analytic)(response.Item1.Data);
-                    if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew &&
-                            newAnalytic.SearchGroupId != response.Item2)
+                    if( !response.Item1.SessionOk)
                     {
-                        //Currentlt the service is sending back a value of 1 instead of the originating SearchGroupId,
-                        // so we must resolve it here for display purposes.
-                        newAnalytic.SearchGroupId = response.Item2;
-                    }
-
-                    SelectedAnalytic = newAnalytic;
-
-                    foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
-                    {
-                        driver.AssignResultsToDriverGroups();
-                        driver.AreResultsCurrent = true;
-                    }
-
-                    SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
-
-                    if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit)
-                    {
-                        //Treat the edit as completed when initially loaded. 
-                        SelectedFeature.SelectedStep.IsCompleted = true;
-                        SelectedFeature.EnableRemainingSteps();
+                        HandleInvalidRequest("Invalid Api Request - Load Analytic", response.Item1.ClientMessage, response.Item1.ServerMessage);
                     }
                     else
                     {
-                        SelectedAnalytic.IsDirty = true;
-                        SelectedFeature.SelectedStep.IsCompleted = false;
-                        SelectedFeature.DisableRemainingSteps();
+                        OnLoadAnalyticCommandCompleted(response);
                     }
+                    //var newAnalytic = (DisplayEntities.Analytic)(response.Item1.Data);
+                    //if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew &&
+                    //        newAnalytic.SearchGroupId != response.Item2)
+                    //{
+                    //    //Currentlt the service is sending back a value of 1 instead of the originating SearchGroupId,
+                    //    // so we must resolve it here for display purposes.
+                    //    newAnalytic.SearchGroupId = response.Item2;
+                    //}
+
+                    //SelectedAnalytic = newAnalytic;
+
+                    //foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
+                    //{
+                    //    driver.AssignResultsToDriverGroups();
+                    //    driver.AreResultsCurrent = true;
+                    //}
+
+                    //SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
+
+                    //if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit)
+                    //{
+                    //    //Treat the edit as completed when initially loaded. 
+                    //    SelectedFeature.SelectedStep.IsCompleted = true;
+                    //    SelectedFeature.EnableRemainingSteps();
+                    //}
+                    //else
+                    //{
+                    //    SelectedAnalytic.IsDirty = true;
+                    //    SelectedFeature.SelectedStep.IsCompleted = false;
+                    //    SelectedFeature.DisableRemainingSteps();
+                    //}
                 });
 
             LoadPricingEverydayCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -323,28 +331,11 @@ namespace APLPX.UI.WPF.ViewModels
             { 
                     if(!response.SessionOk)
                     {
-                        HandleInvalidRequest("Invalid Request - Run Results",
-                                               string.Format("{0}" + Environment.NewLine + "{1}",
-                                               response.ClientMessage, response.ServerMessage));
+                        HandleInvalidRequest("Invalid Api Request - Save Analytic", response.ClientMessage, response.ServerMessage);
                     }
                     else
                     {
-                        //on callback
-                        SelectedAnalytic.Identity = ((DisplayEntities.Analytic)(response.Data)).Identity;
-                        SelectedAnalytic.IsDirty = false;
-
-                        LoadAnalyticListCommand.Execute(null);
-
-                        SelectedFeature.SelectedStep.IsCompleted = true;
-
-                        //TODO: determine why current step is sometimes disabled here.
-                        if (!SelectedFeature.SelectedStep.IsEnabled)
-                        {
-                            SelectedFeature.SelectedStep.IsEnabled = true;
-                        }
-
-                        SelectedFeature.EnableRemainingSteps();
-
+                        OnSaveAnalyticIdentityCommandCompleted(response);
                     }
             
             });
@@ -365,9 +356,7 @@ namespace APLPX.UI.WPF.ViewModels
             {
                 if(!response.SessionOk)
                 {
-                    HandleInvalidRequest("Invalid Request - Run Results",
-                    string.Format("{0}" + Environment.NewLine + "{1}",
-                    response.ClientMessage, response.ServerMessage));
+                    HandleInvalidRequest("Invalid Api Request - Save Analytic Filters", response.ClientMessage, response.ServerMessage);
                 }
                 else
                 {
@@ -401,9 +390,7 @@ namespace APLPX.UI.WPF.ViewModels
                 {
                     if (!response.SessionOk)
                     {
-                        HandleInvalidRequest("Invalid Request - Run Results", 
-                                            string.Format("{0}" + Environment.NewLine + "{1}", 
-                                            response.ClientMessage, response.ServerMessage));
+                        HandleInvalidRequest("Invalid Request - Save Analytic PriceLists", response.ClientMessage, response.ServerMessage);
                     }
                     else
                     {
@@ -433,9 +420,7 @@ namespace APLPX.UI.WPF.ViewModels
                                 response => {
                                     if (!response.Item1.SessionOk)
                                     {
-                                        HandleInvalidRequest("Invalid Request - Run Results", 
-                                                            string.Format("{0}" + Environment.NewLine + "{1}", 
-                                                            response.Item1.ClientMessage, response.Item1.ServerMessage));
+                                        HandleInvalidRequest("Invalid Api Request - SaveRun Value Drivers", response.Item1.ClientMessage, response.Item1.ServerMessage);
                                     }
                                     else
                                     {
@@ -463,16 +448,14 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         if(!response.SessionOk)
                         {
-                            HandleInvalidRequest("Invalid Request - Run Results", string.Format("{0}" + Environment.NewLine + "{1}", response.ClientMessage, response.ServerMessage ));
+                            HandleInvalidRequest("Invalid Api Request - Run Analytic Results", response.ClientMessage, response.ServerMessage);
                         }
                         else
                         {
                             OnRunResultsCommandCompleted(response);
                         }
 
-                    }, ex => HandleException("Unhandled Exception - Run Results", ex), () => {}
-
-                );
+                    });
         }
 
 
@@ -950,7 +933,57 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Command Callbacks
 
+        private void OnSaveAnalyticIdentityCommandCompleted(Session<DisplayEntities.Analytic> response)
+        {
+            SelectedAnalytic.Identity = ((DisplayEntities.Analytic)(response.Data)).Identity;
+            SelectedAnalytic.IsDirty = false;
 
+            LoadAnalyticListCommand.Execute(null);
+
+            SelectedFeature.SelectedStep.IsCompleted = true;
+
+            //TODO: determine why current step is sometimes disabled here.
+            if (!SelectedFeature.SelectedStep.IsEnabled)
+            {
+                SelectedFeature.SelectedStep.IsEnabled = true;
+            }
+
+            SelectedFeature.EnableRemainingSteps();
+        }
+        private void OnLoadAnalyticCommandCompleted(Tuple<Session<DisplayEntities.Analytic>, int> response)
+        {
+            var newAnalytic = (DisplayEntities.Analytic)(response.Item1.Data);
+            if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew &&
+                    newAnalytic.SearchGroupId != response.Item2)
+            {
+                //Currentlt the service is sending back a value of 1 instead of the originating SearchGroupId,
+                // so we must resolve it here for display purposes.
+                newAnalytic.SearchGroupId = response.Item2;
+            }
+
+            SelectedAnalytic = newAnalytic;
+
+            foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
+            {
+                driver.AssignResultsToDriverGroups();
+                driver.AreResultsCurrent = true;
+            }
+
+            SelectedFeature.SelectedStep = SelectedFeature.DefaultActionStep;
+
+            if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit)
+            {
+                //Treat the edit as completed when initially loaded. 
+                SelectedFeature.SelectedStep.IsCompleted = true;
+                SelectedFeature.EnableRemainingSteps();
+            }
+            else
+            {
+                SelectedAnalytic.IsDirty = true;
+                SelectedFeature.SelectedStep.IsCompleted = false;
+                SelectedFeature.DisableRemainingSteps();
+            }
+        }
         private void OnSaveOrRunValueDriversCommandCompleted(DTO.Session<DTO.Analytic> response, int driverKey)
         {
 
@@ -971,33 +1004,31 @@ namespace APLPX.UI.WPF.ViewModels
             SelectedFeature.EnableRemainingSteps();
 
         }
-
         private void OnRunResultsCommandCompleted(DTO.Session<DTO.Analytic> response)
-                            { 
-                                SelectedFeatureViewModel = GetViewModel(SelectedStep);
-                                if (response.SessionOk)
-                                {
-                                    var drivers = response.Data.ValueDrivers.ToDisplayEntities();
-                                    SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
+        { 
+            SelectedFeatureViewModel = GetViewModel(SelectedStep);
 
-                                    foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
-                                    {
-                                        driver.AssignResultsToDriverGroups();
-                                        driver.AreResultsCurrent = true;
-                                    }
+                var drivers = response.Data.ValueDrivers.ToDisplayEntities();
+                SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
 
-                                }
-                                else
-                                {
-                                    HandleInvalidRequest("Invalid Api Request", string.Format("{0}\n{1}", response.ServerMessage, response.ClientMessage));
-                                }
-                                SelectedFeature.SelectedStep.IsCompleted = true;
-                    }
-        private void DisposeCommandSubscriptions()
-                    {
-            //TODO: on app shutdown - dispose of all command subscriptions
-
+                foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
+                {
+                    driver.AssignResultsToDriverGroups();
+                    driver.AreResultsCurrent = true;
+                }
+            SelectedFeature.SelectedStep.IsCompleted = true;
         }
+        private string FormatDisplayErrorMessage(string title, string clientMessage, string serverMessage)
+        {
+             return string.Format("{0}" + Environment.NewLine + "{1}",
+                               clientMessage, serverMessage);
+        }
+
+        private string FormatLogErrorMessage(string title, string clientMessage, string serverMessage)
+        {
+            return string.Format("{0}/n{1}/n{2}", title, clientMessage, serverMessage);
+        }
+
 
         #endregion
 
@@ -1326,12 +1357,11 @@ namespace APLPX.UI.WPF.ViewModels
 
         }
 
-        private void HandleInvalidRequest(string title, string messages)
+        private void HandleInvalidRequest(string title, string clientMessage, string serverMessage)
         {
-
-            LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, String.Format("{0}/n{1}", title, messages));
+            LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, FormatLogErrorMessage(title, clientMessage, serverMessage));
             ReenableUserInterface();
-            _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = messages });
+            _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = FormatDisplayErrorMessage(title, clientMessage, serverMessage) });
             Navigate();
 
         }

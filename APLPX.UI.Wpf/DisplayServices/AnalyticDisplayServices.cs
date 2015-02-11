@@ -103,8 +103,12 @@ namespace APLPX.UI.WPF.DisplayServices
 
         private Session<Analytic> CreateResponseForUI(DTO.Session<DTO.Analytic> response )
         {
-            var d = (response.Data as DTO.Analytic);
-            var a = d.ToDisplayEntity();
+            Analytic a = null;
+            if(response.Data != null)
+            {
+                var d = (response.Data as DTO.Analytic);
+                a = d.ToDisplayEntity();
+            }
             return new Session<Analytic>
             {
                 Authenticated = response.Authenticated,

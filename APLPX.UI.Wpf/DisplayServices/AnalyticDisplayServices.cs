@@ -40,6 +40,14 @@ namespace APLPX.UI.WPF.DisplayServices
 
         #region Public Methods
 
+        public Session<Analytic> LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
+        {
+            var payload = new DTO.Analytic(entityId);
+            payload.SearchGroupId = searchGroupId;
+            var response = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = payload, SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand });
+            return CreateResponseForUI(response);
+        }
+
         public Session<Analytic> SaveFilters(DisplayEntities.Analytic analytic)
         {
             var payload = analytic.ToPayload();

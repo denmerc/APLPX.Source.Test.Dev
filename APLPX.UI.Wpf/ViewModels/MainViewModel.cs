@@ -231,7 +231,7 @@ namespace APLPX.UI.WPF.ViewModels
                 ));
 
 
-            LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask(async _ =>
+            LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask<Tuple<Session<DisplayEntities.Analytic>, int>>(async _ =>
                 await Task.Run(() =>
                 {
                     SelectedFeature.RestoreSelectedSearchGroup();
@@ -243,20 +243,26 @@ namespace APLPX.UI.WPF.ViewModels
                         entityId = SelectedEntity.Id;
                     }
 
-                    var payload = new DTO.Analytic(entityId);
-                    payload.SearchGroupId = searchGroupId;
-                    var a = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = payload, SqlKey = base.Session.SqlKey, ClientCommand = Session.ClientCommand });
-                    var analyticDto = a.Data;
+                    //var payload = new DTO.Analytic(entityId);
+                    //payload.SearchGroupId = searchGroupId;
+                    //var a = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = payload, SqlKey = base.Session.SqlKey, ClientCommand = Session.ClientCommand });
+                    var response = _analyticDisplayServices.LoadAnalytic(SelectedAnalytic, entityId, searchGroupId);
+                    return new Tuple<Session<DisplayEntities.Analytic>, int>(response, searchGroupId);
 
+                }));
+
+            var disposeLoadAnalyticCommand = LoadAnalyticCommand.Subscribe(response =>
+                {
+                    var newAnalytic = (DisplayEntities.Analytic)(response.Item1.Data);
                     if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew &&
-                        analyticDto.SearchGroupId != searchGroupId)
+                            newAnalytic.SearchGroupId != response.Item2)
                     {
                         //Currentlt the service is sending back a value of 1 instead of the originating SearchGroupId,
                         // so we must resolve it here for display purposes.
-                        analyticDto.SearchGroupId = searchGroupId;
+                        newAnalytic.SearchGroupId = response.Item2;
                     }
 
-                    SelectedAnalytic = analyticDto.ToDisplayEntity();
+                    SelectedAnalytic = newAnalytic;
 
                     foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
                     {
@@ -278,8 +284,7 @@ namespace APLPX.UI.WPF.ViewModels
                         SelectedFeature.SelectedStep.IsCompleted = false;
                         SelectedFeature.DisableRemainingSteps();
                     }
-                }));
-
+                });
 
             LoadPricingEverydayCommand = ReactiveCommand.CreateAsyncTask(async _ =>
                 await Task.Run(() =>
@@ -730,7 +735,7 @@ namespace APLPX.UI.WPF.ViewModels
         /// <summary>
         /// Command for loading an analytic.
         /// </summary>
-        protected ReactiveCommand<Unit> LoadAnalyticCommand { get; private set; }
+        protected ReactiveCommand<Tuple<Session<DisplayEntities.Analytic>, int>> LoadAnalyticCommand { get; private set; }
 
         /// <summary>
         /// Command for loading analytic list.

@@ -44,16 +44,17 @@ namespace APLPX.UI.WPF.DisplayServices
         {
             var response = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = _session.SqlKey });
             List<DTO.Analytic> analyticDtos = response.Data;
-            var displayAnalytics = analyticDtos.ToDisplayEntities();
+            //var displayAnalytics = analyticDtos.ToDisplayEntities();
             return CreateDisplayResponse<List<DTO.Analytic>>(response);
         }
 
 
         public Session<DTO.Analytic> LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
         {
-            var payload = new DTO.Analytic(entityId);
-            payload.SearchGroupId = searchGroupId;
-            var response = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = payload, SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand });
+            analytic.Id = entityId;
+            analytic.SearchGroupId = searchGroupId;
+            var session = CreateRequest(analytic);
+            var response = _analyticService.Load(session);
             return CreateDisplayResponse<DTO.Analytic>(response);
         }
 
@@ -61,7 +62,7 @@ namespace APLPX.UI.WPF.DisplayServices
         {
             var payload = analytic.ToPayload();
             payload.FilterGroups = analytic.FilterGroups;
-            var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
+            var session = CreateRequest(payload);
             var response = _analyticService.SaveFilters(session);
             return CreateDisplayResponse<DTO.Analytic>(response);
         }
@@ -70,7 +71,7 @@ namespace APLPX.UI.WPF.DisplayServices
         {
             var payload = analytic.ToPayload();
             payload.Identity = analytic.Identity;
-            var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
+            var session = CreateRequest(payload);
             var response = _analyticService.SaveIdentity(session);
             return CreateDisplayResponse<DTO.Analytic>(response);
         }
@@ -89,9 +90,7 @@ namespace APLPX.UI.WPF.DisplayServices
         {
             var payload = analytic.ToPayload();
             payload.PriceListGroups = analytic.PriceListGroups;
-            var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
-
-
+            var session = CreateRequest(payload);
             var response = _analyticService.SavePriceLists(session);
             return CreateDisplayResponse<DTO.Analytic>(response);
         }
@@ -100,40 +99,14 @@ namespace APLPX.UI.WPF.DisplayServices
         {
             var payload = analytic.ToPayload();
             payload.PriceListGroups = analytic.PriceListGroups;
-            var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
+            var session = CreateRequest(payload);            
             var response =  _analyticService.SavePriceLists(session);
             return CreateDisplayResponse<DTO.Analytic>(response);
         }
 
-        //private Session<Analytic> CreateResponseForUI(DTO.Session<DTO.Analytic> response )
-        //{
-        //    Analytic a = null;
-        //    if(response.Data != null)
-        //    {
-        //        var d = (response.Data as DTO.Analytic);
-        //        a = d.ToDisplayEntity();
-        //    }
-        //    return new Session<Analytic>
-        //    {
-        //        Authenticated = response.Authenticated,
-        //        SqlAuthorization = response.SqlAuthorization,
-        //        ClientMessage = response.ClientMessage ?? null,
-        //        Data = a ,
-        //        ServerMessage = response.ServerMessage ?? null,
-        //        SessionOk = response.SessionOk,
-        //        User = response.User != null ? response.User.ToDisplayEntity() : null,
-
-        //    };
-        //}
 
         private Session<T> CreateDisplayResponse<T>(DTO.Session<T> response) where T : class
         {
-
-            //if (response.Data != null)
-            //{
-            //    var d = (response.Data as Tin);
-            //    //a = d.ToDisplayEntity();
-            //}
             return new Session<T>
             {
                 Authenticated = response.Authenticated,
@@ -211,7 +184,9 @@ namespace APLPX.UI.WPF.DisplayServices
             DTO.Analytic payload = displayAnalytic.ToDto();
             var sessionDto = new DTO.Session<DTO.Analytic> { Data = payload };
 
-            DTO.Session<DTO.Analytic> returnedSession = null; ;//TODO: set to null until AnalyticService contract is updated. _analyticService.LoadDrivers(sessionDto);
+            DTO.Session<DTO.Analytic> returnedSession = null;
+            
+            //TODO: set to null until AnalyticService contract is updated. _analyticService.LoadDrivers(sessionDto);
 
             var displayList = new List<AnalyticPriceListGroup>();
             foreach (var group in returnedSession.Data.PriceListGroups)

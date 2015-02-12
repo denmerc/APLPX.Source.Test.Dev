@@ -40,33 +40,40 @@ namespace APLPX.UI.WPF.DisplayServices
 
         #region Public Methods
 
-        public Session<Analytic> LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
+        public Session<List<DTO.Analytic>> LoadAnalyticList()
+        {
+            var response = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = _session.SqlKey });
+            List<DTO.Analytic> analyticDtos = response.Data;
+            var displayAnalytics = analyticDtos.ToDisplayEntities();
+            return CreateDisplayResponse<List<DTO.Analytic>>(response);
+        }
+
+
+        public Session<DTO.Analytic> LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
         {
             var payload = new DTO.Analytic(entityId);
             payload.SearchGroupId = searchGroupId;
             var response = _analyticService.Load(new DTO.Session<DTO.Analytic>() { Data = payload, SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand });
-            return CreateResponseForUI(response);
+            return CreateDisplayResponse<DTO.Analytic>(response);
         }
 
-        public Session<Analytic> SaveFilters(DisplayEntities.Analytic analytic)
+        public Session<DTO.Analytic> SaveFilters(DisplayEntities.Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.FilterGroups = analytic.FilterGroups;
             var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
             var response = _analyticService.SaveFilters(session);
-            return CreateResponseForUI(response);
+            return CreateDisplayResponse<DTO.Analytic>(response);
         }
 
-        public Session<Analytic> SaveAnalyticIdentity(Analytic analytic)
+        public Session<DTO.Analytic> SaveAnalyticIdentity(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.Identity = analytic.Identity;
             var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
             var response = _analyticService.SaveIdentity(session);
-            return CreateResponseForUI(response);
+            return CreateDisplayResponse<DTO.Analytic>(response);
         }
-
-
 
         public DTO.Session<DTO.Analytic> RunResults(DisplayEntities.Analytic analytic)
         {
@@ -78,8 +85,7 @@ namespace APLPX.UI.WPF.DisplayServices
             return response;
         }
 
-
-        public Session<Analytic> SavePriceLists(Analytic analytic)
+        public Session<DTO.Analytic> SavePriceLists(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.PriceListGroups = analytic.PriceListGroups;
@@ -87,34 +93,53 @@ namespace APLPX.UI.WPF.DisplayServices
 
 
             var response = _analyticService.SavePriceLists(session);
-            return CreateResponseForUI(response);
+            return CreateDisplayResponse<DTO.Analytic>(response);
         }
 
-
-        public Session<Analytic> LoadPriceLists(Analytic analytic)
+        public Session<DTO.Analytic> LoadPriceLists(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.PriceListGroups = analytic.PriceListGroups;
             var session = new DTO.Session<DTO.Analytic>() { Data = payload.ToDto(), SqlKey = _session.SqlKey, ClientCommand = _session.ClientCommand };
             var response =  _analyticService.SavePriceLists(session);
-            return CreateResponseForUI(response);
+            return CreateDisplayResponse<DTO.Analytic>(response);
         }
 
+        //private Session<Analytic> CreateResponseForUI(DTO.Session<DTO.Analytic> response )
+        //{
+        //    Analytic a = null;
+        //    if(response.Data != null)
+        //    {
+        //        var d = (response.Data as DTO.Analytic);
+        //        a = d.ToDisplayEntity();
+        //    }
+        //    return new Session<Analytic>
+        //    {
+        //        Authenticated = response.Authenticated,
+        //        SqlAuthorization = response.SqlAuthorization,
+        //        ClientMessage = response.ClientMessage ?? null,
+        //        Data = a ,
+        //        ServerMessage = response.ServerMessage ?? null,
+        //        SessionOk = response.SessionOk,
+        //        User = response.User != null ? response.User.ToDisplayEntity() : null,
 
-        private Session<Analytic> CreateResponseForUI(DTO.Session<DTO.Analytic> response )
+        //    };
+        //}
+
+        private Session<T> CreateDisplayResponse<T>(DTO.Session<T> response) where T : class
         {
-            Analytic a = null;
-            if(response.Data != null)
-            {
-                var d = (response.Data as DTO.Analytic);
-                a = d.ToDisplayEntity();
-            }
-            return new Session<Analytic>
+
+            //if (response.Data != null)
+            //{
+            //    var d = (response.Data as Tin);
+            //    //a = d.ToDisplayEntity();
+            //}
+            return new Session<T>
             {
                 Authenticated = response.Authenticated,
                 SqlAuthorization = response.SqlAuthorization,
                 ClientMessage = response.ClientMessage ?? null,
-                Data = a ,
+                Data = response.Data,
                 ServerMessage = response.ServerMessage ?? null,
                 SessionOk = response.SessionOk,
                 User = response.User != null ? response.User.ToDisplayEntity() : null,

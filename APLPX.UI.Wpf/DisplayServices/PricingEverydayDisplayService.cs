@@ -35,26 +35,26 @@ namespace APLPX.UI.WPF.DisplayServices
         #region Public Methods
 
 
-        public Session<PricingEveryday> LoadPricingEveryDay(PricingIdentity identity, int selectedEntityId)
+        public Session<DTO.PricingEveryday> LoadPricingEveryDay(PricingIdentity identity, int selectedEntityId)
         {
             DTO.PricingIdentity id = identity.ToDto();
             var ids = new DTO.PricingEveryday(selectedEntityId, id);
             var response = _pricingEverydayService.LoadPricingEveryday(new DTO.Session<DTO.PricingEveryday>() { Data = ids });
-            return CreateResponseForUI(response);
+            return CreateDisplayResponse<DTO.PricingEveryday>(response);
         }
 
 
 
-        private Session<PricingEveryday> CreateResponseForUI(DTO.Session<DTO.PricingEveryday> response)
+        private Session<T> CreateDisplayResponse<T>(DTO.Session<T> response) 
         {
-            var d = (response.Data as DTO.PricingEveryday);
-            var p = d.ToDisplayEntity();
-            return new Session<PricingEveryday>
+            //var d = (response.Data as DTO.PricingEveryday);
+            //var p = d.ToDisplayEntity();
+            return new Session<T>
             {
                 Authenticated = response.Authenticated,
                 SqlAuthorization = response.SqlAuthorization,
                 ClientMessage = response.ClientMessage ?? null,
-                Data = p,
+                Data = response.Data,
                 ServerMessage = response.ServerMessage ?? null,
                 SessionOk = response.SessionOk,
                 User = response.User != null ? response.User.ToDisplayEntity() : null,

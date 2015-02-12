@@ -7,7 +7,7 @@ namespace APLPX.Entity
     public class NullT { }
 
     [DataContract]
-    public class Session<T> where T : class
+    public class Session<T>
     {
         [DataMember]
         public User User { get; set; }

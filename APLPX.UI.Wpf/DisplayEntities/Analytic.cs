@@ -366,29 +366,18 @@ namespace APLPX.UI.WPF.DisplayEntities
                 consolidatedList.Add(new Error { Message = "A folder must be selected for this Analytic." });
             }
 
-            var entityErrors = Identity.CheckIsValid();
-            foreach (Error error in entityErrors)
-            {
-                consolidatedList.Add(error);
-            }
+            var entityErrors = Identity.GetAllValidationErrors();
+            consolidatedList.AddRange(entityErrors);
+          
 
-            entityErrors = FilterGroups.CheckIsValid();
-            foreach (Error error in entityErrors)
-            {
-                consolidatedList.Add(error);
-            }
+            entityErrors = FilterGroups.GetAllValidationErrors();
+            consolidatedList.AddRange(entityErrors);
 
-            entityErrors = PriceListGroups.CheckIsValid();
-            foreach (Error error in entityErrors)
-            {
-                consolidatedList.Add(error);
-            }
+            entityErrors = PriceListGroups.GetAllValidationErrors();
+            consolidatedList.AddRange(entityErrors);
 
-            entityErrors = ValueDrivers.CheckIsValid();
-            foreach (Error error in entityErrors)
-            {
-                consolidatedList.Add(error);
-            }
+            entityErrors = ValueDrivers.GetAllValidationErrors();
+            consolidatedList.AddRange(entityErrors);
 
             return consolidatedList;
         }

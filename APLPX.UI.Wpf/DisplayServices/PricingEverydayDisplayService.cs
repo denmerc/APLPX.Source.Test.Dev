@@ -45,7 +45,7 @@ namespace APLPX.UI.WPF.DisplayServices
 
 
 
-        private Session<T> CreateDisplayResponse<T>(DTO.Session<DTO.PricingEveryday> response) 
+        private Session<T> CreateDisplayResponse<T>(DTO.Session<DTO.PricingEveryday> response)  where T : class
         {
             PricingEveryday display = response.Data != null ? response.Data.ToDisplayEntity() : null;
             return new Session<T>

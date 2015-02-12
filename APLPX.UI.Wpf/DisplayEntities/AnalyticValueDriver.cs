@@ -144,6 +144,20 @@ namespace APLPX.UI.WPF.DisplayEntities
 
         #endregion
 
+        public override List<Error> GetValidationErrors()
+        {
+            var result = new List<Error>();
+
+            if (Modes.Where(m => m.IsSelected).Count() == 0)
+            {
+                string message = String.Format("\"{0}\" Value Driver: Please specify Auto- or user-generated.", Name);
+                result.Add(new Error { Message = message });
+            }
+
+            return result;
+
+        }
+
         #region IDisposable
 
         protected override void Dispose(bool isDisposing)

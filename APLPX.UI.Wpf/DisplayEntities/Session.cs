@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace APLPX.UI.WPF.DisplayEntities
 {
-    public class Session<T> : DisplayEntityBase
+    public class Session<T> : DisplayEntityBase where T : class
     {
         #region Private Fields
 

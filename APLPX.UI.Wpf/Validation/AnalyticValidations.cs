@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using APLPX.UI.WPF.DisplayEntities;
 
 namespace APLPX.UI.WPF.Validation
@@ -15,8 +14,8 @@ namespace APLPX.UI.WPF.Validation
         /// <summary>
         /// Validates an <see cref="AnalyticIdentity"/>.
         /// </summary>        
-        //// <returns>A list of <see cref="Error"/> objects populated with messages for each invalid item.</returns>
-        public static List<Error> CheckIsValid(this AnalyticIdentity identity)
+        /// <returns>A list of <see cref="Error"/> objects populated with messages for each invalid item.</returns>
+        public static List<Error> GetAllValidationErrors(this AnalyticIdentity identity)
         {
             var errors = new List<Error>();
        
@@ -27,46 +26,79 @@ namespace APLPX.UI.WPF.Validation
         /// Validates a collection of <see cref="AnalyticPriceListGroup"/>s.
         /// </summary>        
         /// <returns>A list of <see cref="Error"/> objects populated with messages for each invalid item.</returns>
-        public static List<Error> CheckIsValid(this IEnumerable<AnalyticPriceListGroup> priceListGroups)
+        public static List<Error> GetAllValidationErrors(this IEnumerable<AnalyticPriceListGroup> priceListGroups)
         {
-            var errors = new List<Error>();
+            var errorList = new List<Error>();
 
             foreach (AnalyticPriceListGroup group in priceListGroups)
             {
-                if (group.SelectedCount == 0)
+                var errors = group.GetValidationErrors();
+                errorList.AddRange(errors);
+            }
+
+            return errorList;
+        }
+        
+        /// <summary>
+        /// Gets a value indicating whether every item in a collection of <see cref="AnalyticPriceListGroup"/>s is valid. 
+        /// </summary>
+        /// <returns>true if all items are valid; otherwise, false.</returns>
+        public static bool AreAllItemsValid(this IEnumerable<AnalyticPriceListGroup> priceListGroups)
+        {
+            bool areAllValid = true;
+
+            foreach (AnalyticPriceListGroup group in priceListGroups)
+            {
+                if (!group.Validate())
                 {
-                    string message = String.Format("{0} Price List: At least one item must be selected.", group.Name);
-                    errors.Add(new Error { Message = message });
+                    areAllValid = false;
+                    break;
                 }
             }
-            return errors;
+            return areAllValid;
         }
 
         /// <summary>
         /// Validates a collection of <see cref="AnalyticValueDriver"/>s.
         /// </summary>        
         /// <returns>A list of <see cref="Error"/> objects populated with messages for each invalid item.</returns>
-        public static List<Error> CheckIsValid(this IEnumerable<AnalyticValueDriver> drivers)
+        public static List<Error> GetAllValidationErrors(this IEnumerable<AnalyticValueDriver> drivers)
         {
-            var errors = new List<Error>();
+            var errorList = new List<Error>();
 
             var selectedDrivers = drivers.Where(driver => driver.IsSelected);
             if (drivers.Count() > 0 && selectedDrivers.Count() == 0)
             {
-                errors.Add(new Error { Message = "At least one Value Driver must be selected." });
+                errorList.Add(new Error { Message = "At least one Value Driver must be selected." });
             }
             else
             {
                 foreach (AnalyticValueDriver driver in selectedDrivers)
                 {
-                    if (driver.Modes.Where(m => m.IsSelected).Count() == 0)
-                    {
-                        string message = String.Format("\"{0}\" Value Driver: Please specify Auto- or user-generated.", driver.Name);
-                        errors.Add(new Error { Message = message });
-                    }
+                    var errors = driver.GetValidationErrors();
+                    errorList.AddRange(errors);
                 }
             }
-            return errors;
+            return errorList;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether every item in a collection of <see cref="AnalyticValueDriver"/>s is valid. 
+        /// </summary>  
+        /// <returns></returns>
+        public static bool AreAllItemsValid(this IEnumerable<AnalyticValueDriver> valueDrivers)
+        {
+            bool areAllValid = true;
+
+            foreach (AnalyticValueDriver group in valueDrivers)
+            {
+                if (!group.Validate())
+                {
+                    areAllValid = false;
+                    break;
+                }
+            }
+            return areAllValid;
         }
 
     }

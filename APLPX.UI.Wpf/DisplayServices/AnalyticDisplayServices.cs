@@ -40,79 +40,90 @@ namespace APLPX.UI.WPF.DisplayServices
 
         #region Public Methods
 
-        public Session<List<DTO.Analytic>> LoadAnalyticList()
+        public Session<List<Analytic>> LoadAnalyticList()
         {
             var response = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = _session.SqlKey });
             List<DTO.Analytic> analyticDtos = response.Data;
-            //var displayAnalytics = analyticDtos.ToDisplayEntities();
-            return CreateDisplayResponse<List<DTO.Analytic>>(response);
+            var displayAnalytics = analyticDtos != null ? analyticDtos.ToDisplayEntities() : null;
+            return new Session<List<Analytic>>
+            {
+                Authenticated = response.Authenticated,
+                SqlAuthorization = response.SqlAuthorization,
+                ClientMessage = response.ClientMessage ?? null,
+                Data = displayAnalytics,
+                ServerMessage = response.ServerMessage ?? null,
+                SessionOk = response.SessionOk,
+                User = response.User != null ? response.User.ToDisplayEntity() : null,
+
+            };
         }
 
 
-        public Session<DTO.Analytic> LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
+        public Session<Analytic> LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
         {
             analytic.Id = entityId;
             analytic.SearchGroupId = searchGroupId;
             var session = CreateRequest(analytic);
             var response = _analyticService.Load(session);
-            return CreateDisplayResponse<DTO.Analytic>(response);
+            return CreateDisplayResponse<Analytic>(response);
         }
 
-        public Session<DTO.Analytic> SaveFilters(DisplayEntities.Analytic analytic)
+        public Session<Analytic> SaveFilters(DisplayEntities.Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.FilterGroups = analytic.FilterGroups;
             var session = CreateRequest(payload);
             var response = _analyticService.SaveFilters(session);
-            return CreateDisplayResponse<DTO.Analytic>(response);
+            return CreateDisplayResponse<Analytic>(response);
         }
 
-        public Session<DTO.Analytic> SaveAnalyticIdentity(Analytic analytic)
+        public Session<Analytic> SaveAnalyticIdentity(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.Identity = analytic.Identity;
             var session = CreateRequest(payload);
             var response = _analyticService.SaveIdentity(session);
-            return CreateDisplayResponse<DTO.Analytic>(response);
+            return CreateDisplayResponse<Analytic>(response);
         }
 
-        public DTO.Session<DTO.Analytic> RunResults(DisplayEntities.Analytic analytic)
+        public Session<Analytic> RunResults(DisplayEntities.Analytic analytic)
         {
             DisplayEntities.Analytic payload = analytic.ToPayload();
             payload.ValueDrivers = analytic.ValueDrivers;
 
             var session = CreateRequest(payload);
             var response = _analyticService.SaveDrivers(session);
-            return response;
+            return CreateDisplayResponse<Analytic>(response);
         }
 
-        public Session<DTO.Analytic> SavePriceLists(Analytic analytic)
+        public Session<Analytic> SavePriceLists(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.PriceListGroups = analytic.PriceListGroups;
             var session = CreateRequest(payload);
             var response = _analyticService.SavePriceLists(session);
-            return CreateDisplayResponse<DTO.Analytic>(response);
+            return CreateDisplayResponse<Analytic>(response);
         }
 
-        public Session<DTO.Analytic> LoadPriceLists(Analytic analytic)
+        public Session<Analytic> LoadPriceLists(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.PriceListGroups = analytic.PriceListGroups;
             var session = CreateRequest(payload);            
             var response =  _analyticService.SavePriceLists(session);
-            return CreateDisplayResponse<DTO.Analytic>(response);
+            return CreateDisplayResponse<Analytic>(response);
         }
 
 
-        private Session<T> CreateDisplayResponse<T>(DTO.Session<T> response) where T : class
+        private Session<T> CreateDisplayResponse<T>(DTO.Session<DTO.Analytic> response) where T : class
         {
+            Analytic display = response.Data != null ? response.Data.ToDisplayEntity() : null;
             return new Session<T>
             {
                 Authenticated = response.Authenticated,
                 SqlAuthorization = response.SqlAuthorization,
                 ClientMessage = response.ClientMessage ?? null,
-                Data = response.Data,
+                Data = display ?? null,
                 ServerMessage = response.ServerMessage ?? null,
                 SessionOk = response.SessionOk,
                 User = response.User != null ? response.User.ToDisplayEntity() : null,

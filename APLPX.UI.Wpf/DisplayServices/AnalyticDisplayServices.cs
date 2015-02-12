@@ -150,7 +150,7 @@ namespace APLPX.UI.WPF.DisplayServices
         private DTO.Session<DTO.Analytic> CreateRequest(Analytic payload)
         {
 
-            var p = payload.ToPayload().ToDto();
+            var p = payload.ToDto();
             var session = new DTO.Session<DTO.Analytic>()
             {
                 Data = p,

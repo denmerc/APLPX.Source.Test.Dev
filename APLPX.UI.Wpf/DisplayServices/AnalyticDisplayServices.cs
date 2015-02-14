@@ -60,9 +60,13 @@ namespace APLPX.UI.WPF.DisplayServices
 
 
         public Session<Analytic> LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
-        {
-            analytic.Id = entityId;
-            analytic.SearchGroupId = searchGroupId;
+        { 
+            if( analytic != null)
+            {
+                analytic.Id = entityId;
+                analytic.SearchGroupId = searchGroupId;
+
+            }
             var session = CreateRequest(analytic);
             var response = _analyticService.Load(session);
             return CreateDisplayResponse<Analytic>(response);

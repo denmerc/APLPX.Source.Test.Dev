@@ -802,6 +802,7 @@ namespace APLPX.UI.WPF.ViewModels
         }
         private void OnLoadAnalyticCommandCompleted(DisplayEntities.Analytic response)
         {
+            SelectedFeature.RestoreSelectedSearchGroup();
             var searchGroupId = GetSearchGroupId(Session.ClientCommand);
             //var a = ((DisplayEntities.Analytic)response.Item1.Data);
             if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew &&

@@ -642,14 +642,14 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         entityId = SelectedEntity.Id;
                     }
-                    ExecuteAsyncCommand(LoadAnalyticCommand, "Retrieving analytic...", "Load Analytic", "Analytic successfully loaded", r => OnLoadAnalyticCommandCompleted(r));
+                    ExecuteAsyncCommand(LoadAnalyticCommand, r => OnLoadAnalyticCommandCompleted(r), "Retrieving analytic...", "Load Analytic", "Analytic successfully loaded.");
                     break;
 
                 case APLPX.Entity.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayEdit:
                     //TODO: get the full entity from the server and load edit screen.
                     //This is a simulation only.
                     SelectedPricingEveryday = SelectedEntity as DisplayEntities.PricingEveryday;
-                    ExecuteAsyncCommand(LoadPricingEverydayCommand, "Retrieving pricing...", "Load Everyday Pricing", "Pricing Everyday successfully loaded", r => OnLoadPricingEverydayCommandCompleted(r));
+                    ExecuteAsyncCommand(LoadPricingEverydayCommand, r => OnLoadPricingEverydayCommandCompleted(r), "Retrieving pricing...", "Load Everyday Pricing", "Pricing Everyday successfully loaded.");
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsEdit:
@@ -658,14 +658,14 @@ namespace APLPX.UI.WPF.ViewModels
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsCopy:
 
-                    ExecuteAsyncCommand(LoadAnalyticCommand, "Copying analytic...", "Copy Analytic", "Analytic successfully copied.",  r => OnLoadAnalyticCommandCompleted(r));
+                    ExecuteAsyncCommand(LoadAnalyticCommand,  r => OnLoadAnalyticCommandCompleted(r), "Copying analytic...", "Copy Analytic", "Analytic successfully copied.");
                     SelectedFeature.DisableRemainingSteps();
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew:
                     SelectedFeature.RestoreSelectedSearchGroup();
 
-                    ExecuteAsyncCommand(LoadAnalyticCommand, "Creating new analytic...", "New Analytic", "New Analytic successfully created.",  r => OnLoadAnalyticCommandCompleted(r));
+                    ExecuteAsyncCommand(LoadAnalyticCommand,  r => OnLoadAnalyticCommandCompleted(r), "Creating new analytic...", "New Analytic", "New Analytic successfully created.");
                     SelectedFeature.DisableRemainingSteps();
                     break;
 
@@ -691,7 +691,7 @@ namespace APLPX.UI.WPF.ViewModels
                 //Save the current entity.
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentitySave:
                     //TODO: call analytic save method on service.
-                    ExecuteAsyncCommand(SaveAnalyticIdentityCommand, "Saving Identity...", "Save Identity", "Identity successfully saved", r => OnSaveAnalyticIdentityCommandCompleted(r));
+                    ExecuteAsyncCommand(SaveAnalyticIdentityCommand, r => OnSaveAnalyticIdentityCommandCompleted(r), "Saving Identity...", "Analytic - Save Identity", "Identity successfully saved");
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingIdentitySave:
@@ -704,11 +704,11 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepActionType.PlanningKitPricingIdentitySave:
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsFiltersSave:
-                    ExecuteAsyncCommand(SaveFiltersCommand, "Saving Filters...", "Analytic - Save Filters", "Filters successfully saved.", _ => OnFiltersCommandCompleted());
+                    ExecuteAsyncCommand(SaveFiltersCommand, _ => OnFiltersCommandCompleted(), "Saving Filters...", "Analytic - Save Filters", "Filters successfully saved.");
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsPriceListsSave:
-                    ExecuteAsyncCommand(SavePriceListsCommand, "Price Lists saving...", "Analytic - Save Price Lists", "Price Lists successfully saved.", r => OnSavePriceListsCommandCompleted(r));
+                    ExecuteAsyncCommand(SavePriceListsCommand,  r => OnSavePriceListsCommandCompleted(r),"Price Lists saving...", "Analytic - Save Price Lists", "Price Lists successfully saved." );
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversSave:
                     //Note: The Save action saves all value drivers only; it does not re-run any driver.
@@ -716,14 +716,14 @@ namespace APLPX.UI.WPF.ViewModels
                     SelectedAnalytic.SaveStateAreDriverResultsCurrent();
                     var driverToSave = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
                     var driverKey = driverToSave.Key;
-                    ExecuteAsyncCommand(SaveOrRunValueDriversCommand, "Saving Value Drivers...", "Analytic - Save Value Drivers", "Value Drivers successfully saved.",  r => OnSaveOrRunValueDriversCommandCompleted(r, driverKey));
+                    ExecuteAsyncCommand(SaveOrRunValueDriversCommand,  r => OnSaveOrRunValueDriversCommandCompleted(r, driverKey), "Saving Value Drivers...", "Analytic - Save Value Drivers", "Value Drivers successfully saved.");
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversRun:
                     //Note: The Run action saves all value drivers and re-runs the driver with RunResults set to true.     
                     var driverToRun = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
                     message = String.Format("Saving all Value Drivers.\nRecalculating \"{0}\" Value Driver...", driverToRun.Name);
-                    ExecuteAsyncCommand(SaveOrRunValueDriversCommand, message,  "Analytic - Run Value Drivers", "Successfully ran value drivers.", r => OnSaveOrRunValueDriversCommandCompleted(r, driverToRun.Key));
+                    ExecuteAsyncCommand(SaveOrRunValueDriversCommand, r => OnSaveOrRunValueDriversCommandCompleted(r, driverToRun.Key), message,  "Analytic - Run Value Drivers", "Successfully ran value drivers.");
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsResultsRun:
@@ -733,7 +733,7 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         string runList = String.Join("\n", driversToRun);
                         message = String.Format("Recalculating Value Drivers:\n{0}", runList);
-                        ExecuteAsyncCommand(RunResultsCommand, message, "Analytic - Run Results", "Successfully ran results.", r => OnRunResultsCommandCompleted(r));
+                        ExecuteAsyncCommand(RunResultsCommand, r => OnRunResultsCommandCompleted(r), message, "Analytic - Run Results", "Successfully ran results.");
                     }
                     else
                     {
@@ -789,7 +789,7 @@ namespace APLPX.UI.WPF.ViewModels
             SelectedAnalytic.IsDirty = false;
 
 
-            ExecuteAsyncCommand(LoadAnalyticListCommand, "", "", "", r => OnLoadAnalyticListCommandCompleted(r));
+            ExecuteAsyncCommand(LoadAnalyticListCommand, r => OnLoadAnalyticListCommandCompleted(r));
             SelectedFeature.SelectedStep.IsCompleted = true;
 
             //TODO: determine why current step is sometimes disabled here.
@@ -936,8 +936,7 @@ namespace APLPX.UI.WPF.ViewModels
                         if (!_featureCache.ContainsKey(SelectedFeature.TypeId))
                         {
                             ExecuteAsyncCommand(
-                                LoadAnalyticListCommand,
-                                "Loading Analytics...", "Analytic Load List", string.Empty, r => OnLoadAnalyticListCommandCompleted(r));
+                                LoadAnalyticListCommand, r => OnLoadAnalyticListCommandCompleted(r), "Loading Analytics...", "Analytic - Load List");
                         }
                         else if (SelectedFeatureViewModel != null)
                         {
@@ -1151,8 +1150,8 @@ namespace APLPX.UI.WPF.ViewModels
         /// <param name="callbackAction">The action to perform when the command completes.</param>
         /// <param name="workingMessage">The message to display while the command is executing.</param>
         /// <param name="completedMessge">(Optional) The message to display when the command completes.</param>
-        private void ExecuteAsyncCommand<T>(ReactiveCommand<T> command,
-            string workingMessage, string apiName, string successMessage,  Action<T> callback = null, Tuple<int,int> parameters = null) where T : DisplayEntityBase
+        private void ExecuteAsyncCommand<T>(ReactiveCommand<T> command, Action<T> callback = null,
+            string workingMessage = "", string apiName = "", string successMessage = "", Tuple<int,int> parameters = null) where T : DisplayEntityBase
         {
             //Update the UI to indicate an operation is in progress.
             Mouse.OverrideCursor = Cursors.Wait;

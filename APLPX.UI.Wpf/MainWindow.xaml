@@ -10,12 +10,11 @@
                       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
                       xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
                       xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
-                      Title="PRICEXPERT"
                       Height="900"
                       MinWidth="1080"
                       MinHeight="530"
                       BorderThickness="1"
-                      GlowBrush="{StaticResource AccentColorBrush}"
+                      GlowBrush="{DynamicResource AccentColorBrush}"
                       NonActiveGlowBrush="Red"
                       NonActiveWindowTitleBrush="Gray"
                       ShowIconOnTitleBar="True"
@@ -24,6 +23,7 @@
                       WindowTitleBrush="#2a2a2a"
                       d:DesignHeight="1354"
                       mc:Ignorable="d">
+
 
     <Window.Resources>
         <ResourceDictionary>
@@ -216,6 +216,16 @@
         </DataTemplate>
     </controls:MetroWindow.IconTemplate>
 
+    <controls:MetroWindow.LeftWindowCommands>
+        <controls:WindowCommands>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0">
+                <TextBlock Text="PRICE" FontSize="16"/>
+                <TextBlock Foreground="LightGreen" Text="X" FontSize="16"/>
+                <TextBlock Text="PERT" FontSize="16"/>
+            </StackPanel>
+        </controls:WindowCommands>
+    </controls:MetroWindow.LeftWindowCommands>
+
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
 
@@ -240,14 +250,14 @@
                           ItemsSource="{Binding AppThemes,
                                                 Mode=OneWay}"
                           TextBlock.FontFamily="Segoe UI"
-                          TextBlock.FontSize="12" />
+                          TextBlock.FontSize="12" ToolTip="PRICEXPERT Theme"/>
                 <MenuItem Background="Transparent"
                           Header="Accent"
                           ItemContainerStyle="{StaticResource AccentColorMenuItemStyle}"
                           ItemsSource="{Binding AccentColors,
                                                 Mode=OneWay}"
                           TextBlock.FontFamily="Segoe UI"
-                          TextBlock.FontSize="12" />
+                          TextBlock.FontSize="12" ToolTip="PRICEXPERT Accent Color"/>
             </Menu>
 
             <Button Command="{Binding Path=AboutCommand}"
@@ -763,8 +773,11 @@
                 <ScrollViewer.Effect>
                     <DropShadowEffect BlurRadius="10" Opacity="0" />
                 </ScrollViewer.Effect>
-
+                <Grid>
                 <ContentControl x:Name="ContentMain" Content="{Binding SelectedFeatureViewModel}" />
+                    <views:MessageToaster x:Name="toasterPopup"  />
+                </Grid>
+
             </ScrollViewer>
 
             <Grid x:Name="ActionGrid"

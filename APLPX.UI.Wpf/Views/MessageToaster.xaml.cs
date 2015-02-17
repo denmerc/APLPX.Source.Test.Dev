@@ -1,37 +1,44 @@
 ﻿using System;
 using System.Windows;
-using MahApps.Metro;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace APLPX.UI.WPF.Views
 {
     /// <summary>
-    /// Toaster style window for displaying messages.
+    /// Interaction logic for ToasterPopup.xaml
     /// </summary>
-    public partial class MessageToaster : Window
+    public partial class MessageToaster : UserControl
     {
+        Window ParentWindow { get; set; }
         public MessageToaster()
         {
             InitializeComponent();
         }
 
-
-        /// <summary>
-        /// Gets/sets the message to be displayed in this window.
-        /// </summary>
-        public string Message
+        protected override void OnInitialized(EventArgs e)
         {
-            get { return (string)GetValue(MessageProperty); }
-            set { SetValue(MessageProperty, value); }
+            base.OnInitialized(e);
         }
 
-        public static readonly DependencyProperty MessageProperty =
-            DependencyProperty.Register("Message", typeof(string), typeof(MessageToaster), new PropertyMetadata(null));
-  
-
-        private void Storyboard_Completed(object sender, EventArgs e)
+        public void ShowDialogBox(Window parentWindow, string message)
         {
-            Close();            
-        }   
+            ParentWindow = parentWindow;
+            popupLabel.Content = message;
+            Storyboard StatusFader = (Storyboard)Resources["StatusFader"];
+            ParentWindow.IsEnabled = true;
+            this.Height = 150;
+            this.Width = 250;
+            popup.Height = 150;
+            popup.Width = 250;
+            popup.IsOpen = true;
+            StatusFader.Begin(popupBackground);
+        }
 
+        void StatusFader_Completed(object sender, EventArgs e)
+        {
+            popup.IsOpen = false;
+            ParentWindow.IsEnabled = true;
+        }
     }
 }

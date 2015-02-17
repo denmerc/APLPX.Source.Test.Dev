@@ -254,25 +254,38 @@ namespace APLPX.UI.WPF.DisplayEntities
         public List<ISearchableEntity> SearchableEntities
         {
             get { return _searchableEntities; }
-            set { this.RaiseAndSetIfChanged(ref _searchableEntities, value); }
+            set
+            {
+                if (_searchableEntities != value)
+                {
+                    _searchableEntities = value;
+                    OnPropertyChanged("SearchableEntities");
+
+                    if (_searchableEntities != null)
+                    {
+                        AssignSearchProperties();
+                    }
+                }
+            }
         }
 
         /// <summary>
-        /// Gets the list of searchable entites filtered by the currently selected SearchGroup, if any.
-        /// Returns an empty list if no SearchGroup is selected.
+        /// Gets the list of searchable entities filtered by the currently selected SearchGroup.
+        /// Returns an empty list if no SearchGroup is selected, or if no matching entities are found.
         /// </summary>
         public List<ISearchableEntity> FilteredSearchableEntities
         {
             get
             {
-                var matchingEntities = Enumerable.Empty<ISearchableEntity>();
+                var result = new List<ISearchableEntity>();         
 
-                if (SelectedSearchGroup != null)
+                if (SelectedSearchGroup != null && SearchableEntities != null)
                 {
-                    matchingEntities = SearchableEntities.Where(item => item.SearchGroupKey == SelectedSearchGroup.SearchGroupKey);
+                    var matchingEntities = SearchableEntities.Where(entity => entity.SearchGroupKey == SelectedSearchGroup.SearchGroupKey);
+                    result.AddRange(matchingEntities);                    
                 }
 
-                return new List<ISearchableEntity>(matchingEntities);
+                return result;
             }
         }
 

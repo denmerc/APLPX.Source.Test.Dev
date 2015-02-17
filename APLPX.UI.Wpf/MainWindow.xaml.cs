@@ -70,23 +70,7 @@ namespace APLPX.UI.WPF
 
         private void ShowMessageToaster(OperationCompletedEvent action)
         {
-            double thisWindowTop = this.Top;
-            double thisWindowLeft = this.Left;
-
-            if (WindowState == WindowState.Maximized)
-            {
-                //Ensure this window's coordinates are correct when it is maximized.
-                //Reference: https://social.msdn.microsoft.com/Forums/vstudio/en-US/078b8a70-7725-4986-8164-55efccbcfb46/window-top-and-left-values-are-not-updated-correctly-when-maximizing-a-window-in-net-4?forum=wpf
-                var rect = GetWindowRectangle(this);
-                thisWindowTop = rect.Top;
-                thisWindowLeft = rect.Left;
-            }
-
-            MessageToaster toaster = new MessageToaster();
-            toaster.Left = thisWindowLeft + this.ActualWidth - (ActionGrid.ActualWidth + CommandBar.ActualWidth);
-            toaster.Top = thisWindowTop + (this.ActualHeight - toaster.Height) / 2;
-            toaster.Message = action.Message;
-            toaster.Show();
+            toasterPopup.ShowDialogBox(this, action.Message);
         }
 
         private void ShowAboutBox(AboutViewModel viewModel)

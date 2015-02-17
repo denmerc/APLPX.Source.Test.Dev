@@ -260,8 +260,8 @@
     <Compile Include="Mappers\FilterMapper.cs" />
     <Compile Include="Mappers\ErrorMapper.cs" />
     <Compile Include="Mappers\IdentityMapper.cs" />
-    <Compile Include="SimpleCommand.cs" />
-    <Compile Include="Validation\AnalyticValidations.cs" />
+    <Compile Include="Themes.cs" />
+	<Compile Include="Validation\AnalyticValidations.cs" />
     <Compile Include="Validation\CommonValidations.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\Admin\AdminUsersViewModel.cs" />

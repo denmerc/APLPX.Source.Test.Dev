@@ -45,8 +45,11 @@ namespace APLPX.UI.WPF.DisplayServices
             var response = _analyticService.LoadList(new DTO.Session<DTO.NullT> { SqlKey = _session.SqlKey });
             List<DTO.Analytic> analyticDtos = response.Data;
             var displayAnalytics = analyticDtos != null ? analyticDtos.ToDisplayEntities() : null;
-            return new Session<List<Analytic>>
+
+            
+            var s = new Session<List<Analytic>>
             {
+                
                 Authenticated = response.Authenticated,
                 SqlAuthorization = response.SqlAuthorization,
                 ClientMessage = response.ClientMessage ?? null,
@@ -54,12 +57,14 @@ namespace APLPX.UI.WPF.DisplayServices
                 ServerMessage = response.ServerMessage ?? null,
                 SessionOk = response.SessionOk,
                 User = response.User != null ? response.User.ToDisplayEntity() : null,
-
+                
             };
+            
+            return s;
         }
 
 
-        public Session<Analytic> LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
+        public Analytic LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
         { 
             if( analytic != null)
             {
@@ -69,54 +74,164 @@ namespace APLPX.UI.WPF.DisplayServices
             }
             var session = CreateRequest(analytic);
             var response = _analyticService.Load(session);
-            return CreateDisplayResponse<Analytic>(response);
+            Analytic data = null;
+            if (response.SessionOk)
+            {
+                data = response.Data.ToDisplayEntity();
+                data.SessionOk = response.SessionOk;
+            }
+            else
+            {
+
+                data = new Analytic
+                {
+                    SessionOk = response.SessionOk,
+                    ClientMessage = response.ClientMessage,
+                    ServerMessage = response.ServerMessage,
+
+                };
+
+            }
+            return data;
         }
 
-        public Session<Analytic> SaveFilters(DisplayEntities.Analytic analytic)
+        public Analytic SaveFilters(DisplayEntities.Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.FilterGroups = analytic.FilterGroups;
             var session = CreateRequest(payload);
             var response = _analyticService.SaveFilters(session);
-            return CreateDisplayResponse<Analytic>(response);
+            Analytic data = null;
+            if (response.SessionOk)
+            {
+                data = response.Data.ToDisplayEntity();
+                data.SessionOk = response.SessionOk;
+            }
+            else
+            {
+
+                data = new Analytic
+                {
+                    SessionOk = response.SessionOk,
+                    ClientMessage = response.ClientMessage,
+                    ServerMessage = response.ServerMessage,
+
+                };
+
+            }
+            return data;
+
         }
 
-        public Session<Analytic> SaveAnalyticIdentity(Analytic analytic)
+        public Analytic SaveAnalyticIdentity(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.Identity = analytic.Identity;
             var session = CreateRequest(payload);
             var response = _analyticService.SaveIdentity(session);
-            return CreateDisplayResponse<Analytic>(response);
+            Analytic data = null;
+            if (response.SessionOk)
+            {
+                data = response.Data.ToDisplayEntity();
+                data.SessionOk = response.SessionOk;
+            }
+            else
+            {
+
+                data = new Analytic
+                {
+                    SessionOk = response.SessionOk,
+                    ClientMessage = response.ClientMessage,
+                    ServerMessage = response.ServerMessage,
+
+                };
+
+            }
+            return data;
         }
 
-        public Session<Analytic> RunResults(DisplayEntities.Analytic analytic)
+        public Analytic RunResults(DisplayEntities.Analytic analytic)
         {
             DisplayEntities.Analytic payload = analytic.ToPayload();
             payload.ValueDrivers = analytic.ValueDrivers;
 
             var session = CreateRequest(payload);
             var response = _analyticService.SaveDrivers(session);
-            return CreateDisplayResponse<Analytic>(response);
+            Analytic data = null;
+            if (response.SessionOk)
+            {
+                data = response.Data.ToDisplayEntity();
+                data.SessionOk = response.SessionOk;
+            }
+            else
+            {
+
+                data = new Analytic
+                {
+                    SessionOk = response.SessionOk,
+                    ClientMessage = response.ClientMessage,
+                    ServerMessage = response.ServerMessage,
+
+                };
+
+            }
+            return data;
         }
 
-        public Session<Analytic> SavePriceLists(Analytic analytic)
+        public Analytic SavePriceLists(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.PriceListGroups = analytic.PriceListGroups;
             var session = CreateRequest(payload);
             var response = _analyticService.SavePriceLists(session);
-            return CreateDisplayResponse<Analytic>(response);
+            Analytic data = null;
+            if (response.SessionOk)
+            {
+                data = response.Data.ToDisplayEntity();
+                data.SessionOk = response.SessionOk;
+            }
+            else
+            {
+
+                data = new Analytic
+                {
+                    SessionOk = response.SessionOk,
+                    ClientMessage = response.ClientMessage,
+                    ServerMessage = response.ServerMessage,
+
+                };
+
+            }
+            return data;
         }
 
-        public Session<Analytic> LoadPriceLists(Analytic analytic)
+        public Analytic LoadPriceLists(Analytic analytic)
         {
             var payload = analytic.ToPayload();
             payload.PriceListGroups = analytic.PriceListGroups;
             var session = CreateRequest(payload);            
             var response =  _analyticService.SavePriceLists(session);
-            return CreateDisplayResponse<Analytic>(response);
+            Analytic data = null;
+            if (response.SessionOk)
+            {
+                data = response.Data.ToDisplayEntity();
+                data.SessionOk = response.SessionOk;
+            }
+            else
+            {
+
+                data = new Analytic
+                {
+                    SessionOk = response.SessionOk,
+                    ClientMessage = response.ClientMessage,
+                    ServerMessage = response.ServerMessage,
+
+                };
+
+            }
+            return data;
         }
+
 
 
         private Session<T> CreateDisplayResponse<T>(DTO.Session<DTO.Analytic> response) where T : class

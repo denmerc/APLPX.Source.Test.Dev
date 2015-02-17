@@ -73,11 +73,11 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _winAuthorization, value); }
         }
 
-        public bool SessionOk
-        {
-            get { return _sessionOk; }
-            set { this.RaiseAndSetIfChanged(ref _sessionOk, value); }
-        }
+        //public bool SessionOk
+        //{
+        //    get { return _sessionOk; }
+        //    set { this.RaiseAndSetIfChanged(ref _sessionOk, value); }
+        //}
 
         public int ClientCommand
         {
@@ -85,17 +85,17 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _clientCommand, value); }
         }
 
-        public string ClientMessage
-        {
-            get { return _clientMessage; }
-            set { this.RaiseAndSetIfChanged(ref _clientMessage, value); }
-        }
+        //public string ClientMessage
+        //{
+        //    get { return _clientMessage; }
+        //    set { this.RaiseAndSetIfChanged(ref _clientMessage, value); }
+        //}
 
-        public string ServerMessage
-        {
-            get { return _serverMessage; }
-            set { this.RaiseAndSetIfChanged(ref _serverMessage, value); }
-        }
+        //public string ServerMessage
+        //{
+        //    get { return _serverMessage; }
+        //    set { this.RaiseAndSetIfChanged(ref _serverMessage, value); }
+        //}
 
         public List<Module> Modules
         {

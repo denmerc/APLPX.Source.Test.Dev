@@ -91,7 +91,9 @@
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=MIN VALUE ({0})}" />
+                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}"
+                                       Text="MIN VALUE"
+                                       TextAlignment="Center" />
                         </DataTemplate>
                     </DataGridTextColumn.HeaderTemplate>
                 </DataGridTextColumn>
@@ -101,7 +103,9 @@
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=MAX VALUE ({0})}" />
+                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}"
+                                       Text="MAX VALUE"
+                                       TextAlignment="Center" />
                         </DataTemplate>
                     </DataGridTextColumn.HeaderTemplate>
                 </DataGridTextColumn>
@@ -134,9 +138,15 @@
                                                                   ToolTip="Check to recalculate this driver's results when you choose Run." />
 
                                                         <TextBlock x:Name="txtName"
+                                                                   Margin="5,0"
                                                                    VerticalAlignment="Center"
                                                                    Text="{Binding Path=Name,
                                                                                   StringFormat={}{0}}" />
+
+                                                        <TextBlock x:Name="txtUnit"                                                                   
+                                                                   VerticalAlignment="Center"
+                                                                   Text="{Binding Path=Items[0].Driver.UnitOfMeasure,
+                                                                                  StringFormat={}({0})}" />
                                                     </DockPanel>
                                                 </Grid>
                                             </Expander.Header>

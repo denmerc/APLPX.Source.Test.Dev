@@ -63,7 +63,7 @@ namespace APLPX.UI.WPF.ViewModels
 
             InitializeEventHandlers();
             InitializeCommands();
-            InitializeCommandErrorHandlers();
+            //InitializeCommandErrorHandlers();
             CurrentStatusText = "Ready";
 
             // create accent color menu items for the demo
@@ -75,11 +75,6 @@ namespace APLPX.UI.WPF.ViewModels
             this.AppThemes = ThemeManager.AppThemes
                                            .Select(a => new AppThemeMenuData() { Name = a.Name, BorderColorBrush = a.Resources["BlackColorBrush"] as Brush, ColorBrush = a.Resources["WhiteColorBrush"] as Brush })
                                            .ToList();
-
-
-            var accent = ThemeManager.Accents.First(x => x.Name == "Blue");
-            var theme = ThemeManager.GetAppTheme("BaseDark");
-            ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
 
         }
 
@@ -186,8 +181,7 @@ namespace APLPX.UI.WPF.ViewModels
             LogoutCommand = ReactiveCommand.Create();
             LogoutCommand.Subscribe(x =>
             {
-
-                var loginWindow = new LoginWindow();
+                                var loginWindow = new LoginWindow();
                 var vm = new LoginViewModel(_userService);
                 loginWindow.DataContext = vm;
                 loginWindow.ShowMaxRestoreButton = false;
@@ -228,48 +222,22 @@ namespace APLPX.UI.WPF.ViewModels
 
                 ));
 
-            var disposeLoadAnalyticListCommand = LoadAnalyticListCommand.Subscribe(response =>
-            {
-                if (!response.SessionOk)
-                {
-                    HandleInvalidRequest("Invalid Api Request - Load Analytic List", response.ClientMessage, response.ServerMessage);
-                }
-                else
-                {
-                    OnLoadAnalyticListCommandCompleted(response);
-                }
-
-            });
-
-
-            LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask<Tuple<Session<DisplayEntities.Analytic>, int>>(async _ =>
-                await Task.Run(() =>
+            LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask<DisplayEntities.Analytic>(async _ =>
+                await Task.Run<DisplayEntities.Analytic>( () =>
                 {
                     SelectedFeature.RestoreSelectedSearchGroup();
-                    int searchGroupId = GetSearchGroupId(Session.ClientCommand);
+                    //int searchGroupId = GetSearchGroupId(Session.ClientCommand);
 
-                    int entityId = 0;
-                    if (SelectedEntity != null)
-                    {
-                        entityId = SelectedEntity.Id;
-                    }
+                    //int entityId = 0;
+                    //if (SelectedEntity != null)
+                    //{
+                    //    entityId = SelectedEntity.Id;
+                    //}
 
-                    var response = _analyticDisplayServices.LoadAnalytic(SelectedAnalytic, entityId, searchGroupId);
-                    return new Tuple<Session<DisplayEntities.Analytic>, int>(response, searchGroupId);
+                    return _analyticDisplayServices.LoadAnalytic(SelectedAnalytic, SelectedEntity != null ? SelectedEntity.Id : 0, GetSearchGroupId(Session.ClientCommand));
+                    
 
                 }));
-
-            var disposeLoadAnalyticCommand = LoadAnalyticCommand.Subscribe(response =>
-            {
-                if (!response.Item1.SessionOk)
-                {
-                    HandleInvalidRequest("Invalid Api Request - Load Analytic", response.Item1.ClientMessage, response.Item1.ServerMessage);
-                }
-                else
-                {
-                    OnLoadAnalyticCommandCompleted(response);
-                }
-            });
 
             LoadPricingEverydayCommand = ReactiveCommand.CreateAsyncTask<Session<DisplayEntities.PricingEveryday>>(async _ =>
                 await Task.Run(() =>
@@ -277,59 +245,19 @@ namespace APLPX.UI.WPF.ViewModels
                     return _pricingEverydayDisplayServices.LoadPricingEveryDay(SelectedPricingEveryday.Identity, SelectedEntity.Id);
                 }));
 
-            var disposeLoadPricingEverydayCommand = LoadPricingEverydayCommand.Subscribe(response =>
-            {
-
-                if (!response.SessionOk)
-                {
-                    HandleInvalidRequest("Invalid Api Request - Load Pricing Everyday", response.ClientMessage, response.ServerMessage);
-                }
-                else
-                {
-                    OnLoadPricingEverydayCommandCompleted(response);
-                }
-
-            });
-
-            SaveAnalyticIdentityCommand = ReactiveCommand.CreateAsyncTask<Session<DisplayEntities.Analytic>>(async _ =>
+            SaveAnalyticIdentityCommand = ReactiveCommand.CreateAsyncTask<DisplayEntities.Analytic>(async _ =>
                 await Task.Run(() =>
                 {
                     return _analyticDisplayServices.SaveAnalyticIdentity(SelectedAnalytic);
                 }));
 
-            var dispSaveAnalyticIdentityCommand = SaveAnalyticIdentityCommand.Subscribe(response =>
-            {
-                if (!response.SessionOk)
-                {
-                    HandleInvalidRequest("Invalid Api Request - Save Analytic", response.ClientMessage, response.ServerMessage);
-                }
-                else
-                {
-                    OnSaveAnalyticIdentityCommandCompleted(response);
-                }
-
-            });
-
-
-            SaveFiltersCommand = ReactiveCommand.CreateAsyncTask<Session<DisplayEntities.Analytic>>(async _ =>
+            SaveFiltersCommand = ReactiveCommand.CreateAsyncTask<DisplayEntities.Analytic>(async _ =>
                 await Task.Run(() =>
                 {
                     return _analyticDisplayServices.SaveFilters(SelectedAnalytic);
                 }));
 
-            var saveFiltersCommand = SaveFiltersCommand.Subscribe(response =>
-            {
-                if (!response.SessionOk)
-                {
-                    HandleInvalidRequest("Invalid Api Request - Save Analytic Filters", response.ClientMessage, response.ServerMessage);
-                }
-                else
-                {
-                    OnFiltersCommandCompleted();
-                }
-            });
-
-            SavePriceListsCommand = ReactiveCommand.CreateAsyncTask<Session<DisplayEntities.Analytic>>(async _ =>
+            SavePriceListsCommand = ReactiveCommand.CreateAsyncTask<DisplayEntities.Analytic>(async _ =>
                 await Task.Run(() =>
                 {
                     var response = _analyticDisplayServices.SavePriceLists(SelectedAnalytic);
@@ -337,100 +265,33 @@ namespace APLPX.UI.WPF.ViewModels
                 }));
 
 
-            var disposePriceListsCommand = SavePriceListsCommand.Subscribe(response =>
-            {
-                if (!response.SessionOk)
-                {
-                    HandleInvalidRequest("Invalid Request - Save Analytic PriceLists", response.ClientMessage, response.ServerMessage);
-                }
-                else
-                {
-                    OnPriceListsCommandCompleted(response);
-                }
-            });
-
-
-            SaveOrRunValueDriversCommand = ReactiveCommand.CreateAsyncTask<Tuple<Session<DisplayEntities.Analytic>, int>>(async _ =>
+            SaveOrRunValueDriversCommand = ReactiveCommand.CreateAsyncTask<DisplayEntities.Analytic>(async _ =>
                 await Task.Run(() =>
                 {
-                    SelectedAnalytic.SaveStateAreDriverResultsCurrent();
-                    var driverToRun = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
-                    var driverKey = driverToRun.Key;
+                    //SelectedAnalytic.SaveStateAreDriverResultsCurrent();
+                    //var driverToRun = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
+                    //var driverKey = driverToRun.Key;
 
                     var response = _analyticDisplayServices.RunResults(SelectedAnalytic);
-                    return new Tuple<Session<DisplayEntities.Analytic>, int>(response, driverKey);
+                    return response;
 
                 }));
 
-
-            var disposeSaveOrRunValueDriversCommand = SaveOrRunValueDriversCommand.Subscribe(
-                            response =>
-                            {
-                                if (!response.Item1.SessionOk)
-                                {
-                                    HandleInvalidRequest("Invalid Api Request - SaveRun Value Drivers", response.Item1.ClientMessage, response.Item1.ServerMessage);
-                                }
-                                else
-                                {
-                                    OnSaveOrRunValueDriversCommandCompleted(response.Item1, response.Item2);
-                                }
-                            });
-
-
-
-
-
-
-
-
-            RunResultsCommand = ReactiveCommand.CreateAsyncTask<Session<DisplayEntities.Analytic>>(async _ =>
+            RunResultsCommand = ReactiveCommand.CreateAsyncTask<DisplayEntities.Analytic>(async _ =>
             await Task.Run(() =>
             {
                 return _analyticDisplayServices.RunResults(SelectedAnalytic);
 
             }));
 
-            var disposeResults = RunResultsCommand.Subscribe(
-
-                response =>
-                {
-                    if (!response.SessionOk)
-                    {
-                        HandleInvalidRequest("Invalid Api Request - Run Analytic Results", response.ClientMessage, response.ServerMessage);
-                    }
-                    else
-                    {
-                        OnRunResultsCommandCompleted(response);
-                    }
-
-                });
         }
 
-
-        private void InitializeCommandErrorHandlers()
-        {
-            LoadAnalyticListCommand.ThrownExceptions.Subscribe(err =>
-            {
-                HandleException("API Error : Loading Analytic List", err);
-
-            });
-            LoadAnalyticCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Analytic", err));
-            LoadPricingEverydayCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Loading Pricing", err));
-            SaveAnalyticIdentityCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Identity", err));
-            SaveFiltersCommand.ThrownExceptions.Subscribe(err => HandleException("API Error: Saving Analytic Filters", err));
-            SavePriceListsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Price Lists", err));
-            SaveOrRunValueDriversCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Saving Analytic Value Drivers", err));
-
-            RunResultsCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Running Analytic Results", err));
-            LogoutCommand.ThrownExceptions.Subscribe(err => HandleException("API Error : Logging User Out", err));
-
-        }
 
         #endregion
 
         #region Properties
 
-        public ReactiveCommand<Session<DisplayEntities.Analytic>> RunResultsCommand { get; private set; }
+        public ReactiveCommand<DisplayEntities.Analytic> RunResultsCommand { get; private set; }
 
         public ReactiveCommand<object> LogoutCommand { get; private set; }
 
@@ -671,7 +532,7 @@ namespace APLPX.UI.WPF.ViewModels
         /// <summary>
         /// Command for loading an analytic.
         /// </summary>
-        protected ReactiveCommand<Tuple<Session<DisplayEntities.Analytic>, int>> LoadAnalyticCommand { get; private set; }
+        protected ReactiveCommand<DisplayEntities.Analytic> LoadAnalyticCommand { get; private set; }
 
         /// <summary>
         /// Command for loading analytic list.
@@ -686,22 +547,22 @@ namespace APLPX.UI.WPF.ViewModels
         /// <summary>
         /// Command for saving an analytic identity.
         /// </summary>
-        protected ReactiveCommand<Session<DisplayEntities.Analytic>> SaveAnalyticIdentityCommand { get; private set; }
+        protected ReactiveCommand<DisplayEntities.Analytic> SaveAnalyticIdentityCommand { get; private set; }
 
         /// <summary>
         /// Command to save filters.
         /// </summary>
-        protected ReactiveCommand<Session<DisplayEntities.Analytic>> SaveFiltersCommand { get; private set; }
+        protected ReactiveCommand<DisplayEntities.Analytic> SaveFiltersCommand { get; private set; }
 
         /// <summary>
         /// Command to save price lists
         /// </summary>
-        protected ReactiveCommand<Session<DisplayEntities.Analytic>> SavePriceListsCommand { get; private set; }
+        protected ReactiveCommand<DisplayEntities.Analytic> SavePriceListsCommand { get; private set; }
 
         /// <summary>
         /// Command to save or run Value Drivers.
         /// </summary>
-        protected ReactiveCommand<Tuple<Session<DisplayEntities.Analytic>, int>> SaveOrRunValueDriversCommand { get; private set; }
+        protected ReactiveCommand<DisplayEntities.Analytic> SaveOrRunValueDriversCommand { get; private set; }
 
         /// <summary>
         /// Command that is invoked when any action is selected in the bound view.
@@ -772,14 +633,23 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit:
-                    ExecuteAsyncCommand(LoadAnalyticCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Retrieving analytic...", "Analytic was successfully retrieved.");
+
+                    SelectedFeature.RestoreSelectedSearchGroup();
+                    int searchGroupId = GetSearchGroupId(Session.ClientCommand);
+
+                    int entityId = 0;
+                    if (SelectedEntity != null)
+                    {
+                        entityId = SelectedEntity.Id;
+                    }
+                    ExecuteAsyncCommand(LoadAnalyticCommand, "Retrieving analytic...", "Load Analytic", "Analytic successfully loaded", r => OnLoadAnalyticCommandCompleted(r));
                     break;
 
                 case APLPX.Entity.ModuleFeatureStepActionType.PlanningEverydayPricingSearchEverydayEdit:
                     //TODO: get the full entity from the server and load edit screen.
                     //This is a simulation only.
                     SelectedPricingEveryday = SelectedEntity as DisplayEntities.PricingEveryday;
-                    ExecuteAsyncCommand(LoadPricingEverydayCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Retrieving pricing...", "PriceRoutine was successfully retrieved.");
+                    ExecuteAsyncCommand(LoadPricingEverydayCommand, "Retrieving pricing...", "Load Everyday Pricing", "Pricing Everyday successfully loaded", r => OnLoadPricingEverydayCommandCompleted(r));
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningPromotionPricingSearchPromotionsEdit:
@@ -787,12 +657,15 @@ namespace APLPX.UI.WPF.ViewModels
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsCopy:
-                    ExecuteAsyncCommand(LoadAnalyticCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Copying analytic...", "Analytic was successfully copied.");
+
+                    ExecuteAsyncCommand(LoadAnalyticCommand, "Copying analytic...", "Copy Analytic", "Analytic successfully copied.",  r => OnLoadAnalyticCommandCompleted(r));
                     SelectedFeature.DisableRemainingSteps();
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew:
-                    ExecuteAsyncCommand(LoadAnalyticCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Creating new analytic...", "Analytic was successfully created.");
+                    SelectedFeature.RestoreSelectedSearchGroup();
+
+                    ExecuteAsyncCommand(LoadAnalyticCommand, "Creating new analytic...", "New Analytic", "New Analytic successfully created.",  r => OnLoadAnalyticCommandCompleted(r));
                     SelectedFeature.DisableRemainingSteps();
                     break;
 
@@ -818,7 +691,7 @@ namespace APLPX.UI.WPF.ViewModels
                 //Save the current entity.
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsIdentitySave:
                     //TODO: call analytic save method on service.
-                    ExecuteAsyncCommand(SaveAnalyticIdentityCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Saving Identity...", "Identity saved.");
+                    ExecuteAsyncCommand(SaveAnalyticIdentityCommand, "Saving Identity...", "Save Identity", "Identity successfully saved", r => OnSaveAnalyticIdentityCommandCompleted(r));
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningEverydayPricingIdentitySave:
@@ -831,22 +704,26 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepActionType.PlanningKitPricingIdentitySave:
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsFiltersSave:
-                    ExecuteAsyncCommand(SaveFiltersCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Saving Filters...", "Filters saved.");
+                    ExecuteAsyncCommand(SaveFiltersCommand, "Saving Filters...", "Analytic - Save Filters", "Filters successfully saved.", _ => OnFiltersCommandCompleted());
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsPriceListsSave:
-                    ExecuteAsyncCommand(SavePriceListsCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Price Lists saving...", "Price Lists saved.");
+                    ExecuteAsyncCommand(SavePriceListsCommand, "Price Lists saving...", "Analytic - Save Price Lists", "Price Lists successfully saved.", r => OnSavePriceListsCommandCompleted(r));
                     break;
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversSave:
                     //Note: The Save action saves all value drivers only; it does not re-run any driver.
-                    ExecuteAsyncCommand(SaveOrRunValueDriversCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), "Saving Value Drivers...", "Value Drivers saved.");
+
+                    SelectedAnalytic.SaveStateAreDriverResultsCurrent();
+                    var driverToSave = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
+                    var driverKey = driverToSave.Key;
+                    ExecuteAsyncCommand(SaveOrRunValueDriversCommand, "Saving Value Drivers...", "Analytic - Save Value Drivers", "Value Drivers successfully saved.",  r => OnSaveOrRunValueDriversCommandCompleted(r, driverKey));
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversRun:
                     //Note: The Run action saves all value drivers and re-runs the driver with RunResults set to true.     
                     var driverToRun = SelectedAnalytic.ValueDrivers.FirstOrDefault(d => d.RunResults);
                     message = String.Format("Saving all Value Drivers.\nRecalculating \"{0}\" Value Driver...", driverToRun.Name);
-                    ExecuteAsyncCommand(SaveOrRunValueDriversCommand, x => SelectedFeatureViewModel = GetViewModel(SelectedStep), message, "Value Drivers saved.");
+                    ExecuteAsyncCommand(SaveOrRunValueDriversCommand, message,  "Analytic - Run Value Drivers", "Successfully ran value drivers.", r => OnSaveOrRunValueDriversCommandCompleted(r, driverToRun.Key));
                     break;
 
                 case DTO.ModuleFeatureStepActionType.PlanningAnalyticsResultsRun:
@@ -856,7 +733,7 @@ namespace APLPX.UI.WPF.ViewModels
                     {
                         string runList = String.Join("\n", driversToRun);
                         message = String.Format("Recalculating Value Drivers:\n{0}", runList);
-                        ExecuteAsyncCommand(RunResultsCommand, _ => { }, message, "Value Drivers run successfully.");
+                        ExecuteAsyncCommand(RunResultsCommand, message, "Analytic - Run Results", "Successfully ran results.", r => OnRunResultsCommandCompleted(r));
                     }
                     else
                     {
@@ -887,11 +764,9 @@ namespace APLPX.UI.WPF.ViewModels
             SelectedFeature.SelectedStep.IsCompleted = true;
             SelectedFeature.EnableRemainingSteps();
         }
-        private void OnPriceListsCommandCompleted(Session<DisplayEntities.Analytic> response)
+        private void OnSavePriceListsCommandCompleted(DisplayEntities.Analytic response)
         {
-            var a = ((DisplayEntities.Analytic)response.Data);
-            var priceListGroups = a.PriceListGroups;
-            SelectedAnalytic.PriceListGroups = new ReactiveList<AnalyticPriceListGroup>(priceListGroups);
+            SelectedAnalytic.PriceListGroups = new ReactiveList<AnalyticPriceListGroup>(response.PriceListGroups);
             SelectedAnalytic.FilterGroups.ClearIsDirty();
             SelectedFeature.SelectedStep.IsCompleted = true;
             SelectedFeature.EnableRemainingSteps();
@@ -908,14 +783,13 @@ namespace APLPX.UI.WPF.ViewModels
             var iSearchables = ((List<DisplayEntities.Analytic>)response.Data).Cast<ISearchableEntity>().ToList();
             SelectedFeature.SearchableEntities = iSearchables;
         }
-        private void OnSaveAnalyticIdentityCommandCompleted(Session<DisplayEntities.Analytic> response)
+        private void OnSaveAnalyticIdentityCommandCompleted(DisplayEntities.Analytic response)
         {
-            var a = ((DisplayEntities.Analytic)response.Data);
-            SelectedAnalytic.Identity = a.Identity;
+            SelectedAnalytic.Identity = response.Identity;
             SelectedAnalytic.IsDirty = false;
 
-            LoadAnalyticListCommand.Execute(null);
 
+            ExecuteAsyncCommand(LoadAnalyticListCommand, "", "", "", r => OnLoadAnalyticListCommandCompleted(r));
             SelectedFeature.SelectedStep.IsCompleted = true;
 
             //TODO: determine why current step is sometimes disabled here.
@@ -926,18 +800,19 @@ namespace APLPX.UI.WPF.ViewModels
 
             SelectedFeature.EnableRemainingSteps();
         }
-        private void OnLoadAnalyticCommandCompleted(Tuple<Session<DisplayEntities.Analytic>, int> response)
+        private void OnLoadAnalyticCommandCompleted(DisplayEntities.Analytic response)
         {
-            var a = ((DisplayEntities.Analytic)response.Item1.Data);
+            var searchGroupId = GetSearchGroupId(Session.ClientCommand);
+            //var a = ((DisplayEntities.Analytic)response.Item1.Data);
             if (Session.ClientCommand == (int)DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsNew &&
-                   a.SearchGroupId != response.Item2)
+                   response.SearchGroupId != searchGroupId)
             {
                 //Currentlt the service is sending back a value of 1 instead of the originating SearchGroupId,
                 // so we must resolve it here for display purposes.
-                a.SearchGroupId = response.Item2;
+                response.SearchGroupId = searchGroupId;
             }
 
-            SelectedAnalytic = a;
+            SelectedAnalytic = response;
 
             foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
             {
@@ -960,11 +835,11 @@ namespace APLPX.UI.WPF.ViewModels
                 SelectedFeature.DisableRemainingSteps();
             }
         }
-        private void OnSaveOrRunValueDriversCommandCompleted(DisplayEntities.Session<DisplayEntities.Analytic> response, int driverKey)
+        private void OnSaveOrRunValueDriversCommandCompleted(DisplayEntities.Analytic response, int driverKey)
         {
 
-            var drivers = ((DisplayEntities.Analytic)(response.Data)).ValueDrivers;
-            SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
+           
+            SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(response.ValueDrivers);
 
             SelectedAnalytic.RestoreStateAreDriverResultsCurrent();
 
@@ -981,12 +856,10 @@ namespace APLPX.UI.WPF.ViewModels
             SelectedFeature.EnableRemainingSteps();
 
         }
-        private void OnRunResultsCommandCompleted(DisplayEntities.Session<DisplayEntities.Analytic> response)
+        private void OnRunResultsCommandCompleted(DisplayEntities.Analytic response)
         {
             SelectedFeatureViewModel = GetViewModel(SelectedStep);
-
-            var drivers = ((DisplayEntities.Analytic)response.Data).ValueDrivers;
-            SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(drivers);
+            SelectedAnalytic.ValueDrivers = new ReactiveList<AnalyticValueDriver>(response.ValueDrivers);
 
             foreach (AnalyticValueDriver driver in SelectedAnalytic.ValueDrivers)
             {
@@ -1064,9 +937,7 @@ namespace APLPX.UI.WPF.ViewModels
                         {
                             ExecuteAsyncCommand(
                                 LoadAnalyticListCommand,
-                                _ => { _featureCache.Add(SelectedFeature.TypeId, SelectedFeature); },
-                                "Loading Analytics...", "Successfully loaded Analytics",
-                                "API Error: Loading Analytic List");
+                                "Loading Analytics...", "Analytic Load List", string.Empty, r => OnLoadAnalyticListCommandCompleted(r));
                         }
                         else if (SelectedFeatureViewModel != null)
                         {
@@ -1281,7 +1152,7 @@ namespace APLPX.UI.WPF.ViewModels
         /// <param name="workingMessage">The message to display while the command is executing.</param>
         /// <param name="completedMessge">(Optional) The message to display when the command completes.</param>
         private void ExecuteAsyncCommand<T>(ReactiveCommand<T> command,
-            Action<T> callbackAction, string workingMessage, string completedMessge = null, string errorTitle = "")
+            string workingMessage, string apiName, string successMessage,  Action<T> callback = null, Tuple<int,int> parameters = null) where T : DisplayEntityBase
         {
             //Update the UI to indicate an operation is in progress.
             Mouse.OverrideCursor = Cursors.Wait;
@@ -1289,15 +1160,24 @@ namespace APLPX.UI.WPF.ViewModels
             SelectedFeatureViewModel = new WaitViewModel(IsActionInProgress, workingMessage);
             CurrentStatusText = workingMessage;
 
-            if (callbackAction != null)
-            {
-                //Execute the async command with the specifed callback delegate.
-                CancellationToken token = new CancellationToken(false);
-                command.ExecuteAsync().Subscribe(callbackAction,
-                    //ex => HandleException(errorTitle, ex) //does not work here 
-                    _ => { }
-                    , () => OnCommandCompleted(completedMessge), token);
-            }
+            command.ExecuteAsync(parameters).Subscribe(r =>
+                {
+                    if (!r.SessionOk)
+                    {
+                        HandleInvalidRequest(string.Format("Invalid Api Request : {0}", apiName), r.ClientMessage, r.ServerMessage);
+                    }
+                    else
+                    {
+                        if (callback != null) { callback.Invoke(r); }
+                        OnCommandCompleted(successMessage);
+                    }
+
+                }, ex => HandleException(string.Format("Api Exception : {0}", apiName), ex), () => 
+                    {
+                        SelectedFeatureViewModel = GetViewModel(SelectedStep);
+                        ReenableUserInterface();
+                    });
+
         }
 
         private void OnCommandCompleted(string completedMessge = null)
@@ -1338,7 +1218,7 @@ namespace APLPX.UI.WPF.ViewModels
             LogManager.GetCurrentClassLogger().Log(LogLevel.Warn, FormatLogErrorMessage(title, clientMessage, serverMessage));
             ReenableUserInterface();
             _eventManager.Publish<ErrorEvent>(new ErrorEvent { Title = title, Message = FormatDisplayErrorMessage(title, clientMessage, serverMessage) });
-            Navigate();
+            //Navigate();
 
         }
 
@@ -1368,11 +1248,14 @@ namespace APLPX.UI.WPF.ViewModels
             if (SelectedFeature != null)
             {
                 //Pre-select the first search group if one is not already selected.
+                //BMB: Initial selection taken out per request (Terri)
+                /*
                 var searchGroups = SelectedFeature.SearchGroupDisplayList;
                 if (SelectedFeature.SelectedSearchGroup == null && searchGroups.Count > 0)
                 {
                     SelectedFeature.SelectedSearchGroup = searchGroups[0];
                 }
+                */
                 OnSelectedEntityChanged(SelectedFeature.SelectedEntity);
             }
             IsFeatureSelectorAvailable = SetIsFeatureSelectorAvailable();
@@ -1485,57 +1368,6 @@ namespace APLPX.UI.WPF.ViewModels
 
         #endregion
 
-        #region Themes
-        public class AccentColorMenuData
-        {
-            public string Name { get; set; }
-            public Brush BorderColorBrush { get; set; }
-            public Brush ColorBrush { get; set; }
-
-            private ICommand changeAccentCommand;
-
-            public ICommand ChangeAccentCommand
-            {
-                get { return this.changeAccentCommand ?? (changeAccentCommand = new SimpleCommand { CanExecuteDelegate = x => true, ExecuteDelegate = x => this.DoChangeTheme(x) }); }
-            }
-
-            protected virtual void DoChangeTheme(object sender)
-            {
-
-                var theme = ThemeManager.DetectAppStyle(Application.Current);
-                var accent = ThemeManager.GetAccent(this.Name);
-                ThemeManager.ChangeAppStyle(Application.Current, accent, theme.Item1);
-
-
-                /*
-                var accent = ThemeManager.GetAccent(this.Name);
-                var theme = MahApps.Metro.ThemeManager.AppThemes.First(x => x.Name == "BaseLight");
-
-                //dark theme
-                MahApps.Metro.ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
-                */
-            }
-        }
-
-        public class AppThemeMenuData : AccentColorMenuData
-        {
-            protected override void DoChangeTheme(object sender)
-            {
-
-                var theme = ThemeManager.DetectAppStyle(Application.Current);
-                var appTheme = ThemeManager.GetAppTheme(this.Name);
-                ThemeManager.ChangeAppStyle(Application.Current, theme.Item2, appTheme);
-
-                /*
-                var accent = ThemeManager.GetAccent(this.Name);
-                var theme = MahApps.Metro.ThemeManager.AppThemes.First(x => x.Name == "BaseLight");
-
-                //dark theme
-                MahApps.Metro.ThemeManager.ChangeAppStyle(Application.Current, accent, theme)
-                 */
-            }
-        }
-        #endregion
 
     }
 }

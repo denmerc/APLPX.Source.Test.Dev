@@ -10,7 +10,12 @@ namespace APLPX.UI.WPF.DisplayEntities
     public abstract class DisplayEntityBase : ReactiveObject
     {
         private bool _isDirty;
-        private ReactiveList<Error> _errors;
+        private ReactiveList<Error> _validationResults;
+        private string _clientMessage;
+        private string _serverMessage;
+        private bool _sessionOk;
+
+
         private bool _isDisposed;
 
         protected DisplayEntityBase()
@@ -23,16 +28,71 @@ namespace APLPX.UI.WPF.DisplayEntities
         public bool IsDirty
         {
             get { return _isDirty; }
-            set { this.RaiseAndSetIfChanged(ref _isDirty, value); }
+            set
+            {
+                if (_isDirty != value)
+                {
+                    _isDirty = value;
+                    OnPropertyChanged("IsDirty");
+                }
+            }
         }
+
+        public string ClientMessage
+        {
+            get { return _clientMessage; }
+            set
+            {
+                if (_clientMessage != value)
+                {
+                    _clientMessage = value;
+                    OnPropertyChanged("ClientMessage");
+                }
+            }
+        }
+
+        public string ServerMessage
+        {
+            get { return _serverMessage; }
+            set
+            {
+                if (_serverMessage != value)
+                {
+                    _serverMessage = value;
+                    OnPropertyChanged("ServerMessage");
+                }
+            }
+        }
+
+        public bool SessionOk
+        {
+            get { return _sessionOk; }
+            set
+            {
+                if (_sessionOk != value)
+                {
+                    _sessionOk = value;
+                    OnPropertyChanged("SessionOk");
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Gets the list of validation results/errors for this object.
         /// </summary>
         public ReactiveList<Error> ValidationResults
         {
-            get { return _errors; }
-            protected set { this.RaiseAndSetIfChanged(ref _errors, value); }
+            get { return _validationResults; }
+            set
+            {
+                if (_validationResults != value)
+                {
+                    _validationResults = value;
+                    OnPropertyChanged("ValidationResults");
+                }
+            }
         }
 
         #endregion

@@ -146,6 +146,7 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="ApplicationServices\ApplicationInfo.cs" />
     <Compile Include="Comparers\AnalyticValueDriverComparer.cs" />
     <Compile Include="Converters\MultiplierConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
@@ -260,8 +261,10 @@
     <Compile Include="Mappers\FilterMapper.cs" />
     <Compile Include="Mappers\ErrorMapper.cs" />
     <Compile Include="Mappers\IdentityMapper.cs" />
+    <Compile Include="Interfaces\IMessageDisplayService.cs" />
+    <Compile Include="ApplicationServices\WpfMessageDisplayService.cs" />
     <Compile Include="Themes.cs" />
-	<Compile Include="Validation\AnalyticValidations.cs" />
+    <Compile Include="Validation\AnalyticValidations.cs" />
     <Compile Include="Validation\CommonValidations.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\Admin\AdminUsersViewModel.cs" />
@@ -272,6 +275,7 @@
     <Compile Include="ViewModels\Analytic\AnalyticPriceListViewModel.cs" />
     <Compile Include="ViewModels\FilterViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\InputBoxViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingEverydayPriceListListViewModel.cs" />
     <Compile Include="ViewModels\Pricing\PricingEverydayResults\CompetitivePriceList.cs" />
@@ -309,6 +313,9 @@
     </Compile>
     <Compile Include="Views\Common\SearchDiagnosticsControl.xaml.cs">
       <DependentUpon>SearchDiagnosticsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InputBox.xaml.cs">
+      <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SessionDiagnosticsControl.xaml.cs">
       <DependentUpon>SessionDiagnosticsControl.xaml</DependentUpon>
@@ -400,6 +407,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Common\SearchDiagnosticsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InputBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

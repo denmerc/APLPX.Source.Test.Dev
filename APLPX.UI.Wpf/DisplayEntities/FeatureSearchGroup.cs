@@ -69,13 +69,37 @@ namespace APLPX.UI.WPF.DisplayEntities
         public bool IsNameChanged
         {
             get { return _isNameChanged; }
-            set { this.RaiseAndSetIfChanged(ref _isNameChanged, value); }
+            set
+            {
+                if (_isNameChanged != value)
+                {
+                    _isNameChanged = value;
+                    OnPropertyChanged("IsNameChanged");
+
+                    if (_isNameChanged && !IsDirty)
+                    {
+                        IsDirty = true;
+                    }
+                }
+            }
         }
 
         public bool IsSearchKeyChanged
         {
             get { return _isSearchKeyChanged; }
-            set { this.RaiseAndSetIfChanged(ref _isSearchKeyChanged, value); }
+            set
+            {
+                if (_isSearchKeyChanged != value)
+                {
+                    _isSearchKeyChanged = value;
+                    OnPropertyChanged("IsSearchKeyChanged");
+
+                    if (_isSearchKeyChanged && !IsDirty)
+                    {
+                        IsDirty = true;
+                    }
+                }
+            }
         }
 
         public bool CanNameChange

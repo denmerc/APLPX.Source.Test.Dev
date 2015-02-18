@@ -125,7 +125,7 @@ namespace APLPX.UI.WPF.ViewModels
             if (Modules == null || Modules.Count <= 0)
             {
                 //App.Current.Windows[0].Close();
-                ShowMessageBox("No licensed modules.", MessageBoxImage.Information);
+                ShowMessageBox("No licensed modules.");
                 Application.Current.Shutdown();
             }
             SelectedModule = Modules.Where(x => x.TypeId == DTO.ModuleType.Planning).FirstOrDefault();
@@ -226,6 +226,7 @@ namespace APLPX.UI.WPF.ViewModels
                 await Task.Run<DisplayEntities.Analytic>( () =>
             {
                     SelectedFeature.RestoreSelectedSearchGroup();
+
                     DisplayEntities.Analytic sourceAnalytic = SelectedAnalytic;
 
                     int searchGroupId = GetSearchGroupId(Session.ClientCommand);
@@ -236,10 +237,11 @@ namespace APLPX.UI.WPF.ViewModels
                     }
                     else
                     {
+                        //This applies when creating a new Analytic.
                         sourceAnalytic = new DisplayEntities.Analytic();
                     }
 
-                    return _analyticDisplayServices.LoadAnalytic(SelectedAnalytic, entityId, searchGroupId);
+                    return _analyticDisplayServices.LoadAnalytic(sourceAnalytic, entityId, searchGroupId);
 
 
                 }));
@@ -742,7 +744,7 @@ namespace APLPX.UI.WPF.ViewModels
                     }
                     else
                     {
-                        ShowMessageBox("Please select at least one Value Driver to run.", MessageBoxImage.Information);
+                        ShowMessageBox("Please select at least one Value Driver to run.");
                     }
                     break;
 

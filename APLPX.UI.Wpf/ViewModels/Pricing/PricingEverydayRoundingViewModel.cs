@@ -136,9 +136,9 @@ namespace APLPX.UI.WPF.ViewModels.Pricing
             if (template != null && SelectedPriceList != null)
             {
                 string prompt = String.Format("Copy the rounding rules\nfrom \"{0}\"\nto \"{1}\"?", SelectedTemplate.Name, SelectedPriceList.Name);
-                var result = ShowPrompt(prompt);
+                bool okToProceed = base.ShowPrompt(prompt) ?? false;
 
-                if (result == MessageBoxResult.Yes)
+                if (okToProceed)
                 {
                     //Copy the rules from the template to the price list.
                     List<PriceRoundingRule> copiedRules = new List<PriceRoundingRule>();

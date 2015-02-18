@@ -125,15 +125,6 @@ namespace APLPX.UI.WPF.ViewModels
             }
         }
 
-        public string NewEntityCaption
-        {
-            get
-            {
-                string result = String.Format("New {0}...", SelectedFeature.Classification);
-                return result;
-            }
-        }
-
         #endregion
 
         #region Event Handlers
@@ -188,16 +179,16 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void CopyEntityExecuted(object parameter)
         {
-            base.ShowMessageBox("Copy coming soon...", System.Windows.MessageBoxImage.Information);
+            base.ShowMessageBox("Copy coming soon...");
             GetEntityFromService(DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsCopy);
         }
 
         private void EditEntityExecuted(object parameter)
         {
-            base.ShowMessageBox("Edit coming soon...", System.Windows.MessageBoxImage.Information);
+            base.ShowMessageBox("Edit coming soon...");
             GetEntityFromService(DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit);
         }
- 
+
         private bool RenameSearchGroupCanExecute(FeatureSearchGroup searchGroup)
         {
             bool result = (searchGroup != null && searchGroup.CanNameChange);
@@ -210,7 +201,12 @@ namespace APLPX.UI.WPF.ViewModels
             var parentGroup = parameter as FeatureSearchGroup;
             if (parentGroup != null)
             {
-                //TODO: implement
+                string newName = base.ShowInputBox("Rename Folder", parentGroup.Name);
+                if (!String.IsNullOrWhiteSpace(newName))
+                {
+                    parentGroup.Name = newName;
+                    parentGroup.IsNameChanged = true;
+                }
             }
         }
 

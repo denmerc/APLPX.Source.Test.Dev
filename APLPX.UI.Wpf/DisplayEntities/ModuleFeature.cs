@@ -304,9 +304,13 @@ namespace APLPX.UI.WPF.DisplayEntities
                         result = "Analytic";
                         break;
                     case ModuleFeatureType.PlanningEverydayPricing:
+                        result = "Everyday Pricing";
+                        break;
                     case ModuleFeatureType.PlanningPromotionPricing:
+                        result = "Promotion Pricing";
+                        break;
                     case ModuleFeatureType.PlanningKitPricing:
-                        result = "Price Routine";
+                        result = "Kit Pricing";
                         break;
                     case ModuleFeatureType.AdministrationUserMaintenance:
                         result = "User";

@@ -103,13 +103,20 @@
                                                           Path=DataContext}"
                                             ToolTip="{Binding Path=Name}">
                                     <StackPanel.ContextMenu>
-                                        <ContextMenu x:Name="ctxSearchGroup" Visibility="Collapsed">
+                                        <ContextMenu x:Name="ctxSearchGroup">
                                             <MenuItem Command="{Binding Path=PlacementTarget.Tag.CreateNewEntityCommand,
                                                                         RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                                       CommandParameter="{Binding}"
-                                                      Header="{Binding Path=PlacementTarget.Tag.NewEntityCaption,
-                                                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                                      ToolTip="Create a new item in this folder" />
+                                                      ToolTip="Create a new item in this folder">
+                                                <MenuItem.Header>
+                                                    <TextBlock Text="{Binding Path=PlacementTarget.Tag.SelectedFeature.Classification, RelativeSource={RelativeSource AncestorType=ContextMenu}, StringFormat={}New {0}}" />
+                                                </MenuItem.Header>
+                                            </MenuItem>
+                                            <MenuItem Command="{Binding Path=PlacementTarget.Tag.RenameSearchGroupCommand,
+                                                                        RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                      CommandParameter="{Binding}"
+                                                      Header="Rename Folder..."
+                                                      ToolTip="Rename this folder" />
                                         </ContextMenu>
                                     </StackPanel.ContextMenu>
 
@@ -168,6 +175,15 @@
                                             </Grid>
                                         </Label.Content>
                                     </Label>
+
+                                    <TextBlock x:Name="txtDirtyIndicator"
+                                               Margin="2"
+                                               VerticalAlignment="Center"
+                                               FontSize="16"
+                                               Text="*"
+                                               ToolTip="This folder has been renamed since its last save."
+                                               Visibility="{Binding Path=IsNameChanged,
+                                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 </StackPanel>
                                 <Separator x:Name="itemSeparator"
                                            Grid.Row="1"

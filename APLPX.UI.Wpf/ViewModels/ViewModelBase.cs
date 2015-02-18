@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Input;
-
 using APLPX.UI.WPF.DisplayServices;
+using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
 using DTO = APLPX.Entity;
@@ -11,6 +10,9 @@ using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.ViewModels
 {
+    /// <summary>
+    /// Base class for view models.
+    /// </summary>
     public abstract class ViewModelBase : ReactiveObject, IDisposable
     {
         #region Private Fields
@@ -25,6 +27,8 @@ namespace APLPX.UI.WPF.ViewModels
         private Display.Session<DTO.NullT> _sessionDiagnostics;
         private UserDisplayServices _userDisplayServices;
         private AnalyticDisplayServices _analyticDisplayServices;
+        private readonly IMessageDisplayService _messageDisplayService;
+
         private List<Display.Action> _commands;
 
         private bool _isDebugMode;
@@ -35,10 +39,14 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Constructors
 
-        public ViewModelBase()
+        protected ViewModelBase()
         {
             Commands = new List<DisplayEntities.Action>();
             SessionDiagnostics = new Display.Session<DTO.NullT>();
+
+            //TODO: pass in IMessageDisplayService provider via a constructor parameter and resolve using dependency injection.
+            //The following is for initial development only:
+            _messageDisplayService = new APLPX.UI.WPF.ApplicationServices.WpfMessageDisplayService();
 
 #if DEBUG
             IsDebugMode = true;
@@ -183,18 +191,22 @@ namespace APLPX.UI.WPF.ViewModels
             Commands.Add(action);
         }
 
-        protected void ShowMessageBox(string message, MessageBoxImage image)
+        protected void ShowMessageBox(string message)
         {
-            MessageBox.Show(message, "PRICEXPERT", MessageBoxButton.OK, image);
+            _messageDisplayService.ShowMessage(null, message);
         }
 
-        protected MessageBoxResult ShowPrompt(string message)
+        protected bool? ShowPrompt(string message)
         {
-            MessageBoxResult result = MessageBox.Show(message, "PRICEXPERT", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
+            bool? result = _messageDisplayService.ShowQuestion(null, message);
             return result;
         }
 
+        protected string ShowInputBox(string title, string originalText)
+        {
+            string newText = _messageDisplayService.ShowInputBox(null, title, originalText);
+            return newText;
+        }
 
         #region IDisposable
 

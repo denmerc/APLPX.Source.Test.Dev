@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="APLPX.UI.WPF.Views.SearchGroupSelector"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:APLPX.UI.WPF.DragDropProviders"
              xmlns:helpers="clr-namespace:APLPX.UI.WPF.Helpers"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,7 +10,7 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        
+
         <CollectionViewSource x:Key="cvsSearchGroups" Source="{Binding Path=SelectedFeature.SearchGroupDisplayList}">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription Direction="Ascending" PropertyName="Sort" />
@@ -19,7 +19,7 @@
 
         <dd:SearchableEntityDragSource x:Key="searchableEntityDragSource" />
         <dd:SearchItemDropTarget x:Key="searchItemDropTarget" />
-   
+
     </UserControl.Resources>
 
     <UserControl.Triggers>
@@ -28,7 +28,9 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid x:Name="layoutRoot" Margin="5,20,5,20" Background="{DynamicResource MainWindowBackground}">
+    <Grid x:Name="layoutRoot"
+          Margin="5,20,5,20"
+          Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -40,8 +42,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <Border 
-                Grid.Column="0"
+        <Border Grid.Column="0"
                 Width="350"
                 Height="405"
                 Background="{DynamicResource GrayBrush2}"
@@ -56,202 +57,207 @@
                 </Grid.RowDefinitions>
 
                 <Label x:Name="txtSearchGroupsTitle"
-               Grid.Row="0"
-               Margin="5,10,0,5"
-               Content="{Binding Path=SelectedFeature.Classification}"
-               ContentStringFormat="Locate {0}"
-               VerticalAlignment="Top"
-               FontSize="20"
-               FontWeight="Bold"
-               Style="{StaticResource BaseStyleLabel}"/>
+                       Grid.Row="0"
+                       Margin="5,10,0,5"
+                       VerticalAlignment="Top"
+                       Content="{Binding Path=SelectedFeature.Classification}"
+                       ContentStringFormat="Locate {0}"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Style="{StaticResource BaseStyleLabel}" />
 
                 <Separator x:Name="itemSeparator1"
                            Grid.Row="1"
-                   VerticalAlignment="Bottom"
-                   Panel.ZIndex="1000"
-                   Visibility="Visible" 
-                           Margin="10,0"/>
-            
+                           Margin="10,0"
+                           VerticalAlignment="Bottom"
+                           Panel.ZIndex="1000"
+                           Visibility="Visible" />
 
-            <ListBox x:Name="lstSearchGroups"
-                Grid.Row="2"
-                 Margin="15"
-                 ItemsSource="{Binding Source={StaticResource cvsSearchGroups}}"
-           
-                 SelectedItem="{Binding Path=SelectedFeature.SelectedSearchGroup}"
-                 Background="Transparent"
-                     MaxHeight="300">
 
-                <ListBox.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="10" />
-                    </Style>
-                </ListBox.Resources>
+                <ListBox x:Name="lstSearchGroups"
+                         Grid.Row="2"
+                         MaxHeight="300"
+                         Margin="15"
+                         Background="Transparent"
+                         ItemsSource="{Binding Source={StaticResource cvsSearchGroups}}"
+                         SelectedItem="{Binding Path=SelectedFeature.SelectedSearchGroup}">
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition x:Name="rowSpacer" Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <StackPanel x:Name="listItemPanel"
-                                    Grid.Row="0"
-                                    Orientation="Horizontal"
-                                    Tag="{Binding ElementName=lstSearchGroups,
-                                                  Path=DataContext}"
-                                    ToolTip="{Binding Path=Name}">
-                                <StackPanel.ContextMenu>
-                                    <ContextMenu x:Name="ctxEntity" Visibility="Collapsed">
-                                        <MenuItem Command="{Binding Path=PlacementTarget.Tag.CreateNewEntityCommand,
-                                                                RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                              CommandParameter="{Binding}"
-                                              Header="{Binding Path=PlacementTarget.Tag.NewEntityCaption,
-                                                               RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                              Style="{x:Null}"
-                                              ToolTip="Create a new item in this folder" />
-                                    </ContextMenu>
-                                </StackPanel.ContextMenu>
+                    <ListBox.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10" />
+                        </Style>
+                    </ListBox.Resources>
 
-                                <Label x:Name="lblValue"
-                                   Margin="4,2" Style="{StaticResource BaseStyleLabel}" Foreground="{DynamicResource LabelTextBrush}">
-                                    <Label.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0"
-                                                   Text="{Binding Name}"
-                                                   TextTrimming="CharacterEllipsis" FontSize="16"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding ItemCount, StringFormat={} ({0} items)}" FontSize="16"/>
-                                        </Grid>
-                                    </Label.Content>
-                                </Label>
-                                <Label x:Name="btnValue"
-                                   Margin="0,2" Style="{StaticResource BaseStyleLabel}" >
-                                    <Label.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0"
-                                                   MaxWidth="225"
-                                                   Text="{Binding Name}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                            <TextBlock Grid.Column="1" Text="{Binding ItemCount, StringFormat={} ({0} items)}" />
-                                        </Grid>
-                                    </Label.Content>
-                                </Label>
-                                <Label x:Name="lblBtn"
-                                   Margin="0,2" Style="{StaticResource BaseStyleLabel}" >
-                                    <Label.Content>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0"
-                                                   MaxWidth="200"
-                                                   Text="{Binding Name}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                            <TextBlock Grid.Column="1" Text="{Binding ItemCount, StringFormat={} ({0} items)}" />
-                                        </Grid>
-                                    </Label.Content>
-                                </Label>
-                            </StackPanel>
-                            <Separator x:Name="itemSeparator"
-                                   Grid.Row="1"
-                                   Width="275"
-                                   Visibility="Collapsed" />
-                        </Grid>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding Path=IsSubGroup}" Value="False">
-                                <Setter TargetName="rowSpacer" Property="Height" Value="25" />
-                                <Setter TargetName="lblValue" Property="Visibility" Value="Visible" />
-                                <Setter TargetName="btnValue" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="lblBtn" Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=IsSubGroup}" Value="True">
-                                <Setter TargetName="lblValue" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="btnValue" Property="Visibility" Value="Visible" />
-                                <Setter TargetName="lblBtn" Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=HasSubGroups}" Value="True">
-                                <Setter TargetName="lblValue" Property="Visibility" Value="Visible" />
-                                <Setter TargetName="btnValue" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="lblBtn" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="rowSpacer" Property="Height" Value="Auto" />
-                            </DataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding Path=HasSubGroups}" Value="False" />
-                                    <Condition Binding="{Binding Path=IsSubGroup}" Value="False" />
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="lblBtn" Property="Visibility" Value="Visible" />
-                                <Setter TargetName="lblValue" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="btnValue" Property="Visibility" Value="Collapsed" />
-                                <Setter TargetName="rowSpacer" Property="Height" Value="0" />
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding Path=IsSubGroup}" Value="True" />
-                                    <Condition Binding="{Binding Path=CanSearchKeyChange}" Value="True" />
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="ctxEntity" Property="Visibility" Value="Visible" />
-                            </MultiDataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition x:Name="rowSpacer" Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <StackPanel x:Name="listItemPanel"
+                                            Grid.Row="0"
+                                            Orientation="Horizontal"
+                                            Tag="{Binding ElementName=lstSearchGroups,
+                                                          Path=DataContext}"
+                                            ToolTip="{Binding Path=Name}">
+                                    <StackPanel.ContextMenu>
+                                        <ContextMenu x:Name="ctxSearchGroup" Visibility="Collapsed">
+                                            <MenuItem Command="{Binding Path=PlacementTarget.Tag.CreateNewEntityCommand,
+                                                                        RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                      CommandParameter="{Binding}"
+                                                      Header="{Binding Path=PlacementTarget.Tag.NewEntityCaption,
+                                                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                      ToolTip="Create a new item in this folder" />
+                                        </ContextMenu>
+                                    </StackPanel.ContextMenu>
 
-                <ListBox.ItemContainerStyle>
-                    <Style  TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource baseListBoxItemStyle}">
-                        <Style.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="5"/>
+                                    <Label x:Name="lblValue"
+                                           Margin="4,2"
+                                           Foreground="{DynamicResource LabelTextBrush}"
+                                           Style="{StaticResource BaseStyleLabel}">
+                                        <Label.Content>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0"
+                                                           FontSize="16"
+                                                           Text="{Binding Name}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="1"
+                                                           FontSize="16"
+                                                           Text="{Binding ItemCount,
+                                                                          StringFormat={} ({0} items)}" />
+                                            </Grid>
+                                        </Label.Content>
+                                    </Label>
+                                    <Label x:Name="btnValue"
+                                           Margin="0,2"
+                                           Style="{StaticResource BaseStyleLabel}">
+                                        <Label.Content>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0"
+                                                           MaxWidth="225"
+                                                           Text="{Binding Name}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="1" Text="{Binding ItemCount, StringFormat={} ({0} items)}" />
+                                            </Grid>
+                                        </Label.Content>
+                                    </Label>
+                                    <Label x:Name="lblBtn"
+                                           Margin="0,2"
+                                           Style="{StaticResource BaseStyleLabel}">
+                                        <Label.Content>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0"
+                                                           MaxWidth="200"
+                                                           Text="{Binding Name}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="1" Text="{Binding ItemCount, StringFormat={} ({0} items)}" />
+                                            </Grid>
+                                        </Label.Content>
+                                    </Label>
+                                </StackPanel>
+                                <Separator x:Name="itemSeparator"
+                                           Grid.Row="1"
+                                           Width="275"
+                                           Visibility="Collapsed" />
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsSubGroup}" Value="False">
+                                    <Setter TargetName="rowSpacer" Property="Height" Value="25" />
+                                    <Setter TargetName="lblValue" Property="Visibility" Value="Visible" />
+                                    <Setter TargetName="btnValue" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="lblBtn" Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=IsSubGroup}" Value="True">
+                                    <Setter TargetName="lblValue" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="btnValue" Property="Visibility" Value="Visible" />
+                                    <Setter TargetName="lblBtn" Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=HasSubGroups}" Value="True">
+                                    <Setter TargetName="lblValue" Property="Visibility" Value="Visible" />
+                                    <Setter TargetName="btnValue" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="lblBtn" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="rowSpacer" Property="Height" Value="Auto" />
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=HasSubGroups}" Value="False" />
+                                        <Condition Binding="{Binding Path=IsSubGroup}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="lblBtn" Property="Visibility" Value="Visible" />
+                                    <Setter TargetName="lblValue" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="btnValue" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="rowSpacer" Property="Height" Value="0" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsSubGroup}" Value="True" />
+                                        <Condition Binding="{Binding Path=CanSearchKeyChange}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="ctxSearchGroup" Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
 
-                            </Style>
-                        </Style.Resources>
+                    <ListBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="{x:Type ListBoxItem}">
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5" />
+
+                                </Style>
+                            </Style.Resources>
                             <Setter Property="helpers:DragDropHelper.DropTarget" Value="{StaticResource searchItemDropTarget}" />
                             <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
-							<Setter Property="Margin" Value="0,2.5" />
+                            <Setter Property="Margin" Value="0,2.5" />
                             <Setter Property="MaxWidth" Value="305" />
 
-                        <Style.Triggers>
+                            <Style.Triggers>
 
-                            <DataTrigger Binding="{Binding Path=HasSubGroups}" Value="True">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=HasSubGroups}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
 
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding Path=HasSubGroups}" Value="True" />
-                                    <Condition Binding="{Binding Path=IsSubGroup}" Value="False" />
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Margin" Value="0,10,0,0" />
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=HasSubGroups}" Value="True" />
+                                        <Condition Binding="{Binding Path=IsSubGroup}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Margin" Value="0,10,0,0" />
 
-                            </MultiDataTrigger>
+                                </MultiDataTrigger>
 
-                        </Style.Triggers>
+                            </Style.Triggers>
 
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
             </Grid>
         </Border>
 
         <Border Grid.Column="2"
                 Width="350"
+                Height="405"
                 Background="{DynamicResource GrayBrush2}"
                 BorderThickness="1"
                 CornerRadius="10"
-                Height="405"
-   
                 Visibility="{Binding Path=IsSearchFilterSelected,
-                                     Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                     Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -259,71 +265,87 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-            
-            <Label x:Name="txtFilteredTitle"
-               Grid.Row="0"
-               Margin="5,10,0,5"
-               Content="{Binding Path=SelectedFeature.Classification}"
-               ContentStringFormat="Select {0}"
-               VerticalAlignment="Center"
-               FontSize="20"
-               FontWeight="Bold"
-               Style="{StaticResource BaseStyleLabel}"
-               Visibility="{Binding Path=IsSearchFilterSelected,
-                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <Label x:Name="txtFilteredTitle"
+                       Grid.Row="0"
+                       Margin="5,10,0,5"
+                       VerticalAlignment="Center"
+                       Content="{Binding Path=SelectedFeature.Classification}"
+                       ContentStringFormat="Select {0}"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Style="{StaticResource BaseStyleLabel}"
+                       Visibility="{Binding Path=IsSearchFilterSelected,
+                                            Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <Separator x:Name="itemSeparator2"
-                   Grid.Row="1"
-                   Margin="10,0"
-                   VerticalAlignment="Top"
-                   Panel.ZIndex="1000"                 
-                   Visibility="{Binding Path=IsSearchFilterSelected,
-                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
-
+                           Grid.Row="1"
+                           Margin="10,0"
+                           VerticalAlignment="Top"
+                           Panel.ZIndex="1000"
+                           Visibility="{Binding Path=IsSearchFilterSelected,
+                                                Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <ListBox x:Name="lstFiltered"
-                Grid.Row="2"
-                 ItemsSource="{Binding Path=SelectedFeature.FilteredSearchableEntities}"
-                 SelectedItem="{Binding Path=SelectedFeature.SelectedEntity}"
-                 Visibility="{Binding Path=IsSearchFilterSelected,
-                                      Converter={StaticResource BooleanToVisibilityConverter}}"
-                 Background="Transparent"
-                 Margin="15"
+                         Grid.Row="2"
+                         MaxHeight="300"
+                         Margin="15"
+                         Background="Transparent"
+                         ItemsSource="{Binding Path=SelectedFeature.FilteredSearchableEntities}"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         MaxHeight="300">
+                         SelectedItem="{Binding Path=SelectedFeature.SelectedEntity}"
+                         Visibility="{Binding Path=IsSearchFilterSelected,
+                                              Converter={StaticResource BooleanToVisibilityConverter}}">
 
+                    <ListBox.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10" />
+                        </Style>
+                    </ListBox.Resources>
 
-                <ListBox.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="10" />
-                    </Style>
-                </ListBox.Resources>
-
-                <ListBox.ItemContainerStyle>
-                    <Style  TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource baseListBoxItemStyle}">
-                        <Style.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="5"/>
-                            </Style>
-                        </Style.Resources>
+                    <ListBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource baseListBoxItemStyle}" TargetType="{x:Type ListBoxItem}">
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5" />
+                                </Style>
+                            </Style.Resources>
                             <Setter Property="helpers:DragDropHelper.DragSource" Value="{StaticResource searchableEntityDragSource}" />
                             <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
-							<Setter Property="Margin" Value="0,2.5" />
+                            <Setter Property="Margin" Value="0,2.5" />
                             <Setter Property="MaxWidth" Value="305" />
                         </Style>
-                </ListBox.ItemContainerStyle>
+                    </ListBox.ItemContainerStyle>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                            <Label Margin="0,2" ToolTip="{Binding Path=Identity.Name}" Style="{StaticResource BaseStyleLabel}" HorizontalAlignment="Left">
-                            <Label.Content>
-                                <AccessText Text="{Binding Path=Identity.Name}"
-                                        TextTrimming="CharacterEllipsis" />
-                            </Label.Content>
-                        </Label>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Tag="{Binding ElementName=lstSearchGroups, Path=DataContext}">
+                                <Label Margin="0,2"
+                                       HorizontalAlignment="Left"
+                                       Style="{StaticResource BaseStyleLabel}"
+                                       ToolTip="{Binding Path=Identity.Name}">
+                                    <Label.Content>
+                                        <AccessText Text="{Binding Path=Identity.Name}" TextTrimming="CharacterEllipsis" />
+                                    </Label.Content>
+                                </Label>
+                                <StackPanel.ContextMenu>
+                                    <ContextMenu x:Name="ctxEntity">
+                                        <MenuItem Command="{Binding Path=PlacementTarget.Tag.EditEntityCommand,
+                                                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding}"
+                                                  Header="Edit"
+                                                  ToolTip="Edit this item." />
+                                        <MenuItem Command="{Binding Path=PlacementTarget.Tag.CopyEntityCommand,
+                                                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding}"
+                                                  Header="Copy"
+                                                  ToolTip="Edit a copy of this item." />
+                                    </ContextMenu>
+                                </StackPanel.ContextMenu>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </Border>
     </Grid>

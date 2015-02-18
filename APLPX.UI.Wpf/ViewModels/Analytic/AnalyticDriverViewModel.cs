@@ -2,6 +2,7 @@
 using System.Linq;
 using APLPX.UI.WPF.DisplayEntities;
 using ReactiveUI;
+using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.ViewModels.Analytic
 {
@@ -13,6 +14,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         #region Private Fields
 
         private DisplayEntities.Analytic _entity;
+
         private IDisposable _driverChangedSubscription;
         private IDisposable _modeChangedSubscription;
         private IDisposable _selectedChangedSubscription;
@@ -45,6 +47,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             }
 
             InitializeEventHandlers();
+            InitializeCommands();
         }
 
         private void InitializeEventHandlers()
@@ -55,18 +58,42 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             var selectedValueDriverModeChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver.SelectedMode);
             _modeChangedSubscription = selectedValueDriverModeChanged.Subscribe(mode => OnSelectedDriverModeChanged(mode));
 
-            //TODO: for some reason, this handler is getting unhooked after executing the Save or Run commands.
-            //The dirtyChanged approach (below) works correctly.
-            //_driverChangedSubscription = this.Entity.ValueDrivers.ItemChanged.Subscribe(drv => OnValueDriverChanged(drv));
-
             var dirtyChanged = this.WhenAnyValue(vm => vm.Entity.SelectedValueDriver.IsDirty);
             _driverChangedSubscription = dirtyChanged.Subscribe(isDirty => OnDriverDirtyChanged(isDirty));
+
+            this.Entity.ValueDrivers.ChangeTrackingEnabled = true;
+            this.Entity.ValueDrivers.ItemChanged.Subscribe(v => OnDriverChanged(v));
         }
 
+        private void InitializeCommands()
+        {
+            //At least one value driver must be marked Selected in order to save.
+            IObservable<bool> canExecute = this.WhenAnyValue(vm => vm.IsAnyValueDriverIncluded, vm => vm.IsAnyValueDriverDirty, (included, dirty) => SaveCanExecute(included, dirty));
+            SaveCommand = ReactiveCommand.Create(canExecute);
+            this.WhenAnyObservable(vm => vm.SaveCommand).Subscribe(val => SaveExecuted(val));
+
+            RunCommand = ReactiveCommand.Create(canExecute);
+            this.WhenAnyObservable(vm => vm.RunCommand).Subscribe(val => RunExecuted(val));
+
+            Commands.Add(new DisplayEntities.Action { Command = SaveCommand, Name = "Save", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversSave });
+            Commands.Add(new DisplayEntities.Action { Command = RunCommand, Name = "Run", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsValueDriversRun });
+        }
 
         #endregion
 
         #region Properties
+
+        public ReactiveCommand<object> SaveCommand
+        {
+            get;
+            private set;
+        }
+
+        public ReactiveCommand<object> RunCommand
+        {
+            get;
+            private set;
+        }
 
         public DisplayEntities.Analytic Entity
         {
@@ -88,8 +115,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
                 }
             }
         }
-
-
+  
         public bool IsValueDriverSelected
         {
             get { return (Entity != null && Entity.SelectedValueDriver != null); }
@@ -123,16 +149,52 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether any ValueDriver is marked IsSelected.
+        /// </summary>
+        public bool IsAnyValueDriverIncluded
+        {
+            get
+            {
+                bool result = Entity.ValueDrivers.Any(driver => driver.IsSelected);
+
+                return result;
+            }
+        }
+
         #endregion
 
-        #region Event Handlers
+        #region Command and Event Handlers
+
+        private void RunExecuted(object parameter)
+        {
+
+        }
+
+        private bool SaveCanExecute(bool isAnyDriverSelected, bool isDirty)
+        {
+            bool canExecute = isAnyDriverSelected && isDirty;
+
+            return canExecute;
+        }
+
+        private void SaveExecuted(object parameter)
+        {
+        }
+
+
+        private void OnDriverChanged(IReactivePropertyChangedEventArgs<AnalyticValueDriver> v)
+        {
+            this.RaisePropertyChanged("IsAnyValueDriverIncluded");
+        }
+
 
         private void OnDriverDirtyChanged(bool isDirty)
         {
             if (isDirty)
             {
                 SelectedFeature.SelectedStep.IsCompleted = false;
-                SelectedFeature.DisableRemainingSteps();                
+                SelectedFeature.DisableRemainingSteps();
             }
 
             //Update dependent calculated properties.

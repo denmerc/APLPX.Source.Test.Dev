@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+
 using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
+using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -15,6 +17,7 @@ namespace APLPX.UI.WPF.ViewModels
         private IFilterContainer _entity;
         private IDisposable _filterChangedSubscription;
         private IDisposable _selectAllFilterSubscription;
+
         private bool _isDisposed;
 
         #region Constructor and Initialization
@@ -43,16 +46,28 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void InitializeCommands()
         {
-            var canExecute = this.WhenAnyValue(vm => vm.Entity.SelectedFilterGroup, (group) => SelectAllFiltersCanExecute(group));
+            IObservable<bool> canExecute = this.WhenAnyValue(vm => vm.Entity.SelectedFilterGroup, (group) => SelectAllFiltersCanExecute(group));
             SelectAllFiltersCommand = ReactiveCommand.Create(canExecute);
 
-            _selectAllFilterSubscription = this.WhenAnyObservable(vm => vm.SelectAllFiltersCommand).Subscribe(item => SelectAllFiltersCommandExecuted(item));
-            _filterChangedSubscription = Entity.FilterGroups.ItemChanged.Subscribe(g => OnFilterGroupChanged(g));
+            _selectAllFilterSubscription = this.WhenAnyObservable(vm => vm.SelectAllFiltersCommand).Subscribe(item => SelectAllFiltersExecuted(item));
+            _filterChangedSubscription = Entity.FilterGroups.ItemChanged.Subscribe(group => OnFilterGroupChanged(group));
+
+            canExecute = this.WhenAnyValue(vm => vm.IsAnyFilterGroupDirty, (val) => SaveCanExecute(val));
+            SaveCommand = ReactiveCommand.Create(canExecute);            
+            this.WhenAnyObservable(vm => vm.SaveCommand).Subscribe(val => SaveExecuted(val));
+
+            Commands.Add(new DisplayEntities.Action { Command = SaveCommand, Name = "Save", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsFiltersSave });
         }
 
         #endregion
 
         #region Properties
+
+        public ReactiveCommand<object> SaveCommand
+        {
+            get;
+            private set;
+        }
 
         public ReactiveCommand<object> SelectAllFiltersCommand
         {
@@ -94,6 +109,16 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Command and Event Handlers
 
+        private bool SaveCanExecute(bool isDirty)
+        {
+            return isDirty;
+        }
+
+        private void SaveExecuted(object parameter)
+        {
+
+        }
+
         private bool SelectAllFiltersCanExecute(FilterGroup filterGroup)
         {
             bool result = (filterGroup != null);
@@ -101,7 +126,7 @@ namespace APLPX.UI.WPF.ViewModels
             return result;
         }
 
-        private void SelectAllFiltersCommandExecuted(object parameter)
+        private void SelectAllFiltersExecuted(object parameter)
         {
             bool isSelected = Convert.ToBoolean(parameter);
 

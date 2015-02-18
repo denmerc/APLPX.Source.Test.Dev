@@ -181,7 +181,7 @@ namespace APLPX.UI.WPF.ViewModels
             LogoutCommand = ReactiveCommand.Create();
             LogoutCommand.Subscribe(x =>
             {
-                                var loginWindow = new LoginWindow();
+                var loginWindow = new LoginWindow();
                 var vm = new LoginViewModel(_userService);
                 loginWindow.DataContext = vm;
                 loginWindow.ShowMaxRestoreButton = false;
@@ -224,18 +224,23 @@ namespace APLPX.UI.WPF.ViewModels
 
             LoadAnalyticCommand = ReactiveCommand.CreateAsyncTask<DisplayEntities.Analytic>(async _ =>
                 await Task.Run<DisplayEntities.Analytic>( () =>
-                {
+            {
                     SelectedFeature.RestoreSelectedSearchGroup();
-                    //int searchGroupId = GetSearchGroupId(Session.ClientCommand);
+                    DisplayEntities.Analytic sourceAnalytic = SelectedAnalytic;
 
-                    //int entityId = 0;
-                    //if (SelectedEntity != null)
-                    //{
-                    //    entityId = SelectedEntity.Id;
-                    //}
+                    int searchGroupId = GetSearchGroupId(Session.ClientCommand);
+                    int entityId = 0;
+                    if (SelectedEntity != null)
+                    {
+                        entityId = SelectedEntity.Id;                      
+                    }
+                    else
+                    {
+                        sourceAnalytic = new DisplayEntities.Analytic();
+                    }
 
-                    return _analyticDisplayServices.LoadAnalytic(SelectedAnalytic, SelectedEntity != null ? SelectedEntity.Id : 0, GetSearchGroupId(Session.ClientCommand));
-                    
+                    return _analyticDisplayServices.LoadAnalytic(SelectedAnalytic, entityId, searchGroupId);
+
 
                 }));
 
@@ -284,7 +289,7 @@ namespace APLPX.UI.WPF.ViewModels
 
             }));
 
-        }
+                    }
 
 
         #endregion
@@ -1167,10 +1172,10 @@ namespace APLPX.UI.WPF.ViewModels
                         HandleInvalidRequest(string.Format("Invalid Api Request : {0}", apiName), r.ClientMessage, r.ServerMessage);
                     }
                     else
-                    {
+            {
                         if (callback != null) { callback.Invoke(r); }
                         OnCommandCompleted(successMessage);
-                    }
+            }
 
                 }, ex => HandleException(string.Format("Api Exception : {0}", apiName), ex), () => 
                     {

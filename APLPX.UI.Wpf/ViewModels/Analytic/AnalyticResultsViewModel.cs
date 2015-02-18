@@ -73,7 +73,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         {
             get
             {
-                int result = Entity.ValueDrivers.Where(d => d.RunResults).Count();
+                int result = Entity.ValueDrivers.Where(d => d.RunResults && d.IsSelected).Count();
                 return result;
             }
         }

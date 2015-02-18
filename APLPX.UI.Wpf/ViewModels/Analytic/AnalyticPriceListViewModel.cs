@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+
 using APLPX.UI.WPF.DisplayEntities;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
+using DTO = APLPX.Entity;
 
 namespace APLPX.UI.WPF.ViewModels.Analytic
 {
     public class AnalyticPriceListViewModel : ViewModelBase
     {
         private Display.Analytic _entity;
+
         private IDisposable _selectAllPriceListsSubscription;
         private IDisposable _priceListChangedSubscription;
         private bool _isDisposed;
@@ -41,25 +44,41 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         private void InitializeCommands()
         {
-            var canExecute = this.WhenAnyValue(vm => vm.Entity.SelectedPriceListGroup, (plGroup) => SelectAllPriceListsCanExecute(plGroup));
+            IObservable<bool> canExecute = this.WhenAnyValue(vm => vm.Entity.SelectedPriceListGroup, (plGroup) => SelectAllPriceListsCanExecute(plGroup));
             SelectAllPriceListsCommand = ReactiveCommand.Create(canExecute);
 
             _selectAllPriceListsSubscription = this.WhenAnyObservable(vm => vm.SelectAllPriceListsCommand).Subscribe(item => SelectAllPriceListsExecuted(item));
 
             _priceListChangedSubscription = this.Entity.PriceListGroups.ItemChanged.Subscribe(plg => OnPriceListChanged(plg));
+
+            canExecute = this.WhenAnyValue(vm => vm.IsAnyPriceListGroupDirty, (val) => SaveCanExecute(val));
+            SaveCommand = ReactiveCommand.Create(canExecute);
+            this.WhenAnyObservable(vm => vm.SaveCommand).Subscribe(val => SaveExecuted(val));
+
+            Commands.Add(new DisplayEntities.Action { Command = SaveCommand, Name = "Save", TypeId = DTO.ModuleFeatureStepActionType.PlanningAnalyticsPriceListsSave });
         }
 
         #endregion
 
         #region Properties
 
-        public ReactiveCommand<object> SelectAllPriceListsCommand { get; private set; }
+        public ReactiveCommand<object> SaveCommand
+        {
+            get;
+            private set;
+        }
+
+        public ReactiveCommand<object> SelectAllPriceListsCommand
+        {
+            get;
+            private set;
+        }
 
         public Display.Analytic Entity
         {
             get { return _entity; }
             private set { this.RaiseAndSetIfChanged(ref _entity, value); }
-        }
+        } 
 
         /// <summary>
         /// Gets a value indicating whether the price list groups should be displayed.
@@ -101,6 +120,16 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         #endregion
 
         #region Command and Event Handlers
+
+        private bool SaveCanExecute(bool isDirty)
+        {
+            return isDirty;
+        }
+
+        private void SaveExecuted(object parameter)
+        {
+        }
+
 
         private bool SelectAllPriceListsCanExecute(Display.AnalyticPriceListGroup priceListGroup)
         {

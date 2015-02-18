@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using APLPX.Entity;
 using ReactiveUI;
 
@@ -15,7 +16,8 @@ namespace APLPX.UI.WPF.DisplayEntities
         private string _parentName;
         private string _title;
         private short _sort;
-        private ModuleFeatureStepActionType _typeId;    
+        private ModuleFeatureStepActionType _typeId;
+        private ICommand _command;
 
         #endregion
 
@@ -59,6 +61,14 @@ namespace APLPX.UI.WPF.DisplayEntities
             set { this.RaiseAndSetIfChanged(ref _typeId, value); }
         }
 
+        /// <summary>
+        /// Gets/sets the command associated with this object.
+        /// </summary>
+        public ICommand Command
+        {
+            get { return _command; }
+            set { this.RaiseAndSetIfChanged(ref _command, value); }
+        }
 
         #endregion
 

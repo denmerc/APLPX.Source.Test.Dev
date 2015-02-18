@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 
-using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.DisplayServices;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
@@ -15,15 +15,18 @@ namespace APLPX.UI.WPF.ViewModels
     {
         #region Private Fields
 
-        private Module _selectedModule;
-        private ModuleFeature _selectedFeature;
-        private User _currentUser;
+        private Display.Module _selectedModule;
+        private Display.ModuleFeature _selectedFeature;
+        private Display.User _currentUser;
         private Display.Analytic _selectedAnalytic;
         private Display.PricingEveryday _selectedPricingEveryday;
 
         private DTO.Session<DTO.NullT> _session;
         private Display.Session<DTO.NullT> _sessionDiagnostics;
-        //private UserDisplayServices _userDisplayServices;
+        private UserDisplayServices _userDisplayServices;
+        private AnalyticDisplayServices _analyticDisplayServices;
+        private List<Display.Action> _commands;
+
         private bool _isDebugMode;
         private bool _areDiagnosticsVisible;
         private bool _isDisposed;
@@ -34,7 +37,9 @@ namespace APLPX.UI.WPF.ViewModels
 
         public ViewModelBase()
         {
+            Commands = new List<DisplayEntities.Action>();
             SessionDiagnostics = new Display.Session<DTO.NullT>();
+
 #if DEBUG
             IsDebugMode = true;
 #endif
@@ -44,7 +49,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Properties
 
-        public ModuleFeature SelectedFeature
+        public Display.ModuleFeature SelectedFeature
         {
             get { return _selectedFeature; }
             set { this.RaiseAndSetIfChanged(ref _selectedFeature, value); }
@@ -53,16 +58,22 @@ namespace APLPX.UI.WPF.ViewModels
         /// <summary>
         /// Gets/sets the current user.
         /// </summary>
-        public User CurrentUser
+        public Display.User CurrentUser
         {
             get { return _currentUser; }
             set { this.RaiseAndSetIfChanged(ref _currentUser, value); }
         }
 
+        public List<Display.Action> Commands
+        {
+            get { return _commands; }
+            protected set { _commands = value; }
+        }
+
         /// <summary>
         /// Gets/sets the currently selected module.
         /// </summary>
-        public Module SelectedModule
+        public Display.Module SelectedModule
         {
             get { return _selectedModule; }
             set
@@ -107,14 +118,36 @@ namespace APLPX.UI.WPF.ViewModels
 
         }
 
-        ///// <summary>
-        ///// Gets/sets the UserDisplayServices provider.
-        ///// </summary>
-        //public UserDisplayServices UserServices
-        //{
-        //    get { return _userDisplayServices; }
-        //    set { this.RaiseAndSetIfChanged(ref _userDisplayServices, value); }
-        //}
+        /// <summary>
+        /// Gets/sets the AnalyticDisplayServices provider.
+        /// </summary>
+        public AnalyticDisplayServices AnalyticServices
+        {
+            get
+            {
+                if (_analyticDisplayServices == null)
+                {
+                    //TODO: get from cache.
+                }
+                return _analyticDisplayServices;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets/sets the UserDisplayServices provider.
+        /// </summary>
+        public UserDisplayServices UserServices
+        {
+            get
+            {
+                if (_userDisplayServices == null)
+                {
+                    //TODO: get from cache.
+                }
+                return _userDisplayServices;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether to the application is in debug mode.
@@ -138,6 +171,17 @@ namespace APLPX.UI.WPF.ViewModels
 
         #endregion
 
+        protected void AddCommand(ICommand command, string name, Entity.ModuleFeatureStepActionType actionType)
+        {
+            var action = new Display.Action
+            {
+                Name = name,
+                Command = command,
+                TypeId = actionType
+            };
+
+            Commands.Add(action);
+        }
 
         protected void ShowMessageBox(string message, MessageBoxImage image)
         {

@@ -20,6 +20,8 @@ using MahApps.Metro;
 using NLog;
 using ReactiveUI;
 using DTO = APLPX.Entity;
+using Ninject;
+using Ninject.Parameters;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -56,8 +58,10 @@ namespace APLPX.UI.WPF.ViewModels
 
         #region Constructors and Initialization
 
-        private MainViewModel()
+        private MainViewModel(EventAggregator eventManager)
         {
+
+            _eventManager = eventManager;
             _featureCache = new Dictionary<DTO.ModuleFeatureType, ModuleFeature>();
             _moduleViewModelCache = new Dictionary<DTO.ModuleType, ViewModelBase>();
 
@@ -87,9 +91,10 @@ namespace APLPX.UI.WPF.ViewModels
         public MainViewModel(DTO.Session<DTO.NullT> session,
                                 IAnalyticService analyticService,
                                 IUserService userService,
-                                IPricingEverydayService pricingService
+                                IPricingEverydayService pricingService,
+                                EventAggregator eventManager
                             )
-            : this()
+            : this(eventManager)
         {
             if (session == null)
             {
@@ -140,7 +145,7 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void InitializeEventHandlers()
         {
-            _eventManager = ((EventAggregator)App.Current.Resources["EventManager"]);
+            
             _eventManager.GetEvent<SearchGroupsUpdatedEvent>().Subscribe(data => OnSearchGroupReassigned(data));
 
             _eventManager.GetEvent<FeatureSearchGroup>().Subscribe(data => OnCreateNewEntityRequested(data));
@@ -182,7 +187,11 @@ namespace APLPX.UI.WPF.ViewModels
             LogoutCommand.Subscribe(x =>
             {
                 var loginWindow = new LoginWindow();
-                var vm = new LoginViewModel(_userService);
+                var vm = ViewModelBase.Kernel.Get<LoginViewModel>();
+                vm.Session = null;
+                vm.StatusMessage = string.Empty;
+                vm.Password = string.Empty;
+                vm.UserName = string.Empty;
                 loginWindow.DataContext = vm;
                 loginWindow.ShowMaxRestoreButton = false;
                 loginWindow.ShowMinButton = false;
@@ -198,10 +207,15 @@ namespace APLPX.UI.WPF.ViewModels
                     //TODO: trigger this at inactive timeout interval
                     if (vm.Session.Authenticated)
                     {
+                        var main = ViewModelBase.Kernel.Get<MainViewModel>(
+                            new ConstructorArgument("session", vm.Session)
+                            );
+                        //var main = ViewModelBase.Kernel.Get<MainViewModel>();
 
-                        var mvm = new MainViewModel(vm.Session, _analyticService, _userService, _pricingEverydayService);
+                        //main.Session = vm.Session;
+                        //var mvm = new MainViewModel(vm.Session, _analyticService, _userService, _pricingEverydayService, _eventManager);
                         var mainW = new MainWindow();
-                        mainW.DataContext = mvm;
+                        mainW.DataContext = main;
                         mainW.Show();
                         App.Current.Windows[0].DataContext = null;
                         App.Current.Windows[0].Close();

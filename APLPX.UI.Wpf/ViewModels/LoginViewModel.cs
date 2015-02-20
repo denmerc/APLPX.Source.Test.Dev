@@ -1,5 +1,6 @@
 ﻿using APLPX.Client.Contracts;
 using APLPX.Entity;
+using Ninject;
 using NLog;
 using ReactiveUI;
 using System;
@@ -16,9 +17,10 @@ namespace APLPX.UI.WPF.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        public LoginViewModel(IUserService userService)
+        public LoginViewModel()
         {
-            UserService = userService;
+            
+            //UserService = userService;
             StatusMessage = "";
             
             InitializeCommand = ReactiveCommand.CreateAsyncTask(async _ =>
@@ -67,7 +69,7 @@ namespace APLPX.UI.WPF.ViewModels
                 }
             );
         }
-
+        [Inject]
         public IUserService UserService { get; set; }
         public IPricingEverydayService PricingService { get; set; }
         public IAnalyticService AnalyticService { get; set; }

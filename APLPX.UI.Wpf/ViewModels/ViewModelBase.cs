@@ -6,6 +6,7 @@ using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
 using DTO = APLPX.Entity;
+using Ninject;
 
 
 namespace APLPX.UI.WPF.ViewModels
@@ -207,7 +208,8 @@ namespace APLPX.UI.WPF.ViewModels
             string newText = _messageDisplayService.ShowInputBox(null, title, originalText);
             return newText;
         }
-
+        [Inject]
+        public static  Ninject.IKernel Kernel { get; set; }
         #region IDisposable
 
         public void Dispose()

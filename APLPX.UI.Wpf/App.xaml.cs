@@ -17,6 +17,7 @@ using Ninject.Parameters;
 using APLPX.Entity;
 using Ninject;
 using APLPX.UI.WPF.AppllicationServices;
+using APLPX.UI.WPF.ApplicationServices;
 
 
 namespace APLPX.UI.WPF
@@ -39,6 +40,7 @@ namespace APLPX.UI.WPF
 
             try
             {
+                PriceExpertApplication.Current.Bootstrap();
                 //IKernel kernel = new StandardKernel();
 
 
@@ -73,7 +75,8 @@ namespace APLPX.UI.WPF
                 //mainWindow.Show();
                 //ViewModelBase.Kernel = kernel;
 
-                var loginViewModel = Cache.Kernel.Get<LoginViewModel>() ;
+                var loginViewModel = PriceExpertApplication.Current.Container.Get<LoginViewModel>();
+                //var loginViewModel = Cache.Kernel.Get<LoginViewModel>() ;
                 var loginWindow = new LoginWindow();
                 //var vm = new LoginViewModel();
                 loginWindow.DataContext = loginViewModel;
@@ -83,10 +86,11 @@ namespace APLPX.UI.WPF
                     var mainWindow = new MainWindow();
                 if (loginWindow.ShowDialog() == true)
                 {
-                    
-                var eventManager = Cache.EventManager; App.Current.Resources.Add("EventManager", eventManager);
 
-                var main = Cache.Kernel.Get<MainViewModel>(new ConstructorArgument("session", loginViewModel.Session)); 
+                    //var eventManager = PriceExpertApplication.Current.Container.Get<EventAggregator>(); 
+                    //App.Current.Resources.Add("EventManager", eventManager);
+
+                        var main = PriceExpertApplication.Current.Container.Get< MainViewModel > (new ConstructorArgument("session", loginViewModel.Session)); 
                         //new ConstructorArgument("session", loginViewModel.Session ),
                         //new ConstructorArgument("analyticService", Cache.AnalyticService),
                         //new ConstructorArgument("pricingService", Cache.PricingEverydayService),
@@ -103,7 +107,7 @@ namespace APLPX.UI.WPF
                         //new ConstructorArgument("eventManager", eventAggregator)
                     //var mvm = new MainViewModel(loginViewModel.Session, analyticClient, userClient, pricingClient, eventManager);
                     mainWindow.DataContext = main;
-                    mainWindow.Show();
+                    mainWindow.Show(); 
                 }
             }
             catch (Exception ex)

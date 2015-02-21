@@ -4,6 +4,8 @@ using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
 using DTO = APLPX.Entity;
+using APLPX.UI.WPF.ApplicationServices;
+using Ninject;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -165,7 +167,9 @@ namespace APLPX.UI.WPF.ViewModels
 
             if (parentGroup != null)
             {
-                EventAggregator notifier = ((EventAggregator)App.Current.Resources["EventManager"]);
+                var notifier = PriceExpertApplication.Current.Container.Get<EventAggregator>();
+
+                //EventAggregator notifier = ((EventAggregator)App.Current.Resources["EventManager"]);
                 notifier.Publish(parentGroup);
             }
         }

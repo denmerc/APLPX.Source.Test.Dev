@@ -3,6 +3,8 @@ using System.Windows;
 using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.Interfaces;
+using APLPX.UI.WPF.ApplicationServices;
+using Ninject;
 
 namespace APLPX.UI.WPF.DragDropProviders
 {
@@ -51,7 +53,8 @@ namespace APLPX.UI.WPF.DragDropProviders
 
         private void PublishChangeNotification(ISearchableEntity sourceEntity, FeatureSearchGroup destSearchGroup)
         {
-            EventAggregator notifier = ((EventAggregator)App.Current.Resources["EventManager"]);
+            var notifier = PriceExpertApplication.Current.Container.Get<EventAggregator>();
+            //EventAggregator notifier = ((EventAggregator)App.Current.Resources["EventManager"]);
             var data = new SearchGroupsUpdatedEvent(sourceEntity, destSearchGroup);
             notifier.Publish(data);
         }

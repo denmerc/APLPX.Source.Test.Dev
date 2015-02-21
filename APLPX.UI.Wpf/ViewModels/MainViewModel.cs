@@ -23,6 +23,7 @@ using DTO = APLPX.Entity;
 using Ninject;
 using Ninject.Parameters;
 using APLPX.UI.WPF.AppllicationServices;
+using APLPX.UI.WPF.ApplicationServices;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -208,7 +209,7 @@ namespace APLPX.UI.WPF.ViewModels
                     //TODO: trigger this at inactive timeout interval
                     if (vm.Session.Authenticated)
                     {
-                        var main = Cache.Kernel.Get<MainViewModel>(new ConstructorArgument("session", vm.Session));
+                        var main = PriceExpertApplication.Current.Container.Get<MainViewModel>(new ConstructorArgument("session", vm.Session));
                         //var main = ViewModelBase.Cache.Get<MainViewModel>(
                         //    new ConstructorArgument("session", vm.Session)
                         //    );

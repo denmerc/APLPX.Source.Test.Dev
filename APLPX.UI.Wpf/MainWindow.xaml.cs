@@ -10,6 +10,7 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using Ninject;
+using APLPX.UI.WPF.AppllicationServices;
 
 namespace APLPX.UI.WPF
 {
@@ -50,7 +51,7 @@ namespace APLPX.UI.WPF
         {
             InitializeComponent();
 
-            _eventManager = ViewModelBase.Kernel.Get<EventAggregator>();
+            _eventManager = Cache.EventManager;
             //_eventManager = ((EventAggregator)App.Current.Resources["EventManager"]);
 
             _eventManager.GetEvent<OperationCompletedEvent>().Subscribe(action => ShowMessageToaster(action));

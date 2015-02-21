@@ -276,6 +276,7 @@
     <Compile Include="ViewModels\Analytic\AnalyticResultsViewModel.cs" />
     <Compile Include="Events\EventAggregator.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticPriceListViewModel.cs" />
+    <Compile Include="ApplicationServices\Cache.cs" />
     <Compile Include="ViewModels\FilterViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\InputBoxViewModel.cs" />
@@ -612,6 +613,10 @@
     <ProjectReference Include="..\APLPX.Client.Contracts\APLPX.Client.Contracts.csproj">
       <Project>{8888ebe0-7a11-4ad0-ab11-88dbfe009c57}</Project>
       <Name>APLPX.Client.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APLPX.Client.Mock\APLPX.Client.Mock.csproj">
+      <Project>{5cc39bb0-2a4c-4eca-8a8a-3c845b34d504}</Project>
+      <Name>APLPX.Client.Mock</Name>
     </ProjectReference>
     <ProjectReference Include="..\APLPX.Client\APLPX.Client.csproj">
       <Project>{ab16ff02-1b5b-4009-a989-0cb54c802efa}</Project>

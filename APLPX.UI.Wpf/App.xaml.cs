@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using Ninject.Parameters;
 using APLPX.Entity;
 using Ninject;
+using APLPX.UI.WPF.AppllicationServices;
 
 
 namespace APLPX.UI.WPF
@@ -38,67 +39,69 @@ namespace APLPX.UI.WPF
 
             try
             {
-                IKernel kernel = new StandardKernel();
+                //IKernel kernel = new StandardKernel();
 
 
                 //mock
+                
+                //var accentColors = new List<AccentColorMenuData>();
+                //var appThemes = new List<AppThemeMenuData>();
 
-                var accentColors = new List<AccentColorMenuData>();
-                var appThemes = new List<AppThemeMenuData>();
-
-                kernel.Bind<IAnalyticService>().To<AnalyticClient>();
-                kernel.Bind<IPricingEverydayService>().To<PricingEverydayClient>();
-                kernel.Bind<IUserService>().To<UserClient>();
-                kernel.Bind<EventAggregator>().ToSelf().InSingletonScope();
-
-
-                var analyticClient = kernel.Get<IAnalyticService>();
-                var pricingEverydayClient = kernel.Get<IPricingEverydayService>();
-                var userClient = kernel.Get<IUserService>();
-                var eventAggregator = kernel.Get<EventAggregator>();
-
-                kernel.Bind<MainViewModel>().ToSelf()
-                    .WithConstructorArgument("analyticService", analyticClient)
-                    .WithConstructorArgument("userService", userClient)
-                    .WithConstructorArgument("pricingService", pricingEverydayClient);
-
-                kernel.Bind<LoginViewModel>().ToSelf().InSingletonScope();
+                //kernel.Bind<IAnalyticService>().To<AnalyticClient>();
+                //kernel.Bind<IPricingEverydayService>().To<PricingEverydayClient>();
+                //kernel.Bind<IUserService>().To<UserClient>();
+                //kernel.Bind<EventAggregator>().ToSelf().InSingletonScope();
 
 
-                //var main = kernel.Get<MainViewModel>(
-                //    new ConstructorArgument("session", session),
-                //    new ConstructorArgument("analyticService", analyticClient),
-                //    new ConstructorArgument("pricingService", pricingEverydayClient),
-                //    new ConstructorArgument("userService", userClient),
-                //    new ConstructorArgument("eventManager", eventAggregator)
-                //    );
+                
+                //var analyticClient = kernel.Get<IAnalyticService>();
+                //var pricingEverydayClient = kernel.Get<IPricingEverydayService>();
+                //var userClient = kernel.Get<IUserService>();
+                //var eventAggregator = kernel.Get<EventAggregator>();
+
+                //kernel.Bind<MainViewModel>().ToSelf()
+                //    .WithConstructorArgument("analyticService", analyticClient)
+                //    .WithConstructorArgument("userService", userClient)
+                //    .WithConstructorArgument("pricingService", pricingEverydayClient);
+
+                //kernel.Bind<LoginViewModel>().ToSelf().InSingletonScope();
+
+
 
                 //var mainWindow = new MainWindow();
                 //mainWindow.DataContext = main;
                 //mainWindow.Show();
-                var eventManager = eventAggregator; App.Current.Resources.Add("EventManager", eventManager);
+                //ViewModelBase.Kernel = kernel;
 
-                var loginViewModel = kernel.Get<LoginViewModel>();
-                ViewModelBase.Kernel = kernel;
-
+                var loginViewModel = Cache.Kernel.Get<LoginViewModel>() ;
                 var loginWindow = new LoginWindow();
                 //var vm = new LoginViewModel();
                 loginWindow.DataContext = loginViewModel;
                 loginWindow.ShowMaxRestoreButton = false;
                 loginWindow.ShowMinButton = false;
-                var mainWindow = new MainWindow();
 
+                    var mainWindow = new MainWindow();
                 if (loginWindow.ShowDialog() == true)
                 {
-                    //var mvm = new MainViewModel(loginViewModel.Session, analyticClient, userClient, pricingClient, eventManager);
-                    var main = kernel.Get<MainViewModel>(
-                        new ConstructorArgument("session", loginViewModel.Session)
-                        );
+                    
+                var eventManager = Cache.EventManager; App.Current.Resources.Add("EventManager", eventManager);
+
+                var main = Cache.Kernel.Get<MainViewModel>(new ConstructorArgument("session", loginViewModel.Session)); 
+                        //new ConstructorArgument("session", loginViewModel.Session ),
+                        //new ConstructorArgument("analyticService", Cache.AnalyticService),
+                        //new ConstructorArgument("pricingService", Cache.PricingEverydayService),
+                        //new ConstructorArgument("userService", Cache.User)
+
+                        //);
+                    //var main = kernel.Get<MainViewModel>(
+                    //    new ConstructorArgument("session", loginViewModel.Session)
+                    //    );
                         //,
                         //new ConstructorArgument("analyticService", analyticClient),
                         //new ConstructorArgument("pricingService", pricingEverydayClient),
                         //new ConstructorArgument("userService", userClient),
                         //new ConstructorArgument("eventManager", eventAggregator)
+                    //var mvm = new MainViewModel(loginViewModel.Session, analyticClient, userClient, pricingClient, eventManager);
                     mainWindow.DataContext = main;
                     mainWindow.Show();
                 }

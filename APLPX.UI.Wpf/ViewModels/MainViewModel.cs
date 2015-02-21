@@ -22,6 +22,7 @@ using ReactiveUI;
 using DTO = APLPX.Entity;
 using Ninject;
 using Ninject.Parameters;
+using APLPX.UI.WPF.AppllicationServices;
 
 namespace APLPX.UI.WPF.ViewModels
 {
@@ -187,7 +188,7 @@ namespace APLPX.UI.WPF.ViewModels
             LogoutCommand.Subscribe(x =>
             {
                 var loginWindow = new LoginWindow();
-                var vm = ViewModelBase.Kernel.Get<LoginViewModel>();
+                var vm = new LoginViewModel();
                 vm.Session = null;
                 vm.StatusMessage = string.Empty;
                 vm.Password = string.Empty;
@@ -207,9 +208,10 @@ namespace APLPX.UI.WPF.ViewModels
                     //TODO: trigger this at inactive timeout interval
                     if (vm.Session.Authenticated)
                     {
-                        var main = ViewModelBase.Kernel.Get<MainViewModel>(
-                            new ConstructorArgument("session", vm.Session)
-                            );
+                        var main = Cache.Kernel.Get<MainViewModel>(new ConstructorArgument("session", vm.Session));
+                        //var main = ViewModelBase.Cache.Get<MainViewModel>(
+                        //    new ConstructorArgument("session", vm.Session)
+                        //    );
                         //var main = ViewModelBase.Kernel.Get<MainViewModel>();
 
                         //main.Session = vm.Session;

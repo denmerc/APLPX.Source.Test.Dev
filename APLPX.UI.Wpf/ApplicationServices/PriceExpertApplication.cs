@@ -44,7 +44,7 @@ namespace APLPX.UI.WPF.ApplicationServices
         public void Bootstrap()
         {
 
-            if (ConfigurationManager.AppSettings["Environment"] == "DE")
+            if (ConfigurationManager.AppSettings["Environment"] == "TEST")
             {
                 Container = new StandardKernel(new ApplicationProvider());
             }
@@ -99,7 +99,7 @@ namespace APLPX.UI.WPF.ApplicationServices
             Bind<LoginViewModel>().ToSelf().InSingletonScope();
             Bind<SearchViewModel>().ToSelf().InTransientScope();
             Bind<AnalyticDisplayServices>().ToSelf().InSingletonScope()
-    .WithConstructorArgument("analyticService", Kernel.Get<IAnalyticService>());
+                        .WithConstructorArgument("analyticService", Kernel.Get<IAnalyticService>());
 
             Bind<PricingEverydayDisplayService>().ToSelf().InSingletonScope()
                 .WithConstructorArgument("pricingService", Kernel.Get<IPricingEverydayService>());

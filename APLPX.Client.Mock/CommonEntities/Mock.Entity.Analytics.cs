@@ -123,6 +123,9 @@ namespace APLPX.Common.Mock.Entity
         [DataMember]
         public int SearchId { get; set; }
         [DataMember]
+        [BsonElement("SearchGroupId")]
+        public string SearchGroupId { get; set; }
+        [DataMember]
         [BsonElement("SearchGroupKey")]
         public string SearchGroupKey { get; set; }
         [DataMember]

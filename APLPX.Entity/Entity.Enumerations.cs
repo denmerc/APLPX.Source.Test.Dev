@@ -50,7 +50,18 @@ namespace APLPX.Entity
         [EnumMember]
         AdministrationHome = 131,
         [EnumMember]
-        AdministrationUserMaintenance = 135
+        AdministrationUserMaintenance = 135,
+
+        [EnumMember]
+        AdminHome = 200,
+        [EnumMember]
+        AdminUsers = 201,
+        [EnumMember]
+        AdminMarkUp = 202,
+        [EnumMember]
+        AdminOptimization = 203,
+        [EnumMember]
+        AdminTemplates = 204
     }
 
     [DataContract]
@@ -166,7 +177,19 @@ namespace APLPX.Entity
         [EnumMember]
         AdministrationUserMaintenanceUserIdentity = 162, // Step 2) User Identity
         [EnumMember]
-        AdministrationUserMaintenanceUserRole = 167 // Step 3) User Role    
+        AdministrationUserMaintenanceUserRole = 167, // Step 3) User Role    
+    
+    
+        [EnumMember]
+        AdminHome = 199,
+        [EnumMember]
+        AdminUserSearch = 200,
+        [EnumMember]
+        AdminUserIdentity = 201,
+        [EnumMember]
+        AdminUserCredentials = 202,
+        [EnumMember]
+        AdminUserRole = 203
     }
 
     [DataContract]
@@ -320,7 +343,14 @@ namespace APLPX.Entity
         [EnumMember]
         PlanningKitPricingForecastDelete = 259, // Workflow View Step Action, Delete Kit Pricing Forecast
         [EnumMember]
-        PlanningKitPricingApprovalSubmit = 220 // Workflow View Step Action, Submit Kit Pricing Approval    
+        PlanningKitPricingApprovalSubmit = 220, // Workflow View Step Action, Submit Kit Pricing Approval    
+
+        [EnumMember]
+        AdminUserSearchNew = 400,
+        [EnumMember]
+        AdminUserSearchEdit = 401,
+        [EnumMember]
+        AdminUserSearchRemove = 402
     }
 
     [DataContract]

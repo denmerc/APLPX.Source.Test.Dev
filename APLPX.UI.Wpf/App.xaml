@@ -5,12 +5,12 @@
              xmlns:helpers="clr-namespace:APLPX.UI.WPF.Helpers"
              xmlns:local="clr-namespace:APLPX.UI.WPF"
              xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
-             xmlns:viewsAdmin="clr-namespace:APLPX.UI.WPF.Views.Admin"
+             xmlns:viewsAdmin="clr-namespace:APLPX.UI.Admin.Views;assembly=APLPX.UI.Admin"
              xmlns:viewsAnalytic="clr-namespace:APLPX.UI.WPF.Views.Analytic"
              xmlns:viewsCommon="clr-namespace:APLPX.UI.WPF.Views.Common"
              xmlns:viewsPricing="clr-namespace:APLPX.UI.WPF.Views.Pricing"
              xmlns:vm="clr-namespace:APLPX.UI.WPF.ViewModels"
-             xmlns:vmAdmin="clr-namespace:APLPX.UI.WPF.ViewModels.Admin"
+             xmlns:vmAdmin="clr-namespace:APLPX.UI.Admin.ViewModels;assembly=APLPX.UI.Admin"
              xmlns:vma="clr-namespace:APLPX.UI.WPF.ViewModels.Analytic"
              xmlns:vmp="clr-namespace:APLPX.UI.WPF.ViewModels.Pricing">
 
@@ -597,9 +597,25 @@
                 <local:HomeView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type vmAdmin:AdminUsersViewModel}">
+            <!--<DataTemplate DataType="{x:Type vmAdmin:AdminUsersViewModel}">
                 <viewsAdmin:UserAdminControl />
+            </DataTemplate>-->
+
+            <DataTemplate DataType="{x:Type vmAdmin:UserSearchViewModel}">
+                <viewsAdmin:UserSearchView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vmAdmin:UserIdentityViewModel}">
+                <viewsAdmin:UserIdentityView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vmAdmin:UserCredentialViewModel}">
+                <viewsAdmin:UserCredentialView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vmAdmin:UserRoleViewModel}">
+                <viewsAdmin:UserRoleView/>
+            </DataTemplate>
+
+
+
 
             <DataTemplate DataType="{x:Type vm:SearchViewModel}">
                 <local:SearchControl />

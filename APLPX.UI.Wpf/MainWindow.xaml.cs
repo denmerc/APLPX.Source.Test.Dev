@@ -10,7 +10,7 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using Ninject;
-using APLPX.UI.WPF.AppllicationServices;
+using APLPX.UI.WPF.ApplicationServices;
 
 namespace APLPX.UI.WPF
 {
@@ -51,8 +51,7 @@ namespace APLPX.UI.WPF
         {
             InitializeComponent();
 
-            _eventManager = Cache.EventManager;
-            //_eventManager = ((EventAggregator)App.Current.Resources["EventManager"]);
+            _eventManager = PriceExpertApplication.Current.Container.Get<EventAggregator>();
 
             _eventManager.GetEvent<OperationCompletedEvent>().Subscribe(action => ShowMessageToaster(action));
             _eventManager.GetEvent<AboutViewModel>().Subscribe(vm => ShowAboutBox(vm));

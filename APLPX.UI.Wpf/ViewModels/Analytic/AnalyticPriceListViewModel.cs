@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-
 using APLPX.UI.WPF.DisplayEntities;
+using APLPX.UI.WPF.DisplayServices;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
 using DTO = APLPX.Entity;
@@ -12,6 +12,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     public class AnalyticPriceListViewModel : ViewModelBase
     {
         private Display.Analytic _entity;
+        private AnalyticDisplayServices _analyticDisplayService;
 
         private IDisposable _selectAllPriceListsSubscription;
         private IDisposable _priceListChangedSubscription;
@@ -19,20 +20,24 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #region Constructor and Initialization
 
-        public AnalyticPriceListViewModel(Display.Analytic entity, Display.ModuleFeature feature)
+        public AnalyticPriceListViewModel(Display.Analytic entity, Display.ModuleFeature feature, AnalyticDisplayServices analyticDisplayService)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
-
             if (feature == null)
             {
                 throw new ArgumentNullException("feature");
             }
+            if (analyticDisplayService == null)
+            {
+                throw new ArgumentNullException("analyticDisplayService");
+            }
 
             Entity = entity;
             SelectedFeature = feature;
+            _analyticDisplayService = analyticDisplayService;
 
             if (Entity.PriceListGroups.Count > 0 && Entity.SelectedPriceListGroup == null)
             {
@@ -51,7 +56,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
             _priceListChangedSubscription = this.Entity.PriceListGroups.ItemChanged.Subscribe(plg => OnPriceListChanged(plg));
 
-            canExecute = this.WhenAnyValue(vm => vm.IsAnyPriceListGroupDirty, (val) => SaveCanExecute(val));
+            canExecute = this.WhenAnyValue(vm => vm.IsAnyPriceListGroupDirty, vm => vm.ValidationResults.Count, (isDirty, errorCount) => SaveCanExecute(isDirty, errorCount));
             SaveCommand = ReactiveCommand.Create(canExecute);
             this.WhenAnyObservable(vm => vm.SaveCommand).Subscribe(val => SaveExecuted(val));
 
@@ -78,7 +83,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         {
             get { return _entity; }
             private set { this.RaiseAndSetIfChanged(ref _entity, value); }
-        } 
+        }
 
         /// <summary>
         /// Gets a value indicating whether the price list groups should be displayed.
@@ -121,9 +126,9 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #region Command and Event Handlers
 
-        private bool SaveCanExecute(bool isDirty)
+        private bool SaveCanExecute(bool isDirty, int errorCount)
         {
-            return isDirty;
+            return (isDirty && errorCount == 0);
         }
 
         private void SaveExecuted(object parameter)

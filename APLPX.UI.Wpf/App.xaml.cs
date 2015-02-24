@@ -16,7 +16,6 @@ using System.Windows.Threading;
 using Ninject.Parameters;
 using APLPX.Entity;
 using Ninject;
-using APLPX.UI.WPF.AppllicationServices;
 using APLPX.UI.WPF.ApplicationServices;
 
 

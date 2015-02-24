@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using APLPX.UI.WPF.DisplayServices;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
 
@@ -16,6 +17,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
         #region Private Fields
 
         private Display.Analytic _analytic;
+        private AnalyticDisplayServices _analyticDisplayService;
         private IDisposable _searchKeyChangedSubscription;
         private bool _isDisposed;
 
@@ -23,7 +25,7 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
 
         #region Constructor
 
-        public AnalyticIdentityViewModel(Display.Analytic analytic, Display.ModuleFeature feature)
+        public AnalyticIdentityViewModel(Display.Analytic analytic, Display.ModuleFeature feature, AnalyticDisplayServices analyticDisplayService)
         {
             if (analytic == null)
             {
@@ -32,10 +34,15 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
             if (feature == null)
             {
                 throw new ArgumentNullException("feature");
-            }         
+            }
+            if (analyticDisplayService == null)
+            {
+                throw new ArgumentNullException("analyticDisplayService");
+            }
 
             Analytic = analytic;
             base.SelectedFeature = feature;
+            _analyticDisplayService = analyticDisplayService;
 
             InitializeEventHandlers();
             InitializeCommands();

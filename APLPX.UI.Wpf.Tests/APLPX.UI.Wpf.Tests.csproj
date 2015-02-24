@@ -107,6 +107,10 @@
       <Project>{e1b6bd21-4dc1-48c2-b8a0-1d03aacd974d}</Project>
       <Name>APLPX.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\APLPX.UI.Common\APLPX.UI.Common.csproj">
+      <Project>{cfecbcdc-a6e3-4259-af87-1a60f707ee51}</Project>
+      <Name>APLPX.UI.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\APLPX.UI.Wpf\APLPX.UI.Wpf.csproj">
       <Project>{632a3dca-fd92-4067-96b9-9a858c23e2d3}</Project>
       <Name>APLPX.UI.Wpf</Name>

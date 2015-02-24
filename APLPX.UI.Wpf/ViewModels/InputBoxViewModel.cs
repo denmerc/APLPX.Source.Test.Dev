@@ -11,6 +11,7 @@ namespace APLPX.UI.WPF.ViewModels
     {
         private string _text;
         private string _title;
+        private bool _isValid;
 
         public InputBoxViewModel(string title, string text)
         {
@@ -28,6 +29,13 @@ namespace APLPX.UI.WPF.ViewModels
         {
             get { return _title; }
             private set { this.RaiseAndSetIfChanged(ref _title, value); }
+        }
+
+        
+        public bool IsValid
+        {
+            private set { this.RaiseAndSetIfChanged(ref _isValid, value); }
+            get { return _isValid; }
         }
 
         #region IDataErrorInfo
@@ -50,6 +58,8 @@ namespace APLPX.UI.WPF.ViewModels
                         result = "Entry is required.";
                     }
                 }
+
+                IsValid = String.IsNullOrWhiteSpace(result);
 
                 return result;
             }

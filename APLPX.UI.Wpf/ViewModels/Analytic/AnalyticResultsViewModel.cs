@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using APLPX.UI.WPF.DisplayServices;
 using APLPX.UI.WPF.Helpers;
 using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
@@ -14,16 +15,24 @@ namespace APLPX.UI.WPF.ViewModels.Analytic
     public class AnalyticResultsViewModel : ViewModelBase
     {
         private DisplayEntities.Analytic _entity;
+        private AnalyticDisplayServices _analyticDisplayService;
+
         private IDisposable _itemChangedSubscription;
         private IDisposable _selectAllDriversSubscription;
 
-        public AnalyticResultsViewModel(Display.Analytic entity)
+        public AnalyticResultsViewModel(Display.Analytic entity, AnalyticDisplayServices analyticDisplayService)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
+            if (analyticDisplayService == null)
+            {
+                throw new ArgumentNullException("analyticDisplayService");
+            }
+
             Entity = entity;
+            _analyticDisplayService = analyticDisplayService;
 
             SelectAllDriversCommand = ReactiveCommand.Create();
             _selectAllDriversSubscription = SelectAllDriversCommand.Subscribe(v => SelectAllDriversExecuted(v));

@@ -7,7 +7,7 @@ using ReactiveUI;
 using Display = APLPX.UI.WPF.DisplayEntities;
 using DTO = APLPX.Entity;
 using Ninject;
-using APLPX.UI.WPF.AppllicationServices;
+using APLPX.UI.Common.Interfaces;
 
 
 namespace APLPX.UI.WPF.ViewModels
@@ -15,7 +15,7 @@ namespace APLPX.UI.WPF.ViewModels
     /// <summary>
     /// Base class for view models.
     /// </summary>
-    public abstract class ViewModelBase : ReactiveObject, IDisposable
+    public abstract class ViewModelBase : ReactiveObject, IDisposable, IViewModel
     {
         #region Private Fields
 
@@ -209,7 +209,7 @@ namespace APLPX.UI.WPF.ViewModels
             string newText = _messageDisplayService.ShowInputBox(null, title, originalText);
             return newText;
         }
-       
+
         #region IDisposable
 
         public void Dispose()

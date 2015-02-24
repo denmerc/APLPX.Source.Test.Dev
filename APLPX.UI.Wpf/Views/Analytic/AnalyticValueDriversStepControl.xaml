@@ -8,6 +8,7 @@
              xmlns:local="clr-namespace:APLPX.UI.WPF.Views.Analytic"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:views="clr-namespace:APLPX.UI.WPF.Views"
              mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -24,11 +25,18 @@
             <SolidColorBrush x:Key="editableTextBackground" Color="LightBlue" />
             <SolidColorBrush x:Key="editableTextForeground" Color="Black" />
 
+            <Style x:Key="TitleTextStyle"
+                   BasedOn="{StaticResource StepTitleTextStyle}"
+                   TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+
             <Style x:Key="EditTextBoxStyle"
-                   BasedOn="{StaticResource TextBoxStyle1}"
+                   BasedOn="{StaticResource {x:Type TextBox}}"
                    TargetType="TextBox">
-                <Setter Property="Width" Value="55" />
+                <Setter Property="Width" Value="65" />
                 <Setter Property="Height" Value="23" />
+                <Setter Property="Margin" Value="10,5" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="helpers:TextBoxHelper.SelectAllTextOnFocus" Value="True" />
             </Style>
@@ -36,6 +44,11 @@
             <Style x:Key="HeaderTemplateTextStyle" TargetType="TextBlock">
                 <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
+
+            <Style x:Key="ElementCenteredStyle" TargetType="TextBlock">
+                <Setter Property="TextAlignment" Value="Center" />
+            </Style>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -50,7 +63,7 @@
 
     <Grid x:Name="LayoutRoot" Background="{DynamicResource MainWindowBackground}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="35" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -63,32 +76,24 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Margin="10,5,0,5"
-                   Style="{StaticResource StepTitleTextStyle}"
+                   VerticalAlignment="Center"
+                   Style="{StaticResource TitleTextStyle}"
                    Text="Value Drivers" />
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="1"
-                   Style="{StaticResource StepTitleTextStyle}"
-                   Text="Modes"
-                   Visibility="Collapsed" />
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="2"
-                   Margin="10,5,0,5"
-                   Style="{StaticResource StepTitleTextStyle}"
-                   Text="Driver Groups"
-                   Visibility="{Binding Path=IsValueDriverSelected,
-                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <ListBox x:Name="DriversListBox"
                  Grid.Row="1"
-                 Grid.RowSpan="2"
+                 Grid.RowSpan="3"
                  Grid.Column="0"
                  Margin="10,0,0,0"
                  Background="Transparent"
@@ -118,30 +123,62 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
+        <TextBlock Grid.Row="0"
+                   Grid.Column="2"
+                   Style="{StaticResource TitleTextStyle}"
+                   Text="Modes"
+                   Visibility="Collapsed" />
+
+        <TextBlock x:Name="txtChartTitle"
+                   Grid.Row="0"
+                   Grid.Column="1"
+                   Style="{StaticResource TitleTextStyle}"
+                   Text="Driver Distribution" />
+
+        <Grid x:Name="ChartPlaceholderGrid"
+              Grid.Row="1"
+              Grid.RowSpan="2"
+              Grid.Column="1"
+              Width="350"
+              Margin="20,5"
+              Background="SlateGray">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="16"
+                       Style="{StaticResource BaseStyleTextBlock}"
+                       Text="Driver chart goes here." />
+        </Grid>
+
+        <!--
+            <TextBlock Grid.Row="0"
+            Grid.Column="3"
+            Style="{StaticResource TitleTextStyle}"
+            Text="Driver Modes" />
+        -->
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="4"
+                   Margin="10,5,0,5"
+                   Style="{StaticResource TitleTextStyle}"
+                   Text="Driver Configuration"
+                   Visibility="{Binding Path=IsValueDriverSelected,
+                                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+
         <Grid x:Name="DriveGroupConfigurationGrid"
               Grid.Row="1"
-              Grid.Column="2"
-              Margin="30,10,0,5"
+              Grid.Column="4"
+              Margin="20,5"
               HorizontalAlignment="Center">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <ListBox x:Name="DriverModesListBox"
                      Grid.Row="0"
-                     Grid.Column="0"
-                     Grid.ColumnSpan="3"
-                     Margin="0,0,0,5"
+                     Margin="5"
                      VerticalAlignment="Center"
                      VerticalContentAlignment="Center"
                      Background="Transparent"
@@ -153,16 +190,18 @@
                                           Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
+
                         <RadioButton x:Name="rdoSelectedMode"
                                      Content="{Binding Path=Name}"
                                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},
                                                          Path=IsSelected}"
                                      Style="{StaticResource MetroRadioButton}" />
+                        <!--  <TextBlock FontSize="16" Text="{Binding Path=Name}" />  -->
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
+                        <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemContainerStyle>
@@ -175,28 +214,80 @@
 
             <StackPanel x:Name="GroupCountPanel"
                         Grid.Row="1"
+                        Margin="5"
                         Orientation="Horizontal"
                         Visibility="{Binding Path=IsValueDriverModeSelected,
                                              Converter={StaticResource BooleanToVisibilityConverter}}">
+
                 <Label Content="No. of Groups:" FontSize="16" />
 
                 <controls:NumericUpDown x:Name="GroupCountUpDown"
-                                        Margin="5"
+                                        Margin="0"
                                         HorizontalAlignment="Left"
                                         IsReadOnly="False"
                                         Maximum="15"
                                         Minimum="1"
                                         Value="{Binding Path=Entity.SelectedValueDriver.SelectedMode.GroupCount}" />
-
-                <TextBlock Margin="5"
-                           VerticalAlignment="Center"
-                           FontSize="16"
-                           Foreground="LightBlue"
-                           Text="(Results are not current)"
-                           ToolTip="This value driver must be recalculated due to changes made."
-                           Visibility="{Binding Path=Entity.SelectedValueDriver.AreResultsCurrent,
-                                                Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
             </StackPanel>
+
+            <Grid x:Name="LimitsGrid"
+                  Grid.Row="2"
+                  Margin="5"
+                  HorizontalAlignment="Center"
+                  Visibility="{Binding Path=IsDriverInUserEntryMode,
+                                       Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style x:Key="LimitCaptionStyle"
+                           BasedOn="{StaticResource {x:Type TextBlock}}"
+                           TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="TextAlignment" Value="Center" />
+                        <Setter Property="Width" Value="80" />
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                        <Setter Property="FontSize" Value="14" />
+                    </Style>
+                </Grid.Resources>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Style="{StaticResource LimitCaptionStyle}"
+                           Text="{Binding Path=Entity.SelectedValueDriver.UnitOfMeasure,
+                                          StringFormat=Lower Limit ({0})}" />
+
+                <TextBox x:Name="txtLowerLimit"
+                         Grid.Row="1"
+                         Grid.Column="0"
+                         VerticalAlignment="Center"
+                         Style="{StaticResource EditTextBoxStyle}"
+                         Text="{Binding Path=Entity.SelectedValueDriver.SelectedMode.MinDriverOutlier,
+                                        UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           Width="80"
+                           HorizontalAlignment="Center"
+                           FontSize="14"
+                           Text="{Binding Path=Entity.SelectedValueDriver.UnitOfMeasure,
+                                          StringFormat=Upper Limit ({0})}"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" />
+
+                <TextBox x:Name="txtUpperLimit"
+                         Grid.Row="1"
+                         Grid.Column="1"
+                         VerticalAlignment="Center"
+                         Style="{StaticResource EditTextBoxStyle}"
+                         Text="{Binding Path=Entity.SelectedValueDriver.SelectedMode.MaxDriverOutlier,
+                                        UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
         </Grid>
 
         <!--
@@ -209,8 +300,8 @@
 
         <DataGrid x:Name="DriverGroupsDataGrid"
                   Grid.Row="2"
-                  Grid.Column="2"
-                  Margin="10,0,0,0"
+                  Grid.Column="4"
+                  Margin="20,10"
                   VerticalAlignment="Top"
                   AutoGenerateColumns="False"
                   BeginningEdit="DriverGroupsDataGrid_BeginningEdit"
@@ -219,7 +310,7 @@
                   CanUserSortColumns="False"
                   ItemsSource="{Binding Path=Entity.SelectedValueDriver.SelectedMode.Groups}"
                   Style="{StaticResource MetroDataGrid}"
-                  Visibility="{Binding Path=IsValueDriverModeSelected,
+                  Visibility="{Binding Path=IsDriverInUserEntryMode,
                                        Converter={StaticResource BooleanToVisibilityConverter}}">
             <DataGrid.Resources>
                 <Style x:Key="GroupMinCellStyle" TargetType="DataGridCell">
@@ -241,10 +332,11 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-
-                <Style x:Key="ElementCenteredStyle" TargetType="TextBlock">
-                    <Setter Property="TextAlignment" Value="Center" />
-                </Style>
+                <!--<Style x:Key="ValidatedElementStyle"
+                       BasedOn="{StaticResource StandardDataGridNumericalCellStyle}"
+                       TargetType="TextBlock">
+                    <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
+                </Style>-->
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <!--  Driver Group columns:  -->
@@ -257,12 +349,17 @@
                 <DataGridTextColumn x:Name="colLower"
                                     Width="75"
                                     Binding="{Binding Path=MinOutlier,
-                                                      StringFormat={}{0:N0}}"
+                                                      StringFormat={}{0:N0},                                                      
+                                                      UpdateSourceTrigger=PropertyChanged}"
                                     CellStyle="{StaticResource GroupMinCellStyle}"
                                     ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=LOWER LIMIT ({0})}" />
+                            <TextBlock x:Name="txtHeader"
+                                       Style="{StaticResource HeaderTemplateTextStyle}"
+                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel},
+                                                      Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure,
+                                                      StringFormat=LOWER LIMIT ({0})}" />
                         </DataTemplate>
                     </DataGridTextColumn.HeaderTemplate>
                 </DataGridTextColumn>
@@ -270,13 +367,17 @@
                 <DataGridTextColumn x:Name="colUpper"
                                     Width="75"
                                     Binding="{Binding Path=MaxOutlier,
-                                                      StringFormat={}{0:N0}}"
+                                                      StringFormat={}{0:N0},
+                                                      UpdateSourceTrigger=PropertyChanged}"
                                     CellStyle="{StaticResource GroupMaxCellStyle}"
-                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Upper Limit">
+                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=UPPER LIMIT ({0})}" />
+                            <TextBlock x:Name="txtHeader"
+                                       Style="{StaticResource HeaderTemplateTextStyle}"
+                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel},
+                                                      Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure,
+                                                      StringFormat=UPPER LIMIT ({0})}" />
                         </DataTemplate>
                     </DataGridTextColumn.HeaderTemplate>
                 </DataGridTextColumn>
@@ -288,46 +389,48 @@
                     Converter={StaticResource BooleanToVisibilityConverter}}"
                 -->
 
-                <DataGridTextColumn Binding="{Binding Path=Results.SkuCount,
-                                                      StringFormat={}{0:N0}}"
-                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Sku Count"
-                                    IsReadOnly="True" />
-
-                <DataGridTextColumn Binding="{Binding Path=Results.SalesValue}"
-                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    Header="Sales Value"
-                                    IsReadOnly="True" />
-
-                <DataGridTextColumn Width="75"
-                                    Binding="{Binding Path=Results.MinOutlier,
-                                                      StringFormat={}{0:N0}}"
-                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    IsReadOnly="True">
+                <!--
+                    <DataGridTextColumn Binding="{Binding Path=Results.SkuCount,
+                    StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                    Header="Sku Count"
+                    IsReadOnly="True" />
+                    
+                    <DataGridTextColumn Binding="{Binding Path=Results.SalesValue}"
+                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                    Header="Sales Value"
+                    IsReadOnly="True" />
+                    
+                    <DataGridTextColumn Width="75"
+                    Binding="{Binding Path=Results.MinOutlier,
+                    StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                    IsReadOnly="True">
                     <DataGridTextColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=ACTUAL LOWER ({0})}" />
-                        </DataTemplate>
+                    <DataTemplate>
+                    <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=ACTUAL LOWER ({0})}" />
+                    </DataTemplate>
                     </DataGridTextColumn.HeaderTemplate>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Width="75"
-                                    Binding="{Binding Path=Results.MaxOutlier,
-                                                      StringFormat={}{0:N0}}"
-                                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
-                                    IsReadOnly="True">
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Width="75"
+                    Binding="{Binding Path=Results.MaxOutlier,
+                    StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                    IsReadOnly="True">
                     <DataGridTextColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=ACTUAL UPPER ({0})}" />
-                        </DataTemplate>
+                    <DataTemplate>
+                    <TextBlock Style="{StaticResource HeaderTemplateTextStyle}" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel}, Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure, StringFormat=ACTUAL UPPER ({0})}" />
+                    </DataTemplate>
                     </DataGridTextColumn.HeaderTemplate>
-                </DataGridTextColumn>
+                    </DataGridTextColumn>
+                -->
             </DataGrid.Columns>
         </DataGrid>
 
         <TextBlock x:Name="txtIsDirty"
                    Grid.Row="3"
-                   Grid.Column="1"
+                   Grid.Column="4"
                    Grid.ColumnSpan="2"
                    Margin="0,10,0,5"
                    VerticalAlignment="Top"
@@ -337,9 +440,99 @@
                    Visibility="{Binding Path=IsAnyValueDriverDirty,
                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-        <GridSplitter Grid.Row="4"
+        <TextBlock Grid.Row="0"
+                   Grid.Column="5"
+                   Style="{StaticResource TitleTextStyle}"
+                   Text="Driver Results" />
+
+        <Grid x:Name="ResultsGrid"
+              Grid.Row="1"
+              Grid.RowSpan="3"
+              Grid.Column="5">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <DataGrid x:Name="DriverResultsDataGrid"
+                      Grid.Row="0"
+                      Margin="10,0,0,0"
+                      AutoGenerateColumns="False"
+                      BeginningEdit="DriverGroupsDataGrid_BeginningEdit"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserSortColumns="False"
+                      IsReadOnly="True"
+                      ItemsSource="{Binding Path=Entity.SelectedValueDriver.SelectedMode.Groups}"
+                      Style="{StaticResource MetroDataGrid}"
+                      Visibility="{Binding Path=IsValueDriverModeSelected,
+                                           Converter={StaticResource BooleanToVisibilityConverter}}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Value}"
+                                        ElementStyle="{StaticResource ElementCenteredStyle}"
+                                        Header="Group" />
+
+                    <DataGridTextColumn Binding="{Binding Path=Results.SkuCount,
+                                                          StringFormat={}{0:N0}}"
+                                        ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                        Header="Sku Count" />
+
+                    <DataGridTextColumn Width="75"
+                                        Binding="{Binding Path=Results.MinOutlier,
+                                                          StringFormat={}{0:N0}}"
+                                        ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock x:Name="txtHeader"
+                                           Style="{StaticResource HeaderTemplateTextStyle}"
+                                           Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel},
+                                                          Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure,
+                                                          StringFormat=MIN. ({0})}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Width="75"
+                                        Binding="{Binding Path=Results.MaxOutlier,
+                                                          StringFormat={}{0:N0}}"
+                                        ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                        IsReadOnly="True">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock x:Name="txtHeader"
+                                           Style="{StaticResource HeaderTemplateTextStyle}"
+                                           Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridCellsPanel},
+                                                          Path=DataContext.Entity.SelectedValueDriver.UnitOfMeasure,
+                                                          StringFormat=MAX. ({0})}" />
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding Path=Results.SalesValue}"
+                                        ElementStyle="{StaticResource StandardDataGridNumericalCellStyle}"
+                                        Header="Sales Value" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <TextBlock Grid.Row="1"
+                       Margin="5"
+                       FontSize="16"
+                       Foreground="LightBlue"
+                       Text="(Results are not current)"
+                       ToolTip="This value driver must be recalculated due to changes made."
+                       Visibility="{Binding Path=Entity.SelectedValueDriver.AreResultsCurrent,
+                                            Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+        </Grid>
+
+        <views:ValidationResultsControl Grid.Row="4"
+                                        Grid.Column="4"
+                                        Margin="10,5"
+                                        Visibility="Collapsed" />
+
+        <GridSplitter Grid.Row="5"
                       Grid.Column="0"
-                      Grid.ColumnSpan="4"
+                      Grid.ColumnSpan="6"
                       Height="3"
                       Margin="0,5"
                       HorizontalAlignment="Stretch"
@@ -349,16 +542,16 @@
                                            Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <local:AnalyticValueDriverDiagnosticsControl x:Name="ucDiagnostics"
-                                                     Grid.Row="5"
+                                                     Grid.Row="6"
                                                      Grid.Column="0"
-                                                     Grid.ColumnSpan="4"
+                                                     Grid.ColumnSpan="6"
                                                      HorizontalAlignment="Left"
                                                      VerticalAlignment="Top"
                                                      Visibility="{Binding Path=AreDiagnosticsVisible,
                                                                           Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <CheckBox Grid.Row="5"
-                  Grid.Column="3"
+                  Grid.Column="5"
                   Margin="5"
                   HorizontalAlignment="Right"
                   IsChecked="{Binding Path=AreDiagnosticsVisible}"

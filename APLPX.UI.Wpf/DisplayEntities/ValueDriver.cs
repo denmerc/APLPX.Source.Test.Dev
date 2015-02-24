@@ -67,7 +67,16 @@ namespace APLPX.UI.WPF.DisplayEntities
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { this.RaiseAndSetIfChanged(ref _isSelected, value); }
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged("IsSelected");
+
+                    IsDirty = true;
+                }
+            }
         }
 
         public bool IsDisplayOnly

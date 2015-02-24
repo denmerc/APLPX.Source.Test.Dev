@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using APLPX.UI.WPF.DisplayEntities;
+using APLPX.UI.WPF.DisplayServices;
 using APLPX.UI.WPF.Events;
 using APLPX.UI.WPF.Interfaces;
 using ReactiveUI;
@@ -17,19 +19,25 @@ namespace APLPX.UI.WPF.ViewModels
         private ISearchableEntity _selectedEntity;
         private IDisposable _selectedEntityChangedSubscription;
         private IDisposable _selectedGroupChangedSubscription;
+        private AnalyticDisplayServices _analyticDisplayService;
 
         private bool _isDisposed;
 
         #region Constructor and Initialization
 
-        public SearchViewModel(ModuleFeature feature)
+        public SearchViewModel(ModuleFeature feature, AnalyticDisplayServices analyticDisplayService)
         {
             if (feature == null)
             {
                 throw new ArgumentNullException("feature");
             }
+            if (analyticDisplayService == null)
+            {
+                throw new ArgumentNullException("analyticDisplayServices");
+            }
 
             SelectedFeature = feature;
+            _analyticDisplayService = analyticDisplayService;
 
             InitializeEventHandlers();
             InitializeCommands();
@@ -183,13 +191,11 @@ namespace APLPX.UI.WPF.ViewModels
 
         private void CopyEntityExecuted(object parameter)
         {
-            base.ShowMessageBox("Copy coming soon...");
             GetEntityFromService(DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsCopy);
         }
 
         private void EditEntityExecuted(object parameter)
         {
-            base.ShowMessageBox("Edit coming soon...");
             GetEntityFromService(DTO.ModuleFeatureStepActionType.PlanningAnalyticsSearchAnalyticsEdit);
         }
 
@@ -205,8 +211,9 @@ namespace APLPX.UI.WPF.ViewModels
             var parentGroup = parameter as FeatureSearchGroup;
             if (parentGroup != null)
             {
-                string newName = base.ShowInputBox("Rename Folder", parentGroup.Name);
-                if (!String.IsNullOrWhiteSpace(newName))
+                string originalName = parentGroup.Name;
+                string newName = base.ShowInputBox("Rename Folder", originalName);
+                if (!String.IsNullOrWhiteSpace(newName) && !newName.Equals(originalName))
                 {
                     parentGroup.Name = newName;
                     parentGroup.IsNameChanged = true;
@@ -221,7 +228,7 @@ namespace APLPX.UI.WPF.ViewModels
             int entityId = _selectedEntity.Id;
 
             //TODO: update client services method to take actionType parameter.
-            //var response = base.AnalyticServices.LoadAnalytic(SelectedAnalytic, entityId, searchGroupId, (int)actionType);
+            //var response = _analyticDisplayServices.LoadAnalytic(sourceAnalytic, entityId, searchGroupId, (int)actionType);
         }
 
         #endregion

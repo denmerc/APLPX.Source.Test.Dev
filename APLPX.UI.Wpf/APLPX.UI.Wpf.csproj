@@ -231,6 +231,7 @@
     <Compile Include="Helpers\DisplayModuleGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\MockAdministrationGenerator.cs" />
     <Compile Include="Helpers\MockAnalyticGenerator.cs" />
     <Compile Include="Helpers\MockFilterGenerator.cs" />
     <Compile Include="Helpers\MockPricingEverydayGenerator.cs" />
@@ -278,7 +279,6 @@
     <Compile Include="ViewModels\Analytic\AnalyticResultsViewModel.cs" />
     <Compile Include="Events\EventAggregator.cs" />
     <Compile Include="ViewModels\Analytic\AnalyticPriceListViewModel.cs" />
-    <Compile Include="ApplicationServices\Cache.cs" />
     <Compile Include="ViewModels\FilterViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\InputBoxViewModel.cs" />
@@ -629,6 +629,14 @@
     <ProjectReference Include="..\APLPX.Entity\APLPX.Entity.csproj">
       <Project>{e1b6bd21-4dc1-48c2-b8a0-1d03aacd974d}</Project>
       <Name>APLPX.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APLPX.UI.Admin\APLPX.UI.Admin.csproj">
+      <Project>{ca3eb68c-40ab-495d-b338-a065f515de3f}</Project>
+      <Name>APLPX.UI.Admin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APLPX.UI.Common\APLPX.UI.Common.csproj">
+      <Project>{cfecbcdc-a6e3-4259-af87-1a60f707ee51}</Project>
+      <Name>APLPX.UI.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

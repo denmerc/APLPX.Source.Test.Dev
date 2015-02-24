@@ -64,7 +64,7 @@ namespace APLPX.UI.WPF.DisplayServices
         }
 
 
-        public Analytic LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId)
+        public Analytic LoadAnalytic(DisplayEntities.Analytic analytic, int entityId, int searchGroupId, int commandId)
         { 
             if( analytic != null)
             {
@@ -73,6 +73,7 @@ namespace APLPX.UI.WPF.DisplayServices
 
             }
             var session = CreateRequest(analytic);
+            session.ClientCommand = commandId;
             var response = _analyticService.Load(session);
             Analytic data = null;
             if (response.SessionOk)

@@ -56,6 +56,11 @@ namespace APLPX.UI.WPF.ViewModels
                             }
                         
                         } 
+                        else if (Session.Modules ==  null || Session.Modules.Count <= 0)
+                        {
+                             Password = string.Empty;
+                             StatusMessage = "No licensed modules for this user.";
+                        }
                         else //failed
                         {
                             ClearWhenLoginFails();

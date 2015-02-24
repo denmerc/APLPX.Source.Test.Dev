@@ -31,9 +31,9 @@ namespace APLPX.UI.WPF.ViewModels
     {
         #region Private Fields
 
-        private readonly IUserService _userService;
-        private readonly IAnalyticService _analyticService;
-        private readonly IPricingEverydayService _pricingEverydayService;
+        //private readonly IUserService _userService;
+        //private readonly IAnalyticService _analyticService;
+        //private readonly IPricingEverydayService _pricingEverydayService;
         private readonly AnalyticDisplayServices _analyticDisplayServices;
         private readonly PricingEverydayDisplayService _pricingEverydayDisplayServices;
 
@@ -91,9 +91,6 @@ namespace APLPX.UI.WPF.ViewModels
         /// <param name="analyticService">An IAnalyticService provider.></param>
         /// <param name="userService">An IUserService provider.</param>
         public MainViewModel(DTO.Session<DTO.NullT> session,
-                                IAnalyticService analyticService,
-                                IUserService userService,
-                                IPricingEverydayService pricingService,
                                 EventAggregator eventManager
                             )
             : this(eventManager)
@@ -103,24 +100,20 @@ namespace APLPX.UI.WPF.ViewModels
                 throw new ArgumentNullException("session", "session cannot be null.");
             }
 
-            if (analyticService == null)
-            {
-                throw new ArgumentNullException("analyticService", "Value cannot be null.");
-            }
 
-            if (userService == null)
-            {
-                throw new ArgumentNullException("userService", "Value cannot be null.");
-            }
 
             base.Session = session;
 
             //base.UserServices = new UserDisplayServices(userService);
-            _analyticService = analyticService;
-            _userService = userService;
-            _pricingEverydayService = pricingService;
-            _analyticDisplayServices = new AnalyticDisplayServices(_analyticService, Session);
-            _pricingEverydayDisplayServices = new PricingEverydayDisplayService(_pricingEverydayService, Session);
+            //_analyticService = analyticService;
+            //_userService = userService;
+            //_pricingEverydayService = pricingService;
+
+            _analyticDisplayServices = PriceExpertApplication.Current.Container.Get<AnalyticDisplayServices>(new ConstructorArgument("session", Session));
+            //_analyticDisplayServices = new AnalyticDisplayServices(_analyticService, Session); 
+
+            _pricingEverydayDisplayServices = PriceExpertApplication.Current.Container.Get<PricingEverydayDisplayService>(new ConstructorArgument("session", Session));
+            //_pricingEverydayDisplayServices = new PricingEverydayDisplayService(_pricingEverydayService, Session);
 
             CurrentUser = session.User.ToDisplayEntity();
 
@@ -1034,7 +1027,7 @@ namespace APLPX.UI.WPF.ViewModels
                 case DTO.ModuleFeatureStepType.PlanningKitPricingSearchKits:
                     if (_searchViewModel == null)
                     {
-                        _searchViewModel = new SearchViewModel(SelectedFeature);
+                        _searchViewModel = PriceExpertApplication.Current.Container.Get<SearchViewModel>(new ConstructorArgument("feature",SelectedFeature));
                     }
                     else if (_searchViewModel.SelectedFeature != SelectedFeature)
                     {

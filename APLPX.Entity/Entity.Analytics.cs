@@ -184,23 +184,23 @@ namespace APLPX.Entity
         [DataMember]
         public string Notes { get; set; }
         [DataMember]
-        public DateTime Refreshed { get; private set; }
+        public DateTime Refreshed { get;  set; }
         [DataMember]
-        public string RefreshedText { get; private set; }
+        public string RefreshedText { get;  set; }
         [DataMember]
-        public DateTime Created { get; private set; }
+        public DateTime Created { get;  set; }
         [DataMember]
-        public string CreatedText { get; private set; }
+        public string CreatedText { get;  set; }
         [DataMember]
-        public DateTime Edited { get; private set; }
+        public DateTime Edited { get;  set; }
         [DataMember]
-        public string EditedText { get; private set; }
+        public string EditedText { get;  set; }
         [DataMember]
-        public string Author { get; private set; }
+        public string Author { get;  set; }
         [DataMember]
-        public string Editor { get; private set; }
+        public string Editor { get;  set; }
         [DataMember]
-        public string Owner { get; private set; }
+        public string Owner { get;  set; }
         [DataMember]
         public bool Shared { get; set; }
         [DataMember]

@@ -1,6 +1,7 @@
 ﻿using APLPX.Client;
 using APLPX.Client.Contracts;
-using APLPX.Client.Mock.Proxies;
+using MOCKProxies = APLPX.Client.Mock.Proxies;
+using MOCKEntity = APLPX.Common.Mock.Entity;
 using APLPX.UI.WPF.DisplayEntities;
 using APLPX.UI.WPF.DisplayServices;
 using APLPX.UI.WPF.Events;
@@ -13,6 +14,9 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTO = APLPX.Entity;
+using APLPX.UI.WPF.ViewModels.Analytic;
+using APLPX.UI.WPF.ViewModels.Pricing;
 
 namespace APLPX.UI.WPF.ApplicationServices
 {
@@ -40,7 +44,7 @@ namespace APLPX.UI.WPF.ApplicationServices
         public void Bootstrap()
         {
 
-            if (ConfigurationManager.AppSettings["Environment"] == "DEV")
+            if (ConfigurationManager.AppSettings["Environment"] == "DE")
             {
                 Container = new StandardKernel(new ApplicationProvider());
             }
@@ -64,9 +68,20 @@ namespace APLPX.UI.WPF.ApplicationServices
             Bind<AnalyticDisplayServices>().ToSelf().InSingletonScope()
                 .WithConstructorArgument("analyticService", Kernel.Get<IAnalyticService>());
 
+            Bind<PricingEverydayDisplayService>().ToSelf().InSingletonScope()
+                .WithConstructorArgument("pricingService", Kernel.Get<IPricingEverydayService>());
+
 
             Bind<MainViewModel>().ToSelf();
             Bind<LoginViewModel>().ToSelf();
+
+            //Load ViewModel Resolver
+            //ViewModelFactory<ViewModelBase>.Register(ModuleFeatureStepType.AdministrationHomeDashboard, () => new HomeViewModel());
+            //ViewModelFactory<APLPX.UI.WPF.ViewModels.Analytic.AnalyticDriverViewModel>.Register(ModuleFeatureStepType.PlanningAnalyticsValueDrivers, (DisplayEntities.Analytic a, DisplayEntities.ModuleFeature f) => new APLPX.UI.WPF.ViewModels.Analytic.AnalyticDriverViewModel(a,f));
+            //ViewModelFactory<ViewModelBase>.Register(ModuleFeatureStepType.AdministrationHomeDashboard, () => new HomeViewModel());
+            //ViewModelFactory<ViewModelBase>.Register(ModuleFeatureStepType.AdministrationHomeDashboard, () => new HomeViewModel());
+            //var vm = ViewModelFactory<ViewModelBase>.Create(ModuleFeatureStepType.AdministrationHomeDashboard);
+
         }
     }
 
@@ -75,22 +90,42 @@ namespace APLPX.UI.WPF.ApplicationServices
 
         public override void Load()
         {
-            Bind<IAnalyticService>().To<MockAnalyticClient>();
-            Bind<IPricingEverydayService>().To<MockPricingEverydayClient>();
-            Bind<IUserService>().To<MockUserClient>();
+            Bind<IAnalyticService>().To<MOCKProxies.MockAnalyticClient>();
+            Bind<IPricingEverydayService>().To<MOCKProxies.MockPricingEverydayClient>();
+            Bind<IUserService>().To<MOCKProxies.MockUserClient>();
             Bind<EventAggregator>().ToSelf().InSingletonScope();
 
             Bind<MainViewModel>().ToSelf();
             Bind<LoginViewModel>().ToSelf().InSingletonScope();
             Bind<SearchViewModel>().ToSelf().InTransientScope();
+            Bind<AnalyticDisplayServices>().ToSelf().InSingletonScope()
+    .WithConstructorArgument("analyticService", Kernel.Get<IAnalyticService>());
+
+            Bind<PricingEverydayDisplayService>().ToSelf().InSingletonScope()
+                .WithConstructorArgument("pricingService", Kernel.Get<IPricingEverydayService>());
+
         }
     }
 
-    public class ViewModelFactory
+    public class ViewModelFactory<T>
     {
-        public static ViewModelBase Get(ModuleFeatureStep step)
+        private ViewModelFactory() { }
+        static readonly Dictionary<DTO.ModuleFeatureStepType, Func<T>> _dict = new Dictionary<DTO.ModuleFeatureStepType, Func<T>>();
+
+        public static T Create(DTO.ModuleFeatureStepType stepType)
         {
-            return null;
+            Func<T> constructor = null;
+            if (_dict.TryGetValue(stepType, out constructor))
+                return constructor();
+
+            throw new ArgumentException("No type registered for this step");
+        }
+        public static void Register(DTO.ModuleFeatureStepType stepType, Func<T> constructor)
+        {
+            _dict.Add(stepType, constructor);
         }
     }
+
+
+
 }

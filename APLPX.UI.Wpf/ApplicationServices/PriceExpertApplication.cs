@@ -44,7 +44,7 @@ namespace APLPX.UI.WPF.ApplicationServices
         public void Bootstrap()
         {
 
-            if (ConfigurationManager.AppSettings["Environment"] == "TEST")
+            if (ConfigurationManager.AppSettings["Environment"] == "DEV")
             {
                 Container = new StandardKernel(new ApplicationProvider());
             }
